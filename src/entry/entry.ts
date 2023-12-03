@@ -1,4 +1,6 @@
-export type EntryCategory = "A" | "B";
+// Elementary: 小学生部門 / Open: オープン部門
+// ToDo: 部門の定義をファイルから読み込むようにする
+export type EntryCategory = "Elementary" | "Open";
 export interface EntryCreateArgs {
   id: string;
   teamName: string;
