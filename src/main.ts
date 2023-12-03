@@ -1,1 +1,1 @@
-console.log("TypeScript Template")
+console.log("TypeScript Template");
