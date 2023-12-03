@@ -18,6 +18,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mikuroxina/mini-fn": "^5.4.3",
     "esbuild": "^0.19.8",
     "typescript": "^5.3.2"
   },
