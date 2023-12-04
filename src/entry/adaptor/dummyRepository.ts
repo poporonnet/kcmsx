@@ -21,6 +21,10 @@ export class DummyRepository implements EntryRepository {
     return Option.some(entry);
   }
 
+  async findAll(): Promise<Result.Result<Error, Array<Entry>>> {
+    return Result.ok(this.data);
+  }
+
   reset() {
     this.data = [];
   }
