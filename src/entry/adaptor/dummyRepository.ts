@@ -21,6 +21,14 @@ export class DummyRepository implements EntryRepository {
     return Option.some(entry);
   }
 
+  async findByID(id: string): Promise<Option.Option<Entry>> {
+    const entry = this.data.find((e) => e.id === id);
+    if (entry === undefined) {
+      return Option.none();
+    }
+    return Option.some(entry);
+  }
+
   async findAll(): Promise<Result.Result<Error, Array<Entry>>> {
     return Result.ok(this.data);
   }

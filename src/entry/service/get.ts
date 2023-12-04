@@ -1,6 +1,6 @@
 import { EntryRepository } from "../repository.js";
 import { Entry } from "../entry.js";
-import { Result } from "@mikuroxina/mini-fn";
+import { Option, Result } from "@mikuroxina/mini-fn";
 
 export class FindEntryService {
   private readonly repository: EntryRepository;
@@ -21,15 +21,22 @@ export class FindEntryService {
   }
 
   async findByID(id: string): Promise<Result.Result<Error, EntryDTO>> {
-    console.log(id);
-    throw new Error("Not implemented");
+    const res = await this.repository.findByID(id);
+    if (Option.isNone(res)) {
+      return Result.err(new Error("Not found"));
+    }
+
+    return Result.ok(EntryDTO.fromDomain(res[1]));
   }
 
   async findByTeamName(name: string): Promise<Result.Result<Error, EntryDTO>> {
-    console.log(name);
-    throw new Error("Not implemented");
-  }
+    const res = await this.repository.findByTeamName(name);
+    if (Option.isNone(res)) {
+      return Result.err(new Error("Not found"));
+    }
 
+    return Result.ok(EntryDTO.fromDomain(res[1]));
+  }
 }
 
 export class EntryDTO {
