@@ -36,9 +36,21 @@ describe("getEntryService", () => {
     );
   });
 
-  it("チーム名で取得できる", async () => {});
+  it("チーム名で取得できる", async () => {
+    const actual = await service.findByTeamName(dummyData[0].teamName);
+    expect(Result.isOk(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(EntryDTO.fromDomain(testEntryData[0]));
+  });
 
-  it("チームIDで取得できる", async () => {});
+  it("チームIDで取得できる", async () => {
+    const actual = await service.findByID(dummyData[0].id);
+    expect(Result.isOk(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(EntryDTO.fromDomain(testEntryData[0]));
+  });
 
-  it("存在しないときはエラーを返す", async () => {});
+  it("存在しないときはエラーを返す", async () => {
+    const actual = await service.findByID("0");
+    expect(Result.isErr(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(new Error("Not found"));
+  });
 });

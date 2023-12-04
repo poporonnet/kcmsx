@@ -19,6 +19,17 @@ export class FindEntryService {
 
     return Result.ok(result);
   }
+
+  async findByID(id: string): Promise<Result.Result<Error, EntryDTO>> {
+    console.log(id);
+    throw new Error("Not implemented");
+  }
+
+  async findByTeamName(name: string): Promise<Result.Result<Error, EntryDTO>> {
+    console.log(name);
+    throw new Error("Not implemented");
+  }
+
 }
 
 export class EntryDTO {
