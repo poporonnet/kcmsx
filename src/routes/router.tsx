@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import { Layout } from "./layout.tsx";
 import { Home } from "../pages/home.tsx";
-import {EntryList} from "../pages/entryList.tsx";
+import { EntryList } from "../pages/entryList.tsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
