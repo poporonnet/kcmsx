@@ -3,10 +3,10 @@ import { Header } from "../components/header.tsx";
 import { AppShell } from "@mantine/core";
 
 export const Layout = () => (
-  <>
-    <AppShell header={{ height: 60 }} padding="md">
-      <Header />
+  <AppShell header={{ height: 60 }} padding="md">
+    <Header />
+    <AppShell.Main>
       <Outlet />
-    </AppShell>
-  </>
+    </AppShell.Main>
+  </AppShell>
 );
