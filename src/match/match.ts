@@ -5,6 +5,7 @@ export type MatchTeams = [Entry | undefined, Entry | undefined];
 export interface CreateMatchArgs {
   id: string;
   teams: MatchTeams;
+  courseIndex: number;
   matchType: "primary" | "final";
 }
 
@@ -20,6 +21,8 @@ export class Match {
   private readonly _teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
   private readonly _matchType: "primary" | "final";
+  // コース番号
+  private readonly _courseIndex: number;
   // チームごとの得点
   private _points?: [MatchPoints, MatchPoints];
   // 勝利チームのID
@@ -31,12 +34,14 @@ export class Match {
     matchType: "primary" | "final";
     points?: [MatchPoints, MatchPoints];
     winnerID?: string;
+    courseIndex: number;
   }) {
     this._id = args.id;
     this._teams = args.teams;
     this._points = args.points;
     this._winnerID = args.winnerID;
     this._matchType = args.matchType;
+    this._courseIndex = args.courseIndex;
   }
 
   get id(): string {
@@ -59,6 +64,10 @@ export class Match {
     return this._matchType;
   }
 
+  get courseIndex(): number {
+    return this._courseIndex;
+  }
+
   set winnerID(winnerID: string) {
     this._winnerID = winnerID;
   }
@@ -72,6 +81,7 @@ export class Match {
       id: arg.id,
       teams: arg.teams,
       matchType: arg.matchType,
+      courseIndex: arg.courseIndex,
     });
   }
 }
