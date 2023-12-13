@@ -6,9 +6,11 @@ MIT License.
 import { Hono } from "hono";
 import { entryHandler } from "./entry/main.js";
 import { serve } from "@hono/node-server";
+import { cors } from "hono/cors";
 
 const app = new Hono();
 
+app.use("*", cors());
 app.route("/entry", entryHandler);
 
 serve(app, () => {
