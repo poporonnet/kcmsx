@@ -11,6 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: install packages
-        run: npm i
+        run: bun i
       - name: test
-        run: npm test
+        run: bun test
+      - name: code check
+        run: bun run check
+      - name: lint
+        run: bun run lint
