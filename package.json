@@ -6,7 +6,7 @@
   "main": "main.js",
   "scripts": {
     "start": "node --enable-source-maps ./build/main.js",
-    "dev": "tsx ./src/main.ts",
+    "dev": "tsx --watch ./src/main.ts",
     "build": "esbuild ./src/main.ts --bundle --sourcemap --platform=node --target=node16 --format=esm --packages=external --outfile=build/main.js",
     "lint": "eslint --cache --ignore-path .gitignore 'src/**/**.ts'",
     "format": "prettier . --write",
@@ -18,9 +18,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@hono/node-server": "^1.3.3",
+    "@hono/zod-validator": "^0.1.11",
     "@mikuroxina/mini-fn": "^5.4.3",
     "esbuild": "^0.19.8",
-    "typescript": "^5.3.2"
+    "hono": "^3.11.5",
+    "typescript": "^5.3.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.10.2",
