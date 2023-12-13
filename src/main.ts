@@ -5,7 +5,6 @@ MIT License.
 */
 import { Hono } from "hono";
 import { entryHandler } from "./entry/main.js";
-import { serve } from "@hono/node-server";
 import { cors } from "hono/cors";
 
 const app = new Hono();
@@ -13,8 +12,7 @@ const app = new Hono();
 app.use("*", cors());
 app.route("/entry", entryHandler);
 
-serve(app, () => {
-  console.log(
-    "kcms\n(C) 2023 Poporon Network & Other Contributors\nMIT License.\nServer started: 3000",
-  );
-});
+export default {
+  port: 3000,
+  fetch: app.fetch,
+}

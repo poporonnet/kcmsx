@@ -2,6 +2,33 @@
 
 Matz葉ガニロボコン 大会運営支援ツール
 
+## 開発者向け情報
+### requires
+- bun(latest)
+
+### サーバーを動作させる
+上記必要なものをインストールしてください.
+
+依存関係のインストール
+```bash
+bun i
+```
+
+サーバーの起動 (プロダクション向け)
+```bash
+bun run build
+bun start
+```
+
+サーバーの起動
+```bash
+bun dev
+```
+
+### Authors/License
+(C) 2023 Poporon Network & Other Contributors  
+MIT License
+
 ## Api Reference
 
 ### endpoint list
