@@ -15,4 +15,4 @@ app.route("/entry", entryHandler);
 export default {
   port: 3000,
   fetch: app.fetch,
-}
+};
