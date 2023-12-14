@@ -201,6 +201,8 @@ body: `application/json`
     "matchType": "primary",
     // チームごとの得点 (teamsと同じ順で入る)
     "points": [2, 5],
+    // チームごとのゴール時間(秒)
+    "time": [50, 61],
     // 勝利チームのID
     "winnerID": "93454093"
   }
