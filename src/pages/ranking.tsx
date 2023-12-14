@@ -1,5 +1,5 @@
 import { Flex, Table, Title } from "@mantine/core";
-import "./entryList.css";
+import "./ranking.css";
 
 type Team = {
   name: string;
