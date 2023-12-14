@@ -6,12 +6,14 @@ import {
 import { Layout } from "./layout.tsx";
 import { Home } from "../pages/home.tsx";
 import { EntryList } from "../pages/entryList.tsx";
+import { Result } from "../pages/result.tsx";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route index element={<Home />} />
       <Route path="/entrylist" element={<EntryList />} />
+      <Route path="/result" element={<Result />} />
     </Route>
   ),
   {
