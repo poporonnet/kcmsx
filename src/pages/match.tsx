@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Button,
   Divider,
@@ -7,15 +8,50 @@ import {
   Text,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
+import { useTimer } from "react-timer-hook";
+import { expiryTimestamp } from "../utils/expiryTimestamp";
+
+type TimerState = "Initial" | "Started" | "Finished";
 
 export const Match = () => {
   const { id } = useParams();
+  const matchTimeSec = 300;
+  const [timerState, setTimerState] = useState<TimerState>("Initial");
+  const { start, pause, resume, isRunning, minutes, seconds } = useTimer({
+    expiryTimestamp: expiryTimestamp(matchTimeSec),
+    autoStart: false,
+    onExpire: () => setTimerState("Finished"),
+  });
   console.log(id);
+
+  const onClickTimer = () => {
+    if (timerState == "Initial") {
+      start();
+      setTimerState("Started");
+      return;
+    }
+
+    if (isRunning) {
+      pause();
+    } else {
+      resume();
+    }
+  };
 
   return (
     <Flex h="100%" direction="column" gap="md" align="center" justify="center">
-      <Button w="100%" h="auto" pb="sm" variant="outline">
-        <Text size="5rem">05:00</Text>
+      <Button
+        w="100%"
+        h="auto"
+        pb="sm"
+        variant="filled"
+        color={timerState == "Finished" ? "pink" : isRunning ? "teal" : "gray"}
+        onClick={onClickTimer}
+      >
+        <Text size="5rem">
+          {minutes.toString().padStart(2, "0")}:
+          {seconds.toString().padStart(2, "0")}
+        </Text>
       </Button>
       <Paper pb="sm" w="100%" withBorder>
         <Flex gap="sm" align="center" justify="center">
