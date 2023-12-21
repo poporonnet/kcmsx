@@ -33,6 +33,7 @@ describe("正しくインスタンスを生成できる", () => {
     expect(actual.winnerID).toBeUndefined();
     expect(actual.matchType).toBe("primary");
     expect(actual.courseIndex).toBe(0);
+    expect(actual.time).toBeUndefined();
   });
 
   it("試合相手が居ないとき", () => {
@@ -49,5 +50,6 @@ describe("正しくインスタンスを生成できる", () => {
     expect(actual.winnerID).toBeUndefined();
     expect(actual.matchType).toBe("primary");
     expect(actual.courseIndex).toBe(0);
+    expect(actual.time).toBeUndefined();
   });
 });
