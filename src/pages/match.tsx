@@ -34,6 +34,11 @@ export const Match = () => {
   const [matchJudge] = useState(() => new Judge());
   const forceReload = useForceReload();
 
+  const teams: { teamName: string }[] = [
+    { teamName: "こねこ㌠" },
+    { teamName: "うさぎ㌠" },
+  ];
+
   console.log(id);
 
   const onClickTimer = () => {
@@ -62,14 +67,22 @@ export const Match = () => {
       >
         <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
       </Button>
-      <Paper pb="sm" w="100%" withBorder>
-        <Flex gap="sm" align="center" justify="center">
-          <Text size="4rem" c="blue">
-            {matchJudge.leftTeam.point.point()}
+      <Paper w="100%" withBorder>
+        <Flex align="center" justify="center">
+          <Text pl="md" size="2rem" c="blue" style={{ flex: 1 }}>
+            {teams[0].teamName}
           </Text>
-          <Text size="4rem">-</Text>
-          <Text size="4rem" c="red">
-            {matchJudge.rightTeam.point.point()}
+          <Flex pb="sm" gap="sm">
+            <Text size="4rem" c="blue">
+              {matchJudge.leftTeam.point.point()}
+            </Text>
+            <Text size="4rem">-</Text>
+            <Text size="4rem" c="red">
+              {matchJudge.rightTeam.point.point()}
+            </Text>
+          </Flex>
+          <Text pr="md" size="2rem" c="red" style={{ flex: 1 }}>
+            {teams[1].teamName}
           </Text>
         </Flex>
       </Paper>
