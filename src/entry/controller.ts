@@ -1,6 +1,5 @@
 import { EntryRepository } from "./repository.js";
 import { EntryService } from "./service/entry.js";
-import { Entry } from "./entry.js";
 import { Result } from "@mikuroxina/mini-fn";
 import { FindEntryService } from "./service/get.js";
 
@@ -27,12 +26,7 @@ export class Controller {
     isMultiWalk: boolean;
     category: "Elementary" | "Open";
   }): Promise<Result.Result<Error, baseEntry>> {
-    const entry = Entry.new({
-      id: "",
-      ...args,
-    });
-
-    const res = await this.entry.create(entry);
+    const res = await this.entry.create(args);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }

@@ -40,8 +40,6 @@ entryHandler.get("/", async (c) => {
   if (Result.isErr(res)) {
     return c.json({ error: res[1].message }, 400);
   }
-  // {"error": "too many members"}
-  // b
 
   return c.json([...res[1]]);
 });

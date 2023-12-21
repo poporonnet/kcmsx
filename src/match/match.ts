@@ -19,9 +19,9 @@ export interface ReconstructMatchArgs {
   // コース番号
   courseIndex: number;
   // チームごとの得点
-  points: [MatchPoints, MatchPoints];
+  points?: [MatchPoints, MatchPoints];
   // チームごとのゴール時間(秒)
-  time: [number, number];
+  time?: [number, number];
   // 勝利チームのID
   winnerID?: string;
 }
@@ -119,8 +119,8 @@ export class Match {
       teams: args.teams,
       matchType: args.matchType,
       courseIndex: args.courseIndex,
-      points: [args.points[0], args.points[1]],
-      time: [args.time[0], args.time[1]],
+      points: args.points,
+      time: args.time,
       winnerID: args.winnerID,
     });
   }

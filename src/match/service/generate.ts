@@ -3,6 +3,7 @@ import { Result } from "@mikuroxina/mini-fn";
 import { Entry } from "../../entry/entry.js";
 import { Match } from "../match.js";
 import { MatchRepository } from "./repository.js";
+import * as crypto from "crypto";
 
 export class GenerateMatchService {
   private readonly COURSE_COUNT = 3;
@@ -19,6 +20,7 @@ export class GenerateMatchService {
 
   // 予選対戦表の生成
   async generatePrimaryMatch(): Promise<Result.Result<Error, Match[][]>> {
+    // ToDo: DTOを返すようにする
     const res = await this.entryRepository.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
@@ -50,7 +52,7 @@ export class GenerateMatchService {
         const opponentIndex = k + 1 >= courses[i].length ? 0 : k + 1;
         // ToDo: IDの生成
         const match = Match.new({
-          id: "",
+          id: crypto.randomUUID(),
           matchType: "primary",
           teams: [courses[i][k], courses[i][opponentIndex]],
           courseIndex: i,
