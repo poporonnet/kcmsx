@@ -33,6 +33,13 @@ bun dev
 
 ### Authors/License
 
+| <img src="https://github.com/laminne.png" width="100px"> | <img src="https://github.com/kiharu3112.png" width="100px"> | <img src="https://github.com/tufusa.png" width="100px"> | 
+|:--------------------------------------------------------:|:-----------------------------------------------------------:|:-------------------------------------------------------:|
+|            **laminne (T. YAMAMOTO)**<br>🔧 🦀            |                   **kiharu3112**<br>🔧 🦀                   |                   **tufusa**<br>🔧 🦀                   |
+
+🔧: KCMS/KCMSFの開発   
+🦀: 書き込みツール開発
+
 (C) 2023 Poporon Network & Other Contributors  
 MIT License
 
