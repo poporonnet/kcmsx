@@ -54,12 +54,12 @@ MIT License
 
 body: `application/json`
 
-| 項目名      | 型(TS表記)                       | 説明                   | 備考                                     |
-| ----------- | -------------------------------- | ---------------------- | ---------------------------------------- |
-| teamName    | `string`                         | チーム名               | 重複するとエラー                         |
-| members     | `[string, string]`               | メンバーの名前         | 小学生部門: 1 or 2人 / オープン部門: 1人 |
-| isMultiWalk | `boolean`                        | ロボットが多足歩行型か |                                          |
-| category    | `"Elementary" or "Open"` (union) | 出場する部門           |                                          |
+| 項目名         | 型(TS表記)                          | 説明          | 備考                          |
+|-------------|----------------------------------|-------------|-----------------------------|
+| teamName    | `string`                         | チーム名        | 重複するとエラー                    |
+| members     | `[string, string]`               | メンバーの名前     | 小学生部門: 1 or 2人 / オープン部門: 1人 |
+| isMultiWalk | `boolean`                        | ロボットが多足歩行型か |                             |
+| category    | `"Elementary" or "Open"` (union) | 出場する部門      |                             |
 
 #### 出力
 
@@ -69,7 +69,10 @@ body: `application/json`
 {
   "id": "39440930485098",
   "teamName": "ニカ.reverse()",
-  "members": ["木下竹千代", "織田幸村"],
+  "members": [
+    "木下竹千代",
+    "織田幸村"
+  ],
   "isMultiWalk": false,
   "category": "Elementary"
 }
@@ -94,7 +97,7 @@ body: `application/json`
 パスパラメータ
 
 - `id`: `string`
-  - 取り消すエントリーのID
+    - 取り消すエントリーのID
 
 body: `application/json`
 
@@ -122,14 +125,17 @@ body: `application/json`
   {
     "id": "39440930485098",
     "teamName": "ニカ.reverse()",
-    "members": ["木下竹千代", "織田幸村"],
+    "members": [
+      "木下竹千代",
+      "織田幸村"
+    ],
     "isMultiWalk": false,
     "category": "Elementary"
   }
 ]
 ```
 
-### `GET /match/{categoryType}/{matchType}`
+### `GET /match/{matchType}`
 
 各部門の本選、予選対戦表を取得します
 
@@ -138,9 +144,7 @@ body: `application/json`
 パスパラメータ
 
 - `categoryType`: `"Elementary"|"Open"`
-  - 部門名
-- `matchType`: `"primary" | "final"`
-  - 対戦の種類 (`primary`: 予選, `"final"`: 本選)
+    - 部門名
 
 #### 出力
 
@@ -152,13 +156,33 @@ body: `application/json`
     // 試合ID
     "id": "43945095",
     // 試合するチームのID
-    "teams": ["30495883404", "93454093"],
+    "teams": [
+      {
+        "id": "30495883404",
+        "teamName": "ニカ.reverse()",
+        "isMultiWalk": false,
+        "category": "Elementary"
+      },
+      {
+        "id": "93454093",
+        "teamName": "カニ.reverse()",
+        "isMultiWalk": false,
+        "category": "Elementary"
+      }
+    ],
     // 対戦の種類
     "matchType": "primary",
     // チームごとの得点 (teamsと同じ順で入る)
-    "points": [2, 5],
+    "points": [
+      2,
+      5
+    ],
+    "courseIndex": 1,
     // チームごとのゴール時間(秒)
-    "time": [50, 61],
+    "time": [
+      50,
+      61
+    ],
     // 勝利チームのID
     "winnerID": "93454093"
   }
@@ -170,7 +194,7 @@ body: `application/json`
 - `UNKNOWN_CATEGORY`: 存在しないカテゴリ
 - `UNKNOWN_MATCH_TYPE`: 存在しない対戦種類
 
-### `POST /match/{categoryType}/{matchType}`
+### `POST /match/{matchType}`
 
 各部門の本選、予選対戦表を生成します
 
@@ -179,10 +203,7 @@ body: `application/json`
 パスパラメータ
 
 - `categoryType`: `"Elementary"|"Open"`
-  - 部門名
-- `matchType`: `"primary" | "final"`
-  - 対戦の種類 (`primary`: 予選, `"final"`: 本選)
-    body: `application/json`
+    - 部門名
 
 ```json
 {}
@@ -198,13 +219,33 @@ body: `application/json`
     // 試合ID
     "id": "43945095",
     // 試合するチームのID
-    "teams": ["30495883404", "93454093"],
+    "teams": [
+      {
+        "id": "30495883404",
+        "teamName": "ニカ.reverse()",
+        "isMultiWalk": false,
+        "category": "Elementary"
+      },
+      {
+        "id": "93454093",
+        "teamName": "カニ.reverse()",
+        "isMultiWalk": false,
+        "category": "Elementary"
+      }
+    ],
     // 対戦の種類
     "matchType": "primary",
     // チームごとの得点 (teamsと同じ順で入る)
-    "points": [2, 5],
+    "points": [
+      2,
+      5
+    ],
+    "courseIndex": 1,
     // チームごとのゴール時間(秒)
-    "time": [50, 61],
+    "time": [
+      50,
+      61
+    ],
     // 勝利チームのID
     "winnerID": "93454093"
   }
