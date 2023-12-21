@@ -1,6 +1,6 @@
 import { Match, MatchPoints, MatchTeams } from "../match.js";
 import { MatchRepository } from "../service/repository.js";
-import { Result } from "@mikuroxina/mini-fn";
+import { Option, Result } from "@mikuroxina/mini-fn";
 import { readFile, writeFile } from "node:fs/promises";
 import { EntryJSON } from "../../entry/adaptor/json.js";
 import { Entry } from "../../entry/entry.js";
@@ -41,6 +41,15 @@ export class JSONMatchRepository implements MatchRepository {
     this.data.push(match);
     await this.save();
     return Result.ok(match);
+  }
+
+  public async findByID(id: string): Promise<Option.Option<Match>> {
+    const match = this.data.find((m) => m.id === id);
+    if (!match) {
+      return Option.none();
+    }
+
+    return Option.some(match);
   }
 
   private async save() {

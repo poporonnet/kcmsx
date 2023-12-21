@@ -34,11 +34,11 @@ bun dev
 
 ### Authors/License
 
-| <img src="https://github.com/laminne.png" width="100px"> | <img src="https://github.com/kiharu3112.png" width="100px"> | <img src="https://github.com/tufusa.png" width="100px"> | 
-|:--------------------------------------------------------:|:-----------------------------------------------------------:|:-------------------------------------------------------:|
+| <img src="https://github.com/laminne.png" width="100px"> | <img src="https://github.com/kiharu3112.png" width="100px"> | <img src="https://github.com/tufusa.png" width="100px"> |
+| :------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------: |
 |            **laminne (T. YAMAMOTO)**<br>🔧 🦀            |                   **kiharu3112**<br>🔧 🦀                   |                   **tufusa**<br>🔧 🦀                   |
 
-🔧: KCMS/KCMSFの開発   
+🔧: KCMS/KCMSFの開発  
 🦀: 書き込みツール開発
 
 (C) 2023 Poporon Network & Other Contributors  
@@ -62,12 +62,12 @@ MIT License
 
 body: `application/json`
 
-| 項目名         | 型(TS表記)                          | 説明          | 備考                          |
-|-------------|----------------------------------|-------------|-----------------------------|
-| teamName    | `string`                         | チーム名        | 重複するとエラー                    |
-| members     | `[string, string]`               | メンバーの名前     | 小学生部門: 1 or 2人 / オープン部門: 1人 |
-| isMultiWalk | `boolean`                        | ロボットが多足歩行型か |                             |
-| category    | `"Elementary" or "Open"` (union) | 出場する部門      |                             |
+| 項目名      | 型(TS表記)                       | 説明                   | 備考                                     |
+| ----------- | -------------------------------- | ---------------------- | ---------------------------------------- |
+| teamName    | `string`                         | チーム名               | 重複するとエラー                         |
+| members     | `[string, string]`               | メンバーの名前         | 小学生部門: 1 or 2人 / オープン部門: 1人 |
+| isMultiWalk | `boolean`                        | ロボットが多足歩行型か |                                          |
+| category    | `"Elementary" or "Open"` (union) | 出場する部門           |                                          |
 
 #### 出力
 
@@ -77,10 +77,7 @@ body: `application/json`
 {
   "id": "39440930485098",
   "teamName": "ニカ.reverse()",
-  "members": [
-    "木下竹千代",
-    "織田幸村"
-  ],
+  "members": ["木下竹千代", "織田幸村"],
   "isMultiWalk": false,
   "category": "Elementary"
 }
@@ -105,7 +102,7 @@ body: `application/json`
 パスパラメータ
 
 - `id`: `string`
-    - 取り消すエントリーのID
+  - 取り消すエントリーのID
 
 body: `application/json`
 
@@ -133,10 +130,7 @@ body: `application/json`
   {
     "id": "39440930485098",
     "teamName": "ニカ.reverse()",
-    "members": [
-      "木下竹千代",
-      "織田幸村"
-    ],
+    "members": ["木下竹千代", "織田幸村"],
     "isMultiWalk": false,
     "category": "Elementary"
   }
@@ -152,7 +146,7 @@ body: `application/json`
 パスパラメータ
 
 - `categoryType`: `"Elementary"|"Open"`
-    - 部門名
+  - 部門名
 
 #### 出力
 
@@ -181,16 +175,10 @@ body: `application/json`
     // 対戦の種類
     "matchType": "primary",
     // チームごとの得点 (teamsと同じ順で入る)
-    "points": [
-      2,
-      5
-    ],
+    "points": [2, 5],
     "courseIndex": 1,
     // チームごとのゴール時間(秒)
-    "time": [
-      50,
-      61
-    ],
+    "time": [50, 61],
     // 勝利チームのID
     "winnerID": "93454093"
   }
@@ -211,7 +199,7 @@ body: `application/json`
 パスパラメータ
 
 - `categoryType`: `"Elementary"|"Open"`
-    - 部門名
+  - 部門名
 
 ```json
 {}
@@ -244,16 +232,10 @@ body: `application/json`
     // 対戦の種類
     "matchType": "primary",
     // チームごとの得点 (teamsと同じ順で入る)
-    "points": [
-      2,
-      5
-    ],
+    "points": [2, 5],
     "courseIndex": 1,
     // チームごとのゴール時間(秒)
-    "time": [
-      50,
-      61
-    ],
+    "time": [50, 61],
     // 勝利チームのID
     "winnerID": "93454093"
   }
@@ -274,19 +256,20 @@ body: `application/json`
 パスパラメータ
 
 - id: `string`
-    - 試合ID
+  - 試合ID
 
 <!-- ToDo: TimeをPointと同じようにオブジェクトとして定義する -->
 
-| 項目名      | 型(TS表記)                                                                | 説明       | 備考 |
-|----------|------------------------------------------------------------------------|----------|----|
-| points   | `[{teamID: string, points: number}, {teamID: string, points: number}]` | 得点       |    |
-| time     | `[number, number]`                                                     | ゴール時間(秒) |    |
-| winnerID | `string`                                                               | 勝利チームのID |    |
+| 項目名   | 型(TS表記)                                                             | 説明           | 備考 |
+| -------- | ---------------------------------------------------------------------- | -------------- | ---- |
+| points   | `[{teamID: string, points: number}, {teamID: string, points: number}]` | 得点           |      |
+| time     | `[number, number]`                                                     | ゴール時間(秒) |      |
+| winnerID | `string`                                                               | 勝利チームのID |      |
 
 #### 出力
 
 ##### `200 OK`
+
 更新しました
 
 ```jsonc
@@ -311,16 +294,10 @@ body: `application/json`
   // 対戦の種類
   "matchType": "primary",
   // チームごとの得点 (teamsと同じ順で入る)
-  "points": [
-    2,
-    5
-  ],
+  "points": [2, 5],
   "courseIndex": 1,
   // チームごとのゴール時間(秒)
-  "time": [
-    50,
-    61
-  ],
+  "time": [50, 61],
   // 勝利チームのID
   "winnerID": "93454093"
 }
