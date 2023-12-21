@@ -264,3 +264,64 @@ body: `application/json`
 
 - `UNKNOWN_CATEGORY`: 存在しないカテゴリ
 - `UNKNOWN_MATCH_TYPE`: 存在しない対戦種類
+
+### `PUT /match/{id}`
+
+指定した試合の結果を入力します.
+
+#### 入力
+
+パスパラメータ
+
+- id: `string`
+    - 試合ID
+
+<!-- ToDo: TimeをPointと同じようにオブジェクトとして定義する -->
+
+| 項目名      | 型(TS表記)                                                                | 説明       | 備考 |
+|----------|------------------------------------------------------------------------|----------|----|
+| points   | `[{teamID: string, points: number}, {teamID: string, points: number}]` | 得点       |    |
+| time     | `[number, number]`                                                     | ゴール時間(秒) |    |
+| winnerID | `string`                                                               | 勝利チームのID |    |
+
+#### 出力
+
+##### `200 OK`
+更新しました
+
+```jsonc
+{
+  // 試合ID
+  "id": "43945095",
+  // 試合するチームのID
+  "teams": [
+    {
+      "id": "30495883404",
+      "teamName": "ニカ.reverse()",
+      "isMultiWalk": false,
+      "category": "Elementary"
+    },
+    {
+      "id": "93454093",
+      "teamName": "カニ.reverse()",
+      "isMultiWalk": false,
+      "category": "Elementary"
+    }
+  ],
+  // 対戦の種類
+  "matchType": "primary",
+  // チームごとの得点 (teamsと同じ順で入る)
+  "points": [
+    2,
+    5
+  ],
+  "courseIndex": 1,
+  // チームごとのゴール時間(秒)
+  "time": [
+    50,
+    61
+  ],
+  // 勝利チームのID
+  "winnerID": "93454093"
+}
+```
