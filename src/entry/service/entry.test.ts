@@ -23,7 +23,14 @@ describe("entryService", () => {
     const actual = await service.create(entry);
 
     expect(Result.isOk(actual)).toBe(true);
-    expect(actual[1]).toBe(entry);
+    if (Result.isErr(actual)) {
+      return;
+    }
+
+    expect(actual[1].members).toStrictEqual(["山田四十郎"]);
+    expect(actual[1].teamName).toBe("team1");
+    expect(actual[1].isMultiWalk).toBe(true);
+    expect(actual[1].category).toBe("Open");
   });
 
   it("チーム名が重複するときはエラー終了する", async () => {

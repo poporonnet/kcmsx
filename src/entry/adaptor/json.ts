@@ -8,7 +8,7 @@ interface JSONData {
   match: Array<object>;
 }
 
-interface EntryJSON {
+export interface EntryJSON {
   id: string;
   teamName: string;
   members: Array<string>;
@@ -78,6 +78,7 @@ export class JSONEntryRepository implements EntryRepository {
     for (const v of this.data) {
       console.log(v.teamName, entry.teamName, v.id, entry.id);
       if (v.teamName === entry.teamName || v.id === entry.id) {
+        console.error("Entry already exists");
         return true;
       }
     }
