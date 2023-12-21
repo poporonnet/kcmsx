@@ -1,6 +1,6 @@
 import { Match } from "../match.js";
 import { MatchRepository } from "../service/repository.js";
-import { Result } from "@mikuroxina/mini-fn";
+import { Option, Result } from "@mikuroxina/mini-fn";
 
 export class DummyMatchRepository implements MatchRepository {
   private data: Match[];
@@ -12,5 +12,13 @@ export class DummyMatchRepository implements MatchRepository {
   public async create(match: Match): Promise<Result.Result<Error, Match>> {
     this.data.push(match);
     return Result.ok(match);
+  }
+
+  public async findByID(id: string): Promise<Option.Option<Match>> {
+    const match = this.data.find((m) => m.id === id);
+    if (!match) {
+      return Option.none();
+    }
+    return Option.some(match);
   }
 }
