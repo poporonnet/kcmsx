@@ -12,7 +12,6 @@ const controller = new MatchController(generateService);
 
 matchHandler.post("/:match", async (c) => {
   const { match } = c.req.param();
-  // fixme: teamsにEntryがそのまま入っている
   const res = await controller.generateMatch(match);
   if (Result.isErr(res)) {
     return c.json([{ error: res[1].message }]);
