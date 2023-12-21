@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  ActionIcon,
   Button,
   Divider,
   Flex,
+  Group,
   MantineColor,
   Paper,
   Text,
 } from "@mantine/core";
 import { useParams } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
-import { expiryTimestamp } from "../utils/expiryTimestamp";
+import {
+  IconSquareChevronLeftFilled,
+  IconSquareChevronRightFilled,
+} from "@tabler/icons-react";
+import { expiryTimestamp, parseSeconds } from "../utils/time";
+import { Judge } from "../utils/match/judge";
+import { useForceReload } from "../hooks/useForceReload";
+import { Team } from "../utils/match/team";
 
 type TimerState = "Initial" | "Started" | "Finished";
 
@@ -17,11 +26,14 @@ export const Match = () => {
   const { id } = useParams();
   const matchTimeSec = 300;
   const [timerState, setTimerState] = useState<TimerState>("Initial");
-  const { start, pause, resume, isRunning, minutes, seconds } = useTimer({
+  const { start, pause, resume, isRunning, totalSeconds } = useTimer({
     expiryTimestamp: expiryTimestamp(matchTimeSec),
     autoStart: false,
     onExpire: () => setTimerState("Finished"),
   });
+  const [matchJudge] = useState(() => new Judge());
+  const forceReload = useForceReload();
+
   console.log(id);
 
   const onClickTimer = () => {
@@ -48,73 +60,182 @@ export const Match = () => {
         color={timerState == "Finished" ? "pink" : isRunning ? "teal" : "gray"}
         onClick={onClickTimer}
       >
-        <Text size="5rem">
-          {minutes.toString().padStart(2, "0")}:
-          {seconds.toString().padStart(2, "0")}
-        </Text>
+        <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
       </Button>
       <Paper pb="sm" w="100%" withBorder>
         <Flex gap="sm" align="center" justify="center">
           <Text size="4rem" c="blue">
-            0
+            {matchJudge.leftTeam.point.point()}
           </Text>
           <Text size="4rem">-</Text>
           <Text size="4rem" c="red">
-            0
+            {matchJudge.rightTeam.point.point()}
           </Text>
         </Flex>
       </Paper>
       <Divider w="100%" />
       <Flex direction="row" gap="2rem" align="center" justify="center">
-        <Controls color="blue" />
+        <PointControls
+          color="blue"
+          team={matchJudge.leftTeam}
+          onChange={forceReload}
+          onGoal={(done) =>
+            matchJudge.goalLeftTeam(done ? matchTimeSec - totalSeconds : null)
+          }
+        />
         <Divider orientation="vertical" />
-        <Controls color="red" />
+        <PointControls
+          color="red"
+          team={matchJudge.rightTeam}
+          onChange={forceReload}
+          onGoal={(done) =>
+            matchJudge.goalRightTeam(done ? matchTimeSec - totalSeconds : null)
+          }
+        />
       </Flex>
     </Flex>
   );
 };
 
-const Controls = (props: { color: MantineColor }) => {
-  const fontSize = "1.2";
+const PointControls = (props: {
+  color: MantineColor;
+  team: Team;
+  onChange: () => void;
+  onGoal: (done: boolean) => void;
+}) => {
+  const [minBallCount, maxBallCount] = [0, 3] as const;
+  const [ballCount, setBallCount] = useState(0);
+  useEffect(props.onChange, []);
+
+  const decrement = () => {
+    if (ballCount == minBallCount) return;
+    setBallCount((current) => current - 1);
+    props.team.point.state.bringBall = ballCount - 1;
+    props.onChange();
+  };
+
+  const increment = () => {
+    if (ballCount == maxBallCount) return;
+    setBallCount((current) => current + 1);
+    props.team.point.state.bringBall = ballCount + 1;
+    props.onChange();
+  };
+
   return (
     <Flex direction="column" gap="xs">
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>松江エリアを出た</Text>
+      <ControlButton
+        color={props.color}
+        onChange={(active) => {
+          props.team.point.state.leaveBase = active;
+          props.onChange();
+        }}
+      >
+        松江エリアを出た
       </ControlButton>
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>中間線を越えた</Text>
+      <ControlButton
+        color={props.color}
+        onChange={(active) => {
+          props.team.point.state.overMiddle = active;
+          props.onChange();
+        }}
+      >
+        中間線を越えた
       </ControlButton>
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>金星エリアに入った</Text>
+      <ControlButton
+        color={props.color}
+        onChange={(active) => {
+          props.team.point.state.enterDestination = active;
+          props.onChange();
+        }}
+      >
+        金星エリアに入った
       </ControlButton>
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>ボールを金星エリアに置いた</Text>
+      <ControlButton
+        color={props.color}
+        onChange={(active) => {
+          props.team.point.state.placeBall = active;
+          props.onChange();
+        }}
+      >
+        ボールを金星エリアに置いた
       </ControlButton>
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>松江エリアに戻った</Text>
+      <ControlButton
+        color={props.color}
+        onChange={(active) => {
+          props.team.point.state.returnBase = active;
+          props.onChange();
+        }}
+      >
+        松江エリアに戻った
       </ControlButton>
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>ゴール</Text>
+      <ControlButton
+        color={props.color}
+        onChange={(done) => {
+          props.onGoal(done);
+          props.onChange();
+        }}
+      >
+        ゴール{" "}
+        {props.team.goalTimeSeconds != null &&
+          parseSeconds(props.team.goalTimeSeconds)}
       </ControlButton>
-      <ControlButton color={props.color}>
-        <Text size={`${fontSize}rem`}>雲粒子の数</Text>
-      </ControlButton>
+      <Group>
+        <Text size="1.2rem" c={props.color} style={{ flexGrow: 1 }}>
+          雲粒子の数:
+        </Text>
+        <ActionIcon
+          size="xl"
+          variant="transparent"
+          onClick={decrement}
+          c={ballCount > minBallCount ? props.color : undefined}
+          disabled={ballCount == minBallCount}
+          bg="white"
+        >
+          <IconSquareChevronLeftFilled
+            style={{ width: "100%", height: "100%" }}
+          />
+        </ActionIcon>
+        <Text w="auto" size="xl" style={{ flexGrow: 1 }}>
+          {ballCount}
+        </Text>
+        <ActionIcon
+          size="xl"
+          variant="transparent"
+          onClick={increment}
+          c={ballCount < maxBallCount ? props.color : undefined}
+          disabled={ballCount == maxBallCount}
+          bg="white"
+        >
+          <IconSquareChevronRightFilled
+            style={{ width: "100%", height: "100%" }}
+          />
+        </ActionIcon>
+      </Group>
     </Flex>
   );
 };
 
 const ControlButton = (props: {
   color: MantineColor;
-  children: React.ReactElement;
-}) => (
-  <Button
-    w="auto"
-    h="auto"
-    px="lg"
-    py="xs"
-    variant="outline"
-    color={props.color}
-  >
-    {props.children}
-  </Button>
-);
+  onChange: (active: boolean) => void;
+  children: React.ReactNode;
+}) => {
+  const [active, setActive] = useState(false);
+
+  return (
+    <Button
+      w="auto"
+      h="auto"
+      px="lg"
+      py="xs"
+      variant={active ? "filled" : "outline"}
+      color={props.color}
+      onClick={() => {
+        props.onChange(!active);
+        setActive(() => !active);
+      }}
+    >
+      <Text size="1.2rem">{props.children}</Text>
+    </Button>
+  );
+};
