@@ -20,12 +20,13 @@ import { Judge } from "../utils/match/judge";
 import { useForceReload } from "../hooks/useForceReload";
 import { Team } from "../utils/match/team";
 import { lang } from "../config/lang/lang";
+import { config } from "../config/config";
 
 type TimerState = "Initial" | "Started" | "Finished";
 
 export const Match = () => {
   const { id } = useParams();
-  const matchTimeSec = 300;
+  const matchTimeSec = config.match.matchSeconds;
   const [timerState, setTimerState] = useState<TimerState>("Initial");
   const { start, pause, resume, isRunning, totalSeconds } = useTimer({
     expiryTimestamp: expiryTimestamp(matchTimeSec),
