@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import { zValidator } from "@hono/zod-validator";
 import { entryRequestSchema } from "./schema.js";
 import { Controller } from "./controller.js";
-import { Result } from "@mikuroxina/mini-fn";
+import { Option, Result } from "@mikuroxina/mini-fn";
 import { JSONEntryRepository } from "./adaptor/json.js";
 
 export const entryHandler = new Hono();
@@ -31,10 +31,6 @@ entryHandler.post("/", zValidator("json", entryRequestSchema), async (c) => {
   });
 });
 
-entryHandler.delete("/:id", async (c) => {
-  return c.text("Not implemented", 500);
-});
-
 entryHandler.get("/", async (c) => {
   const res = await controller.get();
   if (Result.isErr(res)) {
@@ -42,4 +38,12 @@ entryHandler.get("/", async (c) => {
   }
 
   return c.json([...res[1]]);
+});
+
+entryHandler.delete("/:id", async (c) => {
+  const res = await controller.delete(c.req.param().id);
+  if (Option.isSome(res)) {
+    return c.json({ error: res[1].message }, 400);
+  }
+  return new Response(null, { status: 204 });
 });
