@@ -1,4 +1,4 @@
-type Lang = Record<string, Record<string, string>>;
+type Lang = Record<string, string | Record<string, string>>;
 
 export const lang = {
   match: {
