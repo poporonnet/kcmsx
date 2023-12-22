@@ -1,5 +1,5 @@
 import { Point, PointState } from "./point";
-import { initialPointState } from "./rule";
+import { initialPointState } from "../../config/rule/rule";
 
 export type SetGoalTimeSeconds = (goalTimeSec: number | null) => void;
 
