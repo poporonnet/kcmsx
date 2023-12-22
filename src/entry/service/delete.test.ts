@@ -7,13 +7,15 @@ import { Entry } from "../entry.js";
 describe("DeleteEntryService", () => {
   const repository = new DummyRepository();
   const service = new DeleteEntryService(repository);
-  repository.create(Entry.new({
+  repository.create(
+    Entry.new({
       id: "1",
       teamName: "TestTeam",
       members: ["TestTaro"],
       isMultiWalk: true,
-      category: "Elementary"
-  }))
+      category: "Elementary",
+    }),
+  );
 
   it("正しく削除できる", async () => {
     const actual = await service.handle("1");
