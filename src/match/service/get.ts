@@ -68,11 +68,17 @@ export class MatchDTO {
     teams: MatchTeams,
     matchType: "primary" | "final",
     courseIndex: number,
+    points?: [MatchPoints, MatchPoints] | undefined,
+    time?: [number, number],
+    winnerID?: string,
   ) {
     this._id = id;
     this._teams = teams;
     this._matchType = matchType;
     this._courseIndex = courseIndex;
+    if (points) this._points = points;
+    if (time) this._time = time;
+    if (winnerID) this._winnerID = winnerID;
   }
 
   public static fromDomain(match: Match): MatchDTO {
@@ -81,6 +87,9 @@ export class MatchDTO {
       match.teams,
       match.matchType,
       match.courseIndex,
+      match.points,
+      match.time,
+      match.winnerID,
     );
   }
 

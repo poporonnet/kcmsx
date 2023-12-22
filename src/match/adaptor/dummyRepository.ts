@@ -21,4 +21,10 @@ export class DummyMatchRepository implements MatchRepository {
     }
     return Option.some(match);
   }
+
+  public async update(match: Match): Promise<Result.Result<Error, Match>> {
+    const i = this.data.findIndex((m) => m.id === match.id);
+    this.data[i] = match;
+    return Result.ok(match);
+  }
 }

@@ -1,12 +1,18 @@
 import { GenerateMatchService } from "./service/generate.js";
 import { Result } from "@mikuroxina/mini-fn";
 import { Match } from "./match.js";
+import { EditMatchService } from "./service/edit.js";
 
 export class MatchController {
   private readonly matchService: GenerateMatchService;
+  private readonly editService: EditMatchService;
 
-  constructor(matchService: GenerateMatchService) {
+  constructor(
+    matchService: GenerateMatchService,
+    editService: EditMatchService,
+  ) {
     this.matchService = matchService;
+    this.editService = editService;
   }
 
   async generateMatch(type: string) {
@@ -26,6 +32,15 @@ export class MatchController {
     return Result.ok(res[1].map((i) => i.map(this.toJSON)));
   }
 
+  async editMatch(id: string, args: matchUpdateJSON) {
+    const res = await this.editService.handle(id, args);
+    if (Result.isErr(res)) {
+      return Result.err(res[1]);
+    }
+
+    return Result.ok(this.toJSON(res[1].toDomain()));
+  }
+
   private toJSON(i: Match) {
     const toTeamsJSON = (i: Match) =>
       i.teams.map((j) => {
@@ -40,7 +55,7 @@ export class MatchController {
           category: j.category,
         };
       });
-
+    // winnerIDなどがundefinedになる
     return {
       id: i.id,
       teams: toTeamsJSON(i),
@@ -51,4 +66,13 @@ export class MatchController {
       winnerID: i.winnerID,
     };
   }
+}
+
+interface matchUpdateJSON {
+  points?: [
+    { teamID: string; points: number },
+    { teamID: string; points: number },
+  ];
+  time?: [number, number];
+  winnerID?: string;
 }
