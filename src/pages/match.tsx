@@ -19,6 +19,7 @@ import { expiryTimestamp, parseSeconds } from "../utils/time";
 import { Judge } from "../utils/match/judge";
 import { useForceReload } from "../hooks/useForceReload";
 import { Team } from "../utils/match/team";
+import { lang } from "../config/lang/lang";
 
 type TimerState = "Initial" | "Started" | "Finished";
 
@@ -118,7 +119,7 @@ const PointControls = (props: {
 }) => {
   const [minBallCount, maxBallCount] = [0, 3] as const;
   const [ballCount, setBallCount] = useState(0);
-  useEffect(() => props.onChange(), [props]);
+  useEffect(props.onChange, []);
 
   const decrement = () => {
     if (ballCount == minBallCount) return;
@@ -143,7 +144,7 @@ const PointControls = (props: {
           props.onChange();
         }}
       >
-        松江エリアを出た
+        {lang.match.leaveBase}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -152,7 +153,7 @@ const PointControls = (props: {
           props.onChange();
         }}
       >
-        中間線を越えた
+        {lang.match.overMiddle}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -161,7 +162,7 @@ const PointControls = (props: {
           props.onChange();
         }}
       >
-        金星エリアに入った
+        {lang.match.enterDistination}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -170,7 +171,7 @@ const PointControls = (props: {
           props.onChange();
         }}
       >
-        ボールを金星エリアに置いた
+        {lang.match.placeBall}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -179,7 +180,7 @@ const PointControls = (props: {
           props.onChange();
         }}
       >
-        松江エリアに戻った
+        {lang.match.returnBase}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -188,13 +189,13 @@ const PointControls = (props: {
           props.onChange();
         }}
       >
-        ゴール{" "}
+        {lang.match.goal}{" "}
         {props.team.goalTimeSeconds != null &&
           parseSeconds(props.team.goalTimeSeconds)}
       </ControlButton>
       <Group>
         <Text size="1.2rem" c={props.color} style={{ flexGrow: 1 }}>
-          雲粒子の数:
+          {lang.match.numberOfBall}:
         </Text>
         <ActionIcon
           size="xl"
