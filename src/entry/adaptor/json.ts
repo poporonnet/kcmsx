@@ -17,7 +17,7 @@ export interface EntryJSON {
 }
 
 export class JSONEntryRepository implements EntryRepository {
-  private readonly data: Array<Entry>;
+  private data: Array<Entry>;
 
   private constructor(data?: Array<Entry>) {
     this.data = data ?? [];
@@ -57,6 +57,12 @@ export class JSONEntryRepository implements EntryRepository {
 
   async findAll(): Promise<Result.Result<Error, Array<Entry>>> {
     return Result.ok(this.data);
+  }
+
+  async delete(id: string): Promise<Option.Option<Error>> {
+    this.data = this.data.filter((e) => e.id !== id);
+    await this.save();
+    return Option.none();
   }
 
   private async save() {

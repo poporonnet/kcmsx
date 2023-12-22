@@ -6,4 +6,5 @@ export interface EntryRepository {
   findByTeamName(name: string): Promise<Option.Option<Entry>>;
   findAll(): Promise<Result.Result<Error, Array<Entry>>>;
   findByID(id: string): Promise<Option.Option<Entry>>;
+  delete(id: string): Promise<Option.Option<Error>>;
 }
