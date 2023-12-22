@@ -1,7 +1,8 @@
 import { EntryRepository } from "./repository.js";
 import { EntryService } from "./service/entry.js";
-import { Result } from "@mikuroxina/mini-fn";
+import { Result, Option } from "@mikuroxina/mini-fn";
 import { FindEntryService } from "./service/get.js";
+import { DeleteEntryService } from "./service/delete.js";
 
 interface baseEntry {
   id: string;
@@ -14,10 +15,12 @@ interface baseEntry {
 export class Controller {
   private readonly entry: EntryService;
   private readonly find: FindEntryService;
+  private readonly deleteService: DeleteEntryService;
 
   constructor(repository: EntryRepository) {
     this.entry = new EntryService(repository);
     this.find = new FindEntryService(repository);
+    this.deleteService = new DeleteEntryService(repository);
   }
 
   async create(args: {
@@ -51,5 +54,14 @@ export class Controller {
         };
       }),
     );
+  }
+
+  async delete(id: string): Promise<Option.Option<Error>> {
+    const res = await this.deleteService.handle(id);
+    if (Option.isSome(res)) {
+      return Option.some(res[1]);
+    }
+
+    return Option.none();
   }
 }

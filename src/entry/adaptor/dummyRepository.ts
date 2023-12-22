@@ -33,6 +33,11 @@ export class DummyRepository implements EntryRepository {
     return Result.ok(this.data);
   }
 
+  async delete(id: string): Promise<Option.Option<Error>> {
+    this.data = this.data.filter((e) => e.id !== id);
+    return Option.none();
+  }
+
   reset() {
     this.data = [];
   }
