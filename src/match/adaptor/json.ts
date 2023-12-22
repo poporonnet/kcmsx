@@ -52,6 +52,14 @@ export class JSONMatchRepository implements MatchRepository {
     return Option.some(match);
   }
 
+  public async update(match: Match): Promise<Result.Result<Error, Match>> {
+    const i = this.data.findIndex((m) => m.id === match.id);
+    this.data[i] = match;
+
+    await this.save();
+    return Result.ok(match);
+  }
+
   private async save() {
     const data = await readFile("./data.json", "utf-8");
     const baseData = JSON.parse(data) as JSONData;

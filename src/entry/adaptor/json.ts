@@ -76,7 +76,6 @@ export class JSONEntryRepository implements EntryRepository {
 
   private isExists(entry: Entry): boolean {
     for (const v of this.data) {
-      console.log(v.teamName, entry.teamName, v.id, entry.id);
       if (v.teamName === entry.teamName || v.id === entry.id) {
         console.error("Entry already exists");
         return true;
