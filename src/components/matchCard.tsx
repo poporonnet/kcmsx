@@ -1,49 +1,49 @@
-import {Box, Card, Text} from "@mantine/core";
-
+import { Card, SimpleGrid, Text } from "@mantine/core";
+import { Link } from "react-router-dom";
 
 interface MatchCardProps {
-  id: number,
-  teamName1: string,
-  teamName2: string,
-  matchType: string,
-  coat: number,
-  isEnd: boolean,
+  id: number;
+  teamName1: string;
+  teamName2: string;
+  matchType: string;
+  isEnd: boolean;
 }
 
 export const MatchCard = (props: MatchCardProps) => {
   return (
-    <Card
-      shadow="sm"
-      padding="sm"
-      radius="md"
-      m={"sm"}
-      withBorder
-      variant={"outline"}
-      component={props.isEnd ? "div" : "a"}
-      href={"/match/" + props.id}
-      style={{
-        display: "flex",
-        width: "12rem",
-        height: "8rem",
+    <Link
+      to={"/match/"}
+      state={{
+        id: props.id,
+        teamName1: props.teamName1,
+        teamName2: props.teamName2,
+        matchType: props.matchType,
       }}
+      style={{ pointerEvents: props.isEnd ? "none" : "auto" }}
     >
-      <Box style={{
-        color: "black",
-        display: "flex",
-        alignItems: "center",
-      }}>
-        <Text size={"lg"}>コート</Text>
-        <Text size={"xl"}>{props.coat}</Text>
-      </Box>
-      <Box style={{
-        color: "black",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-      }}>
-        <Text size={"xs"} style={{fontSize: "1.5rem"}}>{props.teamName1}</Text>
-        <Text size={"xs"} style={{fontSize: "1.5rem"}}>{props.teamName2}</Text>
-      </Box>
-    </Card>
-  )
-}
+      <Card
+        shadow="sm"
+        padding="sm"
+        radius="md"
+        m={"md"}
+        withBorder
+        variant={"outline"}
+        style={{
+          display: "flex",
+          width: "15rem",
+          height: "8rem",
+        }}
+      >
+        <SimpleGrid
+          cols={1}
+          style={{
+            color: "black",
+          }}
+        >
+          <Text size={"2rem"}>{props.teamName1}</Text>
+          <Text size={"2rem"}>{props.teamName2}</Text>
+        </SimpleGrid>
+      </Card>
+    </Link>
+  );
+};
