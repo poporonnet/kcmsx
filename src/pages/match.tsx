@@ -118,7 +118,6 @@ const PointControls = (props: {
 }) => {
   const [minBallCount, maxBallCount] = [0, 3] as const;
   const [ballCount, setBallCount] = useState(0);
-  useEffect(() => props.onChange(), [props]);
 
   const decrement = () => {
     if (ballCount == minBallCount) return;
