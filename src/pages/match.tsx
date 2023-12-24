@@ -9,7 +9,6 @@ import {
   Paper,
   Text,
 } from "@mantine/core";
-import { useParams } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
 import {
   IconSquareChevronLeftFilled,
@@ -19,11 +18,25 @@ import { expiryTimestamp, parseSeconds } from "../utils/time";
 import { Judge } from "../utils/match/judge";
 import { useForceReload } from "../hooks/useForceReload";
 import { Team } from "../utils/match/team";
+import { useLocation } from "react-router-dom";
 
 type TimerState = "Initial" | "Started" | "Finished";
+type TeamInfo = {
+  id: string;
+  teamName: string;
+  isMultiWalk: boolean;
+  category: "Elementary" | "Open";
+};
+export type MatchInfo = {
+  id: string;
+  teams: [TeamInfo, TeamInfo];
+  matchType: "primary" | "final";
+};
 
 export const Match = () => {
-  const { id } = useParams();
+  const matchInfo = useLocation().state as MatchInfo;
+  const isExhibition = matchInfo == null;
+
   const matchTimeSec = 300;
   const [timerState, setTimerState] = useState<TimerState>("Initial");
   const { start, pause, resume, isRunning, totalSeconds } = useTimer({
@@ -31,15 +44,14 @@ export const Match = () => {
     autoStart: false,
     onExpire: () => setTimerState("Finished"),
   });
-  const [matchJudge] = useState(() => new Judge());
+
+  const [matchJudge] = useState(
+    new Judge(
+      { multiWalk: !isExhibition && matchInfo.teams[0].isMultiWalk },
+      { multiWalk: !isExhibition && matchInfo.teams[1].isMultiWalk }
+    )
+  );
   const forceReload = useForceReload();
-
-  const teams: { teamName: string }[] = [
-    { teamName: "こねこ㌠" },
-    { teamName: "うさぎ㌠" },
-  ];
-
-  console.log(id);
 
   const onClickTimer = () => {
     if (timerState == "Initial") {
@@ -69,9 +81,11 @@ export const Match = () => {
       </Button>
       <Paper w="100%" withBorder>
         <Flex align="center" justify="center">
-          <Text pl="md" size="2rem" c="blue" style={{ flex: 1 }}>
-            {teams[0].teamName}
-          </Text>
+          {!isExhibition && (
+            <Text pl="md" size="2rem" c="blue" style={{ flex: 1 }}>
+              {matchInfo.teams[0].teamName}
+            </Text>
+          )}
           <Flex pb="sm" gap="sm">
             <Text size="4rem" c="blue">
               {matchJudge.leftTeam.point.point()}
@@ -81,9 +95,11 @@ export const Match = () => {
               {matchJudge.rightTeam.point.point()}
             </Text>
           </Flex>
-          <Text pr="md" size="2rem" c="red" style={{ flex: 1 }}>
-            {teams[1].teamName}
-          </Text>
+          {!isExhibition && (
+            <Text pr="md" size="2rem" c="red" style={{ flex: 1 }}>
+              {matchInfo.teams[1].teamName}
+            </Text>
+          )}
         </Flex>
       </Paper>
       <Divider w="100%" />

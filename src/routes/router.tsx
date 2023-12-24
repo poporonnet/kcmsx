@@ -13,7 +13,7 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />}>
       <Route index element={<Home />} />
       <Route path="/entrylist" element={<EntryList />} />
-      <Route path="/match/:id" element={<Match />} />
+      <Route path="/match" element={<Match />} />
     </Route>
   ),
   {
