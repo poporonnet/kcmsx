@@ -1,5 +1,6 @@
 import { Card, SimpleGrid, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
+import { IconChecks } from "@tabler/icons-react";
 
 interface MatchCardProps {
   // 許して。後で直すから。
@@ -49,16 +50,31 @@ export const MatchCard = (props: MatchCardProps) => {
           display: "flex",
           width: "15rem",
           height: "8rem",
+          alignItems: "center",
         }}
       >
+        {props.isEnd && (
+          <IconChecks
+            size={30}
+            color={"#00FF00"}
+            style={{
+              position: "absolute",
+              top: "0.5rem",
+              right: "0.5rem",
+            }}
+          />
+        )}
         <SimpleGrid
           cols={1}
           style={{
             color: "black",
+            textAlign: "center",
+            width: "100%",
+            height: "100%",
           }}
         >
-          <Text size={"2rem"}>{props.teamName1}</Text>
-          <Text size={"2rem"}>{props.teamName2}</Text>
+          <Text size={"1rem"} style={{display: "flex", justifyContent: "center", alignItems:"center"}}>{props.teamName1}</Text>
+          <Text size={"1rem"} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{props.teamName2}</Text>
         </SimpleGrid>
       </Card>
     </Link>
