@@ -214,6 +214,7 @@ export const MatchList = () => {
                   teamName2={element.teamName2}
                   matchType={element.matchType}
                   isEnd={element.isEnd}
+                  category={element.category}
                   isMultiWalk={element.isMultiWalk}
                 />
               );
