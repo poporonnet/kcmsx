@@ -2,11 +2,16 @@ import { Card, SimpleGrid, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 interface MatchCardProps {
-  id: number;
+  // 許して。後で直すから。
+  id: string;
+  team1: string;
   teamName1: string;
+  team2: string;
   teamName2: string;
   matchType: string;
   isEnd: boolean;
+  category: string;
+  isMultiWalk: boolean;
 }
 
 export const MatchCard = (props: MatchCardProps) => {
@@ -15,8 +20,20 @@ export const MatchCard = (props: MatchCardProps) => {
       to={"/match/"}
       state={{
         id: props.id,
-        teamName1: props.teamName1,
-        teamName2: props.teamName2,
+        teams: [
+          {
+            id: props.team1,
+            teamName: props.teamName1,
+            category: props.category,
+            isMultiWalk: props.isMultiWalk,
+          },
+          {
+            id: props.team2,
+            teamName: props.teamName2,
+            category: props.category,
+            isMultiWalk: props.isMultiWalk,
+          },
+        ],
         matchType: props.matchType,
       }}
       style={{ pointerEvents: props.isEnd ? "none" : "auto" }}
