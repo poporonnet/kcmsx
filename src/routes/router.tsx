@@ -6,6 +6,7 @@ import {
 import { Layout } from "./layout.tsx";
 import { Home } from "../pages/home.tsx";
 import { EntryList } from "../pages/entryList.tsx";
+import { Match } from "../pages/match.tsx";
 import { Result } from "../pages/result.tsx";
 
 export const router = createBrowserRouter(
@@ -13,6 +14,7 @@ export const router = createBrowserRouter(
     <Route path="/" element={<Layout />}>
       <Route index element={<Home />} />
       <Route path="/entrylist" element={<EntryList />} />
+      <Route path="/match/:id" element={<Match />} />
       <Route path="/result" element={<Result />} />
     </Route>
   ),
