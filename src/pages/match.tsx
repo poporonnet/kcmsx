@@ -270,4 +270,4 @@ const ControlButton = (props: {
 
 export const LinkToMatch = (
   props: { info: MatchInfo } & Omit<LinkProps, "to" | "state">
-) => <Link to="/match" state={props.info} />;
+) => <Link to="/match" state={props.info} {...props} />;
