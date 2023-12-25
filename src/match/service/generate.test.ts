@@ -11,7 +11,7 @@ const generateDummyData = (n: number): Entry[] => {
   for (let i = 0; i < n; i++) {
     res.push(
       Entry.new({
-        id: "",
+        id: `${i}`,
         teamName: `チーム ${i}`,
         members: [`チーム${i}のメンバー1`],
         isMultiWalk: true,
@@ -35,6 +35,5 @@ describe("予選の対戦表を正しく生成できる", () => {
     if (Result.isErr(res)) {
       return;
     }
-    // ToDo: 全員2回試合しているかのチェック
   });
 });

@@ -59,8 +59,8 @@ export class MatchController {
     return {
       id: i.id,
       teams: {
-        Left: toTeamJSON(i.teams.Left),
-        Right: toTeamJSON(i.teams.Right),
+        left: toTeamJSON(i.teams.Left),
+        right: toTeamJSON(i.teams.Right),
       },
       matchType: i.matchType,
       courseIndex: i.courseIndex,
