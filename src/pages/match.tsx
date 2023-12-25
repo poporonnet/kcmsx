@@ -25,7 +25,7 @@ type TeamInfo = {
   id: string;
   teamName: string;
   isMultiWalk: boolean;
-  category: "Elementary" | "Open";
+  category: "elementary" | "open";
 };
 export type MatchInfo = {
   id: string;
