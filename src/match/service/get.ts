@@ -22,6 +22,15 @@ export class GetMatchService {
 
     return Result.ok(MatchDTO.fromDomain(res[1]));
   }
+
+  async findByType(type: string): Promise<Result.Result<Error, MatchDTO[]>> {
+    const res = await this.repository.findByType(type);
+    if (Option.isNone(res)) {
+      return Result.err(new Error("Not found"));
+    }
+
+    return Result.ok(res[1].map(MatchDTO.fromDomain));
+  }
 }
 
 export class MatchDTO {

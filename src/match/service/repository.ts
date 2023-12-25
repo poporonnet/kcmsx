@@ -6,4 +6,5 @@ export interface MatchRepository {
   create(match: Match): Promise<Result.Result<Error, Match>>;
   findByID(id: string): Promise<Option.Option<Match>>;
   update(match: Match): Promise<Result.Result<Error, Match>>;
+  findByType(type: string): Promise<Option.Option<Match[]>>;
 }

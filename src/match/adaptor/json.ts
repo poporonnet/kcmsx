@@ -64,6 +64,14 @@ export class JSONMatchRepository implements MatchRepository {
     return Option.some(match);
   }
 
+  public async findByType(type: string): Promise<Option.Option<Match[]>> {
+    const match = this.data.filter((m) => m.matchType === type);
+    if (!match) {
+      return Option.none();
+    }
+    return Option.some(match);
+  }
+
   public async update(match: Match): Promise<Result.Result<Error, Match>> {
     const i = this.data.findIndex((m) => m.id === match.id);
     this.data[i] = match;

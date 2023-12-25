@@ -3,17 +3,21 @@ import { Result } from "@mikuroxina/mini-fn";
 import { Match } from "./match.js";
 import { EditMatchService } from "./service/edit.js";
 import { Entry } from "../entry/entry.js";
+import { GetMatchService } from "./service/get.js";
 
 export class MatchController {
   private readonly matchService: GenerateMatchService;
   private readonly editService: EditMatchService;
+  private readonly getService: GetMatchService;
 
   constructor(
     matchService: GenerateMatchService,
     editService: EditMatchService,
+    getService: GetMatchService
   ) {
     this.matchService = matchService;
     this.editService = editService;
+    this.getService = getService;
   }
 
   async generateMatch(type: string) {
@@ -42,6 +46,17 @@ export class MatchController {
     return Result.ok(this.toJSON(res[1].toDomain()));
   }
 
+  async getMatchByType(matchType: string) {
+    if (matchType !== "primary") {
+      return Result.err(new Error("not implemented"));
+    }
+    const res = await this.getService.findByType(matchType);
+    if (Result.isErr(res)) {
+      return Result.err(res[1]);
+    }
+    return Result.ok(res[1].map(i => this.toJSON(i.toDomain())));
+  }
+
   private toJSON(i: Match) {
     const toTeamJSON = (i?: Entry) => {
       if (!i) {
@@ -52,7 +67,7 @@ export class MatchController {
         id: i.id,
         teamName: i.teamName,
         isMultiWalk: i.isMultiWalk,
-        category: i.category,
+        category: i.category
       };
     };
 
@@ -60,11 +75,11 @@ export class MatchController {
       id: i.id,
       teams: {
         left: toTeamJSON(i.teams.Left),
-        right: toTeamJSON(i.teams.Right),
+        right: toTeamJSON(i.teams.Right)
       },
       matchType: i.matchType,
       courseIndex: i.courseIndex,
-      results: i.results,
+      results: i.results
     };
   }
 }
@@ -74,14 +89,17 @@ interface matchResultJSON {
   points: number;
   time: number;
 }
+
 interface matchResultPairJSON {
   Left: matchResultJSON;
   Right: matchResultJSON;
 }
+
 interface matchResultFinalPairJSON {
   results: [matchResultPairJSON, matchResultPairJSON];
   winnerID: string;
 }
+
 interface matchUpdateJSON {
   results: matchResultPairJSON | matchResultFinalPairJSON;
 }
