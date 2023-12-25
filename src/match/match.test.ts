@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { Match } from "./match.js";
 import { Entry } from "../entry/entry.js";
 
@@ -22,15 +22,14 @@ describe("正しくインスタンスを生成できる", () => {
   it("試合相手が居るとき", () => {
     const actual = Match.new({
       id: "999",
-      teams: [entry1, entry2],
+      teams: { Left: entry1, Right: entry2 },
       matchType: "primary",
       courseIndex: 0,
     });
 
     expect(actual.id).toBe("999");
-    expect(actual.teams).toEqual([entry1, entry2]);
-    expect(actual.points).toBeUndefined();
-    expect(actual.winnerID).toBeUndefined();
+    expect(actual.teams).toEqual({ Left: entry1, Right: entry2 });
+    expect(actual.results).toBeUndefined();
     expect(actual.matchType).toBe("primary");
     expect(actual.courseIndex).toBe(0);
     expect(actual.time).toBeUndefined();
@@ -39,15 +38,14 @@ describe("正しくインスタンスを生成できる", () => {
   it("試合相手が居ないとき", () => {
     const actual = Match.new({
       id: "999",
-      teams: [entry1, undefined],
+      teams: { Left: entry1, Right: undefined },
       matchType: "primary",
       courseIndex: 0,
     });
 
     expect(actual.id).toBe("999");
-    expect(actual.teams).toEqual([entry1, undefined]);
-    expect(actual.points).toBeUndefined();
-    expect(actual.winnerID).toBeUndefined();
+    expect(actual.teams).toEqual({ Left: entry1, Right: undefined });
+    expect(actual.results).toBeUndefined();
     expect(actual.matchType).toBe("primary");
     expect(actual.courseIndex).toBe(0);
     expect(actual.time).toBeUndefined();

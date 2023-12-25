@@ -10,22 +10,22 @@ describe("EditMatch", () => {
   reporitory.create(
     Match.reconstruct({
       id: "123",
-      teams: [
-        Entry.new({
+      teams: {
+        Left: Entry.new({
           id: "101",
           teamName: "BBC",
           members: ["test1", "test2"],
           isMultiWalk: false,
           category: "Elementary",
         }),
-        Entry.new({
+        Right: Entry.new({
           id: "100",
           teamName: "ABC",
           members: ["test1"],
           isMultiWalk: false,
           category: "Open",
         }),
-      ],
+      },
       matchType: "primary",
       courseIndex: 0,
     }),
@@ -34,33 +34,33 @@ describe("EditMatch", () => {
 
   it("正しく更新できる", async () => {
     const res = await editService.handle("123", {
-      points: [
-        {
+      results: {
+        Left: {
           teamID: "101",
           points: 2,
+          time: 100,
         },
-        {
+        Right: {
           teamID: "100",
           points: 3,
+          time: 200,
         },
-      ],
-      time: [200, 100],
-      winnerID: "100",
+      },
     });
 
     expect(Result.isErr(res)).toBe(false);
     if (Result.isErr(res)) return;
-    expect(res[1].time).toStrictEqual([200, 100]);
-    expect(res[1].winnerID).toStrictEqual("100");
-    expect(res[1].points).toStrictEqual([
-      {
+    expect(res[1].results).toStrictEqual({
+      Left: {
         teamID: "101",
         points: 2,
+        time: 100,
       },
-      {
+      Right: {
         teamID: "100",
         points: 3,
+        time: 200,
       },
-    ]);
+    });
   });
 });

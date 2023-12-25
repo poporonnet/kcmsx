@@ -12,17 +12,12 @@ export class EditMatchService {
 
   async handle(
     id: string,
-    args: Partial<Pick<ReconstructMatchArgs, "points" | "time" | "winnerID">>,
+    args: Partial<Pick<ReconstructMatchArgs, "results">>,
   ): Promise<Result.Result<Error, MatchDTO>> {
     const match = await this.matchRepository.findByID(id);
     if (Option.isNone(match)) return Result.err(new Error("Match not found"));
 
-    if (args.points !== undefined) match[1].points = args.points;
-    if (args.time !== undefined) match[1].time = args.time;
-
-    if (args.winnerID !== undefined) {
-      match[1].winnerID = args.winnerID;
-    }
+    if (args.results !== undefined) match[1].results = args.results;
 
     const res = await this.matchRepository.update(match[1]);
     if (Result.isErr(res)) return Result.err(res[1]);
