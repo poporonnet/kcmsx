@@ -1,18 +1,23 @@
 import { Card, SimpleGrid, Text } from "@mantine/core";
 import { Link } from "react-router-dom";
 import { IconChecks } from "@tabler/icons-react";
-
 interface MatchCardProps {
-  // 許して。後で直すから。
   id: string;
-  team1: string;
-  teamName1: string;
-  team2: string;
-  teamName2: string;
-  matchType: string;
+  matchType: "primary" | "final";
   isEnd: boolean;
-  category: string;
-  isMultiWalk: boolean;
+  category: "elementary" | "open";
+  teams: [
+    {
+      id: string;
+      teamName: string;
+      isMultiWalk: boolean;
+    },
+    {
+      id: string;
+      teamName: string;
+      isMultiWalk: boolean;
+    },
+  ];
 }
 
 export const MatchCard = (props: MatchCardProps) => {
@@ -21,20 +26,7 @@ export const MatchCard = (props: MatchCardProps) => {
       to={"/match/"}
       state={{
         id: props.id,
-        teams: [
-          {
-            id: props.team1,
-            teamName: props.teamName1,
-            category: props.category,
-            isMultiWalk: props.isMultiWalk,
-          },
-          {
-            id: props.team2,
-            teamName: props.teamName2,
-            category: props.category,
-            isMultiWalk: props.isMultiWalk,
-          },
-        ],
+        teams: props.teams,
         matchType: props.matchType,
       }}
       style={{ pointerEvents: props.isEnd ? "none" : "auto" }}
@@ -73,8 +65,26 @@ export const MatchCard = (props: MatchCardProps) => {
             height: "100%",
           }}
         >
-          <Text size={"1rem"} style={{display: "flex", justifyContent: "center", alignItems:"center"}}>{props.teamName1}</Text>
-          <Text size={"1rem"} style={{display: "flex", justifyContent: "center", alignItems: "center"}}>{props.teamName2}</Text>
+          <Text
+            size={"1rem"}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {props.teams[0].teamName}
+          </Text>
+          <Text
+            size={"1rem"}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {props.teams[1].teamName}
+          </Text>
         </SimpleGrid>
       </Card>
     </Link>
