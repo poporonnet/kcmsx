@@ -173,42 +173,30 @@ export const MatchList = () => {
           </Flex>
         ))}
         {category === "open" &&
-          openMatchesByCoat.map((matches, index) => {
-            const shouldRender = matches.some(
-              match => match.matchType === "primary" || (endCheck && match.isEnd)
-            );
-            console.log(shouldRender);
-            if (!shouldRender) return null;
-
-            return (
-              <Flex direction="column" gap="1rem" key={index}>
-                <Box
-                  style={{
-                    backgroundColor: "#e0f0e0",
-                    borderRadius: "0.5rem",
-                  }}
-                >
-                  <Title p={"sm"} m={0} order={3}>
-                    コート{index + 1}
-                  </Title>
-                  {matches.map(match => {
-                    if (match.matchType === "primary" || (endCheck && match.isEnd))
-                      return null;
-                    return (
-                      <MatchCard
-                        key={match.id}
-                        id={match.id}
-                        teams={match.teams}
-                        matchType={match.matchType}
-                        isEnd={match.isEnd}
-                        category={match.category}
-                      />
-                    );
-                  })}
-                </Box>
-              </Flex>
-            );
-          })}
+          openMatchesByCoat.map((matches, index) => (
+            <Flex direction="column" gap="1rem" key={index}>
+              <Box style={{
+                  backgroundColor: "#e0f0e0",
+                  borderRadius: "0.5rem",
+                  }}>
+              <Title p={"sm"} m={0} order={3}>コート{index + 1}</Title>
+              {matches.map((match) => {
+                if (match.matchType == "primary" || (endCheck && match.isEnd)) return;
+                return (
+                  <MatchCard
+                    key={match.id}
+                    id={match.id}
+                    teams={match.teams}
+                    matchType={match.matchType}
+                    isEnd={match.isEnd}
+                    category={match.category}
+                  />
+                )
+              }
+            )}
+            </Box>
+          </Flex>
+        ))}
       </Flex>
     </Box>
   );
