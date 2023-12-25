@@ -18,7 +18,7 @@ import { expiryTimestamp, parseSeconds } from "../utils/time";
 import { Judge } from "../utils/match/judge";
 import { useForceReload } from "../hooks/useForceReload";
 import { Team } from "../utils/match/team";
-import { useLocation } from "react-router-dom";
+import { Link, LinkProps, useLocation } from "react-router-dom";
 
 type TimerState = "Initial" | "Started" | "Finished";
 type TeamInfo = {
@@ -267,3 +267,7 @@ const ControlButton = (props: {
     </Button>
   );
 };
+
+export const LinkToMatch = (
+  props: { info: MatchInfo } & Omit<LinkProps, "to" | "state">
+) => <Link to="/match" state={props.info} />;
