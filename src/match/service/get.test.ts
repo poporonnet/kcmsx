@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { DummyMatchRepository } from "../adaptor/dummyRepository.js";
 import { Entry } from "../../entry/entry.js";
 import { Match } from "../match.js";
@@ -16,7 +16,7 @@ describe("GetMatchService", () => {
   });
   const match = Match.reconstruct({
     id: "111",
-    teams: [entry, undefined],
+    teams: { Left: entry, Right: undefined },
     matchType: "primary",
     courseIndex: 0,
   });
@@ -41,36 +41,36 @@ describe("GetMatchService", () => {
 describe("MatchDTO", async () => {
   const domain = Match.reconstruct({
     id: "1",
-    teams: [
-      Entry.new({
+    teams: {
+      Left: Entry.new({
         id: "2",
         teamName: "あいうえお",
         members: ["いしや"],
         isMultiWalk: false,
         category: "Open",
       }),
-      Entry.new({
+      Right: Entry.new({
         id: "3",
         teamName: "いきしちに",
         members: ["やも"],
         isMultiWalk: true,
         category: "Elementary",
       }),
-    ],
+    },
     matchType: "primary",
     courseIndex: 0,
-    points: [
-      {
+    results: {
+      Left: {
         teamID: "2",
         points: 1,
+        time: 10,
       },
-      {
+      Right: {
         teamID: "3",
-        points: 5,
+        points: 2,
+        time: 20,
       },
-    ],
-    time: [30, 50],
-    winnerID: "123",
+    },
   });
 
   it("正しくdomainに変換できる", async () => {
@@ -80,9 +80,7 @@ describe("MatchDTO", async () => {
     expect(actual.teams).toStrictEqual(domain.teams);
     expect(actual.matchType).toStrictEqual("primary");
     expect(actual.courseIndex).toStrictEqual(0);
-    expect(actual.points).toStrictEqual(domain.points);
-    expect(actual.time).toStrictEqual(domain.time);
-    expect(actual.winnerID).toStrictEqual("123");
+    expect(actual.results).toStrictEqual(domain.results);
   });
   it("正しくdtoに変換できる", async () => {
     const actual = MatchDTO.fromDomain(domain);
@@ -91,8 +89,6 @@ describe("MatchDTO", async () => {
     expect(actual.teams).toStrictEqual(domain.teams);
     expect(actual.matchType).toStrictEqual("primary");
     expect(actual.courseIndex).toStrictEqual(0);
-    expect(actual.points).toStrictEqual(domain.points);
-    expect(actual.time).toStrictEqual(domain.time);
-    expect(actual.winnerID).toStrictEqual("123");
+    expect(actual.results).toStrictEqual(domain.results);
   });
 });

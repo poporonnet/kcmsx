@@ -50,11 +50,10 @@ export class GenerateMatchService {
       for (let k = 0; k < courses[i].length; k++) {
         // 対戦相手のインデックス
         const opponentIndex = k + 1 >= courses[i].length ? 0 : k + 1;
-        // ToDo: IDの生成
         const match = Match.new({
           id: crypto.randomUUID(),
           matchType: "primary",
-          teams: [courses[i][k], courses[i][opponentIndex]],
+          teams: { Left: courses[i][k], Right: courses[i][opponentIndex] },
           courseIndex: i,
         });
         courseMatches.push(match);

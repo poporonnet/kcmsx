@@ -1,6 +1,11 @@
 import { MatchRepository } from "./repository.js";
 import { Option, Result } from "@mikuroxina/mini-fn";
-import { Match, MatchPoints, MatchTeams } from "../match.js";
+import {
+  Match,
+  MatchResultFinalPair,
+  MatchResultPair,
+  MatchTeams,
+} from "../match.js";
 
 export class GetMatchService {
   private readonly repository: MatchRepository;
@@ -28,13 +33,8 @@ export class MatchDTO {
   private readonly _matchType: "primary" | "final";
   // コース番号
   private readonly _courseIndex: number;
-  // チームごとの得点
-  private _points?: [MatchPoints, MatchPoints];
-  // チームごとのゴール時間(秒)
-  private _time?: [number, number];
-  // 勝利チームのID
-  private _winnerID?: string;
-
+  // 試合の結果
+  private readonly _results?: MatchResultPair | MatchResultFinalPair;
   get id(): string {
     return this._id;
   }
@@ -51,16 +51,8 @@ export class MatchDTO {
     return this._courseIndex;
   }
 
-  get points(): [MatchPoints, MatchPoints] | undefined {
-    return this._points;
-  }
-
-  get time(): [number, number] | undefined {
-    return this._time;
-  }
-
-  get winnerID(): string | undefined {
-    return this._winnerID;
+  get results(): MatchResultPair | MatchResultFinalPair | undefined {
+    return this._results;
   }
 
   private constructor(
@@ -68,17 +60,13 @@ export class MatchDTO {
     teams: MatchTeams,
     matchType: "primary" | "final",
     courseIndex: number,
-    points?: [MatchPoints, MatchPoints] | undefined,
-    time?: [number, number],
-    winnerID?: string,
+    results?: MatchResultPair | MatchResultFinalPair,
   ) {
     this._id = id;
     this._teams = teams;
     this._matchType = matchType;
     this._courseIndex = courseIndex;
-    if (points) this._points = points;
-    if (time) this._time = time;
-    if (winnerID) this._winnerID = winnerID;
+    this._results = results;
   }
 
   public static fromDomain(match: Match): MatchDTO {
@@ -87,9 +75,7 @@ export class MatchDTO {
       match.teams,
       match.matchType,
       match.courseIndex,
-      match.points,
-      match.time,
-      match.winnerID,
+      match.results,
     );
   }
 
@@ -99,9 +85,7 @@ export class MatchDTO {
       teams: this._teams,
       matchType: this._matchType,
       courseIndex: this._courseIndex,
-      points: this._points,
-      time: this._time,
-      winnerID: this._winnerID,
+      results: this._results,
     });
   }
 }

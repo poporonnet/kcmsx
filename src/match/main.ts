@@ -6,6 +6,7 @@ import { MatchController } from "./controller.js";
 import { Result } from "@mikuroxina/mini-fn";
 import { EditMatchService } from "./service/edit.js";
 import { ReconstructMatchArgs } from "./match.js";
+
 export const matchHandler = new Hono();
 const repository = await JSONMatchRepository.new();
 const entryRepository = await JSONEntryRepository.new();
@@ -25,9 +26,13 @@ matchHandler.post("/:match", async (c) => {
 
 matchHandler.put("/:match", async (c) => {
   const { match } = c.req.param();
-  const req = (await c.req.json()) as Partial<
-    Pick<ReconstructMatchArgs, "points" | "time" | "winnerID">
+  const req = (await c.req.json()) as Required<
+    Pick<ReconstructMatchArgs, "results">
   >;
+  if (!req.results) {
+    return c.json([{ error: "results is required" }], 400);
+  }
+
   const res = await controller.editMatch(match, req);
   if (Result.isErr(res)) {
     return c.json([{ error: res[1].message }]);

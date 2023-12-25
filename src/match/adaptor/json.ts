@@ -1,4 +1,4 @@
-import { Match, MatchPoints, MatchTeams } from "../match.js";
+import { Match, MatchTeams } from "../match.js";
 import { MatchRepository } from "../service/repository.js";
 import { Option, Result } from "@mikuroxina/mini-fn";
 import { readFile, writeFile } from "node:fs/promises";
@@ -10,19 +10,31 @@ interface JSONData {
   entry: Array<object>;
 }
 
+interface matchResultJSON {
+  teamID: string;
+  points: number;
+  time: number;
+}
+
+interface matchResultPairJSON {
+  Left: matchResultJSON;
+  Right: matchResultJSON;
+}
+
+interface matchResultFinalPairJSON {
+  results: [matchResultPairJSON, matchResultPairJSON];
+  winnerID: string;
+}
+
 interface MatchJSON {
   id: string;
   matchType: string;
   courseIndex: number;
-  teams: [EntryJSON | undefined, EntryJSON | undefined];
-  points?: [MatchPointsJSON, MatchPointsJSON];
-  time?: [number, number];
-  winnerID?: string;
-}
-
-interface MatchPointsJSON {
-  teamID: string;
-  points: number;
+  teams: {
+    Left: EntryJSON | undefined;
+    Right: EntryJSON | undefined;
+  };
+  results?: matchResultPairJSON | matchResultFinalPairJSON;
 }
 
 export class JSONMatchRepository implements MatchRepository {
@@ -91,36 +103,16 @@ export class JSONMatchRepository implements MatchRepository {
         category: entry.category,
       };
     };
-    const convertToMatchPointJSON = (points: MatchPoints) => {
-      return {
-        teamID: points.teamID,
-        points: points.points,
-      };
-    };
-    const convertToMatchPointsJSON = (
-      points: [MatchPoints, MatchPoints] | undefined,
-    ): [MatchPointsJSON, MatchPointsJSON] | undefined => {
-      if (!points) {
-        return points;
-      }
-      return [
-        convertToMatchPointJSON(points[0]),
-        convertToMatchPointJSON(points[1]),
-      ];
-    };
 
     return {
       id: match.id,
-      teams: [
-        covertToEntryJSON(match.teams[0]),
-        covertToEntryJSON(match.teams[1]),
-      ],
+      teams: {
+        Left: covertToEntryJSON(match.teams.Left),
+        Right: covertToEntryJSON(match.teams.Right),
+      },
       matchType: match.matchType,
       courseIndex: match.courseIndex,
-      // ToDo: MatchPointsのパースをする
-      points: convertToMatchPointsJSON(match.points),
-      time: match.time,
-      winnerID: match.winnerID,
+      results: match.results,
     };
   }
 
@@ -131,9 +123,7 @@ export class JSONMatchRepository implements MatchRepository {
       matchType: json.matchType as "primary" | "final",
       // ToDo: MatchPointsのパース
       courseIndex: json.courseIndex,
-      points: json.points,
-      time: json.time,
-      winnerID: json.winnerID,
+      results: json.results,
     });
   }
 }

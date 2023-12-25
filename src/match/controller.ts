@@ -2,6 +2,7 @@ import { GenerateMatchService } from "./service/generate.js";
 import { Result } from "@mikuroxina/mini-fn";
 import { Match } from "./match.js";
 import { EditMatchService } from "./service/edit.js";
+import { Entry } from "../entry/entry.js";
 
 export class MatchController {
   private readonly matchService: GenerateMatchService;
@@ -42,37 +43,45 @@ export class MatchController {
   }
 
   private toJSON(i: Match) {
-    const toTeamsJSON = (i: Match) =>
-      i.teams.map((j) => {
-        if (!j) {
-          return undefined;
-        }
+    const toTeamJSON = (i?: Entry) => {
+      if (!i) {
+        return i;
+      }
 
-        return {
-          id: j.id,
-          teamName: j.teamName,
-          isMultiWalk: j.isMultiWalk,
-          category: j.category,
-        };
-      });
-    // winnerIDなどがundefinedになる
+      return {
+        id: i.id,
+        teamName: i.teamName,
+        isMultiWalk: i.isMultiWalk,
+        category: i.category,
+      };
+    };
+
     return {
       id: i.id,
-      teams: toTeamsJSON(i),
+      teams: {
+        Left: toTeamJSON(i.teams.Left),
+        Right: toTeamJSON(i.teams.Right),
+      },
       matchType: i.matchType,
       courseIndex: i.courseIndex,
-      points: i.points,
-      time: i.time,
-      winnerID: i.winnerID,
+      results: i.results,
     };
   }
 }
 
+interface matchResultJSON {
+  teamID: string;
+  points: number;
+  time: number;
+}
+interface matchResultPairJSON {
+  Left: matchResultJSON;
+  Right: matchResultJSON;
+}
+interface matchResultFinalPairJSON {
+  results: [matchResultPairJSON, matchResultPairJSON];
+  winnerID: string;
+}
 interface matchUpdateJSON {
-  points?: [
-    { teamID: string; points: number },
-    { teamID: string; points: number },
-  ];
-  time?: [number, number];
-  winnerID?: string;
+  results: matchResultPairJSON | matchResultFinalPairJSON;
 }
