@@ -29,7 +29,7 @@ type TeamInfo = {
 };
 export type MatchInfo = {
   id: string;
-  teams: [TeamInfo, TeamInfo];
+  teams: { left: TeamInfo; right: TeamInfo };
   matchType: "primary" | "final";
 };
 
@@ -47,8 +47,8 @@ export const Match = () => {
 
   const [matchJudge] = useState(
     new Judge(
-      { multiWalk: !isExhibition && matchInfo.teams[0].isMultiWalk },
-      { multiWalk: !isExhibition && matchInfo.teams[1].isMultiWalk }
+      { multiWalk: !isExhibition && matchInfo.teams.left.isMultiWalk },
+      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk }
     )
   );
   const forceReload = useForceReload();
@@ -83,7 +83,7 @@ export const Match = () => {
         <Flex align="center" justify="center">
           {!isExhibition && (
             <Text pl="md" size="2rem" c="blue" style={{ flex: 1 }}>
-              {matchInfo.teams[0].teamName}
+              {matchInfo.teams.left.teamName}
             </Text>
           )}
           <Flex pb="sm" gap="sm">
@@ -97,7 +97,7 @@ export const Match = () => {
           </Flex>
           {!isExhibition && (
             <Text pr="md" size="2rem" c="red" style={{ flex: 1 }}>
-              {matchInfo.teams[1].teamName}
+              {matchInfo.teams.right.teamName}
             </Text>
           )}
         </Flex>
