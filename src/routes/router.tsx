@@ -15,7 +15,7 @@ export const router = createBrowserRouter(
       <Route index element={<Home />} />
       <Route path="/entrylist" element={<EntryList />} />
       <Route path="/matchlist" element={<MatchList />} />
-      <Route path="/match/:id" element={<Match />} />
+      <Route path="/match" element={<Match />} />
     </Route>
   ),
   {
