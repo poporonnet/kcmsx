@@ -1,28 +1,28 @@
 import { Card, SimpleGrid, Text } from "@mantine/core";
-import { Link } from "react-router-dom";
+import { LinkToMatch } from "./linkToMatch";
 interface MatchCardProps {
   id: string;
   matchType: "primary" | "final";
-  category: "elementary" | "open";
   teams: {
     "right": {
       id: string;
       teamName: string;
       isMultiWalk: boolean;
+      category: "elementary" | "open";
     };
     "left": {
       id: string;
       teamName: string;
       isMultiWalk: boolean;
+      category: "elementary" | "open";
     };
   };
 }
 
 export const MatchCard = (props: MatchCardProps) => {
   return (
-    <Link
-      to={"/match/"}
-      state={{
+    <LinkToMatch
+      info={{
         id: props.id,
         teams: props.teams,
         matchType: props.matchType,
@@ -73,6 +73,6 @@ export const MatchCard = (props: MatchCardProps) => {
           </Text>
         </SimpleGrid>
       </Card>
-    </Link>
+    </LinkToMatch>
   );
 };

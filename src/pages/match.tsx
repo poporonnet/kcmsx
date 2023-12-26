@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 import { PointControls } from "../components/pointControls";
 
 type TimerState = "Initial" | "Started" | "Finished";
-type TeamInfo = {
+export type TeamInfo = {
   id: string;
   teamName: string;
   isMultiWalk: boolean;

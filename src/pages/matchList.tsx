@@ -1,17 +1,14 @@
 import { Box, Flex, Title } from "@mantine/core";
 import { MatchCard } from "../components/matchCard.tsx";
 import { useEffect, useState } from "react";
-import { Match } from "./match.tsx";
+import { TeamInfo } from "./match.tsx";
 
 // 考慮事項: 予選・決勝で同点の時のじゃんけんの入力をどうするか
 type Match = {
   id: string;
   courseIndex: number;
   category: "elementary" | "open";
-  teams: {
-    right: { id: string; teamName: string; isMultiWalk: boolean };
-    left: { id: string; teamName: string; isMultiWalk: boolean };
-  };
+  teams: { right: TeamInfo; left: TeamInfo };
   matchType: "primary" | "final";
 };
 
@@ -57,7 +54,6 @@ export const MatchList = () => {
                     key={match.id}
                     id={match.id}
                     matchType={match.matchType}
-                    category={match.category}
                     teams={match.teams}
                   />
                 );
