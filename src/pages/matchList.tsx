@@ -17,7 +17,7 @@ export const MatchList = () => {
     Record<string, Match[]> | undefined
   >();
   useEffect(() => {
-    fetch("http://localhost:3000/match/primary", { method: "GET" })
+    fetch(`${import.meta.env.VITE_API_URL}/match/primary`, { method: "GET" })
       .then((res) => res.json())
       .then((data) => {
         const separatedData = data.reduce(
