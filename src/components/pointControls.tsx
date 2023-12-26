@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { Team } from "../utils/match/team";
 import { parseSeconds } from "../utils/time";
+import { lang } from "../config/lang/lang";
 
 export const PointControls = (props: {
   color: MantineColor;
@@ -46,7 +47,7 @@ export const PointControls = (props: {
           props.onChange();
         }}
       >
-        松江エリアを出た
+        {lang.match.leaveBase}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -55,7 +56,7 @@ export const PointControls = (props: {
           props.onChange();
         }}
       >
-        中間線を越えた
+        {lang.match.overMiddle}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -64,7 +65,7 @@ export const PointControls = (props: {
           props.onChange();
         }}
       >
-        金星エリアに入った
+        {lang.match.enterDistination}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -73,7 +74,7 @@ export const PointControls = (props: {
           props.onChange();
         }}
       >
-        ボールを金星エリアに置いた
+        {lang.match.placeBall}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -82,7 +83,7 @@ export const PointControls = (props: {
           props.onChange();
         }}
       >
-        松江エリアに戻った
+        {lang.match.returnBase}
       </ControlButton>
       <ControlButton
         color={props.color}
@@ -91,13 +92,13 @@ export const PointControls = (props: {
           props.onChange();
         }}
       >
-        ゴール{" "}
+        {lang.match.goal}{" "}
         {props.team.goalTimeSeconds != null &&
           parseSeconds(props.team.goalTimeSeconds)}
       </ControlButton>
       <Group>
         <Text size="1.2rem" c={props.color} style={{ flexGrow: 1 }}>
-          雲粒子の数:
+          {lang.match.numberOfBall}:
         </Text>
         <ActionIcon
           size="xl"
