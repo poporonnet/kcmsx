@@ -4,13 +4,13 @@ interface MatchCardProps {
   id: string;
   matchType: "primary" | "final";
   teams: {
-    "right": {
+    right: {
       id: string;
       teamName: string;
       isMultiWalk: boolean;
       category: "elementary" | "open";
     };
-    "left": {
+    left: {
       id: string;
       teamName: string;
       isMultiWalk: boolean;
@@ -18,7 +18,6 @@ interface MatchCardProps {
     };
   };
 }
-
 export const MatchCard = (props: MatchCardProps) => {
   return (
     <LinkToMatch
