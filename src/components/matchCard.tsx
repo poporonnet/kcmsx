@@ -1,35 +1,31 @@
 import { Card, SimpleGrid, Text } from "@mantine/core";
-import { Link } from "react-router-dom";
-import { IconChecks } from "@tabler/icons-react";
+import { LinkToMatch } from "./linkToMatch";
 interface MatchCardProps {
   id: string;
   matchType: "primary" | "final";
-  isEnd: boolean;
-  category: "elementary" | "open";
-  teams: [
-    {
+  teams: {
+    right: {
       id: string;
       teamName: string;
       isMultiWalk: boolean;
-    },
-    {
+      category: "elementary" | "open";
+    };
+    left: {
       id: string;
       teamName: string;
       isMultiWalk: boolean;
-    },
-  ];
+      category: "elementary" | "open";
+    };
+  };
 }
-
 export const MatchCard = (props: MatchCardProps) => {
   return (
-    <Link
-      to={"/match/"}
-      state={{
+    <LinkToMatch
+      info={{
         id: props.id,
         teams: props.teams,
         matchType: props.matchType,
       }}
-      style={{ pointerEvents: props.isEnd ? "none" : "auto" }}
     >
       <Card
         shadow="sm"
@@ -45,17 +41,6 @@ export const MatchCard = (props: MatchCardProps) => {
           alignItems: "center",
         }}
       >
-        {props.isEnd && (
-          <IconChecks
-            size={30}
-            color={"#00FF00"}
-            style={{
-              position: "absolute",
-              top: "0.5rem",
-              right: "0.5rem",
-            }}
-          />
-        )}
         <SimpleGrid
           cols={1}
           style={{
@@ -73,7 +58,7 @@ export const MatchCard = (props: MatchCardProps) => {
               alignItems: "center",
             }}
           >
-            {props.teams[0].teamName}
+            {props.teams["right"].teamName}
           </Text>
           <Text
             size={"1rem"}
@@ -83,10 +68,10 @@ export const MatchCard = (props: MatchCardProps) => {
               alignItems: "center",
             }}
           >
-            {props.teams[1].teamName}
+            {props.teams["left"].teamName}
           </Text>
         </SimpleGrid>
       </Card>
-    </Link>
+    </LinkToMatch>
   );
 };
