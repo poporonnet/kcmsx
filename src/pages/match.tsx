@@ -9,7 +9,7 @@ import { PointControls } from "../components/pointControls";
 import { config } from "../config/config";
 
 type TimerState = "Initial" | "Started" | "Finished";
-type TeamInfo = {
+export type TeamInfo = {
   id: string;
   teamName: string;
   isMultiWalk: boolean;
