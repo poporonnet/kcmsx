@@ -6,9 +6,10 @@ import { Judge } from "../utils/match/judge";
 import { useForceReload } from "../hooks/useForceReload";
 import { useLocation } from "react-router-dom";
 import { PointControls } from "../components/pointControls";
+import { config } from "../config/config";
 
 type TimerState = "Initial" | "Started" | "Finished";
-type TeamInfo = {
+export type TeamInfo = {
   id: string;
   teamName: string;
   isMultiWalk: boolean;
@@ -24,7 +25,7 @@ export const Match = () => {
   const matchInfo = useLocation().state as MatchInfo;
   const isExhibition = matchInfo == null;
 
-  const matchTimeSec = 300;
+  const matchTimeSec = config.match.matchSeconds;
   const [timerState, setTimerState] = useState<TimerState>("Initial");
   const { start, pause, resume, isRunning, totalSeconds } = useTimer({
     expiryTimestamp: expiryTimestamp(matchTimeSec),

@@ -1,4 +1,4 @@
-import { actions, pointTable } from "./rule";
+import { actions, pointTable } from "../../config/rule/rule";
 
 type Action = (typeof actions)[number];
 type PointCalculator =

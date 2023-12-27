@@ -1,4 +1,4 @@
-import { PointState, PointTable } from "./point";
+import { PointState, PointTable } from "../../utils/match/point";
 
 export const actions = [
   "multiWalk",
