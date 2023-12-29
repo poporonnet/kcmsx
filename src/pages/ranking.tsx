@@ -1,20 +1,22 @@
+import { useState, useEffect } from "react";
 import { Flex, Table, Title } from "@mantine/core";
 import "./ranking.css";
 
-type Team = {
+type Ranking = {
   name: string;
-  point: number;
+  id: string;
+  point: any;
   time: number;
-  isWalk: boolean;
 };
 
-const teams: Team[] = [
-  { name: "特攻野郎Aチーム", point: 4, time: 300.0, isWalk: true },
-  { name: "全力投球", point: 5, time: 260.0, isWalk: false },
-  { name: "ハイパーチーム", point: 2, time: 310.0, isWalk: true },
-  { name: "レンちゃん", point: 1, time: 350.0, isWalk: true },
-  { name: "ももクロ", point: 7, time: 290.0, isWalk: false },
-  { name: "アベノミクス", point: 4, time: 320.0, isWalk: true },
+const teams: Ranking[] = [
+  { name: "特攻野郎Aチーム", id: "1", point: 4, time: 300 },
+  { name: "全力投球", id: "2", point: 5, time: 260.0 },
+  { name: "ハイパーチーム", id: "3", point: 2, time: 310.0 },
+  { name: "レンちゃん", id: "4", point: 1, time: 350.0 },
+  { name: "ももクロ", id: "5", point: 7, time: 290.0 },
+  { name: "バカ", id: "6", point: 4, time: 320.0 },
+  { name: "test", id: "7", point: 1, time: 900 },
 ];
 
 const ranking = teams.sort(function (a, b) {
@@ -24,14 +26,54 @@ const ranking = teams.sort(function (a, b) {
   return a.point > b.point ? -1 : 1;
 });
 
+const rankdata: Ranking[] = [];
+
+const FetchData = () => {
+  const [data, setData] = useState();
+  useEffect(() => {
+    fetch("http://localhost:3000/match/primary", { method: "GET" })
+      .then((res) => res.json())
+      .then((json) => setData(json))
+      .catch(() => alert("error"));
+  }, []);
+
+  if (data != undefined) {
+    data.map((game) => {
+      if (`results` in game) {
+        Object.keys(game.results).map((elm) => {
+          const tmp = { name: "str", id: "0", point: 0, time: 0 };
+          if (elm == "left") {
+            tmp.name = game.teams.left.teamName;
+            tmp.id = game.results.left.teamID;
+            tmp.point = game.results.left.points;
+            tmp.time = game.results.left.time;
+            rankdata.push(tmp);
+          } else if (elm == "right") {
+            tmp.name = game.teams.right.teamName;
+            tmp.id = game.results.right.teamID;
+            tmp.point = game.results.right.points;
+            tmp.time = game.results.right.time;
+            rankdata.push(tmp);
+          }
+        });
+      }
+    });
+  }
+
+  console.log(rankdata);
+  return (
+    <>
+      <div>test</div>
+    </>
+  );
+};
+
 export const Ranking = () => (
   <Flex direction="column" gap={20}>
-    <h1>小学生部門</h1>
-    <RankingTable categoryName="予選" teams={ranking} />
-    <RankingTable categoryName="本戦" teams={ranking} />
-    <h1>オープン部門</h1>
-    <RankingTable categoryName="予選" teams={teams} />
-    <RankingTable categoryName="本戦" teams={teams} />
+    <FetchData />
+    <h1>ランキング</h1>
+    <h2>小学生部門</h2>
+    <RankingTable categoryName="予選" teams={rankdata} />
   </Flex>
 );
 
@@ -45,7 +87,6 @@ const RankingTable = (props: { categoryName: string; teams: Team[] }) => (
           <Table.Th>チーム名</Table.Th>
           <Table.Th>ポイント</Table.Th>
           <Table.Th>タイム</Table.Th>
-          <Table.Th>タイプ</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
@@ -55,9 +96,6 @@ const RankingTable = (props: { categoryName: string; teams: Team[] }) => (
             <Table.Td className="td">{element.name}</Table.Td>
             <Table.Td className="td">{element.point}</Table.Td>
             <Table.Td className="td">{element.time}</Table.Td>
-            <Table.Td className="td">
-              {element.isWalk ? "歩行" : "車輪"}
-            </Table.Td>
           </Table.Tr>
         ))}
       </Table.Tbody>
