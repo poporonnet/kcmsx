@@ -1,4 +1,5 @@
 import { TextInput, Box, SegmentedControl, Button, Group } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 export const Entry = () => {
   const [teamName, setTeamName] = useState("");
@@ -27,9 +28,17 @@ export const Entry = () => {
       body: JSON.stringify(data),
     });
     if (res.ok) {
-      alert("登録しました");
+      notifications.show({
+        title: "登録完了",
+        message: "登録が完了しました",
+        color: "green",
+      });
     } else {
-      alert("登録に失敗しました");
+      notifications.show({
+        title: "登録失敗",
+        message: "登録に失敗しました",
+        color: "red",
+      });
     }
   }
   return (
@@ -83,10 +92,7 @@ export const Entry = () => {
           onChange={(value) => setIsMultiWalk(value === "walk")}
         />
         <Group justify={"flex-start"}>
-          <Button
-            mt={"md"}
-            type="submit"
-          >
+          <Button mt={"md"} type="submit">
             登録
           </Button>
         </Group>
