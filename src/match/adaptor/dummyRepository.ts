@@ -3,7 +3,7 @@ import { MatchRepository } from "../service/repository.js";
 import { Option, Result } from "@mikuroxina/mini-fn";
 
 export class DummyMatchRepository implements MatchRepository {
-  private data: Match[];
+  private readonly data: Match[];
 
   constructor() {
     this.data = [];
@@ -34,5 +34,9 @@ export class DummyMatchRepository implements MatchRepository {
     const i = this.data.findIndex((m) => m.id === match.id);
     this.data[i] = match;
     return Result.ok(match);
+  }
+
+  public async findAll(): Promise<Result.Result<Error, Match[]>> {
+    return Result.ok(this.data);
   }
 }

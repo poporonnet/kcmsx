@@ -11,9 +11,10 @@ Matz葉がにロボコン 大会運営支援ツール
 
 ### サーバーを動作させる
 
-上記必要なものをインストールしてください.  
+上記必要なものをインストールしてください.
 
 データ保存用の`data.json`を用意してください.
+
 ```json
 {
   "entry": [],
@@ -43,7 +44,7 @@ bun dev
 ### Authors/License
 
 | <img src="https://github.com/laminne.png" width="100px"> | <img src="https://github.com/kiharu3112.png" width="100px"> | <img src="https://github.com/tufusa.png" width="100px"> |
-|:--------------------------------------------------------:|:-----------------------------------------------------------:|:-------------------------------------------------------:|
+| :------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------: |
 |            **laminne (T. YAMAMOTO)**<br>🔧 🦀            |                   **kiharu3112**<br>🔧 🦀                   |                   **tufusa**<br>🔧 🦀                   |
 
 🔧: KCMS/KCMSFの開発  
@@ -70,12 +71,12 @@ MIT License
 
 body: `application/json`
 
-| 項目名         | 型(TS表記)                          | 説明          | 備考                          |
-|-------------|----------------------------------|-------------|-----------------------------|
-| teamName    | `string`                         | チーム名        | 重複するとエラー                    |
-| members     | `[string, string]`               | メンバーの名前     | 小学生部門: 1 or 2人 / オープン部門: 1人 |
-| isMultiWalk | `boolean`                        | ロボットが多足歩行型か |                             |
-| category    | `"Elementary" or "Open"` (union) | 出場する部門      |                             |
+| 項目名      | 型(TS表記)                       | 説明                   | 備考                                     |
+| ----------- | -------------------------------- | ---------------------- | ---------------------------------------- |
+| teamName    | `string`                         | チーム名               | 重複するとエラー                         |
+| members     | `[string, string]`               | メンバーの名前         | 小学生部門: 1 or 2人 / オープン部門: 1人 |
+| isMultiWalk | `boolean`                        | ロボットが多足歩行型か |                                          |
+| category    | `"Elementary" or "Open"` (union) | 出場する部門           |                                          |
 
 #### 出力
 
@@ -85,10 +86,7 @@ body: `application/json`
 {
   "id": "39440930485098",
   "teamName": "ニカ.reverse()",
-  "members": [
-    "木下竹千代",
-    "織田幸村"
-  ],
+  "members": ["木下竹千代", "織田幸村"],
   "isMultiWalk": false,
   "category": "Elementary"
 }
@@ -113,7 +111,7 @@ body: `application/json`
 パスパラメータ
 
 - `id`: `string`
-    - 取り消すエントリーのID
+  - 取り消すエントリーのID
 
 body: `application/json`
 
@@ -141,10 +139,7 @@ body: `application/json`
   {
     "id": "39440930485098",
     "teamName": "ニカ.reverse()",
-    "members": [
-      "木下竹千代",
-      "織田幸村"
-    ],
+    "members": ["木下竹千代", "織田幸村"],
     "isMultiWalk": false,
     "category": "Elementary"
   }
@@ -160,7 +155,7 @@ body: `application/json`
 パスパラメータ
 
 - `matchType`: `"primary"|"final"`
-    - 部門名
+  - 部門名
 
 #### 出力
 
@@ -204,16 +199,20 @@ body: `application/json`
 - `UNKNOWN_CATEGORY`: 存在しないカテゴリ
 - `UNKNOWN_MATCH_TYPE`: 存在しない対戦種類
 
-### `POST /match/{matchType}`
+### `POST /match/{matchType}/{category}`
 
 各部門の本選、予選対戦表を生成します
+※ 既に生成済みの場合は上書きされます
+※ オープン部門の予選対戦表は生成できません(エラーになります)
 
 #### 入力
 
 パスパラメータ
 
 - `matchType`: `"final"|"primary"`
-    - 部門名
+  - 部門名
+- `category`: `"elementary"|"open"`
+  - カテゴリ
 
 ```json
 {}
@@ -284,7 +283,7 @@ body: `application/json`
 パスパラメータ
 
 - id: `string`
-    - 試合ID
+  - 試合ID
 
 body: `application/json`
 

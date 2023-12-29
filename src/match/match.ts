@@ -57,6 +57,11 @@ export type MatchResultFinalPair = {
   // じゃんけんで決定したとき用
   winnerID: string;
 };
+export const isMatchResultPair = (
+  arg: MatchResultPair | MatchResultFinalPair | undefined,
+): arg is MatchResultPair => {
+  return (arg as MatchResultPair).Left !== undefined;
+};
 
 export interface CreateMatchArgs {
   id: string;
