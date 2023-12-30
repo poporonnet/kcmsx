@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Flex, Table, Title } from "@mantine/core";
+import { useInterval } from "@mantine/hooks";
 import "./ranking.css";
 
 type Ranking = {
@@ -51,6 +52,9 @@ const FetchData = () => {
     }
     return a.point > b.point ? -1 : 1;
   });
+
+  useInterval(FetchData, 30_00);
+
   return;
 };
 
