@@ -22,14 +22,23 @@ const FetchData = () => {
   }, []);
 
   if (resultdata != undefined) {
-    resultdata.map((game) => {
-      if (game.results && game.matchType == "primary") {
-        Object.keys(game.results).map((elm) => {
+    resultdata.map((match) => {
+      if (match.results && match.matchType == "primary") {
+        Object.keys(match.results).map((LtRt) => {
           const tmp = { name: "str", id: "0", point: 0, time: 0 };
-          tmp.name = game.teams[elm].teamName;
-          tmp.id = game.results[elm].teamID;
-          tmp.point = game.results[elm].points;
-          tmp.time = game.results[elm].time;
+          tmp.name = match.teams[LtRt].teamName;
+          tmp.id = match.results[LtRt].teamID;
+          rankdata.map((elm) => {
+            if (elm.id == tmp.id) {
+              tmp.point = match.results[LtRt].points + elm.point;
+              tmp.time = match.results[LtRt].time + elm.time;
+              rankdata = rankdata.filter((result) => result.id !== elm.id);
+            }
+          });
+          if (!tmp.point) {
+            tmp.point = match.results[LtRt].points;
+            tmp.time = match.results[LtRt].time;
+          }
           rankdata.push(tmp);
         });
       }
