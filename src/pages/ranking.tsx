@@ -26,10 +26,11 @@ const ranking = teams.sort(function (a, b) {
   return a.point > b.point ? -1 : 1;
 });
 
-const rankdata: Ranking[] = [];
+let rankdata: Ranking[] = [];
 
 const FetchData = () => {
-  const [data, setData] = useState();
+  let rankdata: Ranking[] = [];
+  const [resultdata, setData] = useState();
   useEffect(() => {
     fetch("http://localhost:3000/match/primary", { method: "GET" })
       .then((res) => res.json())
@@ -37,8 +38,8 @@ const FetchData = () => {
       .catch(() => alert("error"));
   }, []);
 
-  if (data != undefined) {
-    data.map((game) => {
+  if (resultdata != undefined) {
+    resultdata.map((game) => {
       if (`results` in game) {
         Object.keys(game.results).map((elm) => {
           const tmp = { name: "str", id: "0", point: 0, time: 0 };
@@ -60,7 +61,7 @@ const FetchData = () => {
     });
   }
 
-  console.log(rankdata);
+  console.log("rank", rankdata);
   return (
     <>
       <div>test</div>
@@ -77,7 +78,7 @@ export const Ranking = () => (
   </Flex>
 );
 
-const RankingTable = (props: { categoryName: string; teams: Team[] }) => (
+const RankingTable = (props: { categoryName: string; teams: Ranking[] }) => (
   <div>
     <Title order={3}>{props.categoryName}</Title>
     <Table striped withTableBorder miw="40rem">
