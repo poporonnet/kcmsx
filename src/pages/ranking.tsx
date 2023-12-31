@@ -6,14 +6,12 @@ import "./ranking.css";
 type Ranking = {
   name: string;
   id: string;
-  point: any;
+  point: number;
   time: number;
 };
 
-let rankdata: Ranking[] = [];
-
-const FetchData = () => {
-  rankdata = [];
+function FetchData() {
+  let rankdata: Ranking[] = [];
   const [resultdata, setData] = useState();
   useEffect(() => {
     fetch("http://localhost:3000/match/primary", { method: "GET" })
@@ -22,7 +20,7 @@ const FetchData = () => {
       .catch(() => alert("error"));
   }, []);
 
-  if (resultdata != undefined) {
+  if (resultdata) {
     resultdata.map((match) => {
       if (match.results && match.matchType == "primary") {
         Object.keys(match.results).map((LtRt) => {
@@ -54,16 +52,14 @@ const FetchData = () => {
   });
 
   useInterval(FetchData, 30_00);
-
-  return;
-};
+  return rankdata;
+}
 
 export const Ranking = () => (
   <Flex direction="column" gap={20}>
-    <FetchData />
     <h1>ランキング</h1>
     <h2>小学生部門</h2>
-    <RankingTable categoryName="予選" ranking={rankdata} />
+    <RankingTable categoryName="予選" ranking={FetchData()} />
   </Flex>
 );
 
