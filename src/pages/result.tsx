@@ -40,13 +40,13 @@ export const Result = () => {
   const [primarymatch, setprimaryMatch] = useState<Match[]>([]);
   const [finalmatch, setfinalMatch] = useState<Match[]>([]);
   useEffect(() => {
-    fetch("http://localhost:3000/match/primary")
+    fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
       .then((res) => res.json())
       .then((json) => setprimaryMatch(json))
       .catch(() => alert("error"));
   }, []);
   // useEffect(() => {
-  //   fetch("http://localhost:3000/match/final")
+  //   fetch(`${import.meta.env.VITE_API_URL}/match/final`)
   //     .then((res) => res.json())
   //     .then((json) => setfinalMatch(json))
   //     .catch(() => alert("error"));
@@ -64,7 +64,6 @@ export const Result = () => {
 
 const FinalTable = (props: { categoryName: string; matches: Match[] }) => (
   <div>
-    {}
     <Title order={3}>{props.categoryName}</Title>
     <Table striped withTableBorder miw="40rem">
       <Table.Thead>
@@ -76,14 +75,14 @@ const FinalTable = (props: { categoryName: string; matches: Match[] }) => (
       </Table.Thead>
       <Table.Tbody>
         {props.matches.map((element) => (
-          <Table.Tr key={element.id[0]}>
+          <Table.Tr key={element.id}>
             {element.results?.left.points > element.results?.right.points ? (
               <>
                 <Table.Td className="td">
                   {element.teams.left.teamName}
                 </Table.Td>
                 <Table.Td className="td">
-                  {element.results?.right.points}-{element.results?.left.points}
+                  {element.results?.left.points}-{element.results?.right.points}
                 </Table.Td>
                 <Table.Td className="td">
                   {element.teams.right.teamName}
@@ -126,7 +125,7 @@ const PrimaryTable = (props: { categoryName: string; matches: Match[] }) => (
         </Table.Thead>
         <Table.Tbody>
           {props.matches.map((element) => (
-            <Table.Tr key={element.id[0]}>
+            <Table.Tr key={element.id}>
               <Table.Td className="td">{element.teams?.left.teamName}</Table.Td>
               <Table.Td className="td">{element.results?.left.time}</Table.Td>
               <Table.Td className="td">{element.results?.left.points}</Table.Td>
