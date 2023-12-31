@@ -66,9 +66,6 @@ export class MatchController {
   }
 
   async getMatchByType(matchType: string) {
-    if (matchType !== "primary") {
-      return Result.err(new Error("not implemented"));
-    }
     const res = await this.getService.findByType(matchType);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
