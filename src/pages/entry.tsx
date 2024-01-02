@@ -12,11 +12,9 @@ export const Entry = () => {
     const data = {
       teamName: teamName,
       members:
-        category === "Elementary"
-          ? members[1] !== ""
-            ? members
-            : members.slice(0, 1)
-          : members.slice(0, 1),
+        category === "Open" || members[1] === ""
+          ? members.slice(0, 1)
+          : members,
       isMultiWalk: isMultiWalk,
       category: category,
     };
