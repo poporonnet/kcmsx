@@ -36,7 +36,9 @@ export const Match = () => {
   const [matchJudge] = useState(
     new Judge(
       { multiWalk: !isExhibition && matchInfo.teams.left.isMultiWalk },
-      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk }
+      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk },
+      { matchInfo },
+      { matchInfo }
     )
   );
   const forceReload = useForceReload();

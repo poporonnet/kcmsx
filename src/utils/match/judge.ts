@@ -1,4 +1,9 @@
-import { PointState } from "./point";
+import {
+  InitialPointState,
+  PointState,
+  PremiseState,
+} from "../../config/types/rule";
+import { PartlyPartial } from "../../types/util";
 import { SetGoalTimeSeconds, Team } from "./team";
 
 export class Judge {
@@ -8,11 +13,19 @@ export class Judge {
   private readonly _setGoalTimeSecRight: SetGoalTimeSeconds;
 
   constructor(
-    _leftPointState?: Partial<PointState>,
-    _rightPointState?: Partial<PointState>
+    _leftPointState: PartlyPartial<PointState, keyof InitialPointState>,
+    _rightPointState: PartlyPartial<PointState, keyof InitialPointState>,
+    _leftPremiseState: Omit<PremiseState, "side">,
+    _rightPremiseState: Omit<PremiseState, "side">
   ) {
-    [this._leftTeam, this._setGoalTimeSecLeft] = Team.new(_leftPointState);
-    [this._rightTeam, this._setGoalTimeSecRight] = Team.new(_rightPointState);
+    [this._leftTeam, this._setGoalTimeSecLeft] = Team.new(_leftPointState, {
+      ..._leftPremiseState,
+      side: "left",
+    });
+    [this._rightTeam, this._setGoalTimeSecRight] = Team.new(_rightPointState, {
+      ..._rightPremiseState,
+      side: "right",
+    });
   }
 
   get leftTeam() {
