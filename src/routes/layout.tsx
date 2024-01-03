@@ -1,6 +1,6 @@
+import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
 import { Header } from "../components/header.tsx";
-import { AppShell } from "@mantine/core";
 
 export const Layout = () => (
   <AppShell

@@ -1,6 +1,6 @@
 import { Box, Flex, Title } from "@mantine/core";
-import { MatchCard } from "../components/matchCard.tsx";
 import { useEffect, useState } from "react";
+import { MatchCard } from "../components/matchCard.tsx";
 import { TeamInfo } from "./match.tsx";
 
 // 考慮事項: 予選・決勝で同点の時のじゃんけんの入力をどうするか
