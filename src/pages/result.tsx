@@ -38,6 +38,7 @@ type Match = {
 
 export const Result = () => {
   const [primarymatch, setprimaryMatch] = useState<Match[]>([]);
+  // ToDo: 本選の結果を取得する
   const [finalmatch, setfinalMatch] = useState<Match[]>([]);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
@@ -45,12 +46,6 @@ export const Result = () => {
       .then((json) => setprimaryMatch(json))
       .catch(() => alert("error"));
   }, []);
-  // useEffect(() => {
-  //   fetch(`${import.meta.env.VITE_API_URL}/match/final`)
-  //     .then((res) => res.json())
-  //     .then((json) => setfinalMatch(json))
-  //     .catch(() => alert("error"));
-  // }, []);
 
   return (
     <>
@@ -61,6 +56,18 @@ export const Result = () => {
     </>
   );
 };
+
+function MatchResult(winner: string, loser: string, points: number[]) {
+  return (
+    <>
+      <Table.Td className="td">{winner}</Table.Td>
+      <Table.Td className="td">
+        {points[0]}-{points[1]}
+      </Table.Td>
+      <Table.Td className="td">{loser}</Table.Td>
+    </>
+  );
+}
 
 const FinalTable = (props: { categoryName: string; matches: Match[] }) => (
   <div>
@@ -76,31 +83,17 @@ const FinalTable = (props: { categoryName: string; matches: Match[] }) => (
       <Table.Tbody>
         {props.matches.map((element) => (
           <Table.Tr key={element.id}>
-            {element.results?.left.points > element.results?.right.points ? (
-              <>
-                <Table.Td className="td">
-                  {element.teams.left.teamName}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.results?.left.points}-{element.results?.right.points}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.teams.right.teamName}
-                </Table.Td>
-              </>
-            ) : (
-              <>
-                <Table.Td className="td">
-                  {element.teams.right.teamName}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.results?.right.points}-{element.results?.left.points}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.teams.left.teamName}
-                </Table.Td>
-              </>
-            )}
+            {element.results?.left.points > element.results?.right.points
+              ? MatchResult(
+                  element.teams.left.teamName,
+                  element.teams.right.teamName,
+                  [element.results?.left.points, element.results?.right.points]
+                )
+              : MatchResult(
+                  element.teams.right.teamName,
+                  element.teams.left.teamName,
+                  [element.results?.right.points, element.results?.left.points]
+                )}
           </Table.Tr>
         ))}
       </Table.Tbody>
