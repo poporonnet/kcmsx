@@ -14,6 +14,9 @@ dependencies:
   "@mantine/hooks":
     specifier: ^7.3.1
     version: 7.3.1(react@18.2.0)
+  "@mantine/notifications":
+    specifier: 7.3.1
+    version: 7.3.1(@mantine/core@7.3.1)(@mantine/hooks@7.3.1)(react-dom@18.2.0)(react@18.2.0)
   "@tabler/icons-react":
     specifier: ^2.44.0
     version: 2.44.0(react@18.2.0)
@@ -546,6 +549,36 @@ packages:
     resolution:
       {
         integrity: sha512-pbbqPpVou/13xbt/dYYNphPpbDE2XfPN9mUHBoGZgv9FM8IkziNMIOo4PtNlqqqYsyp1lfQIQVKKT+DLZt1C8Q==,
+      }
+    peerDependencies:
+      react: ^18.2.0
+    dependencies:
+      react: 18.2.0
+    dev: false
+
+  /@mantine/notifications@7.3.1(@mantine/core@7.3.1)(@mantine/hooks@7.3.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-9q/Kxzc18hx5PZW4uUSoYRKBlVZPojmbS6DFrua9T684MyDz2a4Hhj6d90i+MwDIu39p6C6i3pl8FLoPqeb0ww==,
+      }
+    peerDependencies:
+      "@mantine/core": 7.3.1
+      "@mantine/hooks": 7.3.1
+      react: ^18.2.0
+      react-dom: ^18.2.0
+    dependencies:
+      "@mantine/core": 7.3.1(@mantine/hooks@7.3.1)(@types/react@18.2.42)(react-dom@18.2.0)(react@18.2.0)
+      "@mantine/hooks": 7.3.1(react@18.2.0)
+      "@mantine/store": 7.3.1(react@18.2.0)
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-transition-group: 4.4.5(react-dom@18.2.0)(react@18.2.0)
+    dev: false
+
+  /@mantine/store@7.3.1(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-B4kFI0ZhZTftlMvD5d8P0y1ATKFAMIA5MT4j0gNUgYEKMl1KkM/dT3kBPC2/32jz4GM9t2UL+D3CvkTwSX/BsA==,
       }
     peerDependencies:
       react: ^18.2.0
@@ -1349,6 +1382,16 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /dom-helpers@5.2.1:
+    resolution:
+      {
+        integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==,
+      }
+    dependencies:
+      "@babel/runtime": 7.23.5
+      csstype: 3.1.2
+    dev: false
 
   /embla-carousel-autoplay@7.1.0(embla-carousel@7.1.0):
     resolution:
@@ -2407,6 +2450,23 @@ packages:
       react: ">=16.8.0"
     dependencies:
       react: 18.2.0
+    dev: false
+
+  /react-transition-group@4.4.5(react-dom@18.2.0)(react@18.2.0):
+    resolution:
+      {
+        integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==,
+      }
+    peerDependencies:
+      react: ">=16.6.0"
+      react-dom: ">=16.6.0"
+    dependencies:
+      "@babel/runtime": 7.23.5
+      dom-helpers: 5.2.1
+      loose-envify: 1.4.0
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react@18.2.0:
