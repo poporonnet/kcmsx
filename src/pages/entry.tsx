@@ -1,4 +1,4 @@
-import { TextInput, Box, SegmentedControl, Button, Group } from "@mantine/core";
+import { Box, Button, Group, SegmentedControl, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 export const Entry = () => {

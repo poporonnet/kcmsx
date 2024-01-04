@@ -1,5 +1,5 @@
 import { Flex, Table, Title } from "@mantine/core";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "./result.css";
 
 type MatchTeam = {
@@ -44,7 +44,7 @@ export const Result = () => {
       .then((res) => res.json())
       .then((json) => setprimaryMatch(json))
       .catch(() => alert("error"));
-  }, []);  
+  }, []);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/final`)
       .then((res) => res.json())
