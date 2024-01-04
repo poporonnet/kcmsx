@@ -38,18 +38,24 @@ type Match = {
 
 export const Result = () => {
   const [primarymatch, setprimaryMatch] = useState<Match[]>([]);
-  // ToDo: 本選の結果を取得する
+  const [finalmatch, setfinalMatch] = useState<Match[]>([]);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
       .then((res) => res.json())
       .then((json) => setprimaryMatch(json))
+      .catch(() => alert("error"));
+  }, []);  
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/match/final`)
+      .then((res) => res.json())
+      .then((json) => setfinalMatch(json))
       .catch(() => alert("error"));
   }, []);
 
   return (
     <>
       <Flex direction="column" gap={20}>
-        <FinalTable categoryName="本選" matches={primarymatch} />
+        <FinalTable categoryName="本選" matches={finalmatch} />
         <PrimaryTable categoryName="予選" matches={primarymatch} />
       </Flex>
     </>
