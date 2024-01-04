@@ -1,69 +1,115 @@
 import { useState, useEffect } from "react";
 import { Flex, Table, Title } from "@mantine/core";
-import { useInterval } from "@mantine/hooks";
+//import { useInterval } from "../hooks/useInterval";
 import "./ranking.css";
 
-type Ranking = {
-  name: string;
-  id: string;
-  point: number;
+type teamResult = {
+  teamName: string;
+  teamID: string;
+  points: number;
   time: number;
 };
 
-function FetchData() {
-  let rankdata: Ranking[] = [];
-  const [resultdata, setData] = useState();
+type ResultData = {
+  id: string;
+  teams: {
+    left: {
+      id: string;
+      teamName: string;
+      isMultiWalk: boolean;
+      category: string;
+    };
+    right: {
+      id: string;
+      teamName: string;
+      isMultiWalk: boolean;
+      category: string;
+    };
+  };
+  matchType: string;
+  courseIndex: number;
+  results: {
+    left: {
+      teamID: string;
+      points: number;
+      time: number;
+    };
+    right: {
+      teamID: string;
+      points: number;
+      time: number;
+    };
+  };
+};
+
+function fetchData(resultdata: ResultData[]) {
+  let rankdata: teamResult[] = [];
+
+  resultdata.map((match: ResultData) => {
+    if (match.results && match.matchType == "primary") {
+      Object.keys(match.results).map((LR) => {
+        const result: teamResult = {
+          teamName: "str",
+          teamID: "0",
+          points: 0,
+          time: 0,
+        };
+        result.teamName = match.teams[LR].teamName;
+        result.teamID = match.results[LR].teamID;
+        rankdata.map((elm) => {
+          if (elm.teamID == result.teamID) {
+            result.points = match.results[LR].points + elm.points;
+            result.time = match.results[LR].time + elm.time;
+            rankdata = rankdata.filter(
+              (result) => result.teamID !== elm.teamID
+            );
+          }
+        });
+        if (!result.points) {
+          result.points = match.results[LR].points;
+          result.time = match.results[LR].time;
+        }
+        rankdata.push(result);
+      });
+    }
+  });
+
+  rankdata = rankdata.sort(function (a, b) {
+    if (a.points == b.points) {
+      return a.time > b.time ? 1 : -1;
+    }
+    return a.points > b.points ? -1 : 1;
+  });
+
+  return rankdata;
+}
+
+export const Ranking = () => {
+  const [resultdata, setData] = useState<ResultData[]>([]);
   useEffect(() => {
-    fetch("http://localhost:3000/match/primary", { method: "GET" })
+    fetch(`${import.meta.env.VITE_API_URL}/match/primary`, { method: "GET" })
       .then((res) => res.json())
       .then((json) => setData(json))
       .catch(() => alert("error"));
   }, []);
 
-  if (resultdata) {
-    resultdata.map((match) => {
-      if (match.results && match.matchType == "primary") {
-        Object.keys(match.results).map((LtRt) => {
-          const tmp = { name: "str", id: "0", point: 0, time: 0 };
-          tmp.name = match.teams[LtRt].teamName;
-          tmp.id = match.results[LtRt].teamID;
-          rankdata.map((elm) => {
-            if (elm.id == tmp.id) {
-              tmp.point = match.results[LtRt].points + elm.point;
-              tmp.time = match.results[LtRt].time + elm.time;
-              rankdata = rankdata.filter((result) => result.id !== elm.id);
-            }
-          });
-          if (!tmp.point) {
-            tmp.point = match.results[LtRt].points;
-            tmp.time = match.results[LtRt].time;
-          }
-          rankdata.push(tmp);
-        });
-      }
-    });
-  }
+  const ranking = fetchData(resultdata);
 
-  rankdata = rankdata.sort(function (a, b) {
-    if (a.point == b.point) {
-      return a.time > b.time ? 1 : -1;
-    }
-    return a.point > b.point ? -1 : 1;
-  });
+  return (
+    <>
+      <Flex direction="column" gap={20}>
+        <h1>ランキング</h1>
+        <h2>小学生部門</h2>
+        <RankingTable categoryName="予選" ranking={ranking} />
+      </Flex>
+    </>
+  );
+};
 
-  useInterval(FetchData, 30_00);
-  return rankdata;
-}
-
-export const Ranking = () => (
-  <Flex direction="column" gap={20}>
-    <h1>ランキング</h1>
-    <h2>小学生部門</h2>
-    <RankingTable categoryName="予選" ranking={FetchData()} />
-  </Flex>
-);
-
-const RankingTable = (props: { categoryName: string; ranking: Ranking[] }) => (
+const RankingTable = (props: {
+  categoryName: string;
+  ranking: teamResult[];
+}) => (
   <div>
     <Title order={3}>{props.categoryName}</Title>
     <Table striped withTableBorder miw="40rem">
@@ -77,10 +123,10 @@ const RankingTable = (props: { categoryName: string; ranking: Ranking[] }) => (
       </Table.Thead>
       <Table.Tbody>
         {props.ranking.map((element, index) => (
-          <Table.Tr key={element.name}>
+          <Table.Tr key={element.teamName}>
             <Table.Td className="td">{index + 1}</Table.Td>
-            <Table.Td className="td">{element.name}</Table.Td>
-            <Table.Td className="td">{element.point}</Table.Td>
+            <Table.Td className="td">{element.teamName}</Table.Td>
+            <Table.Td className="td">{element.points}</Table.Td>
             <Table.Td className="td">{element.time}</Table.Td>
           </Table.Tr>
         ))}
