@@ -3,11 +3,12 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import { Home } from "../pages/home.tsx";
-import { EntryList } from "../pages/entryList.tsx";
 import { Entry } from "../pages/entry.tsx";
-import { MatchList } from "../pages/matchList.tsx";
+import { EntryList } from "../pages/entryList.tsx";
+import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
+import { MatchList } from "../pages/matchList.tsx";
+import { Result } from "../pages/result.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
@@ -18,6 +19,7 @@ export const router = createBrowserRouter(
       <Route path="/entry" element={<Entry />} />
       <Route path="/matchlist" element={<MatchList />} />
       <Route path="/match" element={<Match />} />
+      <Route path="/result" element={<Result />} />
     </Route>
   ),
   {
