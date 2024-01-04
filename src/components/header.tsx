@@ -1,4 +1,4 @@
-import { AppShell, Title, Group } from "@mantine/core";
+import { AppShell, Group, Title } from "@mantine/core";
 import { Link } from "react-router-dom";
 
 export function Header() {

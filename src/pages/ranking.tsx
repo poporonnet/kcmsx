@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { Flex, Table, Title } from "@mantine/core";
+import { useEffect, useState } from "react";
 //import { useInterval } from "../hooks/useInterval";
 import "./ranking.css";
 
@@ -54,22 +54,24 @@ function fetchData(resultdata: ResultData[]) {
           points: 0,
           time: 0,
         };
-        result.teamName = match.teams[LR].teamName;
-        result.teamID = match.results[LR].teamID;
-        rankdata.map((elm) => {
-          if (elm.teamID == result.teamID) {
-            result.points = match.results[LR].points + elm.points;
-            result.time = match.results[LR].time + elm.time;
-            rankdata = rankdata.filter(
-              (result) => result.teamID !== elm.teamID
-            );
+        if (LR == "left" || LR == "right") {
+          result.teamName = match.teams[LR].teamName;
+          result.teamID = match.results[LR].teamID;
+          rankdata.map((elm) => {
+            if (elm.teamID == result.teamID) {
+              result.points = match.results[LR].points + elm.points;
+              result.time = match.results[LR].time + elm.time;
+              rankdata = rankdata.filter(
+                (result) => result.teamID !== elm.teamID
+              );
+            }
+          });
+          if (!result.points) {
+            result.points = match.results[LR].points;
+            result.time = match.results[LR].time;
           }
-        });
-        if (!result.points) {
-          result.points = match.results[LR].points;
-          result.time = match.results[LR].time;
+          rankdata.push(result);
         }
-        rankdata.push(result);
       });
     }
   });

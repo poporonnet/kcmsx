@@ -1,9 +1,9 @@
 import {
-  MantineColor,
-  Flex,
-  Group,
   ActionIcon,
   Button,
+  Flex,
+  Group,
+  MantineColor,
   Text,
 } from "@mantine/core";
 import {
@@ -11,9 +11,9 @@ import {
   IconSquareChevronRightFilled,
 } from "@tabler/icons-react";
 import { useState } from "react";
+import { lang } from "../config/lang/lang";
 import { Team } from "../utils/match/team";
 import { parseSeconds } from "../utils/time";
-import { lang } from "../config/lang/lang";
 
 export const PointControls = (props: {
   color: MantineColor;
