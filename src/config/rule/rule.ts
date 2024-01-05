@@ -55,5 +55,5 @@ export const premise = {
   placeBall: () => true,
   returnBase: () => true,
   bringBall: () => true,
-  firstGoal: () => true,
+  firstGoal: (premiseState) => premiseState.matchInfo?.matchType === "final",
 } satisfies Premise;
