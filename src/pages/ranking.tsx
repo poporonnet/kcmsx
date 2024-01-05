@@ -91,8 +91,7 @@ export const Ranking = () => {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/primary`, { method: "GET" })
       .then((res) => res.json())
-      .then((json) => setData(json))
-      .catch(() => alert("error"));
+      .then((json) => setData(json));
   }, []);
 
   const ranking = fetchData(resultdata);
@@ -111,28 +110,39 @@ export const Ranking = () => {
 const RankingTable = (props: {
   categoryName: string;
   ranking: teamResult[];
-}) => (
-  <div>
-    <Title order={3}>{props.categoryName}</Title>
-    <Table striped withTableBorder miw="40rem">
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>順位</Table.Th>
-          <Table.Th>チーム名</Table.Th>
-          <Table.Th>ポイント</Table.Th>
-          <Table.Th>タイム</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {props.ranking.map((element, index) => (
-          <Table.Tr key={element.teamName}>
-            <Table.Td className="td">{index + 1}</Table.Td>
-            <Table.Td className="td">{element.teamName}</Table.Td>
-            <Table.Td className="td">{element.points}</Table.Td>
-            <Table.Td className="td">{element.time}</Table.Td>
+}) => {
+  if (props.ranking.length == 0) {
+    return (
+      <>
+        <div>
+          <p>結果が出るまでお待ちください</p>
+        </div>
+      </>
+    );
+  }
+  return (
+    <div>
+      <Title order={3}>{props.categoryName}</Title>
+      <Table striped withTableBorder miw="40rem">
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>順位</Table.Th>
+            <Table.Th>チーム名</Table.Th>
+            <Table.Th>ポイント</Table.Th>
+            <Table.Th>タイム</Table.Th>
           </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
-  </div>
-);
+        </Table.Thead>
+        <Table.Tbody>
+          {props.ranking.map((element, index) => (
+            <Table.Tr key={element.teamName}>
+              <Table.Td className="td">{index + 1}</Table.Td>
+              <Table.Td className="td">{element.teamName}</Table.Td>
+              <Table.Td className="td">{element.points}</Table.Td>
+              <Table.Td className="td">{element.time}</Table.Td>
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </div>
+  );
+};
