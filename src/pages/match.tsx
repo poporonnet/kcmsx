@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
-import { useTimer } from "react-timer-hook";
-import { expiryTimestamp, parseSeconds } from "../utils/time";
-import { Judge } from "../utils/match/judge";
-import { useForceReload } from "../hooks/useForceReload";
+import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useTimer } from "react-timer-hook";
 import { PointControls } from "../components/pointControls";
 import { config } from "../config/config";
+import { useForceReload } from "../hooks/useForceReload";
+import { Judge } from "../utils/match/judge";
+import { expiryTimestamp, parseSeconds } from "../utils/time";
 
 type TimerState = "Initial" | "Started" | "Finished";
 export type TeamInfo = {
