@@ -11,8 +11,8 @@ type TeamResult = {
 
 type MatchResult = {
   results: {
-    Left: TeamResult;
-    Right: TeamResult;
+    left: TeamResult;
+    right: TeamResult;
   };
 };
 
@@ -27,11 +27,11 @@ export const MatchSubmit = (props: {
   const submit = async () => {
     const matchResult: MatchResult = {
       results: {
-        Left: {
+        left: {
           id: props.matchInfo.teams.left.id,
           ...props.result.left,
         },
-        Right: {
+        right: {
           id: props.matchInfo.teams.right.id,
           ...props.result.right,
         },
