@@ -1,4 +1,5 @@
 import { Card, SimpleGrid, Text } from "@mantine/core";
+import { IconChecks } from "@tabler/icons-react";
 import { LinkToMatch } from "./linkToMatch";
 interface MatchCardProps {
   id: string;
@@ -17,6 +18,7 @@ interface MatchCardProps {
       category: "elementary" | "open";
     };
   };
+  isFinished: boolean;
 }
 export const MatchCard = (props: MatchCardProps) => {
   return (
@@ -26,9 +28,10 @@ export const MatchCard = (props: MatchCardProps) => {
         teams: props.teams,
         matchType: props.matchType,
       }}
+      style={{ pointerEvents: props.isFinished ? "none" : "auto" }}
     >
       <Card
-        shadow="sm"
+        shadow={props.isFinished ? "none" : "sm"}
         padding="sm"
         radius="md"
         m={"md"}
@@ -41,6 +44,19 @@ export const MatchCard = (props: MatchCardProps) => {
           alignItems: "center",
         }}
       >
+        {props.isFinished ? (
+          <IconChecks
+            size={30}
+            color={"#00FF00"}
+            style={{
+              position: "absolute",
+              top: "0.5rem",
+              right: "0.5rem",
+            }}
+          />
+        ) : (
+          <></>
+        )}
         <SimpleGrid
           cols={1}
           style={{
