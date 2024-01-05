@@ -10,7 +10,7 @@ type Match = {
   category: "elementary" | "open";
   teams: { right: TeamInfo; left: TeamInfo };
   matchType: "primary" | "final";
-  results: {
+  results?: {
     left: {
       teamID: string;
       points: number;
@@ -91,7 +91,7 @@ export const MatchList = () => {
                     id={match.id}
                     matchType={match.matchType}
                     teams={match.teams}
-                    isFinished={Boolean(match.results)}
+                    isFinished={match.results != null}
                   />
                 );
               })}
@@ -121,7 +121,7 @@ export const MatchList = () => {
                     id={match.id}
                     matchType={match.matchType}
                     teams={match.teams}
-                    isFinished={Boolean(match.results)}
+                    isFinished={match.results != null}
                   />
                 );
               })}

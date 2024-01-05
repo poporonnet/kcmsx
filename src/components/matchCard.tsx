@@ -1,6 +1,6 @@
 import { Card, SimpleGrid, Text } from "@mantine/core";
-import { LinkToMatch } from "./linkToMatch";
 import { IconChecks } from "@tabler/icons-react";
+import { LinkToMatch } from "./linkToMatch";
 interface MatchCardProps {
   id: string;
   matchType: "primary" | "final";
@@ -31,7 +31,7 @@ export const MatchCard = (props: MatchCardProps) => {
       style={{ pointerEvents: props.isFinished ? "none" : "auto" }}
     >
       <Card
-        shadow="sm"
+        shadow={props.isFinished ? "none" : "sm"}
         padding="sm"
         radius="md"
         m={"md"}
@@ -45,7 +45,7 @@ export const MatchCard = (props: MatchCardProps) => {
         }}
       >
         {props.isFinished ? (
-        <IconChecks
+          <IconChecks
             size={30}
             color={"#00FF00"}
             style={{
