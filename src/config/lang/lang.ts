@@ -1,4 +1,4 @@
-type Lang = Record<string, string | Record<string, string>>;
+import { Lang } from "../types/lang";
 
 export const lang = {
   match: {

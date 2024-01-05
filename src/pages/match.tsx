@@ -22,7 +22,7 @@ export type MatchInfo = {
 };
 
 export const Match = () => {
-  const matchInfo = useLocation().state as MatchInfo;
+  const matchInfo = useLocation().state as MatchInfo | null;
   const isExhibition = matchInfo == null;
 
   const matchTimeSec = config.match.matchSeconds;
@@ -36,7 +36,9 @@ export const Match = () => {
   const [matchJudge] = useState(
     new Judge(
       { multiWalk: !isExhibition && matchInfo.teams.left.isMultiWalk },
-      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk }
+      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk },
+      { matchInfo },
+      { matchInfo }
     )
   );
   const forceReload = useForceReload();
