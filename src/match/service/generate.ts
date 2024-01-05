@@ -45,7 +45,8 @@ export class GenerateMatchService {
     }
 
     // 分ける(N/M = A...B M[i]にA人、B人を少ない方から)
-    const entry = res[1];
+    const entry = res[1].filter((v) => v.category === "Elementary");
+    console.log(entry.length);
     const entryNum = entry.length;
     // コースごとの参加者数
     const entryPerCourse = Math.floor(entryNum / this.COURSE_COUNT);
