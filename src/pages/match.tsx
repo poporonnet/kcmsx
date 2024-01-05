@@ -2,6 +2,7 @@ import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
+import { MatchSubmit } from "../components/matchSubmit";
 import { PointControls } from "../components/pointControls";
 import { config } from "../config/config";
 import { useForceReload } from "../hooks/useForceReload";
@@ -112,6 +113,22 @@ export const Match = () => {
           }
         />
       </Flex>
+      {!isExhibition && (
+        <MatchSubmit
+          matchInfo={matchInfo}
+          available={timerState === "Finished"}
+          result={{
+            left: {
+              points: matchJudge.leftTeam.point.point(),
+              time: matchJudge.leftTeam.goalTimeSeconds ?? matchTimeSec,
+            },
+            right: {
+              points: matchJudge.rightTeam.point.point(),
+              time: matchJudge.rightTeam.goalTimeSeconds ?? matchTimeSec,
+            },
+          }}
+        />
+      )}
     </Flex>
   );
 };
