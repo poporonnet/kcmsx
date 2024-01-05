@@ -10,6 +10,18 @@ type Match = {
   category: "elementary" | "open";
   teams: { right: TeamInfo; left: TeamInfo };
   matchType: "primary" | "final";
+  results: {
+    left: {
+      teamID: string;
+      points: number;
+      time: number;
+    };
+    right: {
+      teamID: string;
+      points: number;
+      time: number;
+    };
+  };
 };
 
 export const MatchList = () => {
@@ -79,6 +91,7 @@ export const MatchList = () => {
                     id={match.id}
                     matchType={match.matchType}
                     teams={match.teams}
+                    isFinished={Boolean(match.results)}
                   />
                 );
               })}
@@ -108,6 +121,7 @@ export const MatchList = () => {
                     id={match.id}
                     matchType={match.matchType}
                     teams={match.teams}
+                    isFinished={Boolean(match.results)}
                   />
                 );
               })}
