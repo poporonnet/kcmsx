@@ -47,6 +47,7 @@ const isRuleWithInitial = (r: RuleVariant): r is RuleWithInitial =>
   "initial" in r && r.initial !== undefined;
 
 type _PointState = {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
   [R in Rule as R["name"]]: R extends PointRule<infer Type, infer _Initial>
     ? Type
     : never;
