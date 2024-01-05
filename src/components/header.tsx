@@ -10,6 +10,7 @@ export function Header() {
         <Link to="/entry">参加者登録</Link>
         <Link to="/matchlist">試合表</Link>
         <Link to="/result">試合結果</Link>
+        <Link to="/ranking">ランキング</Link>
       </Group>
     </AppShell.Header>
   );
