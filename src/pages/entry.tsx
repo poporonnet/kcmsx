@@ -3,18 +3,15 @@ import { notifications } from "@mantine/notifications";
 import { useState } from "react";
 export const Entry = () => {
   const [teamName, setTeamName] = useState("");
-  const [members, setMembers] = useState(["", ""]);
   const [isMultiWalk, setIsMultiWalk] = useState(true); // ロボットが多足歩行型か
   const [category, setCategory] = useState("Elementary"); // 出場する部門 小学生部門:メンバー最大2人 オープン部門：1人
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // メンバーは、オープン部門または小学生部門かつメンバーが1人の場合は配列の要素数を1つにする
+    // 2024/1/5 仕様変更に伴いメンバーは入力せずに登録できるようにする
     const data = {
       teamName: teamName,
-      members:
-        category === "Open" || members[1] === ""
-          ? members.slice(0, 1)
-          : members,
+      members: ["aa"],
       isMultiWalk: isMultiWalk,
       category: category,
     };
@@ -59,25 +56,6 @@ export const Entry = () => {
           ]}
           value={category}
           onChange={(value) => setCategory(value)}
-        />
-        <TextInput
-          mt={"md"}
-          label="メンバー"
-          required
-          placeholder="メンバーを入力してください"
-          value={members[0]}
-          onChange={(event) => {
-            setMembers([event.currentTarget.value, members[1]]);
-          }}
-        />
-        <TextInput
-          mt={"md"}
-          placeholder="メンバーを入力してください"
-          value={members[1]}
-          onChange={(event) => {
-            setMembers([members[0], event.currentTarget.value]);
-          }}
-          disabled={!(category === "Elementary")}
         />
         <SegmentedControl
           fullWidth

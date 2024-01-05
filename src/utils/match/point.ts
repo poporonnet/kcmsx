@@ -1,19 +1,13 @@
-import { actions, pointTable } from "../../config/rule/rule";
-
-type Action = (typeof actions)[number];
-type PointCalculator =
-  | ((done: boolean) => number)
-  | ((count: number) => number);
-export type PointTable = Record<Action, PointCalculator>;
-export type PointState = {
-  [A in Action]: Parameters<(typeof pointTable)[A]>["0"];
-};
+import { premise, ruleList } from "../../config/rule/rule";
+import { PointState, PremiseState } from "../../config/types/rule";
 
 export class Point {
   private readonly _state: PointState;
+  private readonly _premiseState: PremiseState;
 
-  constructor(_state: PointState) {
+  constructor(_state: PointState, _premiseState: PremiseState) {
     this._state = _state;
+    this._premiseState = _premiseState;
   }
 
   get state() {
@@ -22,9 +16,10 @@ export class Point {
 
   public point(): number {
     let point = 0;
-    actions.forEach((action: Action) => {
-      const calculator = pointTable[action];
-      point += calculator(this._state[action] as never);
+    ruleList.forEach((rule) => {
+      if (!premise[rule.name](this._premiseState)) return;
+
+      point += rule.point(this.state[rule.name] as never);
     });
 
     return point;

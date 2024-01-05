@@ -1,34 +1,59 @@
-import { PointState, PointTable } from "../../utils/match/point";
+import { Premise, RuleList } from "../types/rule";
 
-export const actions = [
-  "multiWalk",
-  "leaveBase",
-  "overMiddle",
-  "enterDestination",
-  "placeBall",
-  "returnBase",
-  "bringBall",
-  "firstGoal",
-] as const;
+export const ruleList = [
+  {
+    name: "multiWalk",
+    point: (done: boolean) => (done ? 2 : 0),
+  },
+  {
+    name: "leaveBase",
+    point: (done: boolean) => (done ? 1 : 0),
+    initial: false,
+  },
+  {
+    name: "overMiddle",
+    point: (done: boolean) => (done ? 1 : 0),
+    initial: false,
+  },
+  {
+    name: "enterDestination",
+    point: (done: boolean) => (done ? 1 : 0),
+    initial: false,
+  },
+  {
+    name: "placeBall",
+    point: (done: boolean) => (done ? 1 : 0),
+    initial: false,
+  },
+  {
+    name: "returnBase",
+    point: (done: boolean) => (done ? 2 : 0),
+    initial: false,
+  },
+  {
+    name: "bringBall",
+    point: (count: number) => count,
+    validate: (value: number) => 0 <= value && value <= 3,
+    initial: 0,
+  },
+  {
+    name: "firstGoal",
+    point: (done: boolean) => (done ? 1 : 0),
+    initial: false,
+  },
+] as const satisfies RuleList;
 
-export const pointTable = {
-  multiWalk: (done: boolean) => (done ? 2 : 0),
-  leaveBase: (done: boolean) => (done ? 1 : 0),
-  overMiddle: (done: boolean) => (done ? 1 : 0),
-  enterDestination: (done: boolean) => (done ? 1 : 0),
-  placeBall: (done: boolean) => (done ? 1 : 0),
-  returnBase: (done: boolean) => (done ? 2 : 0),
-  bringBall: (count: number) => count,
-  firstGoal: (done: boolean) => (done ? 1 : 0),
-} as const satisfies PointTable;
-
-export const initialPointState: PointState = {
-  multiWalk: false,
-  leaveBase: false,
-  overMiddle: false,
-  enterDestination: false,
-  placeBall: false,
-  returnBase: false,
-  bringBall: 0,
-  firstGoal: false,
-};
+export const premise = {
+  multiWalk: (premiseState) =>
+    (premiseState.matchInfo &&
+      premiseState.side &&
+      premiseState.matchInfo.teams[premiseState.side].isMultiWalk) ||
+    true,
+  leaveBase: () => true,
+  overMiddle: () => true,
+  enterDestination: () => true,
+  placeBall: () => true,
+  returnBase: () => true,
+  bringBall: () => true,
+  firstGoal: (premiseState) => premiseState.matchInfo?.matchType === "final",
+} satisfies Premise;

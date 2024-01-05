@@ -2,6 +2,7 @@ import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
+import { MatchSubmit } from "../components/matchSubmit";
 import { PointControls } from "../components/pointControls";
 import { config } from "../config/config";
 import { useForceReload } from "../hooks/useForceReload";
@@ -22,7 +23,7 @@ export type MatchInfo = {
 };
 
 export const Match = () => {
-  const matchInfo = useLocation().state as MatchInfo;
+  const matchInfo = useLocation().state as MatchInfo | null;
   const isExhibition = matchInfo == null;
 
   const matchTimeSec = config.match.matchSeconds;
@@ -36,7 +37,9 @@ export const Match = () => {
   const [matchJudge] = useState(
     new Judge(
       { multiWalk: !isExhibition && matchInfo.teams.left.isMultiWalk },
-      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk }
+      { multiWalk: !isExhibition && matchInfo.teams.right.isMultiWalk },
+      { matchInfo },
+      { matchInfo }
     )
   );
   const forceReload = useForceReload();
@@ -110,6 +113,22 @@ export const Match = () => {
           }
         />
       </Flex>
+      {!isExhibition && (
+        <MatchSubmit
+          matchInfo={matchInfo}
+          available={timerState === "Finished"}
+          result={{
+            left: {
+              points: matchJudge.leftTeam.point.point(),
+              time: matchJudge.leftTeam.goalTimeSeconds ?? matchTimeSec,
+            },
+            right: {
+              points: matchJudge.rightTeam.point.point(),
+              time: matchJudge.rightTeam.goalTimeSeconds ?? matchTimeSec,
+            },
+          }}
+        />
+      )}
     </Flex>
   );
 };
