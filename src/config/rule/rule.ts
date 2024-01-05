@@ -45,7 +45,10 @@ export const ruleList = [
 
 export const premise = {
   multiWalk: (premiseState) =>
-    premiseState.matchInfo.teams[premiseState.side].isMultiWalk,
+    (premiseState.matchInfo &&
+      premiseState.side &&
+      premiseState.matchInfo.teams[premiseState.side].isMultiWalk) ||
+    true,
   leaveBase: () => true,
   overMiddle: () => true,
   enterDestination: () => true,

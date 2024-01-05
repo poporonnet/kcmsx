@@ -22,7 +22,7 @@ export type MatchInfo = {
 };
 
 export const Match = () => {
-  const matchInfo = useLocation().state as MatchInfo;
+  const matchInfo = useLocation().state as MatchInfo | null;
   const isExhibition = matchInfo == null;
 
   const matchTimeSec = config.match.matchSeconds;

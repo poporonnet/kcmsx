@@ -61,8 +61,8 @@ export const initialPointState: InitialPointState = Object.fromEntries(
 ) as InitialPointState;
 
 export type PremiseState = {
-  matchInfo: MatchInfo;
-  side: keyof MatchInfo["teams"];
+  matchInfo: MatchInfo | null;
+  side: keyof MatchInfo["teams"] | null;
 };
 
 type Premiser = (premiseState: PremiseState, pointState: PointState) => boolean;
