@@ -30,24 +30,23 @@ type ResultData = {
   courseIndex: number;
   results: {
     left: {
-      teamID: string;
+      id: string;
       points: number;
       time: number;
     };
     right: {
-      teamID: string;
+      id: string;
       points: number;
       time: number;
     };
   };
 };
 
-function fetchData(resultdata: ResultData[]) {
+function fetchRankingData(resultdata: ResultData[]) {
   let rankdata: teamResult[] = [];
-
-  resultdata.map((match: ResultData) => {
+  resultdata.forEach((match: ResultData) => {
     if (match.results && match.matchType == "primary") {
-      Object.keys(match.results).map((LR) => {
+      Object.keys(match.results).forEach((LR: string) => {
         const result: teamResult = {
           teamName: "str",
           teamID: "0",
@@ -56,20 +55,23 @@ function fetchData(resultdata: ResultData[]) {
         };
         if (LR == "left" || LR == "right") {
           result.teamName = match.teams[LR].teamName;
-          result.teamID = match.results[LR].teamID;
-          rankdata.map((elm) => {
+          result.teamID = match.results[LR].id;
+          if (rankdata.length == 0) {
+            result.points = match.results[LR].points;
+            result.time = match.results[LR].time;
+          }
+          rankdata.forEach((elm) => {
             if (elm.teamID == result.teamID) {
               result.points = match.results[LR].points + elm.points;
               result.time = match.results[LR].time + elm.time;
               rankdata = rankdata.filter(
                 (result) => result.teamID !== elm.teamID
               );
+            } else {
+              result.points = match.results[LR].points;
+              result.time = match.results[LR].time;
             }
           });
-          if (!result.points) {
-            result.points = match.results[LR].points;
-            result.time = match.results[LR].time;
-          }
           rankdata.push(result);
         }
       });
@@ -94,7 +96,7 @@ export const Ranking = () => {
       .then((json) => setData(json));
   }, []);
 
-  const ranking = fetchData(resultdata);
+  const ranking = fetchRankingData(resultdata);
 
   return (
     <>
