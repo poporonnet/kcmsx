@@ -1,5 +1,4 @@
 import { Flex, Table, Title } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import "./result.css";
 
@@ -44,7 +43,6 @@ export const Result = () => {
     fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
       .then((res) => res.json())
       .then((json) => setprimaryMatch(json))
-      .catch(() => alert("error"));
   }, []);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/final`)
