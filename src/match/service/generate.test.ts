@@ -36,11 +36,11 @@ describe("予選の対戦表を正しく生成できる", async () => {
     expect(Result.isErr(res)).toStrictEqual(false);
     for (const v of Result.unwrap(res)) {
       for (const j of v) {
-        expect(j.teams.Left!.id).not.toBe(j.teams.Right!.id);
-        expect(j.teams.Left!.category).toStrictEqual(j.teams.Right!.category);
+        expect(j.teams.left!.id).not.toBe(j.teams.right!.id);
+        expect(j.teams.left!.category).toStrictEqual(j.teams.right!.category);
         console.log(
-          parseInt(j.teams.Left!.id) - 8,
-          parseInt(j.teams.Right!.id) - 8,
+          parseInt(j.teams.left!.id) - 8,
+          parseInt(j.teams.right!.id) - 8,
         );
       }
       console.log("----------------------------------");
@@ -62,28 +62,28 @@ describe("本選の対戦表を正しく生成できる", async () => {
   match[1].map((v) => {
     v.map((j) => {
       j.results = {
-        Left: {
-          teamID: j.teams.Left?.id ?? "",
-          points: Number(j.teams.Left?.id ?? 0),
-          time: Number(j.teams.Left?.id ?? 0),
+        left: {
+          teamID: j.teams.left?.id ?? "",
+          points: Number(j.teams.left?.id ?? 0),
+          time: Number(j.teams.left?.id ?? 0),
         },
-        Right: {
-          teamID: j.teams.Right?.id ?? "",
-          points: Number(j.teams.Right?.id ?? 0),
-          time: Number(j.teams.Right?.id ?? 0),
+        right: {
+          teamID: j.teams.right?.id ?? "",
+          points: Number(j.teams.right?.id ?? 0),
+          time: Number(j.teams.right?.id ?? 0),
         },
       };
       // fixme: 消す(最下位とその1つ上の点数を同じにしている)
-      if (j.teams.Left) {
-        if (j.teams.Left.id === "1") {
-          j.results.Left.points = 0;
-          j.results.Left.time = 0;
+      if (j.teams.left) {
+        if (j.teams.left.id === "1") {
+          j.results.left.points = 0;
+          j.results.left.time = 0;
         }
       }
-      if (j.teams.Right) {
-        if (j.teams.Right.id === "1") {
-          j.results.Right.points = 0;
-          j.results.Right.time = 1;
+      if (j.teams.right) {
+        if (j.teams.right.id === "1") {
+          j.results.right.points = 0;
+          j.results.right.time = 1;
         }
       }
       matchRepository.update(j);

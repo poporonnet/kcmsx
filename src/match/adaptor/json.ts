@@ -17,8 +17,8 @@ interface matchResultJSON {
 }
 
 interface matchResultPairJSON {
-  Left: matchResultJSON;
-  Right: matchResultJSON;
+  left: matchResultJSON;
+  right: matchResultJSON;
 }
 
 interface matchResultFinalPairJSON {
@@ -31,8 +31,8 @@ interface MatchJSON {
   matchType: string;
   courseIndex: number;
   teams: {
-    Left: EntryJSON | undefined;
-    Right: EntryJSON | undefined;
+    left: EntryJSON | undefined;
+    right: EntryJSON | undefined;
   };
   results?: matchResultPairJSON | matchResultFinalPairJSON;
 }
@@ -119,8 +119,8 @@ export class JSONMatchRepository implements MatchRepository {
     return {
       id: match.id,
       teams: {
-        Left: covertToEntryJSON(match.teams.Left),
-        Right: covertToEntryJSON(match.teams.Right),
+        left: covertToEntryJSON(match.teams.left),
+        right: covertToEntryJSON(match.teams.right),
       },
       matchType: match.matchType,
       courseIndex: match.courseIndex,

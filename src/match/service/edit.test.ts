@@ -11,14 +11,14 @@ describe("EditMatch", () => {
     Match.reconstruct({
       id: "123",
       teams: {
-        Left: Entry.new({
+        left: Entry.new({
           id: "101",
           teamName: "BBC",
           members: ["test1", "test2"],
           isMultiWalk: false,
           category: "Elementary",
         }),
-        Right: Entry.new({
+        right: Entry.new({
           id: "100",
           teamName: "ABC",
           members: ["test1"],
@@ -35,12 +35,12 @@ describe("EditMatch", () => {
   it("正しく更新できる", async () => {
     const res = await editService.handle("123", {
       results: {
-        Left: {
+        left: {
           teamID: "101",
           points: 2,
           time: 100,
         },
-        Right: {
+        right: {
           teamID: "100",
           points: 3,
           time: 200,
@@ -51,12 +51,12 @@ describe("EditMatch", () => {
     expect(Result.isErr(res)).toBe(false);
     if (Result.isErr(res)) return;
     expect(res[1].results).toStrictEqual({
-      Left: {
+      left: {
         teamID: "101",
         points: 2,
         time: 100,
       },
-      Right: {
+      right: {
         teamID: "100",
         points: 3,
         time: 200,

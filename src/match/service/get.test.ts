@@ -16,7 +16,7 @@ describe("GetMatchService", () => {
   });
   const match = Match.reconstruct({
     id: "111",
-    teams: { Left: entry, Right: undefined },
+    teams: { left: entry, right: undefined },
     matchType: "primary",
     courseIndex: 0,
   });
@@ -42,14 +42,14 @@ describe("MatchDTO", async () => {
   const domain = Match.reconstruct({
     id: "1",
     teams: {
-      Left: Entry.new({
+      left: Entry.new({
         id: "2",
         teamName: "あいうえお",
         members: ["いしや"],
         isMultiWalk: false,
         category: "Open",
       }),
-      Right: Entry.new({
+      right: Entry.new({
         id: "3",
         teamName: "いきしちに",
         members: ["やも"],
@@ -60,12 +60,12 @@ describe("MatchDTO", async () => {
     matchType: "primary",
     courseIndex: 0,
     results: {
-      Left: {
+      left: {
         teamID: "2",
         points: 1,
         time: 10,
       },
-      Right: {
+      right: {
         teamID: "3",
         points: 2,
         time: 20,

@@ -34,8 +34,8 @@ import { Entry } from "../entry/entry.js";
 */
 // 対戦するチームのペア L左/R右
 export type MatchTeams = {
-  Left: Entry | undefined;
-  Right: Entry | undefined;
+  left: Entry | undefined;
+  right: Entry | undefined;
 };
 // 試合の結果(1チーム,1回のみ)
 export type MatchResult = {
@@ -48,8 +48,8 @@ export type MatchResult = {
 };
 // 予選の結果
 export type MatchResultPair = {
-  Left: MatchResult;
-  Right: MatchResult;
+  left: MatchResult;
+  right: MatchResult;
 };
 // 本選の結果
 export type MatchResultFinalPair = {
@@ -60,7 +60,7 @@ export type MatchResultFinalPair = {
 export const isMatchResultPair = (
   arg: MatchResultPair | MatchResultFinalPair | undefined,
 ): arg is MatchResultPair => {
-  return (arg as MatchResultPair).Left !== undefined;
+  return (arg as MatchResultPair).left !== undefined;
 };
 
 export interface CreateMatchArgs {

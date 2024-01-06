@@ -74,7 +74,7 @@ export class GenerateMatchService {
         const match = Match.new({
           id: crypto.randomUUID(),
           matchType: "primary",
-          teams: { Left: courses[i][k], Right: courses[i][opponentIndex] },
+          teams: { left: courses[i][k], right: courses[i][opponentIndex] },
           courseIndex: i,
         });
         courseMatches.push(match);
@@ -116,7 +116,7 @@ export class GenerateMatchService {
           Match.new({
             id: crypto.randomUUID(),
             matchType: "final",
-            teams: { Left: v[0].entry, Right: v[1].entry },
+            teams: { left: v[0].entry, right: v[1].entry },
             courseIndex: 0,
           }),
         );
@@ -128,7 +128,7 @@ export class GenerateMatchService {
           Match.new({
             id: crypto.randomUUID(),
             matchType: "final",
-            teams: { Left: v[0].entry, Right: v[1].entry },
+            teams: { left: v[0].entry, right: v[1].entry },
             courseIndex: 0,
           }),
         );
@@ -161,8 +161,8 @@ export class GenerateMatchService {
       if (!isMatchResultPair(v.results)) continue;
 
       // 対戦の結果を取って、tournamentRankを作る
-      const left = v.results.Left;
-      const right = v.results.Right;
+      const left = v.results.left;
+      const right = v.results.right;
 
       // 左チームの結果を追加
       const leftRank = rankBase.find((v) => v.entry.id === left.teamID);
@@ -172,7 +172,7 @@ export class GenerateMatchService {
           rank: 0,
           points: left.points,
           time: left.time,
-          entry: v.teams.Left,
+          entry: v.teams.left,
         });
       } else {
         // あれば足す
@@ -188,7 +188,7 @@ export class GenerateMatchService {
           rank: 0,
           points: right.points,
           time: right.time,
-          entry: v.teams.Right,
+          entry: v.teams.right,
         });
       } else {
         // あれば足す

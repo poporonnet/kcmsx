@@ -103,8 +103,8 @@ export class MatchController {
     return {
       id: i.id,
       teams: {
-        left: toTeamJSON(i.teams.Left),
-        right: toTeamJSON(i.teams.Right),
+        left: toTeamJSON(i.teams.left),
+        right: toTeamJSON(i.teams.right),
       },
       matchType: i.matchType,
       courseIndex: i.courseIndex,
@@ -120,8 +120,8 @@ interface matchResultJSON {
 }
 
 interface matchResultPairJSON {
-  Left: matchResultJSON;
-  Right: matchResultJSON;
+  left: matchResultJSON;
+  right: matchResultJSON;
 }
 
 interface matchResultFinalPairJSON {
