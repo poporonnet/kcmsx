@@ -74,7 +74,7 @@ export const MatchCard = (props: MatchCardProps) => {
               alignItems: "center",
             }}
           >
-            {props.teams["right"].teamName}
+            <Text size="xl">右: {props.teams["right"].teamName}</Text>
           </Text>
           <Text
             size={"1rem"}
@@ -84,7 +84,7 @@ export const MatchCard = (props: MatchCardProps) => {
               alignItems: "center",
             }}
           >
-            {props.teams["left"].teamName}
+            <Text size="xl">左: {props.teams["left"].teamName}</Text>
           </Text>
         </SimpleGrid>
       </Card>
