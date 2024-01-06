@@ -43,15 +43,12 @@ export const Result = () => {
     fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
       .then((res) => res.json())
       .then((json) => setprimaryMatch(json))
-      .catch(() => alert("error"));
   }, []);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/final`)
       .then((res) => res.json())
-      .then((json) => setfinalMatch(json))
-      .catch(() => alert("error"));
+      .then((json) => setfinalMatch(json));
   }, []);
-
   return (
     <>
       <Flex direction="column" gap={20}>
