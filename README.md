@@ -347,5 +347,5 @@ body: `application/json`
 ## リンク
 [書き込みツール フロントエンド](https://github.com/poporonnet/kanicon-writer-front)
 
-[書き込みツール コンパイラサーバ](https://github.com/poporonnet/kanicc)
+[書き込みツール コンパイルサーバ](https://github.com/poporonnet/kanicc)
 
