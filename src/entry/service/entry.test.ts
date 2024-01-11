@@ -3,6 +3,7 @@ import { DummyRepository } from '../adaptor/dummyRepository.js';
 import { Entry } from '../entry.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { EntryService } from './entry.js';
+import { TestEntryData } from '../../testData/entry.js';
 
 describe('entryService', () => {
   const repository = new DummyRepository();
@@ -13,43 +14,22 @@ describe('entryService', () => {
   });
 
   it('エントリーできる', async () => {
-    const entry = Entry.new({
-      id: '123',
-      teamName: 'team1',
-      members: ['山田四十郎'],
-      isMultiWalk: true,
-      category: 'Open',
-    });
-    const actual = await service.create(entry);
+    const actual = await service.create(TestEntryData['ElementaryMultiWalk']);
 
     expect(Result.isOk(actual)).toBe(true);
     if (Result.isErr(actual)) {
       return;
     }
 
-    expect(actual[1].members).toStrictEqual(['山田四十郎']);
-    expect(actual[1].teamName).toBe('team1');
+    expect(actual[1].members).toStrictEqual(['TestTaro1']);
+    expect(actual[1].teamName).toBe('TestTeam1');
     expect(actual[1].isMultiWalk).toBe(true);
-    expect(actual[1].category).toBe('Open');
+    expect(actual[1].category).toBe('Elementary');
   });
 
   it('チーム名が重複するときはエラー終了する', async () => {
-    const entry1 = Entry.new({
-      id: '123',
-      teamName: 'team1',
-      members: ['山田四十郎'],
-      isMultiWalk: true,
-      category: 'Open',
-    });
-    const entry2 = Entry.new({
-      id: '123',
-      teamName: 'team1',
-      members: ['山田四十郎'],
-      isMultiWalk: true,
-      category: 'Open',
-    });
-    await service.create(entry1);
-    const result = await service.create(entry2);
+    await service.create(TestEntryData['ElementaryMultiWalk']);
+    const result = await service.create(TestEntryData['ElementaryMultiWalkExists']);
 
     expect(Result.isErr(result)).toBe(true);
     expect(result[1]).toStrictEqual(new Error('teamName Exists'));

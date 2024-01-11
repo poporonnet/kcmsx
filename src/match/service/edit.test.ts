@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
 import { EditMatchService } from './edit.js';
 import { Match } from '../match.js';
-import { Entry } from '../../entry/entry.js';
 import { Result } from '@mikuroxina/mini-fn';
+import { TestEntryData } from '../../testData/entry.js';
 
 describe('EditMatch', () => {
   const reporitory = new DummyMatchRepository();
@@ -11,20 +11,8 @@ describe('EditMatch', () => {
     Match.reconstruct({
       id: '123',
       teams: {
-        left: Entry.new({
-          id: '101',
-          teamName: 'BBC',
-          members: ['test1', 'test2'],
-          isMultiWalk: false,
-          category: 'Elementary',
-        }),
-        right: Entry.new({
-          id: '100',
-          teamName: 'ABC',
-          members: ['test1'],
-          isMultiWalk: false,
-          category: 'Open',
-        }),
+        left: TestEntryData['ElementaryMultiWalk'],
+        right: TestEntryData['ElementaryWheel'],
       },
       matchType: 'primary',
       courseIndex: 0,
@@ -36,12 +24,12 @@ describe('EditMatch', () => {
     const res = await editService.handle('123', {
       results: {
         left: {
-          teamID: '101',
+          teamID: '1',
           points: 2,
           time: 100,
         },
         right: {
-          teamID: '100',
+          teamID: '2',
           points: 3,
           time: 200,
         },
@@ -52,12 +40,12 @@ describe('EditMatch', () => {
     if (Result.isErr(res)) return;
     expect(res[1].results).toStrictEqual({
       left: {
-        teamID: '101',
+        teamID: '1',
         points: 2,
         time: 100,
       },
       right: {
-        teamID: '100',
+        teamID: '2',
         points: 3,
         time: 200,
       },

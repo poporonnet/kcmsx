@@ -25,23 +25,23 @@ export default [
     languageOptions: {
       parser: typeScriptESLintParser,
       globals: {
-        ...vitest.environments.env.globals
-      }
+        ...vitest.environments.env.globals,
+      },
     },
   },
   // TSパーサー
   {
     plugins: {
       '@typescript-eslint': typeScriptESLint,
-      'vitest': vitest
+      vitest: vitest,
     },
   },
   // プラグインの設定
   {
     rules: {
       ...vitest.configs.recommended.rules,
-      "vitest/consistent-test-it": ["error", {"fn": "it"}],
-      "vitest/require-top-level-describe": ["error"],
+      'vitest/consistent-test-it': ['error', { fn: 'it' }],
+      'vitest/require-top-level-describe': ['error'],
     },
   },
 ];

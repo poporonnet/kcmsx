@@ -38,9 +38,7 @@ describe('予選の対戦表を正しく生成できる', () => {
       for (const j of v) {
         expect(j.teams.left!.id).not.toBe(j.teams.right!.id);
         expect(j.teams.left!.category).toStrictEqual(j.teams.right!.category);
-        console.log(parseInt(j.teams.left!.id) - 8, parseInt(j.teams.right!.id) - 8);
       }
-      console.log('----------------------------------');
     }
   });
 });

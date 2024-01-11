@@ -7,10 +7,10 @@ export default defineConfig({
   test: {
     globals: true,
     coverage: {
-      provider: "v8",
-      include: ["src/**/*.ts"],
+      provider: 'v8',
+      include: ['src/**/*.ts'],
       all: true,
-      reporter: ["html", "clover", "text"]
-    }
-  }
-})
+      reporter: ['html', 'clover', 'text'],
+    },
+  },
+});
