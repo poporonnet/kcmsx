@@ -1,7 +1,7 @@
-import { Option, Result } from "@mikuroxina/mini-fn";
-import { MatchRepository } from "./repository.js";
-import { MatchDTO } from "./get.js";
-import { ReconstructMatchArgs } from "../match.js";
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { MatchRepository } from './repository.js';
+import { MatchDTO } from './get.js';
+import { ReconstructMatchArgs } from '../match.js';
 
 export class EditMatchService {
   private readonly matchRepository: MatchRepository;
@@ -12,10 +12,10 @@ export class EditMatchService {
 
   async handle(
     id: string,
-    args: Partial<Pick<ReconstructMatchArgs, "results">>,
+    args: Partial<Pick<ReconstructMatchArgs, 'results'>>
   ): Promise<Result.Result<Error, MatchDTO>> {
     const match = await this.matchRepository.findByID(id);
-    if (Option.isNone(match)) return Result.err(new Error("Match not found"));
+    if (Option.isNone(match)) return Result.err(new Error('Match not found'));
 
     if (args.results !== undefined) match[1].results = args.results;
 

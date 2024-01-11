@@ -1,10 +1,8 @@
-import { Entry } from "../entry/entry.js";
+import { Entry } from '../entry/entry.js';
 
 type Tournament = [TournamentRank, TournamentRank] | [Tournament, Tournament];
 
-const tournament = (
-  ids: TournamentRank[] | Tournament[] | Tournament,
-): Tournament => {
+const tournament = (ids: TournamentRank[] | Tournament[] | Tournament): Tournament => {
   if (ids.length == 2) return ids as Tournament; // この場合必ずTournament
 
   const pairs = new Array(ids.length / 2)
@@ -24,7 +22,7 @@ const generateDummyData = (n: number): TournamentRank[] => {
         teamName: `チーム ${i}`,
         members: [`チーム${i}のメンバー`],
         isMultiWalk: true,
-        category: i % 2 === 0 ? "Open" : "Elementary",
+        category: i % 2 === 0 ? 'Open' : 'Elementary',
       }),
     });
   }

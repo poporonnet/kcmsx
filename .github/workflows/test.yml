@@ -2,7 +2,7 @@ name: run test
 on:
   pull_request:
     paths-ignore:
-      - "**.md"
+      - '**.md'
 
 jobs:
   run_test:

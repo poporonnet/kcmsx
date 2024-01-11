@@ -1,6 +1,6 @@
-import { Match } from "../match.js";
-import { MatchRepository } from "../service/repository.js";
-import { Option, Result } from "@mikuroxina/mini-fn";
+import { Match } from '../match.js';
+import { MatchRepository } from '../service/repository.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class DummyMatchRepository implements MatchRepository {
   private readonly data: Match[];

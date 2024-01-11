@@ -1,20 +1,20 @@
-import { describe, expect, it } from "vitest";
-import { Entry } from "./entry.js";
+import { describe, expect, it } from 'vitest';
+import { Entry } from './entry.js';
 
-describe("正しくインスタンスを生成できる", () => {
-  it("正しくインスタンスを生成できる", () => {
+describe('正しくインスタンスを生成できる', () => {
+  it('正しくインスタンスを生成できる', () => {
     const actual = Entry.new({
-      id: "123",
-      teamName: "チーム1",
-      members: ["山田太郎", "テスト大介"],
+      id: '123',
+      teamName: 'チーム1',
+      members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,
-      category: "Open",
+      category: 'Open',
     });
 
-    expect(actual.id).toBe("123");
-    expect(actual.teamName).toBe("チーム1");
-    expect(actual.members).toEqual(["山田太郎", "テスト大介"]);
+    expect(actual.id).toBe('123');
+    expect(actual.teamName).toBe('チーム1');
+    expect(actual.members).toEqual(['山田太郎', 'テスト大介']);
     expect(actual.isMultiWalk).toBe(false);
-    expect(actual.category).toBe("Open");
+    expect(actual.category).toBe('Open');
   });
 });

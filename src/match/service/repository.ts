@@ -1,5 +1,5 @@
-import { Match } from "../match.js";
-import { Option, Result } from "@mikuroxina/mini-fn";
+import { Match } from '../match.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
 
 export interface MatchRepository {
   // ToDo: バルクで登録できるようにする

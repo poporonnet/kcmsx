@@ -1,16 +1,16 @@
-import { Hono } from "hono";
-import { zValidator } from "@hono/zod-validator";
-import { entryRequestSchema } from "./schema.js";
-import { Controller } from "./controller.js";
-import { Option, Result } from "@mikuroxina/mini-fn";
-import { JSONEntryRepository } from "./adaptor/json.js";
+import { Hono } from 'hono';
+import { zValidator } from '@hono/zod-validator';
+import { entryRequestSchema } from './schema.js';
+import { Controller } from './controller.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { JSONEntryRepository } from './adaptor/json.js';
 
 export const entryHandler = new Hono();
 // export const controller = new Controller(new DummyRepository());
 export const controller = new Controller(await JSONEntryRepository.new());
 
-entryHandler.post("/", zValidator("json", entryRequestSchema), async (c) => {
-  const { teamName, members, isMultiWalk, category } = c.req.valid("json");
+entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
+  const { teamName, members, isMultiWalk, category } = c.req.valid('json');
 
   const res = await controller.create({
     teamName,
@@ -31,7 +31,7 @@ entryHandler.post("/", zValidator("json", entryRequestSchema), async (c) => {
   });
 });
 
-entryHandler.get("/", async (c) => {
+entryHandler.get('/', async (c) => {
   const res = await controller.get();
   if (Result.isErr(res)) {
     return c.json({ error: res[1].message }, 400);
@@ -40,7 +40,7 @@ entryHandler.get("/", async (c) => {
   return c.json([...res[1]]);
 });
 
-entryHandler.delete("/:id", async (c) => {
+entryHandler.delete('/:id', async (c) => {
   const res = await controller.delete(c.req.param().id);
   if (Option.isSome(res)) {
     return c.json({ error: res[1].message }, 400);

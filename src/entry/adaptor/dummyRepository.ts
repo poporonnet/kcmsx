@@ -1,6 +1,6 @@
-import { EntryRepository } from "../repository.js";
-import { Option, Result } from "@mikuroxina/mini-fn";
-import { Entry } from "../entry.js";
+import { EntryRepository } from '../repository.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { Entry } from '../entry.js';
 
 export class DummyRepository implements EntryRepository {
   private data: Array<Entry>;

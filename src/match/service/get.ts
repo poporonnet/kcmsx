@@ -1,11 +1,6 @@
-import { MatchRepository } from "./repository.js";
-import { Option, Result } from "@mikuroxina/mini-fn";
-import {
-  Match,
-  MatchResultFinalPair,
-  MatchResultPair,
-  MatchTeams,
-} from "../match.js";
+import { MatchRepository } from './repository.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { Match, MatchResultFinalPair, MatchResultPair, MatchTeams } from '../match.js';
 
 export class GetMatchService {
   private readonly repository: MatchRepository;
@@ -17,7 +12,7 @@ export class GetMatchService {
   async findById(id: string): Promise<Result.Result<Error, MatchDTO>> {
     const res = await this.repository.findByID(id);
     if (Option.isNone(res)) {
-      return Result.err(new Error("Not found"));
+      return Result.err(new Error('Not found'));
     }
 
     return Result.ok(MatchDTO.fromDomain(res[1]));
@@ -26,7 +21,7 @@ export class GetMatchService {
   async findByType(type: string): Promise<Result.Result<Error, MatchDTO[]>> {
     const res = await this.repository.findByType(type);
     if (Option.isNone(res)) {
-      return Result.err(new Error("Not found"));
+      return Result.err(new Error('Not found'));
     }
 
     return Result.ok(res[1].map(MatchDTO.fromDomain));
@@ -39,7 +34,7 @@ export class MatchDTO {
   // 試合するチームのID
   private readonly _teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
-  private readonly _matchType: "primary" | "final";
+  private readonly _matchType: 'primary' | 'final';
   // コース番号
   private readonly _courseIndex: number;
   // 試合の結果
@@ -52,7 +47,7 @@ export class MatchDTO {
     return this._teams;
   }
 
-  get matchType(): "primary" | "final" {
+  get matchType(): 'primary' | 'final' {
     return this._matchType;
   }
 
@@ -67,9 +62,9 @@ export class MatchDTO {
   private constructor(
     id: string,
     teams: MatchTeams,
-    matchType: "primary" | "final",
+    matchType: 'primary' | 'final',
     courseIndex: number,
-    results?: MatchResultPair | MatchResultFinalPair,
+    results?: MatchResultPair | MatchResultFinalPair
   ) {
     this._id = id;
     this._teams = teams;
@@ -79,13 +74,7 @@ export class MatchDTO {
   }
 
   public static fromDomain(match: Match): MatchDTO {
-    return new MatchDTO(
-      match.id,
-      match.teams,
-      match.matchType,
-      match.courseIndex,
-      match.results,
-    );
+    return new MatchDTO(match.id, match.teams, match.matchType, match.courseIndex, match.results);
   }
 
   public toDomain(): Match {

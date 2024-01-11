@@ -1,4 +1,4 @@
-import { Entry } from "../entry/entry.js";
+import { Entry } from '../entry/entry.js';
 
 /*
 
@@ -58,7 +58,7 @@ export type MatchResultFinalPair = {
   winnerID: string;
 };
 export const isMatchResultPair = (
-  arg: MatchResultPair | MatchResultFinalPair | undefined,
+  arg: MatchResultPair | MatchResultFinalPair | undefined
 ): arg is MatchResultPair => {
   return (arg as MatchResultPair).left !== undefined;
 };
@@ -67,7 +67,7 @@ export interface CreateMatchArgs {
   id: string;
   teams: MatchTeams;
   courseIndex: number;
-  matchType: "primary" | "final";
+  matchType: 'primary' | 'final';
 }
 
 export interface ReconstructMatchArgs {
@@ -76,7 +76,7 @@ export interface ReconstructMatchArgs {
   // 試合するチームのID
   teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
-  matchType: "primary" | "final";
+  matchType: 'primary' | 'final';
   // コース番号
   courseIndex: number;
   // 試合の結果
@@ -89,7 +89,7 @@ export class Match {
   // 試合するチームのID
   private readonly _teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
-  private readonly _matchType: "primary" | "final";
+  private readonly _matchType: 'primary' | 'final';
   // コース番号
   private readonly _courseIndex: number;
   // 試合の結果
@@ -98,7 +98,7 @@ export class Match {
   private constructor(args: {
     id: string;
     teams: MatchTeams;
-    matchType: "primary" | "final";
+    matchType: 'primary' | 'final';
     results?: MatchResultPair | MatchResultFinalPair;
     courseIndex: number;
   }) {
@@ -117,7 +117,7 @@ export class Match {
     return this._teams;
   }
 
-  get matchType(): "primary" | "final" {
+  get matchType(): 'primary' | 'final' {
     return this._matchType;
   }
 

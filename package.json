@@ -8,7 +8,7 @@
     "start": "bun ./build/main.js",
     "dev": "bun run --hot ./src/main.ts",
     "build": "esbuild ./src/main.ts --bundle --sourcemap --platform=node --target=node16 --format=esm --packages=external --outfile=build/main.js",
-    "lint": "eslint --cache --ignore-path .gitignore 'src/**/**.ts'",
+    "lint": "eslint --cache 'src/**/**.ts'",
     "format": "prettier . --write",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
@@ -27,11 +27,14 @@
     "zod": "^3.22.4"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.0.0",
+    "@eslint/js": "^8.56.0",
     "@types/node": "^20.10.2",
-    "@typescript-eslint/eslint-plugin": "^6.13.1",
-    "@typescript-eslint/parser": "^6.13.1",
+    "@typescript-eslint/eslint-plugin": "^6.18.1",
+    "@typescript-eslint/parser": "^6.18.1",
     "eslint": "^8.55.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vitest": "^0.3.20",
     "prettier": "^3.1.0",
     "tsx": "^4.6.2",
     "vitest": "^1.0.0"

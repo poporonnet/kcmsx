@@ -1,9 +1,9 @@
-import { EntryRepository } from "../../entry/repository.js";
-import { Result } from "@mikuroxina/mini-fn";
-import { Entry } from "../../entry/entry.js";
-import { isMatchResultPair, Match } from "../match.js";
-import { MatchRepository } from "./repository.js";
-import * as crypto from "crypto";
+import { EntryRepository } from '../../entry/repository.js';
+import { Result } from '@mikuroxina/mini-fn';
+import { Entry } from '../../entry/entry.js';
+import { isMatchResultPair, Match } from '../match.js';
+import { MatchRepository } from './repository.js';
+import * as crypto from 'crypto';
 
 export type TournamentRank = {
   rank: number;
@@ -11,15 +11,11 @@ export type TournamentRank = {
   time: number;
   entry: Entry;
 };
-export type Tournament =
-  | [TournamentRank, TournamentRank]
-  | [Tournament, Tournament];
+export type Tournament = [TournamentRank, TournamentRank] | [Tournament, Tournament];
 type TournamentPermutation = TournamentRank[];
-type BaseTuple<
-  T,
-  L extends number,
-  Tup extends T[] = [],
-> = Tup["length"] extends L ? Tup : BaseTuple<T, L, [T, ...Tup]>;
+type BaseTuple<T, L extends number, Tup extends T[] = []> = Tup['length'] extends L
+  ? Tup
+  : BaseTuple<T, L, [T, ...Tup]>;
 type Tuple<T, L extends number> = BaseTuple<T, L>;
 
 export class GenerateMatchService {
@@ -28,10 +24,7 @@ export class GenerateMatchService {
   private readonly entryRepository: EntryRepository;
   private readonly matchRepository: MatchRepository;
 
-  constructor(
-    entryRepository: EntryRepository,
-    matchRepository: MatchRepository,
-  ) {
+  constructor(entryRepository: EntryRepository, matchRepository: MatchRepository) {
     this.entryRepository = entryRepository;
     this.matchRepository = matchRepository;
   }
@@ -45,7 +38,7 @@ export class GenerateMatchService {
     }
 
     // 分ける(N/M = A...B M[i]にA人、B人を少ない方から)
-    const entry = res[1].filter((v) => v.category === "Elementary");
+    const entry = res[1].filter((v) => v.category === 'Elementary');
     console.log(entry.length);
     const entryNum = entry.length;
     // コースごとの参加者数
@@ -69,11 +62,10 @@ export class GenerateMatchService {
       for (let k = 0; k < courses[i].length; k++) {
         const courseLength = courses[i].length;
         const gap = Math.floor(courseLength / 2);
-        const opponentIndex =
-          k + gap >= courseLength ? k + gap - courseLength : k + gap;
+        const opponentIndex = k + gap >= courseLength ? k + gap - courseLength : k + gap;
         const match = Match.new({
           id: crypto.randomUUID(),
-          matchType: "primary",
+          matchType: 'primary',
           teams: { left: courses[i][k], right: courses[i][opponentIndex] },
           courseIndex: i,
         });
@@ -92,7 +84,7 @@ export class GenerateMatchService {
   }
 
   async generateFinalMatch(
-    category: "elementary" | "open",
+    category: 'elementary' | 'open'
   ): Promise<Result.Result<Error, Match[]>> {
     /*
     初期対戦表を生成
@@ -104,21 +96,19 @@ export class GenerateMatchService {
     const [elementaryTournament, openTournament] = [
       this.generateTournamentPair(this.generateTournament(elementaryRank)),
       // fixme: unwrapやめる
-      this.generateTournamentPair(
-        this.generateTournament(Result.unwrap(openRank)),
-      ),
+      this.generateTournamentPair(this.generateTournament(Result.unwrap(openRank))),
     ];
 
     const matches: Match[] = [];
-    if (category === "elementary") {
+    if (category === 'elementary') {
       for (const v of elementaryTournament) {
         matches.push(
           Match.new({
             id: crypto.randomUUID(),
-            matchType: "final",
+            matchType: 'final',
             teams: { left: v[0].entry, right: v[1].entry },
             courseIndex: 0,
-          }),
+          })
         );
       }
     } else {
@@ -127,10 +117,10 @@ export class GenerateMatchService {
         matches.push(
           Match.new({
             id: crypto.randomUUID(),
-            matchType: "final",
+            matchType: 'final',
             teams: { left: v[0].entry, right: v[1].entry },
             courseIndex: 0,
-          }),
+          })
         );
       }
     }
@@ -155,7 +145,7 @@ export class GenerateMatchService {
     // -> まず全ての対戦を取得
     for (const v of res[1]) {
       // 本選は関係ないので飛ばす
-      if (v.matchType !== "primary") continue;
+      if (v.matchType !== 'primary') continue;
       // 終わってない場合は飛ばす
       if (!v.results) continue;
       if (!isMatchResultPair(v.results)) continue;
@@ -200,10 +190,10 @@ export class GenerateMatchService {
     // 部門ごとに分ける [0]: Elementary, [1]: Open
     const categoryRank: TournamentRank[][] = [[], []];
     for (const v of rankBase) {
-      if (v.entry.category === "Elementary") {
+      if (v.entry.category === 'Elementary') {
         categoryRank[0].push(v);
       }
-      if (v.entry.category === "Open") {
+      if (v.entry.category === 'Open') {
         categoryRank[1].push(v);
       }
     }
@@ -227,9 +217,7 @@ export class GenerateMatchService {
   }
 
   // generateOpenTournament オープン部門は予選を行わないのでランキング(?)を無理やり作る
-  private async generateOpenTournament(): Promise<
-    Result.Result<Error, TournamentRank[]>
-  > {
+  private async generateOpenTournament(): Promise<Result.Result<Error, TournamentRank[]>> {
     const res = await this.entryRepository.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
@@ -237,7 +225,7 @@ export class GenerateMatchService {
 
     return Result.ok(
       res[1]
-        .filter((v) => v.category === "Open")
+        .filter((v) => v.category === 'Open')
         .map((v, i): TournamentRank => {
           return {
             rank: i,
@@ -245,7 +233,7 @@ export class GenerateMatchService {
             time: 0,
             entry: v,
           };
-        }),
+        })
     );
   }
 
@@ -254,7 +242,7 @@ export class GenerateMatchService {
     ranks = ranks.slice(0, this.FINAL_TOURNAMENT_COUNT);
 
     const genTournament = (
-      ids: TournamentRank[] | Tournament[] | Tournament,
+      ids: TournamentRank[] | Tournament[] | Tournament
     ): TournamentPermutation => {
       if (ids.length == 2) return ids as TournamentPermutation;
 
@@ -273,6 +261,6 @@ export class GenerateMatchService {
       .map((_, i) => array.slice(i * size, (i + 1) * size) as Tuple<T, L>);
 
   private generateTournamentPair = (
-    tournament: TournamentRank[],
+    tournament: TournamentRank[]
   ): [TournamentRank, TournamentRank][] => this.eachSlice(tournament, 2);
 }

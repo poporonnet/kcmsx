@@ -1,6 +1,6 @@
 // Elementary: 小学生部門 / Open: オープン部門
 // ToDo: 部門の定義をファイルから読み込むようにする
-export type EntryCategory = "Elementary" | "Open";
+export type EntryCategory = 'Elementary' | 'Open';
 export interface EntryCreateArgs {
   id: string;
   teamName: string;
@@ -21,7 +21,7 @@ export class Entry {
     teamName: string,
     _members: Array<string>,
     _isMultiWalk: boolean,
-    category: EntryCategory,
+    category: EntryCategory
   ) {
     this._id = id;
     this._teamName = teamName;
@@ -51,12 +51,6 @@ export class Entry {
   }
 
   public static new(arg: EntryCreateArgs): Entry {
-    return new Entry(
-      arg.id,
-      arg.teamName,
-      arg.members,
-      arg.isMultiWalk,
-      arg.category,
-    );
+    return new Entry(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category);
   }
 }

@@ -1,6 +1,6 @@
-import { EntryRepository } from "../repository.js";
-import { Entry } from "../entry.js";
-import { Option, Result } from "@mikuroxina/mini-fn";
+import { EntryRepository } from '../repository.js';
+import { Entry } from '../entry.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class FindEntryService {
   private readonly repository: EntryRepository;
@@ -23,7 +23,7 @@ export class FindEntryService {
   async findByID(id: string): Promise<Result.Result<Error, EntryDTO>> {
     const res = await this.repository.findByID(id);
     if (Option.isNone(res)) {
-      return Result.err(new Error("Not found"));
+      return Result.err(new Error('Not found'));
     }
 
     return Result.ok(EntryDTO.fromDomain(res[1]));
@@ -32,7 +32,7 @@ export class FindEntryService {
   async findByTeamName(name: string): Promise<Result.Result<Error, EntryDTO>> {
     const res = await this.repository.findByTeamName(name);
     if (Option.isNone(res)) {
-      return Result.err(new Error("Not found"));
+      return Result.err(new Error('Not found'));
     }
 
     return Result.ok(EntryDTO.fromDomain(res[1]));
@@ -44,14 +44,14 @@ export class EntryDTO {
   private readonly _teamName: string;
   private readonly _members: string[];
   private readonly _isMultiWalk: boolean;
-  private readonly _category: "Elementary" | "Open";
+  private readonly _category: 'Elementary' | 'Open';
 
   private constructor(
     id: string,
     teamName: string,
     members: string[],
     isMultiWalk: boolean,
-    category: "Elementary" | "Open",
+    category: 'Elementary' | 'Open'
   ) {
     this._id = id;
     this._teamName = teamName;

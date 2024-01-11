@@ -1,8 +1,8 @@
-import { EntryRepository } from "./repository.js";
-import { EntryService } from "./service/entry.js";
-import { Result, Option } from "@mikuroxina/mini-fn";
-import { FindEntryService } from "./service/get.js";
-import { DeleteEntryService } from "./service/delete.js";
+import { EntryRepository } from './repository.js';
+import { EntryService } from './service/entry.js';
+import { Result, Option } from '@mikuroxina/mini-fn';
+import { FindEntryService } from './service/get.js';
+import { DeleteEntryService } from './service/delete.js';
 
 interface baseEntry {
   id: string;
@@ -27,7 +27,7 @@ export class Controller {
     teamName: string;
     members: string[];
     isMultiWalk: boolean;
-    category: "Elementary" | "Open";
+    category: 'Elementary' | 'Open';
   }): Promise<Result.Result<Error, baseEntry>> {
     const res = await this.entry.create(args);
     if (Result.isErr(res)) {
@@ -52,7 +52,7 @@ export class Controller {
           isMultiWalk: v.isMultiWalk,
           category: v.category,
         };
-      }),
+      })
     );
   }
 
