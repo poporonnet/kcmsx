@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { Entry } from './entry.js';
+import { Entry, EntryID } from './entry.js';
 
 describe('正しくインスタンスを生成できる', () => {
   it('正しくインスタンスを生成できる', () => {
     const actual = Entry.new({
-      id: '123',
+      id: '123' as EntryID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,

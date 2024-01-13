@@ -1,6 +1,6 @@
 import { EntryRepository } from '../repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { Entry, EntryCategory } from '../entry.js';
+import { Entry, EntryCategory, EntryID } from '../entry.js';
 import { readFile, writeFile } from 'node:fs/promises';
 
 interface JSONData {
@@ -100,7 +100,7 @@ export class JSONEntryRepository implements EntryRepository {
 
   private static jsonToEntry(json: EntryJSON): Entry {
     return Entry.new({
-      id: json.id,
+      id: json.id as EntryID,
       teamName: json.teamName,
       members: json.members,
       isMultiWalk: json.isMultiWalk,

@@ -1,6 +1,6 @@
 import { MatchRepository } from './repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { Match, MatchResultFinalPair, MatchResultPair, MatchTeams } from '../match.js';
+import { MatchID, Match, MatchResultFinalPair, MatchResultPair, MatchTeams } from '../match.js';
 
 export class GetMatchService {
   private readonly repository: MatchRepository;
@@ -79,7 +79,7 @@ export class MatchDTO {
 
   public toDomain(): Match {
     return Match.reconstruct({
-      id: this._id,
+      id: this._id as MatchID,
       teams: this._teams,
       matchType: this._matchType,
       courseIndex: this._courseIndex,

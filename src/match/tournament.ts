@@ -1,4 +1,4 @@
-import { Entry } from '../entry/entry.js';
+import { Entry, EntryID } from '../entry/entry.js';
 
 type Tournament = [TournamentRank, TournamentRank] | [Tournament, Tournament];
 
@@ -18,7 +18,7 @@ const generateDummyData = (n: number): TournamentRank[] => {
     res.push({
       rank: i,
       entry: Entry.new({
-        id: `${i}`,
+        id: `${i}` as EntryID,
         teamName: `チーム ${i}`,
         members: [`チーム${i}のメンバー`],
         isMultiWalk: true,

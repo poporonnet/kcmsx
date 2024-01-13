@@ -1,10 +1,10 @@
 import { EntryRepository } from '../../entry/repository.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { Entry } from '../../entry/entry.js';
-import { Match } from '../match.js';
+import { MatchID, Match } from '../match.js';
 import { MatchRepository } from './repository.js';
-import * as crypto from 'crypto';
 import { GenerateRankingService } from './generateRanking.js';
+import { SnowflakeIDGenerator } from '../../id/main.js';
 
 export type TournamentRank = {
   rank: number;
@@ -24,15 +24,18 @@ export class GenerateFinalMatchService {
   private readonly entryRepository: EntryRepository;
   private readonly matchRepository: MatchRepository;
   private readonly rankingService: GenerateRankingService;
+  private readonly idGenerator: SnowflakeIDGenerator;
 
   constructor(
     entryRepository: EntryRepository,
     matchRepository: MatchRepository,
-    rankingService: GenerateRankingService
+    rankingService: GenerateRankingService,
+    idGenerator: SnowflakeIDGenerator
   ) {
     this.entryRepository = entryRepository;
     this.matchRepository = matchRepository;
     this.rankingService = rankingService;
+    this.idGenerator = idGenerator;
   }
 
   async handle(category: 'elementary' | 'open'): Promise<Result.Result<Error, Match[]>> {
@@ -52,9 +55,14 @@ export class GenerateFinalMatchService {
     const matches: Match[] = [];
     if (category === 'elementary') {
       for (const v of elementaryTournament) {
+        const id = this.idGenerator.generate<MatchID>();
+        if (Result.isErr(id)) {
+          return Result.err(id[1]);
+        }
+
         matches.push(
           Match.new({
-            id: crypto.randomUUID(),
+            id: id[1] as MatchID,
             matchType: 'final',
             teams: { left: v[0].entry, right: v[1].entry },
             courseIndex: 0,
@@ -63,10 +71,13 @@ export class GenerateFinalMatchService {
       }
     } else {
       for (const v of openTournament) {
-        console.log(v[0].entry.id, v[1].entry.id);
+        const id = this.idGenerator.generate<MatchID>();
+        if (Result.isErr(id)) {
+          return Result.err(id[1]);
+        }
         matches.push(
           Match.new({
-            id: crypto.randomUUID(),
+            id: id[1] as MatchID,
             matchType: 'final',
             teams: { left: v[0].entry, right: v[1].entry },
             courseIndex: 0,

@@ -1,11 +1,11 @@
-import { Match } from '../match/match.js';
+import { MatchID, Match } from '../match/match.js';
 import { TestEntryData, TestEntrySet } from './entry.js';
-import { Entry } from '../entry/entry.js';
+import { Entry, EntryID } from '../entry/entry.js';
 
 // ToDo: もっとデータ数を増やす
 export const TestMatchData = {
   ElementaryPrimary: Match.reconstruct({
-    id: '1',
+    id: '1' as MatchID,
     teams: {
       left: TestEntryData.ElementaryMultiWalk,
       right: TestEntryData.ElementaryWheel,
@@ -14,7 +14,7 @@ export const TestMatchData = {
     matchType: 'primary',
   }),
   ElementaryFinal: Match.reconstruct({
-    id: '2',
+    id: '2' as MatchID,
     teams: {
       left: TestEntryData.ElementaryMultiWalk,
       right: TestEntryData.ElementaryWheel,
@@ -23,7 +23,7 @@ export const TestMatchData = {
     matchType: 'final',
   }),
   OpenFinal: Match.reconstruct({
-    id: '3',
+    id: '3' as MatchID,
     teams: {
       left: TestEntryData.OpenMultiWalk,
       right: TestEntryData.OpenMultiWalk2,
@@ -90,7 +90,7 @@ export const TestRankingMatchData = [
   // ToDo: L/Rを入れるとL/Rを入れ替えたデータも作れるようにしたい
   Match.reconstruct(
     matchArgsBuilder(
-      '200',
+      '200' as MatchID,
       {
         left: TestEntrySet.ElementaryMultiWalk[101],
         right: TestEntrySet.ElementaryWheel[107],
@@ -98,12 +98,12 @@ export const TestRankingMatchData = [
       'primary',
       {
         left: {
-          teamID: '101',
+          teamID: '101' as EntryID,
           points: 10,
           time: 30,
         },
         right: {
-          teamID: '107',
+          teamID: '107' as EntryID,
           points: 4,
           time: 40,
         },
@@ -112,7 +112,7 @@ export const TestRankingMatchData = [
   ),
   Match.reconstruct(
     matchArgsBuilder(
-      '201',
+      '201' as MatchID,
       {
         left: TestEntrySet.ElementaryWheel[107],
         right: TestEntrySet.ElementaryMultiWalk[101],
@@ -120,12 +120,12 @@ export const TestRankingMatchData = [
       'primary',
       {
         left: {
-          teamID: '107',
+          teamID: '107' as EntryID,
           points: 4,
           time: 40,
         },
         right: {
-          teamID: '101',
+          teamID: '101' as EntryID,
           points: 10,
           time: 30,
         },
@@ -135,7 +135,7 @@ export const TestRankingMatchData = [
 
   Match.reconstruct(
     matchArgsBuilder(
-      '202',
+      '202' as MatchID,
       {
         left: TestEntrySet.ElementaryMultiWalk[102],
         right: TestEntrySet.ElementaryWheel[108],
@@ -143,12 +143,12 @@ export const TestRankingMatchData = [
       'primary',
       {
         left: {
-          teamID: '102',
+          teamID: '102' as EntryID,
           points: 9,
           time: 32,
         },
         right: {
-          teamID: '108',
+          teamID: '108' as EntryID,
           points: 3,
           time: 45,
         },
@@ -157,7 +157,7 @@ export const TestRankingMatchData = [
   ),
   Match.reconstruct(
     matchArgsBuilder(
-      '203',
+      '203' as MatchID,
       {
         left: TestEntrySet.ElementaryWheel[108],
         right: TestEntrySet.ElementaryMultiWalk[102],
@@ -165,12 +165,12 @@ export const TestRankingMatchData = [
       'primary',
       {
         left: {
-          teamID: '108',
+          teamID: '108' as EntryID,
           points: 3,
           time: 45,
         },
         right: {
-          teamID: '102',
+          teamID: '102' as EntryID,
           points: 10,
           time: 32,
         },
@@ -180,7 +180,7 @@ export const TestRankingMatchData = [
 
   Match.reconstruct(
     matchArgsBuilder(
-      '204',
+      '204' as MatchID,
       {
         left: TestEntrySet.ElementaryMultiWalk[103],
         right: TestEntrySet.ElementaryWheel[109],
@@ -188,12 +188,12 @@ export const TestRankingMatchData = [
       'primary',
       {
         left: {
-          teamID: '103',
+          teamID: '103' as EntryID,
           points: 9,
           time: 35,
         },
         right: {
-          teamID: '109',
+          teamID: '109' as EntryID,
           points: 3,
           time: 50,
         },
@@ -202,7 +202,7 @@ export const TestRankingMatchData = [
   ),
   Match.reconstruct(
     matchArgsBuilder(
-      '205',
+      '205' as MatchID,
       {
         left: TestEntrySet.ElementaryWheel[109],
         right: TestEntrySet.ElementaryMultiWalk[103],
@@ -210,12 +210,12 @@ export const TestRankingMatchData = [
       'primary',
       {
         left: {
-          teamID: '109',
+          teamID: '109' as EntryID,
           points: 3,
           time: 50,
         },
         right: {
-          teamID: '103',
+          teamID: '103' as EntryID,
           points: 9,
           time: 35,
         },

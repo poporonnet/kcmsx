@@ -1,4 +1,7 @@
-import { Entry } from '../entry/entry.js';
+import { Entry, EntryID } from '../entry/entry.js';
+import { SnowflakeID } from '../id/main.js';
+
+export type MatchID = SnowflakeID<'Match'>;
 
 /*
 
@@ -40,7 +43,7 @@ export type MatchTeams = {
 // 試合の結果(1チーム,1回のみ)
 export type MatchResult = {
   // チームのID
-  teamID: string;
+  teamID: EntryID;
   // 得点
   points: number;
   // ゴール時間(秒)
@@ -55,7 +58,7 @@ export type MatchResultPair = {
 export type MatchResultFinalPair = {
   results: [MatchResultPair, MatchResultPair];
   // じゃんけんで決定したとき用
-  winnerID: string;
+  winnerID: EntryID;
 };
 export const isMatchResultPair = (
   arg: MatchResultPair | MatchResultFinalPair | undefined
@@ -64,7 +67,7 @@ export const isMatchResultPair = (
 };
 
 export interface CreateMatchArgs {
-  id: string;
+  id: MatchID;
   teams: MatchTeams;
   courseIndex: number;
   matchType: 'primary' | 'final';
@@ -72,7 +75,7 @@ export interface CreateMatchArgs {
 
 export interface ReconstructMatchArgs {
   // 試合ID
-  id: string;
+  id: MatchID;
   // 試合するチームのID
   teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
@@ -85,7 +88,7 @@ export interface ReconstructMatchArgs {
 
 export class Match {
   // 試合ID
-  private readonly _id: string;
+  private readonly _id: MatchID;
   // 試合するチームのID
   private readonly _teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
@@ -96,7 +99,7 @@ export class Match {
   private _results?: MatchResultPair | MatchResultFinalPair;
 
   private constructor(args: {
-    id: string;
+    id: MatchID;
     teams: MatchTeams;
     matchType: 'primary' | 'final';
     results?: MatchResultPair | MatchResultFinalPair;
@@ -109,7 +112,7 @@ export class Match {
     this._courseIndex = args.courseIndex;
   }
 
-  get id(): string {
+  get id(): MatchID {
     return this._id;
   }
 

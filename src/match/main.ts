@@ -9,18 +9,21 @@ import { ReconstructMatchArgs } from './match.js';
 import { GetMatchService } from './service/get.js';
 import { GenerateRankingService } from './service/generateRanking.js';
 import { GeneratePrimaryMatchService } from './service/generatePrimary.js';
+import { SnowflakeIDGenerator } from '../id/main.js';
 
 export const matchHandler = new Hono();
 const repository = await JSONMatchRepository.new();
 const entryRepository = await JSONEntryRepository.new();
+const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 const generateService = new GenerateFinalMatchService(
   entryRepository,
   repository,
-  new GenerateRankingService(repository)
+  new GenerateRankingService(repository),
+  idGenerator
 );
 const editService = new EditMatchService(repository);
 const getService = new GetMatchService(repository);
-const primaryService = new GeneratePrimaryMatchService(entryRepository, repository);
+const primaryService = new GeneratePrimaryMatchService(entryRepository, repository, idGenerator);
 const controller = new MatchController(generateService, editService, getService, primaryService);
 matchHandler.get('/:type', async (c) => {
   const { type } = c.req.param();

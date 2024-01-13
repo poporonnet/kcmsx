@@ -4,6 +4,7 @@ import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { GeneratePrimaryMatchService } from './generatePrimary.js';
 import { TestEntrySet } from '../../testData/entry.js';
+import { SnowflakeIDGenerator } from '../../id/main.js';
 
 describe('予選の対戦表を正しく生成できる', () => {
   const repository = new DummyRepository([
@@ -15,7 +16,8 @@ describe('予選の対戦表を正しく生成できる', () => {
     TestEntrySet.ElementaryWheel['109'],
   ]);
   const matchRepository = new DummyMatchRepository();
-  const service = new GeneratePrimaryMatchService(repository, matchRepository);
+  const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
+  const service = new GeneratePrimaryMatchService(repository, matchRepository, idGenerator);
 
   it('初期状態の対戦表を生成できる', async () => {
     const res = await service.generatePrimaryMatch();

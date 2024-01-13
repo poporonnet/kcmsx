@@ -1,5 +1,5 @@
 import { EntryRepository } from '../repository.js';
-import { Entry } from '../entry.js';
+import { Entry, EntryID } from '../entry.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class FindEntryService {
@@ -66,7 +66,7 @@ export class EntryDTO {
 
   public toToDomain(): Entry {
     return Entry.new({
-      id: this._id,
+      id: this._id as EntryID,
       teamName: this._teamName,
       members: this._members,
       isMultiWalk: this._isMultiWalk,

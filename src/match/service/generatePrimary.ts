@@ -1,19 +1,25 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { MatchDTO } from './get.js';
 import { Entry } from '../../entry/entry.js';
-import { Match } from '../match.js';
-import crypto from 'crypto';
+import { MatchID, Match } from '../match.js';
 import { EntryRepository } from '../../entry/repository.js';
 import { MatchRepository } from './repository.js';
+import { SnowflakeIDGenerator } from '../../id/main.js';
 
 export class GeneratePrimaryMatchService {
   private readonly entryRepository: EntryRepository;
   private readonly matchRepository: MatchRepository;
+  private readonly idGenerator: SnowflakeIDGenerator;
   private readonly COURSE_COUNT = 3;
 
-  constructor(entryRepository: EntryRepository, matchRepository: MatchRepository) {
+  constructor(
+    entryRepository: EntryRepository,
+    matchRepository: MatchRepository,
+    idGenerator: SnowflakeIDGenerator
+  ) {
     this.entryRepository = entryRepository;
     this.matchRepository = matchRepository;
+    this.idGenerator = idGenerator;
   }
 
   // 予選対戦表の生成
@@ -49,8 +55,14 @@ export class GeneratePrimaryMatchService {
         const courseLength = courses[i].length;
         const gap = Math.floor(courseLength / 2);
         const opponentIndex = k + gap >= courseLength ? k + gap - courseLength : k + gap;
+
+        const id = this.idGenerator.generate<MatchID>();
+        if (Result.isErr(id)) {
+          return Result.err(id[1]);
+        }
+
         const match = Match.new({
-          id: crypto.randomUUID(),
+          id: id[1] as MatchID,
           matchType: 'primary',
           teams: { left: courses[i][k], right: courses[i][opponentIndex] },
           courseIndex: i,

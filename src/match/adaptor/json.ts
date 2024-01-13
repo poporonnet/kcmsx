@@ -1,9 +1,9 @@
-import { Match, MatchTeams } from '../match.js';
+import { MatchID, Match, MatchTeams } from '../match.js';
 import { MatchRepository } from '../service/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { readFile, writeFile } from 'node:fs/promises';
 import { EntryJSON } from '../../entry/adaptor/json.js';
-import { Entry } from '../../entry/entry.js';
+import { Entry, EntryID } from '../../entry/entry.js';
 
 interface JSONData {
   match: Array<MatchJSON>;
@@ -11,7 +11,7 @@ interface JSONData {
 }
 
 interface matchResultJSON {
-  teamID: string;
+  teamID: EntryID;
   points: number;
   time: number;
 }
@@ -23,7 +23,7 @@ interface matchResultPairJSON {
 
 interface matchResultFinalPairJSON {
   results: [matchResultPairJSON, matchResultPairJSON];
-  winnerID: string;
+  winnerID: EntryID;
 }
 
 interface MatchJSON {
@@ -134,7 +134,7 @@ export class JSONMatchRepository implements MatchRepository {
 
   private static jsonToMatch(json: MatchJSON): Match {
     return Match.reconstruct({
-      id: json.id,
+      id: json.id as MatchID,
       teams: json.teams as MatchTeams,
       matchType: json.matchType as 'primary' | 'final',
       // ToDo: MatchPointsのパース

@@ -3,6 +3,7 @@ import { EntryService } from './service/entry.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { FindEntryService } from './service/get.js';
 import { DeleteEntryService } from './service/delete.js';
+import { SnowflakeIDGenerator } from '../id/main.js';
 
 interface baseEntry {
   id: string;
@@ -18,7 +19,10 @@ export class Controller {
   private readonly deleteService: DeleteEntryService;
 
   constructor(repository: EntryRepository) {
-    this.entry = new EntryService(repository);
+    this.entry = new EntryService(
+      repository,
+      new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
+    );
     this.find = new FindEntryService(repository);
     this.deleteService = new DeleteEntryService(repository);
   }

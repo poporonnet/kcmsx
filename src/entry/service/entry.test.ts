@@ -1,13 +1,17 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/dummyRepository.js';
-import { Entry } from '../entry.js';
+import { Entry, EntryID } from '../entry.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { EntryService } from './entry.js';
 import { TestEntryData } from '../../testData/entry.js';
+import { SnowflakeIDGenerator } from '../../id/main.js';
 
 describe('entryService', () => {
   const repository = new DummyRepository();
-  const service = new EntryService(repository);
+  const service = new EntryService(
+    repository,
+    new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
+  );
 
   afterEach(() => {
     repository.reset();
@@ -37,7 +41,7 @@ describe('entryService', () => {
 
   it('オープン部門のメンバーは1人のみ', async () => {
     const entry = Entry.new({
-      id: '123',
+      id: '123' as EntryID,
       teamName: 'team1',
       members: ['山田四十郎', '山田太郎'],
       isMultiWalk: true,
@@ -51,7 +55,7 @@ describe('entryService', () => {
 
   it('小学生部門のメンバーは1または2人', async () => {
     const entry = Entry.new({
-      id: '123',
+      id: '123' as EntryID,
       teamName: 'team1',
       members: ['山田四十郎', '山田太郎', '山田次郎'],
       isMultiWalk: true,
@@ -65,7 +69,7 @@ describe('entryService', () => {
 
   it('メンバーが居ないチームは作れない', async () => {
     const entry = Entry.new({
-      id: '123',
+      id: '123' as EntryID,
       teamName: 'team1',
       members: [],
       isMultiWalk: true,

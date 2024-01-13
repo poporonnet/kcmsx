@@ -1,15 +1,22 @@
 import { EntryRepository } from '../repository.js';
-import { Entry, EntryCreateArgs } from '../entry.js';
+import { Entry, EntryCreateArgs, EntryID } from '../entry.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { SnowflakeIDGenerator } from '../../id/main.js';
 
 export class EntryService {
   private readonly repository: EntryRepository;
-  constructor(repository: EntryRepository) {
+  private readonly idGenerator: SnowflakeIDGenerator;
+  constructor(repository: EntryRepository, idGenerator: SnowflakeIDGenerator) {
     this.repository = repository;
+    this.idGenerator = idGenerator;
   }
   async create(input: Omit<EntryCreateArgs, 'id'>): Promise<Result.Result<Error, Entry>> {
+    const id = this.idGenerator.generate<EntryID>();
+    if (Result.isErr(id)) {
+      return Result.err(id[1]);
+    }
     const createArgs: EntryCreateArgs = {
-      id: crypto.randomUUID(),
+      id: id[1] as EntryID,
       teamName: input.teamName,
       members: input.members,
       isMultiWalk: input.isMultiWalk,

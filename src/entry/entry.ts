@@ -1,8 +1,12 @@
 // Elementary: 小学生部門 / Open: オープン部門
 // ToDo: 部門の定義をファイルから読み込むようにする
+import { SnowflakeID } from '../id/main.js';
+
 export type EntryCategory = 'Elementary' | 'Open';
+export type EntryID = SnowflakeID<'Entry'>;
+
 export interface EntryCreateArgs {
-  id: string;
+  id: EntryID;
   teamName: string;
   members: Array<string>;
   isMultiWalk: boolean;
@@ -10,14 +14,14 @@ export interface EntryCreateArgs {
 }
 
 export class Entry {
-  private readonly _id: string;
+  private readonly _id: EntryID;
   private readonly _teamName: string;
   private readonly _members: Array<string>;
   private readonly _isMultiWalk: boolean;
   private readonly _category: EntryCategory;
 
   private constructor(
-    id: string,
+    id: EntryID,
     teamName: string,
     _members: Array<string>,
     _isMultiWalk: boolean,
@@ -30,7 +34,7 @@ export class Entry {
     this._category = category;
   }
 
-  get id(): string {
+  get id(): EntryID {
     return this._id;
   }
 
