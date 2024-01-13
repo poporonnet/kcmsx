@@ -55,6 +55,12 @@ export class JSONMatchRepository implements MatchRepository {
     return Result.ok(match);
   }
 
+  public async createBulk(matches: Match[]): Promise<Result.Result<Error, Match[]>> {
+    this.data.push(...matches);
+    await this.save();
+    return Result.ok(matches);
+  }
+
   public async findByID(id: string): Promise<Option.Option<Match>> {
     const match = this.data.find((m) => m.id === id);
     if (!match) {

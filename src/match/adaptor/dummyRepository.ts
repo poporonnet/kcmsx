@@ -5,13 +5,18 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 export class DummyMatchRepository implements MatchRepository {
   private readonly data: Match[];
 
-  constructor() {
-    this.data = [];
+  constructor(data?: Match[]) {
+    this.data = data ?? [];
   }
 
   public async create(match: Match): Promise<Result.Result<Error, Match>> {
     this.data.push(match);
     return Result.ok(match);
+  }
+
+  public async createBulk(matches: Match[]): Promise<Result.Result<Error, Match[]>> {
+    this.data.push(...matches);
+    return Result.ok(matches);
   }
 
   public async findByID(id: string): Promise<Option.Option<Match>> {

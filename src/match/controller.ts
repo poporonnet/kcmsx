@@ -1,23 +1,27 @@
-import { GenerateMatchService } from './service/generate.js';
+import { GenerateFinalMatchService } from './service/generateFinal.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { Match } from './match.js';
 import { EditMatchService } from './service/edit.js';
 import { Entry } from '../entry/entry.js';
 import { GetMatchService } from './service/get.js';
+import { GeneratePrimaryMatchService } from './service/generatePrimary.js';
 
 export class MatchController {
-  private readonly matchService: GenerateMatchService;
+  private readonly matchService: GenerateFinalMatchService;
+  private readonly primaryService: GeneratePrimaryMatchService;
   private readonly editService: EditMatchService;
   private readonly getService: GetMatchService;
 
   constructor(
-    matchService: GenerateMatchService,
+    matchService: GenerateFinalMatchService,
     editService: EditMatchService,
-    getService: GetMatchService
+    getService: GetMatchService,
+    primaryService: GeneratePrimaryMatchService
   ) {
     this.matchService = matchService;
     this.editService = editService;
     this.getService = getService;
+    this.primaryService = primaryService;
   }
 
   async generateMatch(
@@ -43,11 +47,15 @@ export class MatchController {
   }
 
   private async generatePrimary(): Promise<Result.Result<Error, matchJSON[][]>> {
-    const res = await this.matchService.generatePrimaryMatch();
+    const res = await this.primaryService.generatePrimaryMatch();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
-    return Result.ok(res[1].map((i) => i.map(this.toJSON)));
+    return Result.ok(
+      res[1].map((i) => {
+        return i.map((v) => this.toJSON(v.toDomain()));
+      })
+    );
   }
 
   async editMatch(id: string, args: matchUpdateJSON): Promise<Result.Result<Error, matchJSON>> {
@@ -71,7 +79,7 @@ export class MatchController {
     if (!(category === 'elementary' || category === 'open')) {
       return Result.err(new Error('invalid match type'));
     }
-    const res = await this.matchService.generateFinalMatch(category);
+    const res = await this.matchService.handle(category);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }

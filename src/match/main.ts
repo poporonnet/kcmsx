@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { GenerateMatchService } from './service/generate.js';
+import { GenerateFinalMatchService } from './service/generateFinal.js';
 import { JSONMatchRepository } from './adaptor/json.js';
 import { JSONEntryRepository } from '../entry/adaptor/json.js';
 import { MatchController } from './controller.js';
@@ -7,14 +7,21 @@ import { Result } from '@mikuroxina/mini-fn';
 import { EditMatchService } from './service/edit.js';
 import { ReconstructMatchArgs } from './match.js';
 import { GetMatchService } from './service/get.js';
+import { GenerateRankingService } from './service/generateRanking.js';
+import { GeneratePrimaryMatchService } from './service/generatePrimary.js';
 
 export const matchHandler = new Hono();
 const repository = await JSONMatchRepository.new();
 const entryRepository = await JSONEntryRepository.new();
-const generateService = new GenerateMatchService(entryRepository, repository);
+const generateService = new GenerateFinalMatchService(
+  entryRepository,
+  repository,
+  new GenerateRankingService(repository)
+);
 const editService = new EditMatchService(repository);
 const getService = new GetMatchService(repository);
-const controller = new MatchController(generateService, editService, getService);
+const primaryService = new GeneratePrimaryMatchService(entryRepository, repository);
+const controller = new MatchController(generateService, editService, getService, primaryService);
 matchHandler.get('/:type', async (c) => {
   const { type } = c.req.param();
   const res = await controller.getMatchByType(type);

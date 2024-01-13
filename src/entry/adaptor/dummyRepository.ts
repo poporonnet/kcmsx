@@ -4,8 +4,8 @@ import { Entry } from '../entry.js';
 
 export class DummyRepository implements EntryRepository {
   private data: Array<Entry>;
-  constructor() {
-    this.data = [];
+  constructor(data?: Array<Entry>) {
+    this.data = data ?? [];
   }
 
   async create(entry: Entry): Promise<Result.Result<Error, Entry>> {

@@ -1,33 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
-import { Entry } from '../../entry/entry.js';
-import { Match } from '../match.js';
 import { GetMatchService, MatchDTO } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
+import { TestMatchData } from '../../testData/match.js';
 
 describe('GetMatchService', () => {
   const repository = new DummyMatchRepository();
-  const entry = Entry.new({
-    id: crypto.randomUUID(),
-    teamName: 'チームA',
-    members: ['メンバーA'],
-    isMultiWalk: true,
-    category: 'Open',
-  });
-  const match = Match.reconstruct({
-    id: '111',
-    teams: { left: entry, right: undefined },
-    matchType: 'primary',
-    courseIndex: 0,
-  });
-  repository.create(match);
+  repository.create(TestMatchData.ElementaryPrimary);
   const service = new GetMatchService(repository);
 
   it('取得できる', async () => {
-    const res = await service.findById('111');
+    const res = await service.findById(TestMatchData.ElementaryPrimary.id);
 
     expect(Result.isErr(res)).toStrictEqual(false);
-    expect(res[1]).toStrictEqual(MatchDTO.fromDomain(match));
+    expect(res[1]).toStrictEqual(MatchDTO.fromDomain(TestMatchData.ElementaryPrimary));
   });
 
   it('存在しないときはエラー', async () => {
@@ -39,56 +25,17 @@ describe('GetMatchService', () => {
 });
 
 describe('MatchDTO', () => {
-  const domain = Match.reconstruct({
-    id: '1',
-    teams: {
-      left: Entry.new({
-        id: '2',
-        teamName: 'あいうえお',
-        members: ['いしや'],
-        isMultiWalk: false,
-        category: 'Open',
-      }),
-      right: Entry.new({
-        id: '3',
-        teamName: 'いきしちに',
-        members: ['やも'],
-        isMultiWalk: true,
-        category: 'Elementary',
-      }),
-    },
-    matchType: 'primary',
-    courseIndex: 0,
-    results: {
-      left: {
-        teamID: '2',
-        points: 1,
-        time: 10,
-      },
-      right: {
-        teamID: '3',
-        points: 2,
-        time: 20,
-      },
-    },
-  });
+  const domain = TestMatchData.ElementaryPrimary;
 
-  it('正しくdomainに変換できる', async () => {
-    const actual = MatchDTO.fromDomain(domain).toDomain();
+  it('domain dto間で相互変換できる', async () => {
+    const toDomain = MatchDTO.fromDomain(domain).toDomain();
+    const toDTO = MatchDTO.fromDomain(toDomain);
 
-    expect(actual.id).toStrictEqual('1');
-    expect(actual.teams).toStrictEqual(domain.teams);
-    expect(actual.matchType).toStrictEqual('primary');
-    expect(actual.courseIndex).toStrictEqual(0);
-    expect(actual.results).toStrictEqual(domain.results);
-  });
-  it('正しくdtoに変換できる', async () => {
-    const actual = MatchDTO.fromDomain(domain);
-
-    expect(actual.id).toStrictEqual('1');
-    expect(actual.teams).toStrictEqual(domain.teams);
-    expect(actual.matchType).toStrictEqual('primary');
-    expect(actual.courseIndex).toStrictEqual(0);
-    expect(actual.results).toStrictEqual(domain.results);
+    expect(toDomain.id).toStrictEqual(toDTO.id);
+    expect(toDomain.teams.left!.id).toStrictEqual(toDTO.teams.left!.id);
+    expect(toDomain.teams.right!.id).toStrictEqual(toDTO.teams.right!.id);
+    expect(toDomain.matchType).toStrictEqual(toDTO.matchType);
+    expect(toDomain.courseIndex).toStrictEqual(toDTO.courseIndex);
+    expect(toDomain.results).toStrictEqual(toDTO.results);
   });
 });

@@ -137,6 +137,12 @@ export class Match {
     return this._results;
   }
 
+  // 既に試合が終了しているか
+  public isEnd(): boolean {
+    // 結果 NOT undefined -> true
+    return this._results !== undefined;
+  }
+
   public static new(arg: CreateMatchArgs): Match {
     return new Match({
       id: arg.id,

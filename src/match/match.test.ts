@@ -23,6 +23,7 @@ describe('正しくインスタンスを生成できる', () => {
     expect(actual.matchType).toBe('primary');
     expect(actual.courseIndex).toBe(0);
     expect(actual.time).toBeUndefined();
+    expect(actual.isEnd()).toBe(false);
   });
 
   it('試合相手が居ないとき', () => {
