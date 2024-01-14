@@ -107,4 +107,4 @@ export const TestEntrySet = {
     117: Entry.new(entryArgsBuilder('117' as EntryID, false, 'Open')),
     118: Entry.new(entryArgsBuilder('118' as EntryID, false, 'Open')),
   },
-};
+} as const;

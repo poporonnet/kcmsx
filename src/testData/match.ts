@@ -79,12 +79,10 @@ const matchArgsBuilder = <
 
 // ランキング生成用の試合データ
 // Openは予選がないので、予選の試合データはない
-/*
-
-順位順: 101, 102, 103, 107, 108, 109
-得点:   20   19,   18,   8    6,  6
-時間:  60,   64,   70,  80,  90,100
-
+/*        1    2     3   4   5    6   7    8
+  順位順: 101, 102, 103, 104 107, 108, 109, 110
+  得点:   20   19,   18, 10,   8    6,  6,   4
+  時間:  60,   64,   70, 74, 80,  90,100, 180
 */
 export const TestRankingMatchData = [
   // ToDo: L/Rを入れるとL/Rを入れ替えたデータも作れるようにしたい
@@ -218,6 +216,51 @@ export const TestRankingMatchData = [
           teamID: '103' as EntryID,
           points: 9,
           time: 35,
+        },
+      }
+    )
+  ),
+
+  Match.reconstruct(
+    matchArgsBuilder(
+      '205' as MatchID,
+      {
+        left: TestEntrySet.ElementaryMultiWalk[104],
+        right: TestEntrySet.ElementaryWheel[110],
+      },
+      'primary',
+      {
+        left: {
+          teamID: '104' as EntryID,
+          points: 5,
+          time: 37,
+        },
+        right: {
+          teamID: '110' as EntryID,
+          points: 2,
+          time: 90,
+        },
+      }
+    )
+  ),
+  Match.reconstruct(
+    matchArgsBuilder(
+      '206' as MatchID,
+      {
+        left: TestEntrySet.ElementaryWheel[110],
+        right: TestEntrySet.ElementaryMultiWalk[104],
+      },
+      'primary',
+      {
+        left: {
+          teamID: '110' as EntryID,
+          points: 2,
+          time: 90,
+        },
+        right: {
+          teamID: '104' as EntryID,
+          points: 5,
+          time: 37,
         },
       }
     )
