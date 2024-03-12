@@ -4,6 +4,7 @@ import { entryRequestSchema } from './schema.js';
 import { Controller } from './controller.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { JSONEntryRepository } from './adaptor/json.js';
+import { errorToCode } from './adaptor/errors.js';
 
 export const entryHandler = new Hono();
 // export const controller = new Controller(new DummyRepository());
@@ -19,7 +20,7 @@ entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
     category,
   });
   if (Result.isErr(res)) {
-    return c.json({ error: res[1].message }, 400);
+    return c.json({ error: errorToCode(res[1]) }, 400);
   }
 
   return c.json({
@@ -34,7 +35,7 @@ entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
 entryHandler.get('/', async (c) => {
   const res = await controller.get();
   if (Result.isErr(res)) {
-    return c.json({ error: res[1].message }, 400);
+    return c.json({ error: errorToCode(res[1]) }, 400);
   }
 
   return c.json([...res[1]]);

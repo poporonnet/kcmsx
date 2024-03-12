@@ -19,7 +19,7 @@
     "moduleResolution": "Node16",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "pretty": true
+    "pretty": true,
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]
