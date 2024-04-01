@@ -1,4 +1,13 @@
-import { Center, Flex, Table, Text, Title } from "@mantine/core";
+import {
+  Button,
+  Center,
+  Flex,
+  Loader,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
+import { IconRefresh } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { CourseSelector } from "../components/courseSelector";
 import { MatchStatusButton } from "../components/matchStatus";
@@ -27,44 +36,61 @@ export const MatchList = () => {
   const [primaryMatches, setPrimaryMatches] = useState<Match[] | undefined>();
   const [courses, setCourses] = useState<number[]>([]);
   const [select, setSelect] = useState<number | "all">("all");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+
+  const load = () => {
+    if (loading) return;
+    setError(false);
+    setLoading(true);
+    try {
+      fetch(`${import.meta.env.VITE_API_URL}/match/primary`, { method: "GET" })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.length === 0) return;
+          setPrimaryMatches(data);
+          if (primaryMatches) {
+            let course = primaryMatches.map(
+              (primaryMatches) => primaryMatches.courseIndex
+            );
+            course = [...new Set(course)];
+            setCourses(course);
+          }
+        });
+    } catch {
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/match/primary`, { method: "GET" })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.length === 0) return;
-        setPrimaryMatches(data);
-        if (primaryMatches) {
-          let course = primaryMatches.map(
-            (primaryMatches) => primaryMatches.courseIndex
-          );
-          course = [...new Set(course)];
-          setCourses(course);
-        }
-      });
-  }, [primaryMatches]);
+    load();
+  });
 
   return (
     <>
       <Title order={1} m="1rem">
         試合表
       </Title>
-      <Flex justify="flex-end" mb={"1rem"}>
-        <CourseSelector courses={courses} selector={setSelect}/>
-      </Flex>
-      <Table highlightOnHover>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>コート番号</Table.Th>
-            <Table.Th>左コート</Table.Th>
-            <Table.Th>右コート</Table.Th>
-            <Table.Th>
-              <Center>状態</Center>
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {primaryMatches
-            ? primaryMatches.map(
+      {primaryMatches ? (
+        <>
+          <Flex justify="flex-end" mb={"1rem"}>
+            <CourseSelector courses={courses} selector={setSelect} />
+          </Flex>
+          <Table highlightOnHover>
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th>コート番号</Table.Th>
+                <Table.Th>左コート</Table.Th>
+                <Table.Th>右コート</Table.Th>
+                <Table.Th>
+                  <Center>状態</Center>
+                </Table.Th>
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {primaryMatches.map(
                 (match) =>
                   (select === "all" || match.courseIndex === select) && (
                     <Table.Tr key={match.id}>
@@ -95,10 +121,34 @@ export const MatchList = () => {
                       </Table.Td>
                     </Table.Tr>
                   )
-              )
-            : null}
-        </Table.Tbody>
-      </Table>
+              )}
+            </Table.Tbody>
+          </Table>
+        </>
+      ) : loading ? (
+        <>
+          <Text>ロード中</Text>
+          <Loader size={40} />
+        </>
+      ) : error ? (
+        <>
+          <Text>現在試合はありません。</Text>
+          <Button m={"2rem"} onClick={load}>
+            <IconRefresh stroke={2} />
+            再読み込み
+          </Button>
+        </>
+      ) : (
+        <>
+          <Text c={"red"} fw={700}>
+            サバーからのフェッチに失敗しました。
+          </Text>
+          <Button mt={"2rem"} onClick={load}>
+            <IconRefresh stroke={2} />
+            再読み込み
+          </Button>
+        </>
+      )}
     </>
   );
 };
