@@ -42,7 +42,7 @@ export const Result = () => {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
       .then((res) => res.json())
-      .then((json) => setprimaryMatch(json))
+      .then((json) => setprimaryMatch(json));
   }, []);
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/match/final`)
