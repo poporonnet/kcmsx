@@ -22,7 +22,7 @@
     "@hono/zod-validator": "^0.1.11",
     "@mikuroxina/mini-fn": "^5.4.3",
     "esbuild": "^0.20.0",
-    "hono": "^3.11.6",
+    "hono": "^4.0.0",
     "typescript": "^5.3.2",
     "zod": "^3.22.4"
   },
