@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@mantine/carousel':
     specifier: ^7.3.1
-    version: 7.3.1(@mantine/core@7.9.1)(@mantine/hooks@7.9.1)(embla-carousel-react@7.1.0)(react-dom@18.2.0)(react@18.2.0)
+    version: 7.9.1(@mantine/core@7.9.1)(@mantine/hooks@7.9.1)(embla-carousel-react@7.1.0)(react-dom@18.2.0)(react@18.2.0)
   '@mantine/core':
     specifier: ^7.3.1
     version: 7.9.1(@mantine/hooks@7.9.1)(@types/react@18.2.42)(react-dom@18.2.0)(react@18.2.0)
@@ -701,11 +701,11 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@mantine/carousel@7.3.1(@mantine/core@7.9.1)(@mantine/hooks@7.9.1)(embla-carousel-react@7.1.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-63yQZTeePqVpc7jxXtDAKkBc+mAg1yi9X0D43p3M2G4hbe770sBJk9oWotem7IlR7kGlqAx2ri+YNGWUxqzv+g==}
+  /@mantine/carousel@7.9.1(@mantine/core@7.9.1)(@mantine/hooks@7.9.1)(embla-carousel-react@7.1.0)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-8Z893KdrfCTXh941aHS8y4sN7rbys3Hi2sYulqyRzU44Hm6k2gUDiSYccU6KTBWTSw/rzv+qRkvcKIukYM8CTg==}
     peerDependencies:
-      '@mantine/core': 7.3.1
-      '@mantine/hooks': 7.3.1
+      '@mantine/core': 7.9.1
+      '@mantine/hooks': 7.9.1
       embla-carousel-react: '>=7.0.0'
       react: ^18.2.0
       react-dom: ^18.2.0
