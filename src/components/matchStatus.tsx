@@ -9,6 +9,19 @@ type StatusButtonProps = {
 };
 
 export const MatchStatusButton = (props: StatusButtonProps) => {
+  const getColorAndText = () => {
+    switch (props.status) {
+      case "now":
+        return { color: "green", text: "進行中" };
+      case "end":
+        return { color: "red", text: "完了" };
+      case "future":
+        return { color: "blue", text: "未来" };
+      default:
+        return { color: "blue", text: "未定義" };
+    }
+  };
+
   return (
     <LinkToMatch
       info={{
@@ -19,23 +32,11 @@ export const MatchStatusButton = (props: StatusButtonProps) => {
     >
       <Button
         variant="filled"
-        color={
-          props.status === "now"
-            ? "green"
-            : props.status === "end"
-              ? "red"
-              : "blue"
-        }
+        color={getColorAndText().color}
         radius={"lg"}
         size="xs"
       >
-        <Text fw={700}>
-          {props.status === "now"
-            ? "進行中"
-            : props.status === "future"
-              ? "未来"
-              : "完了"}
-        </Text>
+        <Text fw={700}>{getColorAndText().text}</Text>
       </Button>
     </LinkToMatch>
   );

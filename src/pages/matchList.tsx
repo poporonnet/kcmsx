@@ -11,69 +11,59 @@ import { IconRefresh } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { CourseSelector } from "../components/courseSelector";
 import { MatchStatusButton } from "../components/matchStatus";
-import { TeamInfo } from "./match";
-type Match = {
-  id: string;
-  courseIndex: number;
-  category: "elementary" | "open";
-  teams: { right: TeamInfo; left: TeamInfo };
-  matchType: "primary" | "final";
-  results?: {
-    left: {
-      teamID: string;
-      points: number;
-      time: number;
-    };
-    right: {
-      teamID: string;
-      points: number;
-      time: number;
-    };
-  };
-};
+import { Match } from "../types/match";
 
 export const MatchList = () => {
-  const [primaryMatches, setPrimaryMatches] = useState<Match[] | undefined>();
+  const [primaryMatches, setPrimaryMatches] = useState<Match[]>([]);
   const [courses, setCourses] = useState<number[]>([]);
   const [select, setSelect] = useState<number | "all">("all");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-
-  const load = () => {
-    if (loading) return;
+  const fetchPrimaries = async () => {
     setError(false);
     setLoading(true);
+    console.log("fetching");
+
     try {
-      fetch(`${import.meta.env.VITE_API_URL}/match/primary`, { method: "GET" })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.length === 0) return;
-          setPrimaryMatches(data);
-          if (primaryMatches) {
-            let course = primaryMatches.map(
-              (primaryMatches) => primaryMatches.courseIndex
-            );
-            course = [...new Set(course)];
-            setCourses(course);
-          }
-        });
-    } catch {
-      setError(true);
-    } finally {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/match/primary`, {
+        method: "GET",
+      });
+
+      const data = await res.json();
+
+      if (data.length === 0) {
+        setError(false);
+        setLoading(false);
+        console.log("No data");
+        return;
+      }
+
+      setPrimaryMatches(data);
+
+      if (data) {
+        let course: number[] = data.map((match: Match) => match.courseIndex);
+        course = [...new Set(course)];
+        setCourses(course);
+      }
+
       setLoading(false);
+    } catch (error) {
+      setError(true);
     }
+
+    setLoading(false);
   };
 
   useEffect(() => {
-    load();
-  });
+    fetchPrimaries();
+  }, []);
 
   return (
     <>
       <Title order={1} m="1rem">
         試合表
       </Title>
-      {primaryMatches ? (
+      {primaryMatches.length > 0 ? (
         <>
           <Flex justify="flex-end" mb={"1rem"}>
             <CourseSelector courses={courses} selector={setSelect} />
@@ -132,18 +122,18 @@ export const MatchList = () => {
         </>
       ) : error ? (
         <>
-          <Text>現在試合はありません。</Text>
-          <Button m={"2rem"} onClick={load}>
+          <Text c={"red"} fw={700}>
+            サーバーからのフェッチに失敗しました。
+          </Text>
+          <Button mt={"2rem"} onClick={fetchPrimaries}>
             <IconRefresh stroke={2} />
             再読み込み
           </Button>
         </>
       ) : (
         <>
-          <Text c={"red"} fw={700}>
-            サバーからのフェッチに失敗しました。
-          </Text>
-          <Button mt={"2rem"} onClick={load}>
+          <Text>現在試合はありません。</Text>
+          <Button m={"2rem"} onClick={fetchPrimaries}>
             <IconRefresh stroke={2} />
             再読み込み
           </Button>

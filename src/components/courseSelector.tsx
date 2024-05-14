@@ -4,9 +4,8 @@ type Props = {
   selector: (value: number | "all") => void;
 };
 export const CourseSelector = (props: Props) => {
-  const course = props.courses
-    ? props.courses.map((courses) => String(courses))
-    : [];
+  const course = props.courses?.map((courses) => String(courses)) ?? [];
+
   course.unshift("全てのコート");
   return (
     <Select
