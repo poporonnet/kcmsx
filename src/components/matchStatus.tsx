@@ -1,4 +1,4 @@
-import { Button, Text } from "@mantine/core";
+import { Button, MantineColor, Text } from "@mantine/core";
 import { TeamInfo } from "../pages/match";
 import { LinkToMatch } from "./linkToMatch";
 type StatusButtonProps = {
@@ -9,7 +9,7 @@ type StatusButtonProps = {
 };
 
 export const MatchStatusButton = (props: StatusButtonProps) => {
-  const getColorAndText = () => {
+  const getColorAndText = (): { color: MantineColor; text: string } => {
     switch (props.status) {
       case "now":
         return { color: "green", text: "進行中" };
@@ -21,7 +21,7 @@ export const MatchStatusButton = (props: StatusButtonProps) => {
         return { color: "blue", text: "未定義" };
     }
   };
-
+  const status = getColorAndText();
   return (
     <LinkToMatch
       info={{
@@ -30,13 +30,8 @@ export const MatchStatusButton = (props: StatusButtonProps) => {
         matchType: props.matchType,
       }}
     >
-      <Button
-        variant="filled"
-        color={getColorAndText().color}
-        radius={"lg"}
-        size="xs"
-      >
-        <Text fw={700}>{getColorAndText().text}</Text>
+      <Button variant="filled" color={status.color} radius={"lg"} size="xs">
+        <Text fw={700}>{status.text}</Text>
       </Button>
     </LinkToMatch>
   );
