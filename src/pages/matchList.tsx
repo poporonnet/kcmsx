@@ -29,7 +29,13 @@ export const MatchList = () => {
         method: "GET",
       });
 
-      const data = await res.json();
+      const data = await res.json() as undefined | Match[];
+
+      if (!data) {
+        setError(true);
+        setLoading(false);
+        return;
+      }
 
       if (data.length === 0) {
         setError(false);
@@ -41,9 +47,10 @@ export const MatchList = () => {
       setPrimaryMatches(data);
 
       if (data) {
-        let course: number[] = data.map((match: Match) => match.courseIndex);
-        course = [...new Set(course)];
-        setCourses(course);
+        const courses: number[] = [
+          ...new Set(data.map((match: Match) => match.courseIndex)),
+        ];
+        setCourses(courses);
       }
 
       setLoading(false);
