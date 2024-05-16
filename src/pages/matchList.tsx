@@ -29,7 +29,7 @@ export const MatchList = () => {
         method: "GET",
       });
 
-      const data = await res.json() as undefined | Match[];
+      const data = (await res.json()) as undefined | Match[];
 
       if (!data) {
         setError(true);
