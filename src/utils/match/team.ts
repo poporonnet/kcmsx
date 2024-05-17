@@ -1,11 +1,11 @@
-import { Point } from "./point";
-import { PartlyPartial } from "../../types/util";
 import {
   InitialPointState,
   PointState,
   PremiseState,
   initialPointState,
 } from "../../config/types/rule";
+import { PartlyPartial } from "../../types/util";
+import { Point } from "./point";
 
 export type SetGoalTimeSeconds = (goalTimeSec: number | null) => void;
 
