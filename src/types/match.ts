@@ -7,12 +7,12 @@ export type Match = {
   teams: { right: TeamInfo; left: TeamInfo };
   matchType: "primary" | "final";
   results?: {
-    left: team;
-    right: team;
+    left: TeamResult;
+    right: TeamResult;
   };
 };
 
-type team = {
+type TeamResult = {
   teamID: string;
   points: number;
   time: number;
