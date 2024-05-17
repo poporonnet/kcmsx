@@ -70,7 +70,7 @@ export const MatchList = () => {
       <Title order={1} m="1rem">
         試合表
       </Title>
-      {primaryMatches.length > 0 ? (
+      {primaryMatches.length > 0 && (
         <>
           <Flex justify="flex-end" mb={"1rem"}>
             <CourseSelector courses={courses} selector={setSelect} />
@@ -122,12 +122,14 @@ export const MatchList = () => {
             </Table.Tbody>
           </Table>
         </>
-      ) : loading ? (
+      )}
+      {loading && (
         <>
           <Text>ロード中</Text>
           <Loader size={40} />
         </>
-      ) : error ? (
+      )}
+      {error && (
         <>
           <Text c={"red"} fw={700}>
             サーバーからのフェッチに失敗しました。
@@ -137,7 +139,8 @@ export const MatchList = () => {
             再読み込み
           </Button>
         </>
-      ) : (
+      )}
+      {primaryMatches.length === 0 && !loading && !error && (
         <>
           <Text>現在試合はありません。</Text>
           <Button m={"2rem"} onClick={fetchPrimaries}>
