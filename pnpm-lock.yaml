@@ -7,16 +7,16 @@ settings:
 dependencies:
   '@mantine/carousel':
     specifier: ^7.3.1
-    version: 7.10.1(@mantine/core@7.10.1)(@mantine/hooks@7.10.0)(embla-carousel-react@7.1.0)(react-dom@18.3.1)(react@18.3.1)
+    version: 7.10.1(@mantine/core@7.10.1)(@mantine/hooks@7.10.1)(embla-carousel-react@7.1.0)(react-dom@18.3.1)(react@18.3.1)
   '@mantine/core':
     specifier: ^7.3.1
-    version: 7.10.1(@mantine/hooks@7.10.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
+    version: 7.10.1(@mantine/hooks@7.10.1)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
   '@mantine/hooks':
     specifier: ^7.3.1
-    version: 7.10.0(react@18.3.1)
+    version: 7.10.1(react@18.3.1)
   '@mantine/notifications':
     specifier: 7.10.0
-    version: 7.10.0(@mantine/core@7.10.1)(@mantine/hooks@7.10.0)(react-dom@18.3.1)(react@18.3.1)
+    version: 7.10.0(@mantine/core@7.10.1)(@mantine/hooks@7.10.1)(react-dom@18.3.1)(react@18.3.1)
   '@tabler/icons-react':
     specifier: ^2.44.0
     version: 2.47.0(react@18.3.1)
@@ -730,7 +730,7 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.15
     dev: true
 
-  /@mantine/carousel@7.10.1(@mantine/core@7.10.1)(@mantine/hooks@7.10.0)(embla-carousel-react@7.1.0)(react-dom@18.3.1)(react@18.3.1):
+  /@mantine/carousel@7.10.1(@mantine/core@7.10.1)(@mantine/hooks@7.10.1)(embla-carousel-react@7.1.0)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-dUDc8d4V/goCP9GvlV66K11pVGa3y2Jq391/lrIJBOG3fcIpBFrzdMAjCVxDLCOemOubXQkW4fP0TBXq8cBhlQ==}
     peerDependencies:
       '@mantine/core': 7.10.1
@@ -739,14 +739,14 @@ packages:
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
-      '@mantine/hooks': 7.10.0(react@18.3.1)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
+      '@mantine/hooks': 7.10.1(react@18.3.1)
       embla-carousel-react: 7.1.0(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
-  /@mantine/core@7.10.1(@mantine/hooks@7.10.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1):
+  /@mantine/core@7.10.1(@mantine/hooks@7.10.1)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-l9ypojKN3PjwO1CSLIsqxi7mA25+7w+xc71Q+JuCCREI0tuGwkZsKbIOpuTATIJOjPh8ycLiW7QxX1LYsRTq6w==}
     peerDependencies:
       '@mantine/hooks': 7.10.1
@@ -754,7 +754,7 @@ packages:
       react-dom: ^18.2.0
     dependencies:
       '@floating-ui/react': 0.26.16(react-dom@18.3.1)(react@18.3.1)
-      '@mantine/hooks': 7.10.0(react@18.3.1)
+      '@mantine/hooks': 7.10.1(react@18.3.1)
       clsx: 2.1.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
@@ -766,15 +766,15 @@ packages:
       - '@types/react'
     dev: false
 
-  /@mantine/hooks@7.10.0(react@18.3.1):
-    resolution: {integrity: sha512-fnalwYS2WQEFS4wmhmAetDZ/VdJPLNeUXPX9t+S21o3p/dRTX1xhU2mS7yWaQUKM0hPD1TcujqXGlP2M2g/A9A==}
+  /@mantine/hooks@7.10.1(react@18.3.1):
+    resolution: {integrity: sha512-0EH9WBWUdtQLGU3Ak+csQ77EtUxI6pPNfwZdRJQWcaA3f8SFOLo9h9CGxiikFExerhvuCeUlaTf3s+TB9Op/rw==}
     peerDependencies:
       react: ^18.2.0
     dependencies:
       react: 18.3.1
     dev: false
 
-  /@mantine/notifications@7.10.0(@mantine/core@7.10.1)(@mantine/hooks@7.10.0)(react-dom@18.3.1)(react@18.3.1):
+  /@mantine/notifications@7.10.0(@mantine/core@7.10.1)(@mantine/hooks@7.10.1)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-3a0mmM9Kr3nPP+8VHsIuly507nda6ciu2aB/xSxb7gFIKHw3GqSu77pxXa+5l4Y6AQKKvP9360K4KjH6+rOBWw==}
     peerDependencies:
       '@mantine/core': 7.10.0
@@ -782,8 +782,8 @@ packages:
       react: ^18.2.0
       react-dom: ^18.2.0
     dependencies:
-      '@mantine/core': 7.10.1(@mantine/hooks@7.10.0)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
-      '@mantine/hooks': 7.10.0(react@18.3.1)
+      '@mantine/core': 7.10.1(@mantine/hooks@7.10.1)(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
+      '@mantine/hooks': 7.10.1(react@18.3.1)
       '@mantine/store': 7.10.0(react@18.3.1)
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
