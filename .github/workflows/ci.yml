@@ -61,4 +61,4 @@ jobs:
         run: bun run --cwd packages/kcmsf lint
 
       - name: Test
-        run: bun run --cwd packages/kcmsf test
+        run: bun run --cwd packages/kcmsf test:ci
