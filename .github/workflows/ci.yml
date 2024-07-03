@@ -31,6 +31,8 @@ jobs:
         run: pnpm backend check
       - name: Lint
         run: pnpm backend lint
+      - name: Test
+        run: pnpm backend test
 
   frontend_build:
     name: "Build & Check (frontend)"
@@ -57,3 +59,6 @@ jobs:
 
       - name: Lint bun lint
         run: bun run --cwd packages/kcmsf lint
+
+      - name: Test
+        run: bun run --cwd packages/kcmsf test
