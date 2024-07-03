@@ -1,0 +1,21 @@
+name: run test
+on:
+  pull_request:
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  run_test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - name: install packages
+        run: bun i
+      - name: test
+        run: bun test
+      - name: code check
+        run: bun run check
+      - name: lint
+        run: bun run lint
