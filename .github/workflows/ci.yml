@@ -53,8 +53,9 @@ jobs:
 
       - name: Setup Nodejs v20
         uses: actions/setup-node@v4
+      - uses: pnpm/action-setup@v2
         with:
-          cache: "pnpm"
+          version: 9
     
       - name: Code Check
         run: pnpm backend check
