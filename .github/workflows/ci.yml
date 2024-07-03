@@ -5,7 +5,7 @@ on:
 
 jobs:
   backend_build:
-    name: "Build (backend)"
+    name: "Build & Check (backend)"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,9 +27,13 @@ jobs:
 
       - name: Install packages
         run: pnpm i --frozen-lockfile
+      - name: Code Check
+        run: pnpm backend check
+      - name: Lint
+        run: pnpm backend lint
 
   frontend_build:
-    name: "Build (frontend)"
+    name: "Build & Check (frontend)"
     runs-on: ubuntu-latest
 
     steps:
@@ -50,51 +54,6 @@ jobs:
 
       - name: Install
         run: bun install --frozen-lockfile
-
-  backend_check:
-    name: "Check (Backend)"
-    runs-on: ubuntu-latest
-    needs: [backend_build]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Nodejs v20
-        uses: actions/setup-node@v4
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/install/cache
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-pnpm-
-
-      - name: Code Check
-        run: pnpm backend check
-      - name: Lint
-        run: pnpm backend lint
-
-  frontend_check:
-    name: "Check (Frontend)"
-    runs-on: ubuntu-latest
-    needs: [frontend_build]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
-      - name: Restore Cache
-        uses: actions/cache@v4
-        with:
-            path: ~/.cache/install/cache
-            key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
 
       - name: Lint bun lint
         run: bun run --cwd packages/kcmsf lint
