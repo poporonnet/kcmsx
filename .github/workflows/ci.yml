@@ -13,9 +13,17 @@ jobs:
 
       - name: Setup Nodejs v20
         uses: actions/setup-node@v4
+
       - uses: pnpm/action-setup@v2
         with:
           version: 9
+
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/install/cache
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
 
       - name: Install packages
         run: pnpm i --frozen-lockfile
@@ -56,7 +64,14 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 9
-    
+
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/install/cache
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-
+
       - name: Code Check
         run: pnpm backend check
       - name: Lint
@@ -80,6 +95,6 @@ jobs:
         with:
             path: ~/.cache/install/cache
             key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
-      
+
       - name: Lint bun lint
         run: bun run --cwd packages/kcmsf lint
