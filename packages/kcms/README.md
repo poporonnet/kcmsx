@@ -45,11 +45,11 @@ bun dev
 
 | <img src="https://github.com/laminne.png" width="100px"> | <img src="https://github.com/kiharu3112.png" width="100px"> | <img src="https://github.com/tufusa.png" width="100px"> |
 | :------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------: |
-|            **laminne (T. YAMAMOTO)**<br>🔧 🦀           |                   **kiharu3112**<br>🔧 🦀                  |                   **tufusa**<br>🔧 🦀                  |
+|            **laminne (T. YAMAMOTO)**<br>🔧 🦀            |                   **kiharu3112**<br>🔧 🦀                   |                   **tufusa**<br>🔧 🦀                   |
 
 | <img src="https://github.com/speak-mentaiko.png" width="100px"> | <img src="https://github.com/suzune2741.png" width="100px"> | <img src="https://github.com/C4N4242.png" width="100px"> |
-| :------------------------------------------------------: | :---------------------------------------------------------: | :-----------------------------------------------------: |
-|                    **speak-mentaiko**<br>🔧              |                    **suzune2741**<br>🔧                    |                    **C4N4242**<br>🔧                    |
+| :-------------------------------------------------------------: | :---------------------------------------------------------: | :------------------------------------------------------: |
+|                    **speak-mentaiko**<br>🔧                     |                    **suzune2741**<br>🔧                     |                    **C4N4242**<br>🔧                     |
 
 🔧: KCMS/KCMSFの開発  
 🦀: 書き込みツール開発
@@ -176,14 +176,14 @@ body: `application/json`
         "id": "30495883404",
         "teamName": "ニカ.reverse()",
         "isMultiWalk": false,
-        "category": "Elementary"
+        "category": "Elementary",
       },
       {
         "id": "93454093",
         "teamName": "カニ.reverse()",
         "isMultiWalk": false,
-        "category": "Elementary"
-      }
+        "category": "Elementary",
+      },
     ],
     // 対戦の種類
     "matchType": "primary",
@@ -193,8 +193,8 @@ body: `application/json`
     // チームごとのゴール時間(秒)
     "time": [50, 61],
     // 勝利チームのID
-    "winnerID": "93454093"
-  }
+    "winnerID": "93454093",
+  },
 ]
 ```
 
@@ -238,15 +238,15 @@ body: `application/json`
         "id": "30495883404",
         "teamName": "ニカ.reverse()",
         "isMultiWalk": false,
-        "category": "Elementary"
+        "category": "Elementary",
       },
       // コート右側チーム
       "right": {
         "id": "93454093",
         "teamName": "カニ.reverse()",
         "isMultiWalk": false,
-        "category": "Elementary"
-      }
+        "category": "Elementary",
+      },
     },
     // 対戦の種類
     "matchType": "primary",
@@ -256,20 +256,20 @@ body: `application/json`
       "left": {
         "teamID": "30495883404",
         "points": 0,
-        "time": 300
+        "time": 300,
       },
       // 右チームの結果
       "right": {
         "teamID": "93454093",
         "points": 7,
-        "time": 60
-      }
+        "time": 60,
+      },
     },
     // コース番号(0始まり)
     "courseIndex": 1,
     // 勝利チームのID
-    "winnerID": "93454093"
-  }
+    "winnerID": "93454093",
+  },
 ]
 ```
 
