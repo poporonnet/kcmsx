@@ -17,8 +17,8 @@ importers:
         specifier: ^0.2.0
         version: 0.2.2(hono@4.4.11)(zod@3.23.8)
       '@mikuroxina/mini-fn':
-        specifier: ^5.4.3
-        version: 5.7.0
+        specifier: ^6.0.0
+        version: 6.3.1
       esbuild:
         specifier: ^0.23.0
         version: 0.23.0
@@ -702,8 +702,8 @@ packages:
     peerDependencies:
       react: ^18.2.0
 
-  '@mikuroxina/mini-fn@5.7.0':
-    resolution: {integrity: sha512-dUc1Te2alRMbbgAgK701DojTfaVh4q3OIcm7sgDCPmwTsCndtNJOiDpVHkq2W++fY19QyC8FNHGyr7agtFAGKw==}
+  '@mikuroxina/mini-fn@6.3.1':
+    resolution: {integrity: sha512-QzXW94riPQof+aM5ydnkQX6BAL1UlrAqTqP/XKuuWryq7oXy7XuTl12ibJBsnJQs0u4yeggN4zlZZidMTh7DNg==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2897,7 +2897,7 @@ snapshots:
     dependencies:
       react: 18.3.1
 
-  '@mikuroxina/mini-fn@5.7.0': {}
+  '@mikuroxina/mini-fn@6.3.1': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
