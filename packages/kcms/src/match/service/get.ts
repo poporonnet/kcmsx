@@ -74,7 +74,13 @@ export class MatchDTO {
   }
 
   public static fromDomain(match: Match): MatchDTO {
-    return new MatchDTO(match.id, match.teams, match.matchType, match.courseIndex, match.results);
+    return new MatchDTO(
+      match.getId(),
+      match.getTeams(),
+      match.getMatchType(),
+      match.getCourseIndex(),
+      match.getResults()
+    );
   }
 
   public toDomain(): Match {

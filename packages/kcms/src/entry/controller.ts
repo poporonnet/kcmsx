@@ -38,7 +38,14 @@ export class Controller {
       return Result.err(res[1]);
     }
 
-    return Result.ok(res[1]);
+    const unwrapped = Result.unwrap(res);
+    return Result.ok({
+      id: unwrapped.getId(),
+      teamName: unwrapped.getTeamName(),
+      members: unwrapped.getMembers(),
+      isMultiWalk: unwrapped.getIsMultiWalk(),
+      category: unwrapped.getCategory(),
+    });
   }
 
   async get(): Promise<Result.Result<Error, baseEntry[]>> {

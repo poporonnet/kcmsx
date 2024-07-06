@@ -38,7 +38,7 @@ export class JSONEntryRepository implements EntryRepository {
   }
 
   async findByTeamName(name: string): Promise<Option.Option<Entry>> {
-    const entry = this.data.find((e) => e.teamName === name);
+    const entry = this.data.find((e) => e.getTeamName() === name);
     if (entry === undefined) {
       return Option.none();
     }
@@ -46,7 +46,7 @@ export class JSONEntryRepository implements EntryRepository {
   }
 
   async findByID(id: string): Promise<Option.Option<Entry>> {
-    const entry = this.data.find((e) => e.id === id);
+    const entry = this.data.find((e) => e.getId() === id);
     if (entry === undefined) {
       return Option.none();
     }
@@ -58,7 +58,7 @@ export class JSONEntryRepository implements EntryRepository {
   }
 
   async delete(id: string): Promise<Option.Option<Error>> {
-    this.data = this.data.filter((e) => e.id !== id);
+    this.data = this.data.filter((e) => e.getId() !== id);
     await this.save();
     return Option.none();
   }
@@ -73,14 +73,12 @@ export class JSONEntryRepository implements EntryRepository {
 
   private static async load(): Promise<JSONData> {
     const data = await readFile('./data.json', 'utf-8');
-    const parsed = JSON.parse(data) as JSONData;
-    parsed.entry = parsed.entry.map((e) => JSONEntryRepository.jsonToEntry(e));
-    return parsed;
+    return JSON.parse(data) as JSONData;
   }
 
   private isExists(entry: Entry): boolean {
     for (const v of this.data) {
-      if (v.teamName === entry.teamName || v.id === entry.id) {
+      if (v.getTeamName === entry.getTeamName || v.getId === entry.getId) {
         console.error('Entry already exists');
         return true;
       }
@@ -90,11 +88,11 @@ export class JSONEntryRepository implements EntryRepository {
 
   private static entryToJSON(entry: Entry): EntryJSON {
     return {
-      id: entry.id,
-      teamName: entry.teamName,
-      members: entry.members,
-      isMultiWalk: entry.isMultiWalk,
-      category: entry.category,
+      id: entry.getId(),
+      teamName: entry.getTeamName(),
+      members: entry.getMembers(),
+      isMultiWalk: entry.getIsMultiWalk(),
+      category: entry.getCategory(),
     };
   }
 

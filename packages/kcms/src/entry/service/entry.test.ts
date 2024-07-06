@@ -18,22 +18,40 @@ describe('entryService', () => {
   });
 
   it('エントリーできる', async () => {
-    const actual = await service.create(TestEntryData['ElementaryMultiWalk']);
+    const data = TestEntryData['ElementaryMultiWalk'];
+    const actual = await service.create({
+      teamName: data.getTeamName(),
+      members: data.getMembers(),
+      isMultiWalk: data.getIsMultiWalk(),
+      category: data.getCategory(),
+    });
 
     expect(Result.isOk(actual)).toBe(true);
     if (Result.isErr(actual)) {
       return;
     }
 
-    expect(actual[1].members).toStrictEqual(['TestTaro1']);
-    expect(actual[1].teamName).toBe('TestTeam1');
-    expect(actual[1].isMultiWalk).toBe(true);
-    expect(actual[1].category).toBe('Elementary');
+    expect(actual[1].getMembers()).toStrictEqual(['TestTaro1']);
+    expect(actual[1].getTeamName()).toBe('TestTeam1');
+    expect(actual[1].getIsMultiWalk()).toBe(true);
+    expect(actual[1].getCategory()).toBe('Elementary');
   });
 
   it('チーム名が重複するときはエラー終了する', async () => {
-    await service.create(TestEntryData['ElementaryMultiWalk']);
-    const result = await service.create(TestEntryData['ElementaryMultiWalkExists']);
+    const data = TestEntryData['ElementaryMultiWalk'];
+    const existsData = TestEntryData['ElementaryMultiWalkExists'];
+    await service.create({
+      teamName: data.getTeamName(),
+      members: data.getMembers(),
+      isMultiWalk: data.getIsMultiWalk(),
+      category: data.getCategory(),
+    });
+    const result = await service.create({
+      teamName: existsData.getTeamName(),
+      members: existsData.getMembers(),
+      isMultiWalk: existsData.getIsMultiWalk(),
+      category: existsData.getCategory(),
+    });
 
     expect(Result.isErr(result)).toBe(true);
     expect(result[1]).toStrictEqual(new Error('teamName Exists'));
@@ -47,7 +65,12 @@ describe('entryService', () => {
       isMultiWalk: true,
       category: 'Open',
     });
-    const actual = await service.create(entry);
+    const actual = await service.create({
+      teamName: entry.getTeamName(),
+      members: entry.getMembers(),
+      isMultiWalk: entry.getIsMultiWalk(),
+      category: entry.getCategory(),
+    });
 
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('too many members'));
@@ -61,7 +84,12 @@ describe('entryService', () => {
       isMultiWalk: true,
       category: 'Elementary',
     });
-    const actual = await service.create(entry);
+    const actual = await service.create({
+      teamName: entry.getTeamName(),
+      members: entry.getMembers(),
+      isMultiWalk: entry.getIsMultiWalk(),
+      category: entry.getCategory(),
+    });
 
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('too many members'));
@@ -75,7 +103,12 @@ describe('entryService', () => {
       isMultiWalk: true,
       category: 'Elementary',
     });
-    const actual = await service.create(entry);
+    const actual = await service.create({
+      teamName: entry.getTeamName(),
+      members: entry.getMembers(),
+      isMultiWalk: entry.getIsMultiWalk(),
+      category: entry.getCategory(),
+    });
 
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('no member'));

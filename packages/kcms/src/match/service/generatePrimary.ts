@@ -30,7 +30,7 @@ export class GeneratePrimaryMatchService {
     }
 
     // 分ける(N/M = A...B M[i]にA人、B人を少ない方から)
-    const entry = res[1].filter((v) => v.category === 'Elementary');
+    const entry = res[1].filter((v) => v.getCategory() === 'Elementary');
     console.log(entry.length);
     const entryNum = entry.length;
     // コースごとの参加者数

@@ -102,7 +102,7 @@ export class GenerateFinalMatchService {
 
     return Result.ok(
       res[1]
-        .filter((v) => v.category === 'Open')
+        .filter((v) => v.getCategory() === 'Open')
         .map((v, i): TournamentRank => {
           return {
             rank: i,
@@ -142,13 +142,13 @@ export class GenerateFinalMatchService {
       return Result.err(new Error('Match not found.'));
     }
     // 指定したカテゴリの試合だけ取得
-    const categoryMatch = match[1].filter((v) => v.teams.left!.category === category);
+    const categoryMatch = match[1].filter((v) => v.getTeams().left!.getCategory() === category);
 
     // 終了している試合に絞る
     const finishedMatch = categoryMatch.filter((v) => {
       // 終了している条件: resultsがundefinedでない, results.winnerIDに値がある
-      if (v.results === undefined) return false;
-      return (v.results as MatchResultFinalPair).winnerID !== undefined;
+      if (v.getResults() === undefined) return false;
+      return (v.getResults() as MatchResultFinalPair).winnerID !== undefined;
     });
     // N回戦まで終了しているか
     const finishedN = this.isGenerative(this.FINAL_TOURNAMENT_COUNT, finishedMatch.length);
@@ -168,11 +168,11 @@ export class GenerateFinalMatchService {
     const pickWinner = (match: [Match, Match]): Entry[] => {
       const res: Entry[] = new Array<Entry>();
       for (const v of match) {
-        const winnerID = (v.results as MatchResultFinalPair).winnerID;
-        if (v.teams.left!.id == winnerID) {
-          res.push(v.teams.left!);
+        const winnerID = (v.getResults() as MatchResultFinalPair).winnerID;
+        if (v.getTeams().left!.getId() == winnerID) {
+          res.push(v.getTeams().left!);
         } else {
-          res.push(v.teams.right!);
+          res.push(v.getTeams().right!);
         }
       }
       return res;

@@ -10,7 +10,7 @@ describe('GetMatchService', () => {
   const service = new GetMatchService(repository);
 
   it('取得できる', async () => {
-    const res = await service.findById(TestMatchData.ElementaryPrimary.id);
+    const res = await service.findById(TestMatchData.ElementaryPrimary.getId());
 
     expect(Result.isErr(res)).toStrictEqual(false);
     expect(res[1]).toStrictEqual(MatchDTO.fromDomain(TestMatchData.ElementaryPrimary));
@@ -31,11 +31,11 @@ describe('MatchDTO', () => {
     const toDomain = MatchDTO.fromDomain(domain).toDomain();
     const toDTO = MatchDTO.fromDomain(toDomain);
 
-    expect(toDomain.id).toStrictEqual(toDTO.id);
-    expect(toDomain.teams.left!.id).toStrictEqual(toDTO.teams.left!.id);
-    expect(toDomain.teams.right!.id).toStrictEqual(toDTO.teams.right!.id);
-    expect(toDomain.matchType).toStrictEqual(toDTO.matchType);
-    expect(toDomain.courseIndex).toStrictEqual(toDTO.courseIndex);
-    expect(toDomain.results).toStrictEqual(toDTO.results);
+    expect(toDomain.getId()).toStrictEqual(toDTO.id);
+    expect(toDomain.getTeams().left!.getId).toStrictEqual(toDTO.teams.left!.getId);
+    expect(toDomain.getTeams().right!.getId).toStrictEqual(toDTO.teams.right!.getId);
+    expect(toDomain.getMatchType()).toStrictEqual(toDTO.matchType);
+    expect(toDomain.getCourseIndex()).toStrictEqual(toDTO.courseIndex);
+    expect(toDomain.getResults()).toStrictEqual(toDTO.results);
   });
 });

@@ -11,10 +11,10 @@ describe('正しくインスタンスを生成できる', () => {
       category: 'Open',
     });
 
-    expect(actual.id).toBe('123');
-    expect(actual.teamName).toBe('チーム1');
-    expect(actual.members).toEqual(['山田太郎', 'テスト大介']);
-    expect(actual.isMultiWalk).toBe(false);
-    expect(actual.category).toBe('Open');
+    expect(actual.getId()).toBe('123');
+    expect(actual.getTeamName()).toBe('チーム1');
+    expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
+    expect(actual.getIsMultiWalk()).toBe(false);
+    expect(actual.getCategory()).toBe('Open');
   });
 });

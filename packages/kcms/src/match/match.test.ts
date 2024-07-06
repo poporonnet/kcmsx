@@ -14,15 +14,15 @@ describe('正しくインスタンスを生成できる', () => {
       courseIndex: 0,
     });
 
-    expect(actual.id).toBe('999');
-    expect(actual.teams).toEqual({
+    expect(actual.getId()).toBe('999');
+    expect(actual.getTeams()).toEqual({
       left: TestEntryData['ElementaryMultiWalk'],
       right: TestEntryData['ElementaryWheel'],
     });
-    expect(actual.results).toBeUndefined();
-    expect(actual.matchType).toBe('primary');
-    expect(actual.courseIndex).toBe(0);
-    expect(actual.time).toBeUndefined();
+    expect(actual.getResults()).toBeUndefined();
+    expect(actual.getMatchType()).toBe('primary');
+    expect(actual.getCourseIndex()).toBe(0);
+    expect(actual.getTime()).toBeUndefined();
     expect(actual.isEnd()).toBe(false);
   });
 
@@ -34,11 +34,14 @@ describe('正しくインスタンスを生成できる', () => {
       courseIndex: 0,
     });
 
-    expect(actual.id).toBe('999');
-    expect(actual.teams).toEqual({ left: TestEntryData['ElementaryMultiWalk'], right: undefined });
-    expect(actual.results).toBeUndefined();
-    expect(actual.matchType).toBe('primary');
-    expect(actual.courseIndex).toBe(0);
-    expect(actual.time).toBeUndefined();
+    expect(actual.getId()).toBe('999');
+    expect(actual.getTeams()).toEqual({
+      left: TestEntryData['ElementaryMultiWalk'],
+      right: undefined,
+    });
+    expect(actual.getResults()).toBeUndefined();
+    expect(actual.getMatchType()).toBe('primary');
+    expect(actual.getCourseIndex()).toBe(0);
+    expect(actual.getTime()).toBeUndefined();
   });
 });

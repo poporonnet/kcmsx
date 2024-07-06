@@ -14,7 +14,7 @@ export class DummyRepository implements EntryRepository {
   }
 
   async findByTeamName(name: string): Promise<Option.Option<Entry>> {
-    const entry = this.data.find((e) => e.teamName === name);
+    const entry = this.data.find((e) => e.getTeamName() === name);
     if (entry === undefined) {
       return Option.none();
     }
@@ -22,7 +22,7 @@ export class DummyRepository implements EntryRepository {
   }
 
   async findByID(id: string): Promise<Option.Option<Entry>> {
-    const entry = this.data.find((e) => e.id === id);
+    const entry = this.data.find((e) => e.getId() === id);
     if (entry === undefined) {
       return Option.none();
     }
@@ -34,7 +34,7 @@ export class DummyRepository implements EntryRepository {
   }
 
   async delete(id: string): Promise<Option.Option<Error>> {
-    this.data = this.data.filter((e) => e.id !== id);
+    this.data = this.data.filter((e) => e.getId() !== id);
     return Option.none();
   }
 

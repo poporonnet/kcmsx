@@ -93,22 +93,22 @@ export class MatchController {
       }
 
       return {
-        id: i.id,
-        teamName: i.teamName,
-        isMultiWalk: i.isMultiWalk,
-        category: i.category,
+        id: i.getId(),
+        teamName: i.getTeamName(),
+        isMultiWalk: i.getIsMultiWalk(),
+        category: i.getCategory(),
       };
     };
 
     return {
-      id: i.id,
+      id: i.getId(),
       teams: {
-        left: toTeamJSON(i.teams.left),
-        right: toTeamJSON(i.teams.right),
+        left: toTeamJSON(i.getTeams().left),
+        right: toTeamJSON(i.getTeams().right),
       },
-      matchType: i.matchType,
-      courseIndex: i.courseIndex,
-      results: i.results,
+      matchType: i.getMatchType(),
+      courseIndex: i.getCourseIndex(),
+      results: i.getResults(),
     };
   }
 }

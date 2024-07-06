@@ -20,7 +20,7 @@ export class DummyMatchRepository implements MatchRepository {
   }
 
   public async findByID(id: string): Promise<Option.Option<Match>> {
-    const match = this.data.find((m) => m.id === id);
+    const match = this.data.find((m) => m.getId() === id);
     if (!match) {
       return Option.none();
     }
@@ -28,7 +28,7 @@ export class DummyMatchRepository implements MatchRepository {
   }
 
   public async findByType(type: string): Promise<Option.Option<Match[]>> {
-    const match = this.data.filter((m) => m.matchType === type);
+    const match = this.data.filter((m) => m.getMatchType() === type);
     if (!match) {
       return Option.none();
     }
@@ -36,7 +36,7 @@ export class DummyMatchRepository implements MatchRepository {
   }
 
   public async update(match: Match): Promise<Result.Result<Error, Match>> {
-    const i = this.data.findIndex((m) => m.id === match.id);
+    const i = this.data.findIndex((m) => m.getId() === match.getId());
     this.data[i] = match;
     return Result.ok(match);
   }

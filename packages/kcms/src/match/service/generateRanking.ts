@@ -1,6 +1,6 @@
 import { TournamentRank } from './generateFinal.js';
 import { Result } from '@mikuroxina/mini-fn';
-import { isMatchResultPair } from '../match.js';
+import { isMatchResultPair, MatchResultPair } from '../match.js';
 import { MatchRepository } from './repository.js';
 
 export class GenerateRankingService {
@@ -20,24 +20,24 @@ export class GenerateRankingService {
     // -> まず全ての対戦を取得
     for (const v of res[1]) {
       // 本選は関係ないので飛ばす
-      if (v.matchType !== 'primary') continue;
+      if (v.getMatchType() !== 'primary') continue;
       // 終わってない場合は飛ばす
-      if (!v.isEnd() || !v.results) continue;
+      if (!v.isEnd() || !v.getResults()) continue;
       // ToDo: Match.categoryがprimaryのときはMatchResultPairに必ずなるようにする
-      if (!isMatchResultPair(v.results)) continue;
+      if (!isMatchResultPair(v.getResults())) continue;
       // 対戦の結果を取って、tournamentRankを作る
-      const left = v.results.left;
-      const right = v.results.right;
+      const left = (v.getResults() as MatchResultPair).left;
+      const right = (v.getResults() as MatchResultPair).right;
 
       // 左チームの結果を追加
-      const leftRank = rankBase.find((v) => v.entry.id === left.teamID);
+      const leftRank = rankBase.find((v) => v.entry.getId() === left.teamID);
       if (!leftRank) {
         // なければ作る
         rankBase.push(<TournamentRank>{
           rank: 0,
           points: left.points,
           time: left.time,
-          entry: v.teams.left,
+          entry: v.getTeams().left,
         });
       } else {
         // あれば足す
@@ -46,14 +46,14 @@ export class GenerateRankingService {
       }
 
       // 右チームの結果を追加
-      const rightRank = rankBase.find((v) => v.entry.id === right.teamID);
+      const rightRank = rankBase.find((v) => v.entry.getId() === right.teamID);
       if (!rightRank) {
         // なければ作る
         rankBase.push(<TournamentRank>{
           rank: 0,
           points: right.points,
           time: right.time,
-          entry: v.teams.right,
+          entry: v.getTeams().right,
         });
       } else {
         // あれば足す
@@ -65,10 +65,10 @@ export class GenerateRankingService {
     // 部門ごとに分ける [0]: Elementary, [1]: Open
     const categoryRank: TournamentRank[][] = [[], []];
     for (const v of rankBase) {
-      if (v.entry.category === 'Elementary') {
+      if (v.entry.getCategory() === 'Elementary') {
         categoryRank[0].push(v);
       }
-      if (v.entry.category === 'Open') {
+      if (v.entry.getCategory() === 'Open') {
         categoryRank[1].push(v);
       }
     }
