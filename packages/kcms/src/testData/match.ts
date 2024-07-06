@@ -1,4 +1,4 @@
-import { MatchID, Match } from '../match/match.js';
+import { MatchID, Match } from '../match/model/match.js';
 import { TestEntryData, TestEntrySet } from './entry.js';
 import { Entry, EntryID } from '../entry/entry.js';
 

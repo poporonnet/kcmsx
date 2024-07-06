@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
 import { EditMatchService } from './edit.js';
-import { MatchID, Match } from '../match.js';
+import { MatchID, Match } from '../model/match.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry.js';
 import { EntryID } from '../../entry/entry.js';

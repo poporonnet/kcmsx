@@ -1,6 +1,12 @@
 import { MatchRepository } from './repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { MatchID, Match, MatchResultFinalPair, MatchResultPair, MatchTeams } from '../match.js';
+import {
+  MatchID,
+  Match,
+  MatchResultFinalPair,
+  MatchResultPair,
+  MatchTeams,
+} from '../model/match.js';
 
 export class GetMatchService {
   private readonly repository: MatchRepository;

@@ -1,4 +1,4 @@
-import { Match } from '../match.js';
+import { Match } from '../model/match.js';
 import { MatchRepository } from '../service/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 

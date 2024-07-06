@@ -1,6 +1,6 @@
 import { GenerateFinalMatchService } from './service/generateFinal.js';
 import { Result } from '@mikuroxina/mini-fn';
-import { Match } from './match.js';
+import { Match } from './model/match.js';
 import { EditMatchService } from './service/edit.js';
 import { Entry, EntryID } from '../entry/entry.js';
 import { GetMatchService } from './service/get.js';

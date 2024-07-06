@@ -5,7 +5,7 @@ import { JSONEntryRepository } from '../entry/adaptor/json.js';
 import { MatchController } from './controller.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { EditMatchService } from './service/edit.js';
-import { ReconstructMatchArgs } from './match.js';
+import { ReconstructMatchArgs } from './model/match.js';
 import { GetMatchService } from './service/get.js';
 import { GenerateRankingService } from './service/generateRanking.js';
 import { GeneratePrimaryMatchService } from './service/generatePrimary.js';
