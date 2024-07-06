@@ -55,8 +55,8 @@ describe('GenerateFinal1st', () => {
 
     Result.unwrap(actual).map((v, i) => {
       expect(expected[i]).toStrictEqual({
-        left: v.teams.left!.id,
-        right: v.teams.right!.id,
+        left: v.getTeams().left!.id,
+        right: v.getTeams().right!.id,
       });
     });
   });
@@ -160,7 +160,7 @@ describe('GenerateFinalNth', () => {
     const res = Option.unwrap(await repository.findByType('final'));
     // 結果を入れ替える
     res.map(async (v) => {
-      v.results = TestData[`${v.teams.left!.id}-${v.teams.right!.id}`];
+      v.setResults(TestData[`${v.getTeams().left!.id}-${v.getTeams().right!.id}`]);
       await repository.update(v);
     });
 
@@ -168,10 +168,10 @@ describe('GenerateFinalNth', () => {
     Result.unwrap(actual).map((v, i) => {
       expect({
         left: {
-          id: v.teams.left!.id,
+          id: v.getTeams().left!.id,
         },
         right: {
-          id: v.teams.right!.id,
+          id: v.getTeams().right!.id,
         },
       }).toStrictEqual(expected2nd[i]);
     });

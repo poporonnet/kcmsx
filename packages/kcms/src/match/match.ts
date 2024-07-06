@@ -88,15 +88,15 @@ export interface ReconstructMatchArgs {
 
 export class Match {
   // 試合ID
-  private readonly _id: MatchID;
+  private readonly id: MatchID;
   // 試合するチームのID
-  private readonly _teams: MatchTeams;
+  private readonly teams: MatchTeams;
   // 試合種別 primary: 予選, final: 本選
-  private readonly _matchType: 'primary' | 'final';
+  private readonly matchType: 'primary' | 'final';
   // コース番号
-  private readonly _courseIndex: number;
+  private readonly courseIndex: number;
   // 試合の結果
-  private _results?: MatchResultPair | MatchResultFinalPair;
+  private results?: MatchResultPair | MatchResultFinalPair;
 
   private constructor(args: {
     id: MatchID;
@@ -105,45 +105,46 @@ export class Match {
     results?: MatchResultPair | MatchResultFinalPair;
     courseIndex: number;
   }) {
-    this._id = args.id;
-    this._teams = args.teams;
-    this._results = args.results;
-    this._matchType = args.matchType;
-    this._courseIndex = args.courseIndex;
+    this.id = args.id;
+    this.teams = args.teams;
+    this.results = args.results;
+    this.matchType = args.matchType;
+    this.courseIndex = args.courseIndex;
   }
 
-  get id(): MatchID {
-    return this._id;
+  getId(): MatchID {
+    return this.id;
   }
 
-  get teams(): MatchTeams {
-    return this._teams;
+  getTeams(): MatchTeams {
+    return this.teams;
   }
 
-  get matchType(): 'primary' | 'final' {
-    return this._matchType;
+  getMatchType(): 'primary' | 'final' {
+    return this.matchType;
   }
 
-  get courseIndex(): number {
-    return this._courseIndex;
+  getCourseIndex(): number {
+    return this.courseIndex;
   }
 
-  set results(results: MatchResultPair | MatchResultFinalPair) {
-    this._results = results;
+  setResults(results: MatchResultPair | MatchResultFinalPair) {
+    this.results = results;
   }
 
-  get results(): MatchResultPair | MatchResultFinalPair | undefined {
-    return this._results;
+  getResults(): MatchResultPair | MatchResultFinalPair | undefined {
+    return this.results;
   }
 
-  get time(): MatchResultPair | MatchResultFinalPair | undefined {
-    return this._results;
+  // ToDo: Resultを返している意味がわからない
+  getTime(): MatchResultPair | MatchResultFinalPair | undefined {
+    return this.results;
   }
 
   // 既に試合が終了しているか
   public isEnd(): boolean {
     // 結果 NOT undefined -> true
-    return this._results !== undefined;
+    return this.results !== undefined;
   }
 
   public static new(arg: CreateMatchArgs): Match {

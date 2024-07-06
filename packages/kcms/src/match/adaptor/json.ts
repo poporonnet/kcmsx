@@ -62,7 +62,7 @@ export class JSONMatchRepository implements MatchRepository {
   }
 
   public async findByID(id: string): Promise<Option.Option<Match>> {
-    const match = this.data.find((m) => m.id === id);
+    const match = this.data.find((m) => m.getId() === id);
     if (!match) {
       return Option.none();
     }
@@ -71,7 +71,7 @@ export class JSONMatchRepository implements MatchRepository {
   }
 
   public async findByType(type: string): Promise<Option.Option<Match[]>> {
-    const match = this.data.filter((m) => m.matchType === type);
+    const match = this.data.filter((m) => m.getMatchType() === type);
     if (!match) {
       return Option.none();
     }
@@ -83,7 +83,7 @@ export class JSONMatchRepository implements MatchRepository {
   }
 
   public async update(match: Match): Promise<Result.Result<Error, Match>> {
-    const i = this.data.findIndex((m) => m.id === match.id);
+    const i = this.data.findIndex((m) => m.getId === match.getId);
     this.data[i] = match;
 
     await this.save();
@@ -121,14 +121,14 @@ export class JSONMatchRepository implements MatchRepository {
     };
 
     return {
-      id: match.id,
+      id: match.getId(),
       teams: {
-        left: covertToEntryJSON(match.teams.left),
-        right: covertToEntryJSON(match.teams.right),
+        left: covertToEntryJSON(match.getTeams().left),
+        right: covertToEntryJSON(match.getTeams().right),
       },
-      matchType: match.matchType,
-      courseIndex: match.courseIndex,
-      results: match.results,
+      matchType: match.getMatchType(),
+      courseIndex: match.getCourseIndex(),
+      results: match.getResults(),
     };
   }
 

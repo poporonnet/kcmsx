@@ -17,7 +17,7 @@ export class EditMatchService {
     const match = await this.matchRepository.findByID(id);
     if (Option.isNone(match)) return Result.err(new Error('Match not found'));
 
-    if (args.results !== undefined) match[1].results = args.results;
+    if (args.results !== undefined) match[1].setResults(args.results);
 
     const res = await this.matchRepository.update(match[1]);
     if (Result.isErr(res)) return Result.err(res[1]);
