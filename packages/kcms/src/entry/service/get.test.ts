@@ -29,13 +29,13 @@ describe('getEntryService', () => {
   });
 
   it('チーム名で取得できる', async () => {
-    const actual = await service.findByTeamName(testEntryData[0].teamName);
+    const actual = await service.findByTeamName(testEntryData[0].getTeamName());
     expect(Result.isOk(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(EntryDTO.fromDomain(testEntryData[0]));
   });
 
   it('チームIDで取得できる', async () => {
-    const actual = await service.findByID(testEntryData[0].id);
+    const actual = await service.findByID(testEntryData[0].getId());
     expect(Result.isOk(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(EntryDTO.fromDomain(testEntryData[0]));
   });

@@ -93,10 +93,10 @@ export class MatchController {
       }
 
       return {
-        id: i.id,
-        teamName: i.teamName,
-        isMultiWalk: i.isMultiWalk,
-        category: i.category,
+        id: i.getId(),
+        teamName: i.getTeamName(),
+        isMultiWalk: i.getIsMultiWalk(),
+        category: i.getCategory(),
       };
     };
 

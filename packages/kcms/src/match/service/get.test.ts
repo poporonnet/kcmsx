@@ -32,8 +32,8 @@ describe('MatchDTO', () => {
     const toDTO = MatchDTO.fromDomain(toDomain);
 
     expect(toDomain.getId()).toStrictEqual(toDTO.id);
-    expect(toDomain.getTeams().left!.id).toStrictEqual(toDTO.teams.left!.id);
-    expect(toDomain.getTeams().right!.id).toStrictEqual(toDTO.teams.right!.id);
+    expect(toDomain.getTeams().left!.getId).toStrictEqual(toDTO.teams.left!.getId);
+    expect(toDomain.getTeams().right!.getId).toStrictEqual(toDTO.teams.right!.getId);
     expect(toDomain.getMatchType()).toStrictEqual(toDTO.matchType);
     expect(toDomain.getCourseIndex()).toStrictEqual(toDTO.courseIndex);
     expect(toDomain.getResults()).toStrictEqual(toDTO.results);

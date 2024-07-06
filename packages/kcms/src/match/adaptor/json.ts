@@ -112,11 +112,11 @@ export class JSONMatchRepository implements MatchRepository {
       }
 
       return {
-        id: entry.id,
-        teamName: entry.teamName,
-        members: entry.members,
-        isMultiWalk: entry.isMultiWalk,
-        category: entry.category,
+        id: entry.getId(),
+        teamName: entry.getTeamName(),
+        members: entry.getMembers(),
+        isMultiWalk: entry.getIsMultiWalk(),
+        category: entry.getCategory(),
       };
     };
 

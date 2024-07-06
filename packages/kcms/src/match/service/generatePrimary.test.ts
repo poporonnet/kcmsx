@@ -24,8 +24,8 @@ describe('予選の対戦表を正しく生成できる', () => {
     expect(Result.isErr(res)).toStrictEqual(false);
     for (const v of Result.unwrap(res)) {
       for (const j of v) {
-        expect(j.teams.left!.id).not.toBe(j.teams.right!.id);
-        expect(j.teams.left!.category).toStrictEqual(j.teams.right!.category);
+        expect(j.teams.left!.getId()).not.toBe(j.teams.right!.getId());
+        expect(j.teams.left!.getCategory()).toStrictEqual(j.teams.right!.getCategory());
       }
     }
   });

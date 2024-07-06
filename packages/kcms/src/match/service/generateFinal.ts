@@ -102,7 +102,7 @@ export class GenerateFinalMatchService {
 
     return Result.ok(
       res[1]
-        .filter((v) => v.category === 'Open')
+        .filter((v) => v.getCategory() === 'Open')
         .map((v, i): TournamentRank => {
           return {
             rank: i,
@@ -142,7 +142,7 @@ export class GenerateFinalMatchService {
       return Result.err(new Error('Match not found.'));
     }
     // 指定したカテゴリの試合だけ取得
-    const categoryMatch = match[1].filter((v) => v.getTeams().left!.category === category);
+    const categoryMatch = match[1].filter((v) => v.getTeams().left!.getCategory() === category);
 
     // 終了している試合に絞る
     const finishedMatch = categoryMatch.filter((v) => {
@@ -169,7 +169,7 @@ export class GenerateFinalMatchService {
       const res: Entry[] = new Array<Entry>();
       for (const v of match) {
         const winnerID = (v.getResults() as MatchResultFinalPair).winnerID;
-        if (v.getTeams().left!.id == winnerID) {
+        if (v.getTeams().left!.getId() == winnerID) {
           res.push(v.getTeams().left!);
         } else {
           res.push(v.getTeams().right!);

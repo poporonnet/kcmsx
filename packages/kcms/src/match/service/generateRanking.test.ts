@@ -66,12 +66,12 @@ describe('GenerateRankingService', () => {
     ];
 
     actual.map((v, i) => {
-      console.log(v.entry.id, v.rank, v.points, v.time);
+      console.log(v.entry.getId, v.rank, v.points, v.time);
       expect({
         rank: v.rank,
         points: v.points,
         time: v.time,
-        id: v.entry.id,
+        id: v.entry.getId(),
       }).toStrictEqual(expected[i]);
     });
   });

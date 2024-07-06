@@ -14,11 +14,11 @@ export interface EntryCreateArgs {
 }
 
 export class Entry {
-  private readonly _id: EntryID;
-  private readonly _teamName: string;
-  private readonly _members: Array<string>;
-  private readonly _isMultiWalk: boolean;
-  private readonly _category: EntryCategory;
+  private readonly id: EntryID;
+  private readonly teamName: string;
+  private readonly members: Array<string>;
+  private readonly isMultiWalk: boolean;
+  private readonly category: EntryCategory;
 
   private constructor(
     id: EntryID,
@@ -27,31 +27,31 @@ export class Entry {
     _isMultiWalk: boolean,
     category: EntryCategory
   ) {
-    this._id = id;
-    this._teamName = teamName;
-    this._members = _members;
-    this._isMultiWalk = _isMultiWalk;
-    this._category = category;
+    this.id = id;
+    this.teamName = teamName;
+    this.members = _members;
+    this.isMultiWalk = _isMultiWalk;
+    this.category = category;
   }
 
-  get id(): EntryID {
-    return this._id;
+  getId(): EntryID {
+    return this.id;
   }
 
-  get teamName(): string {
-    return this._teamName;
+  getTeamName(): string {
+    return this.teamName;
   }
 
-  get members(): Array<string> {
-    return this._members;
+  getMembers(): Array<string> {
+    return this.members;
   }
 
-  get isMultiWalk(): boolean {
-    return this._isMultiWalk;
+  getIsMultiWalk(): boolean {
+    return this.isMultiWalk;
   }
 
-  get category(): EntryCategory {
-    return this._category;
+  getCategory(): EntryCategory {
+    return this.category;
   }
 
   public static new(arg: EntryCreateArgs): Entry {

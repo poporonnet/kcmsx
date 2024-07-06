@@ -30,7 +30,7 @@ export class GenerateRankingService {
       const right = (v.getResults() as MatchResultPair).right;
 
       // 左チームの結果を追加
-      const leftRank = rankBase.find((v) => v.entry.id === left.teamID);
+      const leftRank = rankBase.find((v) => v.entry.getId() === left.teamID);
       if (!leftRank) {
         // なければ作る
         rankBase.push(<TournamentRank>{
@@ -46,7 +46,7 @@ export class GenerateRankingService {
       }
 
       // 右チームの結果を追加
-      const rightRank = rankBase.find((v) => v.entry.id === right.teamID);
+      const rightRank = rankBase.find((v) => v.entry.getId() === right.teamID);
       if (!rightRank) {
         // なければ作る
         rankBase.push(<TournamentRank>{
@@ -65,10 +65,10 @@ export class GenerateRankingService {
     // 部門ごとに分ける [0]: Elementary, [1]: Open
     const categoryRank: TournamentRank[][] = [[], []];
     for (const v of rankBase) {
-      if (v.entry.category === 'Elementary') {
+      if (v.entry.getCategory() === 'Elementary') {
         categoryRank[0].push(v);
       }
-      if (v.entry.category === 'Open') {
+      if (v.entry.getCategory() === 'Open') {
         categoryRank[1].push(v);
       }
     }
