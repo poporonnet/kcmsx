@@ -1,6 +1,6 @@
 import { TournamentRank } from './generateFinal.js';
 import { Result } from '@mikuroxina/mini-fn';
-import {isMatchResultPair, MatchResultPair} from '../match.js';
+import { isMatchResultPair, MatchResultPair } from '../match.js';
 import { MatchRepository } from './repository.js';
 
 export class GenerateRankingService {

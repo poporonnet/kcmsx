@@ -61,7 +61,13 @@ export class EntryDTO {
   }
 
   public static fromDomain(d: Entry): EntryDTO {
-    return new EntryDTO(d.getId(), d.getTeamName(), d.getMembers(), d.getIsMultiWalk(), d.getCategory());
+    return new EntryDTO(
+      d.getId(),
+      d.getTeamName(),
+      d.getMembers(),
+      d.getIsMultiWalk(),
+      d.getCategory()
+    );
   }
 
   public toToDomain(): Entry {

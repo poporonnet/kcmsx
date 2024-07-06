@@ -1,7 +1,7 @@
-import {EntryRepository} from '../repository.js';
-import {Option, Result} from '@mikuroxina/mini-fn';
-import {Entry, EntryCategory, EntryID} from '../entry.js';
-import {readFile, writeFile} from 'node:fs/promises';
+import { EntryRepository } from '../repository.js';
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { Entry, EntryCategory, EntryID } from '../entry.js';
+import { readFile, writeFile } from 'node:fs/promises';
 
 interface JSONData {
   entry: Array<EntryJSON>;

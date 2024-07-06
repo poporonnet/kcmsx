@@ -41,10 +41,10 @@ export class Controller {
     const unwrapped = Result.unwrap(res);
     return Result.ok({
       id: unwrapped.getId(),
-        teamName: unwrapped.getTeamName(),
-        members: unwrapped.getMembers(),
-        isMultiWalk: unwrapped.getIsMultiWalk(),
-        category: unwrapped.getCategory(),
+      teamName: unwrapped.getTeamName(),
+      members: unwrapped.getMembers(),
+      isMultiWalk: unwrapped.getIsMultiWalk(),
+      category: unwrapped.getCategory(),
     });
   }
 

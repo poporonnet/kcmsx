@@ -56,7 +56,7 @@ describe('GenerateFinal1st', () => {
     Result.unwrap(actual).map((v, i) => {
       expect(expected[i]).toStrictEqual({
         left: v.getTeams().left!.getId(),
-        right: v.getTeams().right!.getId()
+        right: v.getTeams().right!.getId(),
       });
     });
   });
