@@ -3,12 +3,19 @@ import { EntryID } from '../../entry/entry.js';
 
 export type RunResultID = SnowflakeID<RunResult>;
 
+/*
+ * FinishState
+ *   FINISHED: ゴールした
+ *   RETIRED: フィニッシュ(リタイア)した
+ *
+ * */
+export type FinishState = 'FINISHED' | 'RETIRED';
 export interface CreateRunResultArgs {
   id: RunResultID;
   teamID: EntryID;
   points: number;
   goalTime: number;
-  isFinished: boolean;
+  finishState: FinishState;
 }
 
 export class RunResult {
@@ -16,23 +23,26 @@ export class RunResult {
   private readonly teamID: EntryID;
   private readonly points: number;
   private readonly goalTime: number;
-  private readonly isFinished: boolean;
+  private readonly finishState: FinishState;
 
   private constructor(args: {
     id: RunResultID;
     teamID: EntryID;
     points: number;
     goalTime: number;
-    isFinished: boolean;
+    finishState: FinishState;
   }) {
     this.id = args.id;
     this.teamID = args.teamID;
     this.points = args.points;
     this.goalTime = args.goalTime;
-    this.isFinished = args.isFinished;
+    this.finishState = args.finishState;
   }
 
   public static new(args: CreateRunResultArgs): RunResult {
+    if (args.finishState === 'RETIRED') {
+      args.goalTime = Infinity;
+    }
     return new RunResult(args);
   }
 
@@ -52,7 +62,17 @@ export class RunResult {
     return this.goalTime;
   }
 
+  /*
+   * @return {boolean} ゴールしたかどうか
+   * */
   public getIsFinished(): boolean {
-    return this.isFinished;
+    return this.finishState === 'FINISHED';
+  }
+
+  /*
+   * @return {boolean} リタイア(フィニッシュ)したかどうか
+   */
+  public getIsRetired(): boolean {
+    return this.finishState === 'RETIRED';
   }
 }
