@@ -10,7 +10,7 @@ const compat = new FlatCompat();
 export default [
   {
     // 対象ファイル
-    files: ['src/**/**.ts'],
+    files: ['src/**/*.ts'],
   },
   {
     // 除外ファイル

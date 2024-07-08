@@ -8,7 +8,7 @@
     "start": "node ./build/main.js",
     "dev": "tsx ./src/main.ts",
     "build": "esbuild ./src/main.ts --bundle --sourcemap --platform=node --target=node16 --format=esm --packages=external --outfile=build/main.js",
-    "lint": "eslint --cache 'src/**/**.ts'",
+    "lint": "eslint --cache \"src/**/*.ts\"",
     "format": "prettier . --write",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
