@@ -11,7 +11,7 @@ export type RunResultID = SnowflakeID<RunResult>;
 export type FinishState = 'FINISHED' | 'RETIRED';
 export interface CreateRunResultArgs {
   id: RunResultID;
-  teamID: EntryID;
+  teamId: EntryID;
   points: number;
   goalTimeSeconds: number;
   finishState: FinishState;
@@ -19,20 +19,20 @@ export interface CreateRunResultArgs {
 
 export class RunResult {
   private readonly id: RunResultID;
-  private readonly teamID: EntryID;
+  private readonly teamId: EntryID;
   private readonly points: number;
   private readonly goalTimeSeconds: number;
   private readonly finishState: FinishState;
 
   private constructor(args: {
     id: RunResultID;
-    teamID: EntryID;
+    teamId: EntryID;
     points: number;
     goalTimeSeconds: number;
     finishState: FinishState;
   }) {
     this.id = args.id;
-    this.teamID = args.teamID;
+    this.teamId = args.teamId;
     this.points = args.points;
     this.goalTimeSeconds = args.goalTimeSeconds;
     this.finishState = args.finishState;
@@ -50,7 +50,7 @@ export class RunResult {
   }
 
   public getTeamId(): EntryID {
-    return this.teamID;
+    return this.teamId;
   }
 
   public getPoints(): number {

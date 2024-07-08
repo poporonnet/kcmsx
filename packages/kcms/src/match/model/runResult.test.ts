@@ -6,7 +6,7 @@ describe('RunResult', () => {
   it('正しくインスタンスを生成できる(ゴール時)', () => {
     const result = RunResult.new({
       id: '999' as RunResultID,
-      teamID: '100' as EntryID,
+      teamId: '100' as EntryID,
       points: 10,
       goalTimeSeconds: 100,
       finishState: 'FINISHED',
@@ -23,7 +23,7 @@ describe('RunResult', () => {
   it('正しくインスタンスを生成できる(フィニッシュ時)', () => {
     const result = RunResult.new({
       id: '999' as RunResultID,
-      teamID: '100' as EntryID,
+      teamId: '100' as EntryID,
       points: 10,
       goalTimeSeconds: 100,
       finishState: 'RETIRED',
