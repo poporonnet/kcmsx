@@ -1,4 +1,4 @@
-import { MatchID, Match, MatchTeams } from '../match.js';
+import { MatchID, Match, MatchTeams } from '../model/match.js';
 import { MatchRepository } from '../service/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { readFile, writeFile } from 'node:fs/promises';

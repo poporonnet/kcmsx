@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MatchID, Match } from './match.js';
-import { TestEntryData } from '../testData/entry.js';
+import { TestEntryData } from '../../testData/entry.js';
 
 describe('正しくインスタンスを生成できる', () => {
   it('試合相手が居るとき', () => {

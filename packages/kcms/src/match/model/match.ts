@@ -1,5 +1,5 @@
-import { Entry, EntryID } from '../entry/entry.js';
-import { SnowflakeID } from '../id/main.js';
+import { Entry, EntryID } from '../../entry/entry.js';
+import { SnowflakeID } from '../../id/main.js';
 
 export type MatchID = SnowflakeID<'Match'>;
 

@@ -1,7 +1,7 @@
 import { EntryRepository } from '../../entry/repository.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { Entry } from '../../entry/entry.js';
-import { MatchID, Match, MatchResultFinalPair } from '../match.js';
+import { MatchID, Match, MatchResultFinalPair } from '../model/match.js';
 import { MatchRepository } from './repository.js';
 import { GenerateRankingService } from './generateRanking.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';

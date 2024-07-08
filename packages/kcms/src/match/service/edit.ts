@@ -1,7 +1,7 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { MatchRepository } from './repository.js';
 import { MatchDTO } from './get.js';
-import { ReconstructMatchArgs } from '../match.js';
+import { ReconstructMatchArgs } from '../model/match.js';
 
 export class EditMatchService {
   private readonly matchRepository: MatchRepository;

@@ -7,7 +7,7 @@ import { TestEntrySet } from '../../testData/entry.js';
 import { GenerateRankingService } from './generateRanking.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
-import { MatchResultFinalPair } from '../match.js';
+import { MatchResultFinalPair } from '../model/match.js';
 import { EntryID } from '../../entry/entry.js';
 
 describe('GenerateFinal1st', () => {
