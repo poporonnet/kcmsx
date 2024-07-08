@@ -79,11 +79,11 @@ export class MainMatch {
     return this.runResults;
   }
 
-  setRunResults(results: RunResult[]) {
+  appendRunResults(results: RunResult[]) {
     // 1チームが2つずつ結果を持つので、2 または 4個
     if (results.length !== 4 && results.length !== 2) {
       throw new Error('RunResult length must be 2 or 4');
     }
-    this.runResults = results;
+    this.runResults.concat(results);
   }
 }

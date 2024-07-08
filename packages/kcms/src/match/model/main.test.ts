@@ -41,13 +41,12 @@ describe('MainMatch', () => {
       // 2か4以外は足せない
       if (i == 2 || i == 4) {
         expect(() => {
-          mainMatch.setRunResults(
+          mainMatch.appendRunResults(
             [...Array(2)].map((_, i) => {
               return RunResult.new({
                 id: String(i) as RunResultID,
                 goalTimeSeconds: i * 10,
                 points: 10 + i,
-                // ToDo: Team1かTeam2のどちらかを指定する
                 teamId: i % 2 == 0 ? args.teamId1 : args.teamId2,
                 finishState: 'FINISHED',
               });
@@ -57,7 +56,7 @@ describe('MainMatch', () => {
         continue;
       }
       expect(() => {
-        mainMatch.setRunResults(
+        mainMatch.appendRunResults(
           [...Array(i)].map((_, i) => {
             return RunResult.new({
               id: String(i) as RunResultID,
@@ -92,7 +91,9 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(mainMatch.setWinnerId('2' as EntryID)).toBe(undefined);
+    expect(() => mainMatch.setWinnerId('2' as EntryID)).not.toThrow(
+      new Error('WinnerId is already set')
+    );
   });
 
   it('勝者が決まっているときは変更できない', () => {
