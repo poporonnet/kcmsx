@@ -49,7 +49,7 @@ export class RunResult {
     return this.id;
   }
 
-  public getTeamID(): EntryID {
+  public getTeamId(): EntryID {
     return this.teamID;
   }
 
@@ -64,14 +64,14 @@ export class RunResult {
   /*
    * @return {boolean} ゴールしたかどうか
    * */
-  public getIsFinished(): boolean {
+  public isFinished(): boolean {
     return this.finishState === 'FINISHED';
   }
 
   /*
    * @return {boolean} リタイア(フィニッシュ)したかどうか
    */
-  public getIsRetired(): boolean {
+  public isRetired(): boolean {
     return this.finishState === 'RETIRED';
   }
 }

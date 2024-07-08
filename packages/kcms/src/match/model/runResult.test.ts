@@ -13,11 +13,11 @@ describe('RunResult', () => {
     });
 
     expect(result.getId()).toBe('999');
-    expect(result.getTeamID()).toBe('100');
+    expect(result.getTeamId()).toBe('100');
     expect(result.getPoints()).toBe(10);
     expect(result.getGoalTimeSeconds()).toBe(100);
-    expect(result.getIsFinished()).toBe(true);
-    expect(result.getIsRetired()).toBe(false);
+    expect(result.isFinished()).toBe(true);
+    expect(result.isRetired()).toBe(false);
   });
 
   it('正しくインスタンスを生成できる(フィニッシュ時)', () => {
@@ -30,11 +30,12 @@ describe('RunResult', () => {
     });
 
     expect(result.getId()).toBe('999');
-    expect(result.getTeamID()).toBe('100');
+    expect(result.getTeamId()).toBe('100');
     expect(result.getPoints()).toBe(10);
+    // フィニッシュ(リタイア)時はゴールタイムを記録しないのでInfinityにする
     expect(result.getGoalTimeSeconds()).not.toBe(10);
     expect(result.getGoalTimeSeconds()).toBe(Infinity);
-    expect(result.getIsFinished()).toBe(false);
-    expect(result.getIsRetired()).toBe(true);
+    expect(result.isFinished()).toBe(false);
+    expect(result.isRetired()).toBe(true);
   });
 });
