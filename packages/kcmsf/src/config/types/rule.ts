@@ -16,6 +16,8 @@ type StateType = _StateType<{
   countable: number;
 }>;
 
+export type StateTypes = StateType[RuleType];
+
 /**
  * @param name ルールのキー名 e.g.`leaveBase`
  * @param label ルールの表示名 e.g.`松江エリアを出た`
@@ -61,7 +63,9 @@ type Lookup<
     : never
   : never;
 
-type Rule = (typeof ruleList)[number];
+export type Rule = (typeof ruleList)[number];
+
+export type RuleName = Rule["name"];
 
 type RuleWithInitial = Lookup<
   RuleVariant,
