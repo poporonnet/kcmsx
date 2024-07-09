@@ -40,50 +40,9 @@ export class Judge {
 
   goalLeftTeam(goalTimeSec: number | null) {
     this._setGoalTimeSecLeft(goalTimeSec);
-    this.judgeGoalPoint();
   }
 
   goalRightTeam(goalTimeSec: number | null) {
     this._setGoalTimeSecRight(goalTimeSec);
-    this.judgeGoalPoint();
-  }
-
-  private judgeGoalPoint() {
-    const goalTimeLeft = this.leftTeam.goalTimeSeconds;
-    const goalTimeRight = this.rightTeam.goalTimeSeconds;
-
-    this.leftTeam.point.state.firstGoal = false;
-    this.rightTeam.point.state.firstGoal = false;
-
-    const setFirstGoalLeft = () => {
-      this.leftTeam.point.state.firstGoal = true;
-      this.rightTeam.point.state.firstGoal = false;
-    };
-    const setFirstGoalRight = () => {
-      this.leftTeam.point.state.firstGoal = false;
-      this.rightTeam.point.state.firstGoal = true;
-    };
-
-    if (goalTimeLeft != null && goalTimeRight == null) {
-      setFirstGoalLeft();
-      return;
-    }
-    if (goalTimeLeft == null && goalTimeRight != null) {
-      setFirstGoalRight();
-      return;
-    }
-
-    if (goalTimeLeft == null || goalTimeRight == null) {
-      return;
-    }
-
-    if (goalTimeLeft < goalTimeRight) {
-      setFirstGoalLeft();
-      return;
-    }
-    if (goalTimeRight < goalTimeLeft) {
-      setFirstGoalRight();
-      return;
-    }
   }
 }

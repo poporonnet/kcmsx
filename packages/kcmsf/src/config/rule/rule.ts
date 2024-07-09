@@ -52,6 +52,7 @@ export const ruleList = [
     initial: 0,
   },
   {
+    name: "goal",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 1 : 0),
