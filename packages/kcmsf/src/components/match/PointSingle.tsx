@@ -1,12 +1,15 @@
 import { Button, MantineColor, Text } from "@mantine/core";
 import { useState } from "react";
 
-export const PointSingle = (props: {
+interface Props {
+  initial: boolean;
   color: MantineColor;
   onChange: (active: boolean) => void;
   children: React.ReactNode;
-}) => {
-  const [active, setActive] = useState(false);
+}
+
+export const PointSingle = (props: Props) => {
+  const [active, setActive] = useState(props.initial);
 
   return (
     <Button
