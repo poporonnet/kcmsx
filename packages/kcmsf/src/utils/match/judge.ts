@@ -3,6 +3,7 @@ import {
   PointState,
   PremiseState,
 } from "../../config/types/rule";
+import { MatchInfo } from "../../pages/match";
 import { PartlyPartial } from "../../types/util";
 import { SetGoalTimeSeconds, Team } from "./team";
 
@@ -36,6 +37,10 @@ export class Judge {
 
   get rightTeam() {
     return this._rightTeam;
+  }
+
+  team(side: keyof MatchInfo["teams"]) {
+    return side === "left" ? this.leftTeam : this.rightTeam;
   }
 
   goalLeftTeam(goalTimeSec: number | null) {
