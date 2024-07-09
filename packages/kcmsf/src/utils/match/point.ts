@@ -14,6 +14,10 @@ export class Point {
     return this._state;
   }
 
+  get premiseState() {
+    return this._premiseState;
+  }
+
   public point(): number {
     return ruleList
       .map((rule): number => {
