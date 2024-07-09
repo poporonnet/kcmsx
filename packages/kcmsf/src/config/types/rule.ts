@@ -1,4 +1,5 @@
 import { MatchInfo } from "../../pages/match";
+import { Judge } from "../../utils/match/judge";
 import { ruleList } from "../rule/rule";
 
 type StateType = boolean | number;
