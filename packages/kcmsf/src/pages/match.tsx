@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
 import { MatchSubmit } from "../components/match/matchSubmit";
-import { PointControls } from "../components/match/pointControls";
+import { PointControls } from "../components/match/PointControls";
 import { config } from "../config/config";
 import { useForceReload } from "../hooks/useForceReload";
 import { Judge } from "../utils/match/judge";
