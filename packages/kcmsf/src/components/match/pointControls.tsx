@@ -11,9 +11,9 @@ import {
   IconSquareChevronRightFilled,
 } from "@tabler/icons-react";
 import { useState } from "react";
-import { lang } from "../config/lang/lang";
-import { Team } from "../utils/match/team";
-import { parseSeconds } from "../utils/time";
+import { lang } from "../../config/lang/lang";
+import { Team } from "../../utils/match/team";
+import { parseSeconds } from "../../utils/time";
 
 export const PointControls = (props: {
   color: MantineColor;
@@ -88,6 +88,7 @@ export const PointControls = (props: {
       <ControlButton
         color={props.color}
         onChange={(done) => {
+          props.team.point.state.goal = done;
           props.onGoal(done);
           props.onChange();
         }}
