@@ -1,8 +1,9 @@
-import { Premise, RuleList } from "../types/rule";
+import { RuleList } from "../types/rule";
 
 export const ruleList = [
   {
     name: "multiWalk",
+    label: "歩行型",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 2 : 0),
@@ -11,48 +12,50 @@ export const ruleList = [
   },
   {
     name: "leaveBase",
+    label: "松江エリアを出た",
     type: "single",
     point: (done: boolean) => (done ? 1 : 0),
     initial: false,
   },
   {
     name: "overMiddle",
+    label: "中間点を超えた",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 1 : 0),
-    initial: false,
   },
   {
     name: "enterDestination",
+    label: "金星エリアに入った",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 1 : 0),
-    initial: false,
   },
   {
     name: "placeBall",
+    label: "ボールを金星エリアに置いた",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 1 : 0),
-    initial: false,
   },
   {
     name: "returnBase",
+    label: "松江エリアに戻った",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 2 : 0),
-    initial: false,
   },
   {
     name: "bringBall",
+    label: "雲粒子の数",
     type: "countable",
     initial: 0,
     point: (count: number) => count,
     validate: (value: number) => 0 <= value && value <= 3,
-    initial: 0,
   },
   {
     name: "goal",
+    label: "ゴール",
     type: "single",
     initial: false,
     point: (done: boolean) => (done ? 1 : 0),

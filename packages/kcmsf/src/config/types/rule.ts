@@ -21,6 +21,7 @@ type PointRule<
   Initial extends StateType[Type],
 > = Readonly<{
   name: string;
+  label: string;
   type: Type;
   initial: Initial;
   point: (value: StateType[Type]) => number;
