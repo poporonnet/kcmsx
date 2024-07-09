@@ -5,9 +5,10 @@ type StateType = boolean | number;
 
 type PointRule<Type extends StateType, Initial extends Type> = Readonly<{
   name: string;
-  point: (value: Type) => number;
-  validate?: (value: Type) => boolean;
-  initial?: Initial;
+  initial: Initial;
+  point: (value: StateType[Type]) => number;
+  validate?: (value: StateType[Type]) => boolean;
+  premise?: (premiseState: PremiseState) => boolean;
 }>;
 
 type _RuleVariant<Type extends StateType = StateType> = Type extends Type
@@ -63,9 +64,6 @@ export const initialPointState: InitialPointState = Object.fromEntries(
 
 export type PremiseState = {
   matchInfo: MatchInfo | null;
-  side: keyof MatchInfo["teams"] | null;
+  side: keyof MatchInfo["teams"];
+  judge: Judge;
 };
-
-type Premiser = (premiseState: PremiseState, pointState: PointState) => boolean;
-
-export type Premise = Record<RuleName, Premiser>;

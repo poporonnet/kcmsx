@@ -15,16 +15,18 @@ export class Judge {
   constructor(
     _leftPointState: PartlyPartial<PointState, keyof InitialPointState>,
     _rightPointState: PartlyPartial<PointState, keyof InitialPointState>,
-    _leftPremiseState: Omit<PremiseState, "side">,
-    _rightPremiseState: Omit<PremiseState, "side">
+    _leftPremiseState: Omit<PremiseState, "side" | "judge">,
+    _rightPremiseState: Omit<PremiseState, "side" | "judge">
   ) {
     [this._leftTeam, this._setGoalTimeSecLeft] = Team.new(_leftPointState, {
       ..._leftPremiseState,
       side: "left",
+      judge: this,
     });
     [this._rightTeam, this._setGoalTimeSecRight] = Team.new(_rightPointState, {
       ..._rightPremiseState,
       side: "right",
+      judge: this,
     });
   }
 
