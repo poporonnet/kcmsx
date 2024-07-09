@@ -1,5 +1,3 @@
-// 予選試合
-
 import { SnowflakeID } from '../../id/main.js';
 import { RunResult } from './runResult.js';
 import { EntryID } from '../../entry/entry.js';
@@ -15,6 +13,9 @@ export interface CreatePreMatchArgs {
   runResults: RunResult[];
 }
 
+/*
+ * @description 予選の試合
+ * */
 export class PreMatch {
   private readonly id: PreMatchID;
   private readonly courseIndex: number;
@@ -63,7 +64,8 @@ export class PreMatch {
 
   appendRunResults(runResults: RunResult[]) {
     // 1チーム1つずつ結果を持つので,1 or 2個
-    if (runResults.length !== 1 && runResults.length !== 2) {
+    const appendedLength = this.runResults.length + runResults.length;
+    if (appendedLength !== 1 && appendedLength !== 2) {
       throw new Error('RunResult length must be 1 or 2');
     }
     if (

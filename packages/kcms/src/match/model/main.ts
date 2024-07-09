@@ -1,5 +1,3 @@
-// 本戦試合
-
 import { SnowflakeID } from '../../id/main.js';
 import { RunResult } from './runResult.js';
 import { EntryID } from '../../entry/entry.js';
@@ -15,6 +13,9 @@ export interface CreateMainMatchArgs {
   runResults: RunResult[];
 }
 
+/*
+ * @description 本戦の試合
+ */
 export class MainMatch {
   private readonly id: MainMatchID;
   private readonly courseIndex: number;
@@ -81,7 +82,10 @@ export class MainMatch {
 
   appendRunResults(results: RunResult[]) {
     // 1チームが2つずつ結果を持つので、2 または 4個
-    if (results.length !== 4 && results.length !== 2) {
+    if (
+      results.length + this.runResults.length !== 4 &&
+      results.length + this.runResults.length !== 2
+    ) {
       throw new Error('RunResult length must be 2 or 4');
     }
     this.runResults.concat(results);

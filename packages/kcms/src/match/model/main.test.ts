@@ -36,13 +36,13 @@ describe('MainMatch', () => {
       runResults: [],
     };
 
-    for (let i = 1; i < 100; i++) {
+    for (let j = 1; j < 100; j++) {
       const mainMatch = MainMatch.new(args);
       // 2か4以外は足せない
-      if (i == 2 || i == 4) {
+      if (j == 2 || j == 4) {
         expect(() => {
           mainMatch.appendRunResults(
-            [...Array(2)].map((_, i) => {
+            [...Array(j)].map((_, i) => {
               return RunResult.new({
                 id: String(i) as RunResultID,
                 goalTimeSeconds: i * 10,
@@ -57,7 +57,7 @@ describe('MainMatch', () => {
       }
       expect(() => {
         mainMatch.appendRunResults(
-          [...Array(i)].map((_, i) => {
+          [...Array(j)].map((_, i) => {
             return RunResult.new({
               id: String(i) as RunResultID,
               goalTimeSeconds: i * 10,

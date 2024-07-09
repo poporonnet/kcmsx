@@ -54,6 +54,9 @@ export interface ReconstructMatchArgs {
   results?: MatchResultPair | MatchResultFinalPair;
 }
 
+/*
+ * @deprecated
+ */
 export class Match {
   // 試合ID
   private readonly id: MatchID;
