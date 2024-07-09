@@ -3,40 +3,47 @@ import {
   IconSquareChevronLeftFilled,
   IconSquareChevronRightFilled,
 } from "@tabler/icons-react";
-import { useState } from "react";
-import { lang } from "../../config/lang/lang";
-import { Team } from "../../utils/match/team";
+import { useCallback, useState } from "react";
 
-export const PointCountable = (props: {
+interface Props {
+  initial: number;
   color: MantineColor;
-  team: Team;
-  onChange: () => void;
-}) => {
-  const [minBallCount, maxBallCount] = [0, 3] as const;
-  const [ballCount, setBallCount] = useState(0);
-  const decrement = () => {
-    if (ballCount == minBallCount) return;
-    setBallCount((current) => current - 1);
-    props.team.point.state.bringBall = ballCount - 1;
-    props.onChange();
-  };
-  const increment = () => {
-    if (ballCount == maxBallCount) return;
-    setBallCount((current) => current + 1);
-    props.team.point.state.bringBall = ballCount + 1;
-    props.onChange();
-  };
+  onChange: (count: number) => void;
+  validate: (count: number) => boolean;
+  children: React.ReactNode;
+}
+
+export const PointCountable = (props: Props) => {
+  const [count, setCount] = useState(props.initial);
+  const decrementable = props.validate(count - 1);
+  const incrementable = props.validate(count + 1);
+
+  const decrement = useCallback(() => {
+    if (!decrementable) return; // これ以上減らせない
+
+    const nextCount = count - 1;
+    setCount(nextCount);
+    props.onChange(nextCount);
+  }, [count, setCount, props.validate, props.onChange]);
+  const increment = useCallback(() => {
+    if (!incrementable) return; // これ以上増やせない
+
+    const nextCount = count + 1;
+    setCount(nextCount);
+    props.onChange(nextCount);
+  }, [count, setCount, props.validate, props.onChange]);
+
   return (
     <Group>
       <Text size="1.2rem" c={props.color} style={{ flexGrow: 1 }}>
-        {lang.match.numberOfBall}:
+        {props.children}:
       </Text>
       <ActionIcon
         size="xl"
         variant="transparent"
         onClick={decrement}
-        c={ballCount > minBallCount ? props.color : undefined}
-        disabled={ballCount == minBallCount}
+        c={decrementable ? props.color : undefined}
+        disabled={!decrementable}
         bg="white"
       >
         <IconSquareChevronLeftFilled
@@ -44,14 +51,14 @@ export const PointCountable = (props: {
         />
       </ActionIcon>
       <Text w="auto" size="xl" style={{ flexGrow: 1 }}>
-        {ballCount}
+        {count}
       </Text>
       <ActionIcon
         size="xl"
         variant="transparent"
         onClick={increment}
-        c={ballCount < maxBallCount ? props.color : undefined}
-        disabled={ballCount == maxBallCount}
+        c={incrementable ? props.color : undefined}
+        disabled={!incrementable}
         bg="white"
       >
         <IconSquareChevronRightFilled
