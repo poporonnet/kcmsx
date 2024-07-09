@@ -70,8 +70,8 @@ export const ruleList = [
         premiseState.side === "left" ? "right" : "left"
       ).goalTimeSeconds;
 
-      if (!selfTime) return false;
-      if (!otherTime) return true;
+      if (selfTime == null) return false;
+      if (otherTime == null) return true;
       return selfTime < otherTime;
     },
   },
