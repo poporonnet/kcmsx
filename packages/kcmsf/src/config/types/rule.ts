@@ -16,6 +16,15 @@ type StateType = _StateType<{
   countable: number;
 }>;
 
+/**
+ * @param name ルールのキー名 e.g.`leaveBase`
+ * @param label ルールの表示名 e.g.`松江エリアを出た`
+ * @param type ルールのタイプ cf.{@link RuleType}
+ * @param initial ルールの初期状態
+ * @param point 得点を計算する関数, 引数は現在の状態
+ * @param validate 得点をバリデーションする関数, 引数は対象とする状態
+ * @param premise ルールの前提条件の関数, この関数が`false`を返すと加点されない
+ */
 type PointRule<
   Type extends RuleType,
   Initial extends StateType[Type],
