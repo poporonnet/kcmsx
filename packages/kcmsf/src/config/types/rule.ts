@@ -2,18 +2,34 @@ import { MatchInfo } from "../../pages/match";
 import { Judge } from "../../utils/match/judge";
 import { ruleList } from "../rule/rule";
 
-type StateType = boolean | number;
+/**
+ * ルールの種別
+ * - `single`: 状態が真理値のみを持つもの e.g.`ゴールしたか否か`
+ * - `count`: 状態が整数値を持つもの e.g.`持ち帰ったボールの個数`
+ */
+type RuleType = "single" | "countable";
 
-type PointRule<Type extends StateType, Initial extends Type> = Readonly<{
+type _StateType<T extends Record<RuleType, any>> = T;
+
+type StateType = _StateType<{
+  single: boolean;
+  countable: number;
+}>;
+
+type PointRule<
+  Type extends RuleType,
+  Initial extends StateType[Type],
+> = Readonly<{
   name: string;
+  type: Type;
   initial: Initial;
   point: (value: StateType[Type]) => number;
   validate?: (value: StateType[Type]) => boolean;
   premise?: (premiseState: PremiseState) => boolean;
 }>;
 
-type _RuleVariant<Type extends StateType = StateType> = Type extends Type
-  ? PointRule<Type, Type>
+type _RuleVariant<Type extends RuleType = RuleType> = Type extends Type
+  ? PointRule<Type, StateType[Type]>
   : never;
 
 type RuleVariant = _RuleVariant;
@@ -35,9 +51,12 @@ type Lookup<
 
 type Rule = (typeof ruleList)[number];
 
-type RuleName = Rule["name"];
-
-type RuleWithInitial = Lookup<RuleVariant, Rule, "initial", StateType>;
+type RuleWithInitial = Lookup<
+  RuleVariant,
+  Rule,
+  "initial",
+  StateType[RuleType]
+>;
 
 export type InitialPointState = {
   [I in RuleWithInitial as I["name"]]: I extends { name: I["name"] }
@@ -51,7 +70,7 @@ const isRuleWithInitial = (r: RuleVariant): r is RuleWithInitial =>
 type _PointState = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [R in Rule as R["name"]]: R extends PointRule<infer Type, infer _Initial>
-    ? Type
+    ? StateType[Type]
     : never;
 };
 
