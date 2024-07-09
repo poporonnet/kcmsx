@@ -9,6 +9,7 @@ export const ruleList = [
     point: (done: boolean) => (done ? 2 : 0),
     premise: (premiseState) =>
       premiseState.matchInfo?.teams[premiseState.side].isMultiWalk ?? true,
+    visible: (_) => false,
   },
   {
     name: "leaveBase",

@@ -24,6 +24,7 @@ type StateType = _StateType<{
  * @param point 得点を計算する関数, 引数は現在の状態
  * @param validate 得点をバリデーションする関数, 引数は対象とする状態
  * @param premise ルールの前提条件の関数, この関数が`false`を返すと加点されない
+ * @param visible 試合ページでの表示を決める関数, この関数が`false`を返すと表示されない
  */
 type PointRule<
   Type extends RuleType,
@@ -36,6 +37,7 @@ type PointRule<
   point: (value: StateType[Type]) => number;
   validate?: (value: StateType[Type]) => boolean;
   premise?: (premiseState: PremiseState) => boolean;
+  visible?: (premiseState: PremiseState) => boolean;
 }>;
 
 type _RuleVariant<Type extends RuleType = RuleType> = Type extends Type
