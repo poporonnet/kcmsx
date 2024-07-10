@@ -103,3 +103,39 @@ export type PremiseState = {
   side: keyof MatchInfo["teams"];
   judge: Judge;
 };
+
+export type ValidRuleList<R extends RuleList> = UniqueArray<R, "name">;
+
+type UniqueArray<
+  R extends Record<Key, string>[],
+  Key extends keyof R[number],
+> = Key extends string
+  ? IsUnique<Pickup<R, Key>, `\`${Key}\` is duplicated`> extends infer U
+    ? U extends true
+      ? R
+      : U
+    : never
+  : never;
+
+type Pickup<
+  R extends Record<Key, string>[],
+  Key extends keyof R[number],
+  A extends string[] = [],
+> = R extends [infer R1, ...infer RL]
+  ? R1 extends Record<Key, string>
+    ? RL extends Record<Key, string>[]
+      ? Pickup<RL, Key, [...A, R1[Key]]>
+      : never
+    : never
+  : A;
+
+type IsUnique<
+  Array extends string[],
+  ErrorMessage extends string,
+> = Array extends [infer L, ...infer Rest]
+  ? Rest extends string[]
+    ? L extends Rest[number]
+      ? `${ErrorMessage}: \`${L}\``
+      : IsUnique<Rest, ErrorMessage>
+    : never
+  : true;

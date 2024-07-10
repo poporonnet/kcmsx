@@ -1,6 +1,6 @@
-import { RuleList } from "../types/rule";
+import { RuleList, ValidRuleList } from "../types/rule";
 
-export const ruleList = [
+const _ruleList = [
   {
     name: "multiWalk",
     label: "歩行型",
@@ -76,3 +76,5 @@ export const ruleList = [
     },
   },
 ] as const satisfies RuleList;
+
+export const ruleList: ValidRuleList<typeof _ruleList> = _ruleList;
