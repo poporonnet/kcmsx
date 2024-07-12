@@ -9,6 +9,8 @@ const _ruleList = [
     point: (done: boolean) => (done ? 2 : 0),
     premise: (premiseState) =>
       premiseState.matchInfo?.teams[premiseState.side].isMultiWalk ?? true,
+    // 引数 `_` を書かなくても代入できてしまうが、引数が必要なため
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     visible: (_) => false,
   },
   {

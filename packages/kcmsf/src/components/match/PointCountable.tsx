@@ -17,21 +17,22 @@ export const PointCountable = (props: Props) => {
   const [count, setCount] = useState(props.initial);
   const decrementable = props.validate(count - 1);
   const incrementable = props.validate(count + 1);
+  const { onChange } = props;
 
   const decrement = useCallback(() => {
     if (!decrementable) return; // これ以上減らせない
 
     const nextCount = count - 1;
     setCount(nextCount);
-    props.onChange(nextCount);
-  }, [count, setCount, props.validate, props.onChange]);
+    onChange(nextCount);
+  }, [count, decrementable, onChange]);
   const increment = useCallback(() => {
     if (!incrementable) return; // これ以上増やせない
 
     const nextCount = count + 1;
     setCount(nextCount);
-    props.onChange(nextCount);
-  }, [count, setCount, props.validate, props.onChange]);
+    onChange(nextCount);
+  }, [count, incrementable, onChange]);
 
   return (
     <Group>

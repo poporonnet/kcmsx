@@ -12,7 +12,7 @@ type RuleType = "single" | "countable";
 /**
  * @description {@link StateType}のキーを{@link RuleType}に制限するための型
  */
-type _StateType<T extends Record<RuleType, any>> = T;
+type _StateType<T extends Record<RuleType, unknown>> = T;
 
 /**
  * @description {@link RuleType}を対応するルールの状態の型にマップする型
