@@ -49,14 +49,6 @@ const _ruleList = [
     point: (done: boolean) => (done ? 2 : 0),
   },
   {
-    name: "bringBall",
-    label: "雲粒子の数",
-    type: "countable",
-    initial: 0,
-    point: (count: number) => count,
-    validate: (value: number) => 0 <= value && value <= 3,
-  },
-  {
     name: "goal",
     label: "ゴール",
     type: "single",
@@ -76,6 +68,14 @@ const _ruleList = [
       if (otherTime == null) return true;
       return selfTime < otherTime;
     },
+  },
+  {
+    name: "bringBall",
+    label: "雲粒子の数",
+    type: "countable",
+    initial: 0,
+    point: (count: number) => count,
+    validate: (value: number) => 0 <= value && value <= 3,
   },
 ] as const satisfies RuleList;
 
