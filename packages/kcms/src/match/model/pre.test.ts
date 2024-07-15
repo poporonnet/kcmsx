@@ -46,7 +46,6 @@ describe('PreMatch', () => {
   });
 
   it('走行結果は0,1,2個になる', () => {
-    for (let i = 0; i < 100; i++) {
       const args = {
         id: '1' as PreMatchID,
         courseIndex: 1,
@@ -57,11 +56,11 @@ describe('PreMatch', () => {
       };
 
       for (let i = 1; i < 100; i++) {
-        const mainMatch = PreMatch.new(args);
-        // 0,1,2以外は足せない
-        if (i == 0 || i == 1 || i == 2) {
+        const preMatch = PreMatch.new(args);
+        // 1,2以外は足せない
+        if (i == 1 || i == 2) {
           expect(() => {
-            mainMatch.appendRunResults(
+            preMatch.appendRunResults(
               [...Array(i)].map((_, i) => {
                 return RunResult.new({
                   id: String(i) as RunResultID,
@@ -76,7 +75,7 @@ describe('PreMatch', () => {
           continue;
         }
         expect(() => {
-          mainMatch.appendRunResults(
+          preMatch.appendRunResults(
             [...Array(i)].map((_, i) => {
               return RunResult.new({
                 id: String(i) as RunResultID,
@@ -90,7 +89,7 @@ describe('PreMatch', () => {
         }).toThrow(new Error('RunResult length must be 1 or 2'));
       }
     }
-  });
+  );
 
   it('走行結果はチーム1またはチーム2のもの', () => {
     const args = {
