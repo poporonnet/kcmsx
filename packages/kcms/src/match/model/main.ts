@@ -83,10 +83,7 @@ export class MainMatch {
   appendRunResults(results: RunResult[]) {
     // 1チームが2つずつ結果を持つので、2 または 4個
     const appendedLength = this.runResults.length + results.length;
-    if (
-      appendedLength !== 4 &&
-      appendedLength !== 2
-    ) {
+    if (appendedLength !== 4 && appendedLength !== 2) {
       throw new Error('RunResult length must be 2 or 4');
     }
     this.runResults.concat(results);

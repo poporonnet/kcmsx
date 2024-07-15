@@ -46,34 +46,19 @@ describe('PreMatch', () => {
   });
 
   it('走行結果は0,1,2個になる', () => {
-      const args = {
-        id: '1' as PreMatchID,
-        courseIndex: 1,
-        matchIndex: 1,
-        teamId1: '2' as EntryID,
-        teamId2: '3' as EntryID,
-        runResults: [],
-      };
+    const args = {
+      id: '1' as PreMatchID,
+      courseIndex: 1,
+      matchIndex: 1,
+      teamId1: '2' as EntryID,
+      teamId2: '3' as EntryID,
+      runResults: [],
+    };
 
-      for (let i = 1; i < 100; i++) {
-        const preMatch = PreMatch.new(args);
-        // 1,2以外は足せない
-        if (i == 1 || i == 2) {
-          expect(() => {
-            preMatch.appendRunResults(
-              [...Array(i)].map((_, i) => {
-                return RunResult.new({
-                  id: String(i) as RunResultID,
-                  goalTimeSeconds: i * 10,
-                  points: 10 + i,
-                  teamId: i % 2 == 0 ? args.teamId1 : args.teamId2,
-                  finishState: 'FINISHED',
-                });
-              })
-            );
-          }).not.toThrow(new Error('RunResult length must be 1 or 2'));
-          continue;
-        }
+    for (let i = 1; i < 100; i++) {
+      const preMatch = PreMatch.new(args);
+      // 1,2以外は足せない
+      if (i == 1 || i == 2) {
         expect(() => {
           preMatch.appendRunResults(
             [...Array(i)].map((_, i) => {
@@ -86,10 +71,24 @@ describe('PreMatch', () => {
               });
             })
           );
-        }).toThrow(new Error('RunResult length must be 1 or 2'));
+        }).not.toThrow(new Error('RunResult length must be 1 or 2'));
+        continue;
       }
+      expect(() => {
+        preMatch.appendRunResults(
+          [...Array(i)].map((_, i) => {
+            return RunResult.new({
+              id: String(i) as RunResultID,
+              goalTimeSeconds: i * 10,
+              points: 10 + i,
+              teamId: i % 2 == 0 ? args.teamId1 : args.teamId2,
+              finishState: 'FINISHED',
+            });
+          })
+        );
+      }).toThrow(new Error('RunResult length must be 1 or 2'));
     }
-  );
+  });
 
   it('走行結果はチーム1またはチーム2のもの', () => {
     const args = {
