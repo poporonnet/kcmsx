@@ -56,7 +56,7 @@ export class GeneratePrimaryMatchService {
         const gap = Math.floor(courseLength / 2);
         const opponentIndex = k + gap >= courseLength ? k + gap - courseLength : k + gap;
 
-        const id = this.idGenerator.generate<MatchID>();
+        const id = this.idGenerator.generate<Match>();
         if (Result.isErr(id)) {
           return Result.err(id[1]);
         }

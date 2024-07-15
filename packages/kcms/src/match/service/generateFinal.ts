@@ -48,7 +48,7 @@ export class GenerateFinalMatchService {
 
     const matches: Match[] = [];
     for (const v of elementaryTournament) {
-      const id = this.idGenerator.generate<MatchID>();
+      const id = this.idGenerator.generate<Match>();
       if (Result.isErr(id)) {
         return Result.err(id[1]);
       }
@@ -75,7 +75,7 @@ export class GenerateFinalMatchService {
     );
     const matches: Match[] = [];
     for (const v of openTournament) {
-      const id = this.idGenerator.generate<MatchID>();
+      const id = this.idGenerator.generate<Match>();
       if (Result.isErr(id)) {
         return Result.err(id[1]);
       }
@@ -185,7 +185,7 @@ export class GenerateFinalMatchService {
     // ペアから試合を作る
     const newMatches: Match[] = [];
     for (const v of teamPair) {
-      const id = this.idGenerator.generate<MatchID>();
+      const id = this.idGenerator.generate<Match>();
       if (Result.isErr(id)) {
         return Result.err(id[1]);
       }
