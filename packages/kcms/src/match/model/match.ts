@@ -1,40 +1,8 @@
 import { Entry, EntryID } from '../../entry/entry.js';
 import { SnowflakeID } from '../../id/main.js';
 
-export type MatchID = SnowflakeID<'Match'>;
+export type MatchID = SnowflakeID<Match>;
 
-/*
-
-## 試合の仕様:
-### 予選
-- タイムトライアル
-- 2試合(左/右)必ず行う
-    - 2回の試合は(同じ人が)連続して行う
-- 左右の合計得点の合計とゴールタイムの合計を記録する
-- 得点の上位8チーム(小学生部門: 最大16人, オープン部門: 8人)が本選に出場
-- 得点が同点のチームが複数ある場合はゴールタイムで順位を決定する
-    - ゴールタイムでも決まらない場合はじゃんけんで決定する
-- コートは3コート
-- 部門は混合で行う(同じコートで小学生部門と部門が同時に試合を行う)
-- チームのコートへの配分はエントリー順に行う
-
-### 本選
-- トーナメント形式で行う
-- 2試合行い、合計得点が高いほうが勝ち
-    - 同点の場合はじゃんけんで決定
-- コートは1コート
-- 部門ごとにトーナメントを組む
-- 対戦相手の決定は順位順に行う
-
-例: 本選トーナメント
-※数字は順位
-
-                  (略)
- _|_   _|_   _|_   _|_
-|   | |   | |   | |   |
-1   2 3   4 5   6 7   8
-
-*/
 // 対戦するチームのペア L左/R右
 export type MatchTeams = {
   left: Entry | undefined;
@@ -86,6 +54,9 @@ export interface ReconstructMatchArgs {
   results?: MatchResultPair | MatchResultFinalPair;
 }
 
+/*
+ * @deprecated
+ */
 export class Match {
   // 試合ID
   private readonly id: MatchID;
