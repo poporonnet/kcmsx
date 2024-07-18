@@ -1,8 +1,4 @@
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { Entry } from "../pages/entry.tsx";
 import { EntryList } from "../pages/entryList.tsx";
 import { Home } from "../pages/home.tsx";
@@ -12,19 +8,38 @@ import { Ranking } from "../pages/ranking.tsx";
 import { Result } from "../pages/result.tsx";
 import { Layout } from "./layout.tsx";
 
-export const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
-      <Route index element={<Home />} />
-      <Route path="/entrylist" element={<EntryList />} />
-      <Route path="/ranking" element={<Ranking />} />
-      <Route path="/entry" element={<Entry />} />
-      <Route path="/matchlist" element={<MatchList />} />
-      <Route path="/match" element={<Match />} />
-      <Route path="/result" element={<Result />} />
-    </Route>
-  ),
+export const router = createBrowserRouter([
   {
-    basename: import.meta.env.BASE_URL,
-  }
-);
+    path: "/",
+    element: <Home />,
+  },
+  {
+    path: "/entrylist",
+    element: <EntryList />,
+  },
+  {
+    path: "/entry",
+    element: <Entry />,
+  },
+  {
+    path: "/match",
+    element: <Match />,
+  },
+  {
+    path: "/matchlist",
+    element: <MatchList />,
+  },
+  {
+    path: "/ranking",
+    element: <Ranking />,
+  },
+  {
+    path: "/result",
+    element: <Result />,
+  },
+  {
+    path: "/layout",
+    element: <Layout />,
+  },
+]);
+
