@@ -115,13 +115,13 @@ export type PremiseState = {
 };
 
 /**
- * @description {@link RuleList}が有効か判定する型  
+ * @description {@link RuleList}が有効か判定する型
  * {@link PointRule}の`name`属性が重複していたらコンパイルに失敗する
  */
 export type ValidRuleList<R extends RuleList> = UniqueArray<R, "name">;
 
 /**
- * @description リテラル配列`R`内のレコードの`Key`属性がユニークか検査する型  
+ * @description リテラル配列`R`内のレコードの`Key`属性がユニークか検査する型
  * ユニークなら`R`自体, 重複していたらその旨のエラーメッセージの文字列リテラル型になる
  */
 type UniqueArray<
@@ -151,7 +151,7 @@ type Pickup<
   : A;
 
 /**
- * @description 文字列リテラル配列`R`の要素がユニークか検査する型  
+ * @description 文字列リテラル配列`R`の要素がユニークか検査する型
  * ユニークなら`true`, 重複していたら`{ErrorMessage}: {重複している要素}`という文字列リテラル型になる
  */
 type IsUnique<
