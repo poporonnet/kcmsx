@@ -1,18 +1,35 @@
 import { Box, Button, Group, Table, Text, rem } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
+import { notifications } from "@mantine/notifications";
 import {
   IconFileTypeCsv,
   IconSend,
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { Entry as entryType } from "../types/entry";
+
+const Errormeg = (errorNum: number) => {
+  const message: string[] = [
+    "チーム名が短すぎます",
+    "メンバーの名前が短すぎます",
+    "部門が不正です.",
+  ];
+  notifications.show({
+    title: "登録失敗",
+    message: "登録に失敗しました." + message[errorNum],
+    color: "red",
+  });
+};
+
 export const BulkEntry = () => {
-  const dropzoneRef = useRef<HTMLDivElement>(null);
   const [csvData, setCsvData] = useState<string[][]>([]);
+  const [error, setError] = useState<boolean>(true);
   useEffect(() => {
-    dropzoneRef.current?.focus();
-  }, []);
+    console.log("check");
+    checkData(csvData);
+  }),[csvData];
   const handleDrop = (files: File[]) => {
     const file = files[0];
     if (file) {
@@ -28,6 +45,43 @@ export const BulkEntry = () => {
   const parseCSV = (text: string): string[][] => {
     const rows = text.split("\n").map((row) => row.split(","));
     return rows;
+  };
+  const checkData = (data: string[][]) => {
+    data.map((row, i) => {
+      if (i === 0) return;
+      if (row[0] === "") {
+        Errormeg(0);
+        setError(false);
+      }
+      if (row[1].length < 2) Errormeg(1);
+      if (row[2].length < 2 && row[2].length != 0) Errormeg(1);
+      if (
+        row[4].split("\r")[0] !== "Elementary" &&
+        row[4].split("\r")[0] !== "Open"
+      ) {
+        Errormeg(2);
+        setError(false);
+      }
+    });
+    return "";
+  };
+  const sendData = () => {
+    const data = csvData.map((row) => {
+      const entry: entryType = {
+        teamName: row[0],
+        members: [row[1], row[2]],
+        isMultiWalk: row[3] === "true",
+        category: row[4] as "Elementary" | "Open",
+      };
+      return entry;
+    });
+    const json = JSON.stringify(data);
+    const obj = JSON.parse(json);
+    console.log("send");
+    return obj;
+  };
+  const clear = () => {
+    setCsvData([]);
   };
   const showDetails = (data: string[][]) => {
     return (
@@ -64,13 +118,27 @@ export const BulkEntry = () => {
       <h1>一括エントリー</h1>
       {csvData.length > 0 ? (
         <>
-          <h2>内容</h2>
+          <p>この内容で登録します</p>
           <Box>{showDetails(csvData)}</Box>
+          {/* 色を変える */}
+          <Button m={"2rem"} onClick={clear} variant="default">
+            別のCSVを登録する
+          </Button>
+          {error ? (
+            <Button m={"2rem"} onClick={sendData}>
+              <IconSend stroke={2} />
+              登録
+            </Button>
+          ) : (
+            <Button m={"2rem"} onClick={sendData} disabled>
+              <IconSend stroke={2} />
+              登録
+            </Button>
+          )}
         </>
       ) : (
         <Box maw={620} mx={"auto"} bd="3px solid gray.6" p={rem(10)}>
           <Dropzone
-            ref={dropzoneRef}
             onDrop={handleDrop}
             onReject={() => (
               <Text c={"red"} fw={700}>
@@ -129,11 +197,6 @@ export const BulkEntry = () => {
           </Dropzone>
         </Box>
       )}
-
-      <Button m={"2rem"}>
-        <IconSend stroke={2} />
-        登録
-      </Button>
     </>
   );
 };
