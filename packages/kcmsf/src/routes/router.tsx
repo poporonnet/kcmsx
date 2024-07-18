@@ -11,35 +11,36 @@ import { Layout } from "./layout.tsx";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/entrylist",
-    element: <EntryList />,
-  },
-  {
-    path: "/entry",
-    element: <Entry />,
-  },
-  {
-    path: "/match",
-    element: <Match />,
-  },
-  {
-    path: "/matchlist",
-    element: <MatchList />,
-  },
-  {
-    path: "/ranking",
-    element: <Ranking />,
-  },
-  {
-    path: "/result",
-    element: <Result />,
-  },
-  {
-    path: "/layout",
     element: <Layout />,
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "entrylist",
+        element: <EntryList />,
+      },
+      {
+        path: "entry",
+        element: <Entry />,
+      },
+      {
+        path: "match",
+        element: <Match />,
+      },
+      {
+        path: "matchlist",
+        element: <MatchList />,
+      },
+      {
+        path: "ranking",
+        element: <Ranking />,
+      },
+      {
+        path: "result",
+        element: <Result />,
+      },
+    ],
   },
 ]);
-
