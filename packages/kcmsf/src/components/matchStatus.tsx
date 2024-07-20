@@ -1,11 +1,11 @@
 import { Button, MantineColor, Text } from "@mantine/core";
-import { TeamInfo } from "../pages/match";
+import { MatchInfo, TeamInfo } from "config/types/derived/matchInfo";
 import { LinkToMatch } from "./linkToMatch";
 type StatusButtonProps = {
   id: string;
   teams: { right: TeamInfo; left: TeamInfo };
   status: "now" | "future" | "end";
-  matchType: "primary" | "final";
+  matchType: MatchInfo["matchType"];
 };
 
 export const MatchStatusButton = (props: StatusButtonProps) => {

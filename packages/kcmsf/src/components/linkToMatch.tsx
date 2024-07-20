@@ -1,5 +1,5 @@
 import { Link, LinkProps } from "react-router-dom";
-import { MatchInfo } from "../pages/match";
+import { MatchInfo } from "config/types/derived/matchInfo";
 
 export const LinkToMatch = (
   props: { info: MatchInfo } & Omit<LinkProps, "to" | "state">

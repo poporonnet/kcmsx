@@ -1,5 +1,6 @@
 import { MantineColor } from "@mantine/core";
-import { Rule, StateTypes } from "../../config/types/rule";
+import { Rule } from "config/types/derived/rule";
+import { StateTypes } from "config/types/rule";
 import { Team } from "../../utils/match/team";
 import { PointCountable } from "./PointCountable";
 import { PointSingle } from "./PointSingle";

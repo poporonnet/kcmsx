@@ -1,5 +1,5 @@
 import { Flex, MantineColor } from "@mantine/core";
-import { ruleList } from "../../config/rule/rule";
+import { config } from "config/config";
 import { Team } from "../../utils/match/team";
 import { parseSeconds } from "../../utils/time";
 import { PointControl } from "./PointControl";
@@ -12,10 +12,10 @@ export const PointControls = (props: {
 }) => {
   return (
     <Flex direction="column" gap="xs">
-      {ruleList.map(
+      {config.rules.map(
         (rule) =>
           !(
-            "visible" in rule && !rule.visible(props.team.point.premiseState)
+            "visible" in rule && !rule.visible?.(props.team.point.premiseState)
           ) && ( // このルールが非表示でない場合のみ
             <PointControl
               color={props.color}
@@ -26,6 +26,7 @@ export const PointControls = (props: {
                 if (rule.name === "goal" && typeof value === "boolean")
                   props.onGoal(value);
               }}
+              key={`${props.team.point.premiseState.side}-${rule.name}`}
             >
               {rule.label}
               {rule.name === "goal" && props.team.goalTimeSeconds != null
