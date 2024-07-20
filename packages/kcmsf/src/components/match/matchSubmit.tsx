@@ -1,7 +1,7 @@
 import { Button, Flex, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { IconSend2 } from "@tabler/icons-react";
-import { MatchInfo } from "../../pages/match";
+import { MatchInfo } from "config/types/derived/matchInfo";
 
 type TeamResult = {
   id: string;
