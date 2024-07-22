@@ -97,16 +97,15 @@ export const config = createConfig(
     },
     goal: {
       scorable: (state) => {
-        if (state.matchInfo?.matchType !== "main") return false;
+        if (state.matchInfo?.matchType !== "main") return false; // 本戦以外では先ゴールに得点を与えない
 
-        const selfTime =
-          state.matchState[state.side].getGoalTimeSeconds();
+        const selfTime = state.matchState[state.side].getGoalTimeSeconds(); // 自分のゴールタイム
         const otherTime =
-          state.matchState[against(state.side)].getGoalTimeSeconds(); // 相手のゴールタイム
+          state.matchState[against(state.side)].getGoalTimeSeconds();
 
-        if (selfTime == null) return false;
-        if (otherTime == null) return true;
-        return selfTime < otherTime;
+        if (selfTime == null) return false; // 自分がゴールしていないなら先ゴールでない
+        if (otherTime == null) return true; // 自分がゴールしていて、相手がゴールしていないなら先ゴール
+        return selfTime < otherTime; // どちらもゴールしていて、自分のゴールタイムのほうが小さければ先ゴール
       },
     },
   }
