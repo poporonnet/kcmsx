@@ -7,13 +7,11 @@ export const config = createConfig(
     robotTypes: ["wheel", "leg"],
     departments: [
       {
-        id: 0,
         type: "elementary",
         name: "小学生部門",
         robotTypes: ["wheel", "leg"],
       },
       {
-        id: 1,
         type: "open",
         name: "オープン部門",
         robotTypes: ["leg"],

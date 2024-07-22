@@ -2,7 +2,6 @@
  * @description 1つの部門設定の型
  */
 export type DepartmentConfig<RobotTypes extends string[]> = {
-  id: number;
   type: string;
   name: string;
   robotTypes: RobotTypes[number][];

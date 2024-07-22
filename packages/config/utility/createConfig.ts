@@ -61,7 +61,7 @@ export const createConfig = <
   department: Object.fromEntries(
     baseConfig.departments.map<
       [Departments[number]["type"], Omit<DepartmentConfig<RobotTypes>, "type">]
-    >(({ type, id, name, robotTypes }) => [type, { id, name, robotTypes }])
+    >(({ type, name, robotTypes }) => [type, { name, robotTypes }])
   ) as DerivedDepartment<RobotTypes, Departments>,
   match: Object.fromEntries(
     baseConfig.matches.map<
