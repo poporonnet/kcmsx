@@ -42,6 +42,9 @@ export type Rule<
   Initial extends StateType[Type],
 > = RuleBase<Type, Initial> & RuleCondition;
 
+/**
+ * @description 1つのルールの, ルールの状態に依存する部分の型
+ */
 export type RuleBase<
   Type extends RuleType,
   Initial extends StateType[Type],
@@ -54,6 +57,9 @@ export type RuleBase<
   validate?: (value: StateType[Type]) => boolean;
 }>;
 
+/**
+ * @description 1つのルールの, ルールの状態に依存する部分の型
+ */
 export type RuleCondition<
   MatchType extends string = string,
   DepartmentType extends string = string,
@@ -87,10 +93,16 @@ type RuleVariant = _RuleVariant<RuleType>;
  */
 export type RuleList = RuleVariant[];
 
+/**
+ * @description 指定した{@link RuleType}に対応する{@link RuleBase}のユニオン
+ */
 type _RuleBaseVariant<Type extends RuleType> = Type extends Type
   ? RuleBase<Type, StateType[Type]>
   : never;
 
+/**
+ * @description ありうる{@link RuleBase}すべてのユニオン
+ */
 type RuleBaseVariant = _RuleBaseVariant<RuleType>;
 
 export type RuleBaseList = RuleBaseVariant[];

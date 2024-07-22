@@ -3,6 +3,9 @@ import { DepartmentConfig } from "./departmentConfig";
 import { MatchConfig } from "./matchConfig";
 import { RuleBaseList } from "./rule";
 
+/**
+ * @description リテラル型から導出される実際のRuleListの型
+ */
 export type DerivedRuleList<
   RuleBases extends RuleBaseList,
   RobotTypes extends string[],
