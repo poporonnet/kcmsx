@@ -1,21 +1,7 @@
 import { DerivedMatchInfo, Side } from "./matchInfo";
 
-export type DerivedStaticPremiseState<
-  MatchType extends string,
-  DepartmentType extends string,
-> = {
-  matchInfo?: DerivedMatchInfo<MatchType, DepartmentType>;
-  side: Side;
-};
-
-type DerivedDynamicPremiseState<
-  PointState extends Record<string, unknown> = Record<string, unknown>,
-> = {
-  matchState: MatchState<PointState>;
-};
-
 /**
- * @description 得点計算用の試合状態の型
+ * @description リテラル型から導出される得点計算用の試合状態の型
  */
 export type DerivedPremiseState<
   MatchType extends string,
@@ -24,9 +10,27 @@ export type DerivedPremiseState<
 > = DerivedStaticPremiseState<MatchType, DepartmentType> &
   DerivedDynamicPremiseState<PointState>;
 
-type MatchState<PointState extends Record<string, unknown>> = {
-  [S in Side]: {
-    getPointState: () => PointState;
-    getGoalTimeSeconds: () => number | undefined;
+/**
+ * @description リテラル型から導出される得点計算用の試合状態のうち, 試合中に変化しない部分の型
+ */
+export type DerivedStaticPremiseState<
+  MatchType extends string,
+  DepartmentType extends string,
+> = {
+  matchInfo?: DerivedMatchInfo<MatchType, DepartmentType>;
+  side: Side;
+};
+
+/**
+ * @description リテラル型から導出される得点計算用の試合状態のうち, 試合中に変化する部分の型
+ */
+type DerivedDynamicPremiseState<
+  PointState extends Record<string, unknown> = Record<string, unknown>,
+> = {
+  matchState: {
+    [S in Side]: {
+      getPointState: () => PointState;
+      getGoalTimeSeconds: () => number | undefined;
+    };
   };
 };

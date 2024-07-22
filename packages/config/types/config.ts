@@ -2,6 +2,9 @@ import { DerivedMatch, MatchConfig } from "./matchConfig";
 import { DepartmentConfig, DerivedDepartment } from "./departmentConfig";
 import { RuleBaseList, RuleList, ValidRuleList } from "./rule";
 
+/**
+ * @description `createConfig`に入力する設定の型
+ */
 export type BaseConfig<
   ContestName extends string,
   RobotTypes extends string[],
@@ -16,6 +19,9 @@ export type BaseConfig<
   rules: ValidRuleList<RuleBases>;
 };
 
+/**
+ * @description `createConfig`が出力する設定の型
+ */
 export type Config<
   ContestName extends string,
   RobotTypes extends string[],

@@ -1,13 +1,14 @@
-import { config } from "../../config";
+import { Config } from "./config";
 import { DerivedInitialPointState, DerivedPointState } from "../rule";
+import { config } from "../../config";
 
 /**
  * @description 設定されたすべてのルールのユニオン
  */
-export type Rule = (typeof config)["rules"][number];
+export type Rule = Config["rules"][number];
 
 /**
- * @description 設定されたすべてのルールの`name`のユニオン
+ * @description 設定されたすべてのルールの名前のユニオン
  */
 export type RuleName = Rule["name"];
 
