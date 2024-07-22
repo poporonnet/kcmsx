@@ -1,6 +1,6 @@
-import { PointState } from "config/types/derived/rule";
 import { MatchInfo } from "config/types/derived/matchInfo";
 import { PremiseState } from "config/types/derived/premise";
+import { PointState } from "config/types/derived/rule";
 import { SetGoalTimeSeconds, Team } from "./team";
 
 export class Judge {
@@ -15,7 +15,7 @@ export class Judge {
     _leftPremiseState: Omit<PremiseState, "side" | "matchState">,
     _rightPremiseState: Omit<PremiseState, "side" | "matchState">
   ) {
-    const matchState = {
+    const matchState: PremiseState["matchState"] = {
       left: {
         getPointState: () => this._leftTeam.point.state,
         getGoalTimeSeconds: () => this._leftTeam.goalTimeSeconds,
