@@ -35,6 +35,7 @@ export type StateTypes = StateType[RuleType];
  * @param validate 得点をバリデーションする関数, 引数は対象とする状態
  * @param scorable ルールによる点数が加算されるために必要な条件, この関数が`false`を返すと加点されない
  * @param visible 試合ページでの表示を決める関数, この関数が`false`を返すと表示されない
+ * @param changeable 状態を変更するために必要な条件, この関数が`false`を返すと状態が変更できない
  */
 export type Rule<
   Type extends RuleType,
@@ -59,6 +60,9 @@ export type RuleCondition<
   PointState extends Record<string, unknown> = Record<string, unknown>,
 > = Readonly<{
   visible?: (
+    state: DerivedPremiseState<MatchType, DepartmentType, PointState>
+  ) => boolean;
+  changeable?: (
     state: DerivedPremiseState<MatchType, DepartmentType, PointState>
   ) => boolean;
   scorable?: (

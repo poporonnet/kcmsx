@@ -5,6 +5,7 @@ interface Props {
   initial: boolean;
   color: MantineColor;
   onChange: (active: boolean) => void;
+  disabled: boolean;
   children: React.ReactNode;
 }
 
@@ -23,6 +24,7 @@ export const PointSingle = (props: Props) => {
         props.onChange(!active);
         setActive(() => !active);
       }}
+      disabled={props.disabled}
     >
       <Text size="1.2rem">{props.children}</Text>
     </Button>

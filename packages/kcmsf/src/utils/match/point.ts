@@ -22,7 +22,7 @@ export class Point {
   public point(): number {
     return config.rules
       .map((rule): number => {
-        if ("premise" in rule && !rule.premise?.(this._premiseState)) return 0;
+        if (rule.scorable && !rule.scorable(this._premiseState)) return 0;
 
         return rule.point(this.state[rule.name] as never);
       })

@@ -45,20 +45,15 @@ export const createConfig = <
       RobotTypes,
       Matches,
       Departments,
-      Conditions
+      ConditionsConfig<RobotTypes, RuleBaseList, Matches, Departments>
     >[number]
   >((ruleBase) => {
     const name: RuleBases[number]["name"] = ruleBase.name;
     const condition = conditions[name];
 
-    const premise =
-      condition && "premise" in condition ? { premise: condition.premise } : {};
-    const visible =
-      condition && "visible" in condition ? { visible: condition.visible } : {};
     return {
       ...ruleBase,
-      ...premise,
-      ...visible,
+      ...condition,
     };
   }) as ValidRuleList<
     DerivedRuleList<RuleBases, RobotTypes, Matches, Departments, Conditions>
