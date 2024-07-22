@@ -6,6 +6,7 @@ export type DerivedTeamInfo<DepartmentType> = {
 };
 
 export type Side = "left" | "right";
+export type Against<S extends Side> = Side extends S ? Side : Exclude<Side, S>;
 
 export type DerivedMatchInfo<
   MatchType extends string,

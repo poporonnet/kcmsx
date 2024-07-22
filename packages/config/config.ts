@@ -1,4 +1,5 @@
 import { createConfig } from "./utility/createConfig";
+import { against } from "./utility/against";
 
 export const config = createConfig(
   {
@@ -101,9 +102,7 @@ export const config = createConfig(
         const selfTime =
           state.matchState[state.side].getGoalTimeSeconds();
         const otherTime =
-          state.matchState[
-            state.side === "left" ? "right" : "left"
-          ].getGoalTimeSeconds();
+          state.matchState[against(state.side)].getGoalTimeSeconds(); // 相手のゴールタイム
 
         if (selfTime == null) return false;
         if (otherTime == null) return true;
