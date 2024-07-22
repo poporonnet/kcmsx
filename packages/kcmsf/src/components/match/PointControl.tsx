@@ -25,6 +25,9 @@ export const PointControl = (props: Props) => (
           props.team.point.state[props.rule.name] = active;
           props.onChange(active);
         }}
+        disabled={
+          !(props.rule.changeable?.(props.team.point.premiseState) ?? true)
+        }
       >
         {props.children}
       </PointSingle>
@@ -40,6 +43,9 @@ export const PointControl = (props: Props) => (
           props.team.point.state[props.rule.name] = count;
           props.onChange(count);
         }}
+        disabled={
+          !(props.rule.changeable?.(props.team.point.premiseState) ?? true)
+        }
       >
         {props.children}
       </PointCountable>
