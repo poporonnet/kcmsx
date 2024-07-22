@@ -96,7 +96,7 @@ export const config = createConfig(
       visible: () => false,
     },
     goal: {
-      premise: (state) => {
+      scorable: (state) => {
         if (state.matchInfo?.matchType !== "main") return false;
 
         const selfTime =
