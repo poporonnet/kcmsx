@@ -1,4 +1,5 @@
 import { DerivedPremiseState } from "./premise";
+import { UniqueRecords } from "./uniqueCollection";
 
 /**
  * @description ルールの種別のユニオン
@@ -129,49 +130,4 @@ export type DerivedPointState<TRuleBase extends RuleBaseVariant> = {
  * {@link Rule}の`name`属性が重複していたらコンパイルに失敗する
  */
 export type ValidRuleList<R extends RuleList> =
-  UniqueArray<R, "name"> extends infer U ? (R extends U ? R : U) : never;
-
-/**
- * @description リテラル配列`R`内のレコードの`Key`属性がユニークか検査する型
- * ユニークなら`R`自体, 重複していたらその旨のエラーメッセージの文字列リテラル型になる
- */
-type UniqueArray<
-  R extends Record<Key, string>[],
-  Key extends keyof R[number],
-> = Key extends string
-  ? IsUnique<Pickup<R, Key>, `\`${Key}\` is duplicated`> extends infer U
-    ? U extends true
-      ? R
-      : U
-    : never
-  : never;
-
-/**
- * @description リテラル配列`R`内のレコードの`Key`属性を取り出した文字列リテラル配列の型
- */
-type Pickup<
-  R extends Record<Key, string>[],
-  Key extends keyof R[number],
-  A extends string[] = [],
-> = R extends [infer R1, ...infer RL]
-  ? R1 extends Record<Key, string>
-    ? RL extends Record<Key, string>[]
-      ? Pickup<RL, Key, [...A, R1[Key]]>
-      : never
-    : never
-  : A;
-
-/**
- * @description 文字列リテラル配列`R`の要素がユニークか検査する型
- * ユニークなら`true`, 重複していたら`{ErrorMessage}: {重複している要素}`という文字列リテラル型になる
- */
-type IsUnique<
-  Array extends string[],
-  ErrorMessage extends string,
-> = Array extends [infer L, ...infer Rest]
-  ? Rest extends string[]
-    ? L extends Rest[number]
-      ? `${ErrorMessage}: \`${L}\``
-      : IsUnique<Rest, ErrorMessage>
-    : never
-  : true;
+  UniqueRecords<R, "name"> extends infer U ? (R extends U ? R : U) : never;
