@@ -1,6 +1,6 @@
-import { DerivedMatch, MatchConfig } from "../types/matchConfig";
+import { DerivedMatch, MatchConfig, ValidMatchConfigs } from "../types/matchConfig";
 import { BaseConfig, Config } from "../types/config";
-import { DepartmentConfig, DerivedDepartment } from "../types/departmentConfig";
+import { DepartmentConfig, DerivedDepartment, ValidDepartmentConfigs } from "../types/departmentConfig";
 import { RuleBaseList, ValidRuleList } from "../types/rule";
 import { ConditionsConfig } from "../types/conditionsConfig";
 import { DerivedRuleList } from "../types/ruleList";

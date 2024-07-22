@@ -1,6 +1,11 @@
-import { DerivedMatch, MatchConfig } from "./matchConfig";
-import { DepartmentConfig, DerivedDepartment } from "./departmentConfig";
+import { DerivedMatch, MatchConfig, ValidMatchConfigs } from "./matchConfig";
+import {
+  DepartmentConfig,
+  DerivedDepartment,
+  ValidDepartmentConfigs,
+} from "./departmentConfig";
 import { RuleBaseList, RuleList, ValidRuleList } from "./rule";
+import { ValidRobotTypes } from "./robotConfig";
 
 /**
  * @description `createConfig`に入力する設定の型
@@ -13,9 +18,9 @@ export type BaseConfig<
   RuleBases extends RuleBaseList,
 > = {
   contestName: ContestName;
-  robotTypes: RobotTypes;
-  departments: Departments;
-  matches: Matches;
+  robotTypes: ValidRobotTypes<RobotTypes>;
+  departments: ValidDepartmentConfigs<RobotTypes, Departments>;
+  matches: ValidMatchConfigs<Matches>;
   rules: ValidRuleList<RuleBases>;
 };
 
@@ -30,9 +35,9 @@ export type Config<
   Rules extends RuleList,
 > = {
   contestName: ContestName;
-  robotTypes: RobotTypes;
-  departments: Departments;
-  matches: Matches;
+  robotTypes: ValidRobotTypes<RobotTypes>;
+  departments: ValidDepartmentConfigs<RobotTypes, Departments>;
+  matches: ValidMatchConfigs<Matches>;
   rules: ValidRuleList<Rules>;
   department: DerivedDepartment<RobotTypes, Departments>;
   match: DerivedMatch<Matches>;
