@@ -15,7 +15,7 @@ importers:
         version: 1.12.0
       '@hono/zod-validator':
         specifier: ^0.2.0
-        version: 0.2.2(hono@4.5.0)(zod@3.23.8)
+        version: 0.2.2(hono@4.5.1)(zod@3.23.8)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
         version: 6.4.0
@@ -24,7 +24,7 @@ importers:
         version: 0.23.0
       hono:
         specifier: ^4.0.0
-        version: 4.5.0
+        version: 4.5.1
       typescript:
         specifier: ^5.3.2
         version: 5.5.3
@@ -1546,8 +1546,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.5.0:
-    resolution: {integrity: sha512-ZbezypZfn4odyApjCCv+Fw5OgweBqRLA/EsMyc4FUknFvBJcBIKhHy4sqmD1rWpBc/3wUlaQ6tqOPjk36R1ckg==}
+  hono@4.5.1:
+    resolution: {integrity: sha512-6q8AugoWG5wlrjdGG8OFFiqEsPlPGjODjUik48sEJeko4Tae1UsLS2vUiYHLEJx1gJvOZa4BWkQC+urwDmkEvQ==}
     engines: {node: '>=16.0.0'}
 
   html-encoding-sniffer@4.0.0:
@@ -2787,9 +2787,9 @@ snapshots:
 
   '@hono/node-server@1.12.0': {}
 
-  '@hono/zod-validator@0.2.2(hono@4.5.0)(zod@3.23.8)':
+  '@hono/zod-validator@0.2.2(hono@4.5.1)(zod@3.23.8)':
     dependencies:
-      hono: 4.5.0
+      hono: 4.5.1
       zod: 3.23.8
 
   '@humanwhocodes/module-importer@1.0.1': {}
@@ -3738,7 +3738,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.5.0: {}
+  hono@4.5.1: {}
 
   html-encoding-sniffer@4.0.0:
     dependencies:
