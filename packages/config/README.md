@@ -9,6 +9,9 @@
     - [baseConfig.matches](#baseconfigmatches)
     - [baseConfig.rules](#baseconfigrules)
   - [conditions](#conditions)
+  - [utility](#utility)
+    - [createConfig(baseConfig, conditions)](#createconfigbaseconfig-conditions-1)
+    - [against(side)](#againstside)
   - [For Developers(WIP)](#for-developerswip)
 
 kcmsx各種パッケージのための共通の設定ファイルを記述するパッケージです。
@@ -246,5 +249,24 @@ rules: [
 }
 ```
 </details>
+
+## utility
+
+`utility`ディレクトリ以下に、設定を記述する際に便利な関数群が置かれています。
+
+### createConfig(baseConfig, conditions)
+
+- `baseConfig`: `BaseConfig`
+- `conditions`: `ConditionsConfig`
+- 戻り値の型: `Config`
+
+設定を作成する関数です。詳細は上記の通りです。
+
+### against(side)
+
+- `side`: `"left" | "right"`
+- 戻り値の型: `"left" | "right"`
+
+`side`が`"left"`なら`"right"`を、`"right"`なら`"left"`を返します。
 
 ## For Developers(WIP)
