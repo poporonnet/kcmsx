@@ -1,9 +1,8 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
+import { config, MatchInfo } from "config";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
-import { config } from "config/config";
-import { MatchInfo } from "config/types/derived/matchInfo";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { useForceReload } from "../hooks/useForceReload";

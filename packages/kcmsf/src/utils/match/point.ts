@@ -1,6 +1,4 @@
-import { config } from "config/config";
-import { PremiseState } from "config/types/derived/premise";
-import { PointState } from "config/types/derived/rule";
+import { config, PointState, PremiseState } from "config";
 
 export class Point {
   private readonly _state: PointState;
