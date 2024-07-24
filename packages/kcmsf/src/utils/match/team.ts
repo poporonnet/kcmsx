@@ -1,10 +1,4 @@
-import { PremiseState } from "config";
-// import {
-// InitialPointState,
-// PointState,
-// initialPointState,
-// } from "config/types/derived/rule";
-import { PointState, initialPointState } from "config";
+import { PointState, PremiseState, initialPointState } from "config";
 import { Point } from "./point";
 
 export type SetGoalTimeSeconds = (goalTimeSec: number | undefined) => void;
