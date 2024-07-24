@@ -1,11 +1,11 @@
-import { DerivedMatch, MatchConfig, ValidMatchConfigs } from "./matchConfig";
 import {
   DepartmentConfig,
   DerivedDepartment,
   ValidDepartmentConfigs,
 } from "./departmentConfig";
-import { RuleBaseList, RuleList, ValidRuleList } from "./rule";
+import { DerivedMatch, MatchConfig, ValidMatchConfigs } from "./matchConfig";
 import { ValidRobotTypes } from "./robotConfig";
+import { RuleBaseList, RuleList, ValidRuleList } from "./rule";
 
 /**
  * @description `createConfig`に入力する設定の型

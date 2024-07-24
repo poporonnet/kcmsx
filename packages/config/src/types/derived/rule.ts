@@ -1,6 +1,6 @@
-import { Config } from "./config";
-import { DerivedInitialPointState, DerivedPointState } from "../rule";
 import { config } from "../../config";
+import { DerivedInitialPointState, DerivedPointState } from "../rule";
+import { Config } from "./config";
 
 /**
  * @description 設定されたすべてのルールのユニオン
