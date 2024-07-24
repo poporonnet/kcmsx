@@ -1,10 +1,10 @@
-import { PremiseState } from "config/types/derived/premise";
-import {
-  InitialPointState,
-  PointState,
-  initialPointState,
-} from "config/types/derived/rule";
-import { PartlyPartial } from "../../types/util";
+import { PremiseState } from "config";
+// import {
+// InitialPointState,
+// PointState,
+// initialPointState,
+// } from "config/types/derived/rule";
+import { PointState, initialPointState } from "config";
 import { Point } from "./point";
 
 export type SetGoalTimeSeconds = (goalTimeSec: number | undefined) => void;
@@ -33,7 +33,7 @@ export class Team {
   }
 
   static new(
-    _pointState: PartlyPartial<PointState, keyof InitialPointState>,
+    _pointState: Partial<PointState>,
     _premiseState: PremiseState
   ): [Team, SetGoalTimeSeconds] {
     const team = new Team(_pointState, _premiseState);

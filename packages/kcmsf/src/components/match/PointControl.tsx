@@ -1,6 +1,5 @@
 import { MantineColor } from "@mantine/core";
-import { Rule } from "config/types/derived/rule";
-import { StateTypes } from "config/types/rule";
+import { Rule } from "config";
 import { Team } from "../../utils/match/team";
 import { PointCountable } from "./PointCountable";
 import { PointSingle } from "./PointSingle";
@@ -9,7 +8,7 @@ interface Props {
   color: MantineColor;
   team: Team;
   rule: Rule;
-  onChange: (value: StateTypes) => void;
+  onChange: (value: Parameters<Rule["point"]>[0]) => void;
   children: React.ReactNode;
 }
 

@@ -1,5 +1,5 @@
 import { Button, MantineColor, Text } from "@mantine/core";
-import { MatchInfo, TeamInfo } from "config/types/derived/matchInfo";
+import { MatchInfo, TeamInfo } from "config";
 import { LinkToMatch } from "./linkToMatch";
 type StatusButtonProps = {
   id: string;

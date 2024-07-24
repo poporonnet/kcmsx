@@ -1,5 +1,5 @@
 import { Flex, MantineColor } from "@mantine/core";
-import { config } from "config/config";
+import { config } from "config";
 import { Team } from "../../utils/match/team";
 import { parseSeconds } from "../../utils/time";
 import { PointControl } from "./PointControl";

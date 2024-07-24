@@ -1,4 +1,4 @@
-import { TeamInfo } from "config/types/derived/matchInfo";
+import { TeamInfo } from "config";
 
 export type Match = {
   id: string;

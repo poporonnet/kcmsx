@@ -1,6 +1,4 @@
-import { MatchInfo } from "config/types/derived/matchInfo";
-import { PremiseState } from "config/types/derived/premise";
-import { PointState } from "config/types/derived/rule";
+import { MatchInfo, PointState, PremiseState } from "config";
 import { SetGoalTimeSeconds, Team } from "./team";
 
 export class Judge {
