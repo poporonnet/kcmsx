@@ -1,8 +1,8 @@
-import { DerivedMatch, MatchConfig } from "../types/matchConfig";
+import { ConditionsConfig } from "../types/conditionsConfig";
 import { BaseConfig, Config } from "../types/config";
 import { DepartmentConfig, DerivedDepartment } from "../types/departmentConfig";
+import { DerivedMatch, MatchConfig } from "../types/matchConfig";
 import { RuleBaseList, ValidRuleList } from "../types/rule";
-import { ConditionsConfig } from "../types/conditionsConfig";
 import { DerivedRuleList } from "../types/ruleList";
 
 export const createConfig = <

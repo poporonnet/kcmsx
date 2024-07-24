@@ -17,6 +17,7 @@
 kcmsx各種パッケージのための共通の設定ファイルを記述するパッケージです。
 
 `src/config.ts`を編集してください。最小のテンプレートは以下のようになります。
+
 ```ts
 import { createConfig } from "./utility/createConfig";
 
@@ -50,12 +51,14 @@ export const config = createConfig(
 - 型: `string`
 
 コンテストの名称です。主にフロントエンドでの表示に使われます。
+
 <details open>
 <summary>例:</summary>
 
 ```ts
 contestName: "かにロボコン",
 ```
+
 </details>
 
 ### baseConfig.robotTypes
@@ -71,6 +74,7 @@ contestName: "かにロボコン",
 ```ts
 robotTypes: ["wheel", "leg"],
 ```
+
 </details>
 
 ### baseConfig.departments
@@ -108,6 +112,7 @@ departments: [
   },
 ],
 ```
+
 </details>
 
 ### baseConfig.matches
@@ -145,6 +150,7 @@ matches: [
   },
 ],
 ```
+
 </details>
 
 ### baseConfig.rules
@@ -202,8 +208,9 @@ rules: [
     point: (count: number) => count, // count個持ち帰ったらcount点(1個につき1点)
     validate: (value: number) => 0 <= value && value <= 3, // 持ち帰ることのできるボールの個数は0個以上かつ3個以下
   },
-]
+];
 ```
+
 </details>
 
 ## conditions
@@ -248,6 +255,7 @@ rules: [
   },
 }
 ```
+
 </details>
 
 ## utility
