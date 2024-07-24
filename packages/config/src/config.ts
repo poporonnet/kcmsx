@@ -1,5 +1,5 @@
-import { createConfig } from "./utility/createConfig";
 import { against } from "./utility/against";
+import { createConfig } from "./utility/createConfig";
 
 export const config = createConfig(
   {
