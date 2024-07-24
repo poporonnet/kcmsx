@@ -8,6 +8,42 @@ importers:
 
   .: {}
 
+  packages/config:
+    devDependencies:
+      '@eslint/eslintrc':
+        specifier: ^3.0.0
+        version: 3.1.0
+      '@eslint/js':
+        specifier: ^9.0.0
+        version: 9.7.0
+      '@typescript-eslint/eslint-plugin':
+        specifier: ^7.0.0
+        version: 7.16.1(@typescript-eslint/parser@7.16.1(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0)(typescript@5.5.3)
+      '@typescript-eslint/parser':
+        specifier: ^7.0.0
+        version: 7.16.1(eslint@9.7.0)(typescript@5.5.3)
+      '@vitest/coverage-v8':
+        specifier: ^2.0.0
+        version: 2.0.3(vitest@2.0.3(@types/node@20.14.11)(@vitest/ui@2.0.3)(jsdom@24.1.0)(sugarss@4.0.1))
+      eslint:
+        specifier: ^9.0.0
+        version: 9.7.0
+      eslint-config-prettier:
+        specifier: ^9.1.0
+        version: 9.1.0(eslint@9.7.0)
+      eslint-plugin-vitest:
+        specifier: ^0.5.0
+        version: 0.5.4(@typescript-eslint/eslint-plugin@7.16.1(@typescript-eslint/parser@7.16.1(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0)(typescript@5.5.3))(eslint@9.7.0)(typescript@5.5.3)(vitest@2.0.3(@types/node@20.14.11)(@vitest/ui@2.0.3)(jsdom@24.1.0)(sugarss@4.0.1))
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
+      prettier-plugin-organize-imports:
+        specifier: ^4.0.0
+        version: 4.0.0(prettier@3.3.3)(typescript@5.5.3)
+      vitest:
+        specifier: ^2.0.0
+        version: 2.0.3(@types/node@20.14.11)(@vitest/ui@2.0.3)(jsdom@24.1.0)(sugarss@4.0.1)
+
   packages/kcms:
     dependencies:
       '@hono/node-server':

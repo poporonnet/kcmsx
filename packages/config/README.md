@@ -16,7 +16,7 @@
 
 kcmsx各種パッケージのための共通の設定ファイルを記述するパッケージです。
 
-パッケージ直下の`config.ts`を編集します。最小のテンプレートは以下のようになります。
+`src/config.ts`を編集してください。最小のテンプレートは以下のようになります。
 ```ts
 import { createConfig } from "./utility/createConfig";
 
