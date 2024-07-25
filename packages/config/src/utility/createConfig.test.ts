@@ -1,4 +1,6 @@
 import { describe, expect, it } from "vitest";
+import { DerivedPremiseState } from "../types/premise";
+import { DerivedPointState } from "../types/rule";
 import { createConfig } from "./createConfig";
 
 describe("正しい設定を生成できる", () => {
@@ -112,11 +114,25 @@ describe("正しい設定を生成できる", () => {
   });
 
   it("conditionが正しく設定できる", () => {
-    const visible = (state) => state.matchInfo?.matchType == "pre";
-    const scorable = (state) =>
+    type PremiseState = DerivedPremiseState<
+      "pre",
+      "elementary",
+      DerivedPointState<{
+        name: "goal";
+        label: "ゴール";
+        type: "single";
+        initial: false;
+        point: (done: boolean) => 0 | 1;
+        validate: (done: boolean) => boolean;
+      }>
+    >;
+    const visible = (state: PremiseState) =>
+      state.matchInfo?.matchType == "pre";
+    const scorable = (state: PremiseState) =>
       state.matchState[state.side].getGoalTimeSeconds() != undefined;
-    const changeable = (state) =>
+    const changeable = (state: PremiseState) =>
       !!state.matchInfo?.teams[state.side].isMultiWalk;
+
     const config = createConfig(
       {
         contestName: "かにロボコン",
@@ -132,6 +148,7 @@ describe("正しい設定を生成できる", () => {
             type: "single",
             initial: false,
             point: (done: boolean) => (done ? 1 : 0),
+            validate: (done: boolean) => done,
           },
         ],
       } as const,
