@@ -48,3 +48,26 @@ jobs:
 
       - name: Test
         run: bun run --cwd packages/kcmsf test:ci
+
+  config_check:
+    name: "Check (config)"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/config
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Check
+        run: bun run check
+      - name: Lint
+        run: bun run lint
+      - name: Test
+        run: bun run test

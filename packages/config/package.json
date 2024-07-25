@@ -5,11 +5,11 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "lint": "eslint --cache \"{\"*/**/*.ts\", \"config.ts\"}\"",
+    "lint": "eslint --cache \"src/**/*.ts\" \"index.ts\"",
     "format": "prettier . --write",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "check": "prettier --check \"{\"*/**/*.ts\", \"config.ts\"}\" && tsc -p . --noEmit"
+    "check": "prettier --check \"src/**/*.ts\" \"index.ts\" && tsc -p . --noEmit"
   },
   "keywords": [],
   "author": "Poporon Network (tufusa) & Other Contributors",
