@@ -10,19 +10,9 @@ describe("正しい設定を生成できる", () => {
         contestName: "かにロボコン",
         robotTypes: ["wheel"],
         departments: [
-          {
-            type: "elementary",
-            name: "小学生部門",
-            robotTypes: ["wheel"],
-          },
+          { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],
-        matches: [
-          {
-            type: "pre",
-            name: "予選",
-            limitSeconds: 180,
-          },
-        ],
+        matches: [{ type: "pre", name: "予選", limitSeconds: 180 }],
         rules: [
           {
             name: "goal",
@@ -39,24 +29,24 @@ describe("正しい設定を生成できる", () => {
     expect(config.contestName).toBe("かにロボコン");
     expect(config.robotTypes).toEqual(["wheel"]);
 
-    expect(config.departments.length).toBe(1);
+    expect(config.departments).toHaveLength(1);
     expect(config.departments[0].type).toBe("elementary");
     expect(config.departments[0].name).toBe("小学生部門");
     expect(config.departments[0].robotTypes).toEqual(["wheel"]);
 
-    expect(config.matches.length).toBe(1);
+    expect(config.matches).toHaveLength(1);
     expect(config.matches[0].type).toBe("pre");
     expect(config.matches[0].name).toBe("予選");
     expect(config.matches[0].limitSeconds).toBe(180);
 
-    expect(config.rules.length).toBe(1);
+    expect(config.rules).toHaveLength(1);
     expect(config.rules[0].name).toBe("goal");
     expect(config.rules[0].label).toBe("ゴール");
     expect(config.rules[0].type).toBe("single");
     expect(config.rules[0].point).toBe(point);
-    expect(config.rules[0].visible).toBe(undefined);
-    expect(config.rules[0].changeable).toBe(undefined);
-    expect(config.rules[0].scorable).toBe(undefined);
+    expect(config.rules[0].visible).toBeUndefined();
+    expect(config.rules[0].changeable).toBeUndefined();
+    expect(config.rules[0].scorable).toBeUndefined();
 
     expect(config.department.elementary.name).toBe("小学生部門");
     expect(config.department.elementary.robotTypes).toEqual(["wheel"]);
@@ -65,7 +55,98 @@ describe("正しい設定を生成できる", () => {
     expect(config.match.pre.limitSeconds).toBe(180);
   });
 
-  it("複数項目の設定を生成できる", () => {});
+  it("複数項目の設定を生成できる", () => {
+    const range = [...new Array(10)].map((_, i) => i);
+    const robotTypes = range.map((i) => `robot${i}`);
+    const departments = range.map((i) => ({
+      type: `department${i}`,
+      name: `部門${i}`,
+      robotTypes: robotTypes.slice(0, i),
+    }));
+    const matches = range.map((i) => ({
+      type: `match${i}`,
+      name: `試合${i}`,
+      limitSeconds: 100 * i,
+    }));
+    const singleRules = range.map((i) => ({
+      name: `rule${i}-1`,
+      label: `ルール${i}-1`,
+      type: "single" as const,
+      initial: i % 2 == 0,
+      point: (done: boolean) => (done ? 1 : 0),
+    }));
+    const countableRules = range.map((i) => ({
+      name: `rule${i}-2`,
+      label: `ルール${i}-2`,
+      type: "countable" as const,
+      initial: i,
+      point: (value: number) => value,
+      validate: (value: number) => 0 <= value && value <= i * 100,
+    }));
+    const rules = [...singleRules, ...countableRules];
 
-  it("conditionが正しく設定できる", () => {});
+    const config = createConfig(
+      {
+        contestName: "かにロボコン",
+        robotTypes,
+        departments,
+        matches,
+        rules,
+      } as const,
+      {}
+    );
+
+    expect(config.robotTypes).toEqual(robotTypes);
+    expect(config.departments).toEqual(departments);
+    expect(config.matches).toEqual(matches);
+    expect(config.rules).toEqual(rules);
+    range.map((i) =>
+      expect(config.department).toHaveProperty(
+        [`department${i}`, "name"],
+        `部門${i}`
+      )
+    );
+    range.map((i) =>
+      expect(config.match).toHaveProperty([`match${i}`, "name"], `試合${i}`)
+    );
+  });
+
+  it("conditionが正しく設定できる", () => {
+    const visible = (state) => state.matchInfo?.matchType == "pre";
+    const scorable = (state) =>
+      state.matchState[state.side].getGoalTimeSeconds() != undefined;
+    const changeable = (state) =>
+      !!state.matchInfo?.teams[state.side].isMultiWalk;
+    const config = createConfig(
+      {
+        contestName: "かにロボコン",
+        robotTypes: ["wheel"],
+        departments: [
+          { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
+        ],
+        matches: [{ type: "pre", name: "予選", limitSeconds: 180 }],
+        rules: [
+          {
+            name: "goal",
+            label: "ゴール",
+            type: "single",
+            initial: false,
+            point: (done: boolean) => (done ? 1 : 0),
+          },
+        ],
+      } as const,
+      {
+        goal: {
+          visible,
+          scorable,
+          changeable,
+        },
+      }
+    );
+
+    expect(config.rules).toHaveLength(1);
+    expect(config.rules[0].visible).toBe(visible);
+    expect(config.rules[0].scorable).toBe(scorable);
+    expect(config.rules[0].changeable).toBe(changeable);
+  });
 });
