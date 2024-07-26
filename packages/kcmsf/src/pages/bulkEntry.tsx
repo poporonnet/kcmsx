@@ -10,15 +10,16 @@ import {
 import { useEffect, useState } from "react";
 import { Entry as entryType } from "../types/entry";
 
-const Errormeg = (errorNum: number) => {
+const ErrorMessage = (errorNum: number) => {
   const message: string[] = [
-    "チーム名が短すぎます",
-    "メンバーの名前が短すぎます",
-    "部門が不正です.",
+    "チーム名が短すぎます。",
+    "メンバーの名前が短すぎます。",
+    "ロボットのカテゴリーは車輪型または歩行型にしてください。",
+    "部門が不正です。",
   ];
   notifications.show({
     title: "登録失敗",
-    message: "登録に失敗しました." + message[errorNum],
+    message: "登録に失敗しました。" + message[errorNum],
     color: "red",
   });
 };
@@ -26,10 +27,15 @@ const Errormeg = (errorNum: number) => {
 export const BulkEntry = () => {
   const [csvData, setCsvData] = useState<string[][]>([]);
   const [error, setError] = useState<boolean>(true);
+  const [errors, setErrors] = useState<boolean[][]>([]);
+
   useEffect(() => {
-    console.log("check");
-    checkData(csvData);
-  }),[csvData];
+    if (csvData.length > 0) {
+      const newErrors = checkData(csvData);
+      setErrors(newErrors);
+    }
+  }, [csvData]);
+
   const handleDrop = (files: File[]) => {
     const file = files[0];
     if (file) {
@@ -42,48 +48,77 @@ export const BulkEntry = () => {
       reader.readAsText(file);
     }
   };
+
   const parseCSV = (text: string): string[][] => {
-    const rows = text.split("\n").map((row) => row.split(","));
+    const rows = text
+      .replace(/\r\n/g, "\n")
+      .split("\n")
+      .map((row) => row.split(","));
     return rows;
   };
-  const checkData = (data: string[][]) => {
-    data.map((row, i) => {
-      if (i === 0) return;
-      if (row[0] === "") {
-        Errormeg(0);
+
+  const checkData = (data: string[][]): boolean[][] => {
+    const newErrors = data.map((row) => new Array(row.length).fill(false));
+
+    data.forEach((row, i) => {
+      const [teamName, member1, member2, isMultiWalk, category] = row;
+      if (teamName === undefined || teamName === "") {
+        ErrorMessage(0);
+        newErrors[i][0] = true;
         setError(false);
       }
-      if (row[1].length < 2) Errormeg(1);
-      if (row[2].length < 2 && row[2].length != 0) Errormeg(1);
+      if (member1 === undefined || member1.length < 2) {
+        ErrorMessage(1);
+        newErrors[i][1] = true;
+      }
       if (
-        row[4].split("\r")[0] !== "Elementary" &&
-        row[4].split("\r")[0] !== "Open"
+        member2 === undefined ||
+        (member2.length < 2 && member2.length !== 0)
       ) {
-        Errormeg(2);
+        ErrorMessage(1);
+        newErrors[i][2] = true;
+      }
+      if (
+        isMultiWalk === undefined ||
+        (isMultiWalk !== "歩行型" && isMultiWalk !== "車輪型")
+      ) {
+        ErrorMessage(2);
+        newErrors[i][3] = true;
+        setError(false);
+      }
+      if (
+        category === undefined ||
+        (category !== "Elementary" && category !== "Open")
+      ) {
+        ErrorMessage(3);
+        newErrors[i][4] = true;
         setError(false);
       }
     });
-    return "";
+
+    return newErrors;
   };
+
   const sendData = () => {
     const data = csvData.map((row) => {
       const entry: entryType = {
         teamName: row[0],
         members: [row[1], row[2]],
-        isMultiWalk: row[3] === "true",
+        isMultiWalk: row[3] === "歩行型" ? true : false,
         category: row[4] as "Elementary" | "Open",
       };
       return entry;
     });
     const json = JSON.stringify(data);
     const obj = JSON.parse(json);
-    console.log("send");
     return obj;
   };
+
   const clear = () => {
     setCsvData([]);
   };
-  const showDetails = (data: string[][]) => {
+
+  const showDetails = (data: string[][], errors: boolean[][]) => {
     return (
       <Box>
         <Table>
@@ -92,7 +127,7 @@ export const BulkEntry = () => {
               <Table.Th>チーム名</Table.Th>
               <Table.Th>メンバー1</Table.Th>
               <Table.Th>メンバー2</Table.Th>
-              <Table.Th>多足歩行</Table.Th>
+              <Table.Th>歩行型</Table.Th>
               <Table.Th>部門</Table.Th>
             </Table.Tr>
           </Table.Thead>
@@ -102,7 +137,14 @@ export const BulkEntry = () => {
                 {i === 0
                   ? null
                   : row.map((cell, j) => (
-                      <Table.Td ta={"left"} key={j}>
+                      <Table.Td
+                        ta={"left"}
+                        key={j}
+                        style={{
+                          backgroundColor:
+                            errors[i] && errors[i][j] ? "#EC777E" : "inherit",
+                        }}
+                      >
                         {cell}
                       </Table.Td>
                     ))}
@@ -113,19 +155,19 @@ export const BulkEntry = () => {
       </Box>
     );
   };
+
   return (
     <>
       <h1>一括エントリー</h1>
       {csvData.length > 0 ? (
         <>
           <p>この内容で登録します</p>
-          <Box>{showDetails(csvData)}</Box>
-          {/* 色を変える */}
+          <Box>{showDetails(csvData, errors)}</Box>
           <Button m={"2rem"} onClick={clear} variant="default">
-            別のCSVを登録する
+            リセット
           </Button>
           {error ? (
-            <Button m={"2rem"} onClick={sendData}>
+            <Button m={"2rem"} onClick={sendData} >
               <IconSend stroke={2} />
               登録
             </Button>
@@ -189,9 +231,6 @@ export const BulkEntry = () => {
                 <Text size="xl" inline>
                   ここにCSVファイルをドラッグ&ドロップしてください
                 </Text>
-                {/* <Text size="sm" c="dimmed" inline mt={7}>
-          Attach as many files as you like, each file should not exceed 5mb
-        </Text> */}
               </div>
             </Group>
           </Dropzone>
