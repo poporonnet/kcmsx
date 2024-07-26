@@ -13,6 +13,8 @@
     - [createConfig(baseConfig, conditions)](#createconfigbaseconfig-conditions-1)
     - [against(side)](#againstside)
   - [For Developers(WIP)](#for-developerswip)
+    - [kcmsx/configをモノレポ内の別のパッケージから使う](#kcmsxconfigをモノレポ内の別のパッケージから使う)
+    - [型定義ファイルのディレクトリ構造](#型定義ファイルのディレクトリ構造)
 
 kcmsx各種パッケージのための共通の設定ファイルを記述するパッケージです。
 
@@ -278,3 +280,37 @@ rules: [
 `side`が`"left"`なら`"right"`を、`"right"`なら`"left"`を返します。
 
 ## For Developers(WIP)
+
+開発者向けの情報集です。
+
+### kcmsx/configをモノレポ内の別のパッケージから使う
+
+kcmsx/configを使いたいパッケージで以下のコマンドを実行してください。
+
+```bash
+pnpm add config --workspace
+```
+
+以下のように`import`して使えます。
+
+```ts
+import { config, MatchInfo } from "config";
+```
+
+### 型定義ファイルのディレクトリ構造
+
+型定義は`types`ディレクトリ以下に置かれています。
+
+- `types/*.ts`が、`config.ts`に型制約をつけるための"導出型"です。
+- `types/derived/*.ts`が、`config.ts`に記述された設定から導出された、可能な限りリテラル型で表現されている"被導出型"です。
+
+型をインポートする場合は、基本的に`types/derived`ディレクトリに置かれているものを使用するほうが好ましいです。そのため、パッケージのルートからエクスポートされている型は`types/derived`ディレクトリにあるもののみです。`types`直下の型が必要な場合は、ファイルパスで`import`することができます。
+
+<details open>
+  <summary>例:</summary>
+
+  ```ts
+  import { RuleType } from "config/src/types/rule";
+  ```
+
+</details>
