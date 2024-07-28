@@ -88,7 +88,7 @@ export const config = createConfig(
         validate: (value: number) => 0 <= value && value <= 3,
       },
     ],
-  } as const,
+  },
   {
     multiWalk: {
       visible: () => false,
