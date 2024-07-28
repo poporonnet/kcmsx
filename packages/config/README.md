@@ -311,8 +311,8 @@ import { config, MatchInfo } from "config";
 <details open>
   <summary>例:</summary>
 
-  ```ts
-  import { RuleType } from "config/src/types/rule";
-  ```
+```ts
+import { RuleType } from "config/src/types/rule";
+```
 
 </details>
