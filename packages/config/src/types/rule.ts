@@ -180,7 +180,6 @@ export type DerivedInitialPointState<TRuleBase extends DerivedRuleBaseVariant> =
  * @description ルールの状態の型
  */
 export type DerivedPointState<TRuleBase extends DerivedRuleBaseVariant> = {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   [R in TRuleBase as R["name"]]: StateType[R["type"]];
 };
 
