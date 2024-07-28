@@ -30,7 +30,7 @@ export const config = createConfig(
     departments: [],
     matches: [],
     rules: [],
-  } as const,
+  },
   {}
 );
 ```
@@ -45,7 +45,7 @@ export const config = createConfig(
 - 型: `BaseConfig`
 
 主要なほとんどの設定を含むオブジェクトです。
-`contestName`, `robotTypes`, `departments`, `matches`, `rules`プロパティが必要です。また、型推論のため末尾の`as const`が必要です。
+`contestName`, `robotTypes`, `departments`, `matches`, `rules`プロパティが必要です。
 以下でプロパティの詳細について説明しています。
 
 ### baseConfig.contestName
@@ -219,7 +219,7 @@ rules: [
 
 - 型: `ConditionsConfig`
 
-`baseConfig.rules`についてのより高度な制約を記述するためのオブジェクトです。`baseConfig.rules`で指定した各`name`をキーとして、`RuleCondition`オブジェクトを値に記述します。また、型推論の都合上末尾の`as const`は付与しないようにする必要があります。
+`baseConfig.rules`についてのより高度な制約を記述するためのオブジェクトです。`baseConfig.rules`で指定した各`name`をキーとして、`RuleCondition`オブジェクトを値に記述します。
 以下で、レコードの値である`RuleCondition`のプロパティについて説明しています。
 
 - `visible` (オプショナル)
@@ -272,6 +272,8 @@ rules: [
 
 設定を作成する関数です。詳細は上記の通りです。
 
+ユニークな必要があるプロパティの重複や、空の配列などの不正な設定オブジェクトについて、型レベルの制約がされているので、ランタイムではなくコンパイル時にエラーが発生します。
+
 ### against(side)
 
 - `side`: `"left" | "right"`
@@ -304,7 +306,7 @@ import { config, MatchInfo } from "config";
 - `src/types/*.ts`が、`config.ts`に型制約をつけるための"導出型"です。
 - `src/types/derived/*.ts`が、`config.ts`に記述された設定から導出された、可能な限りリテラル型で表現されている"被導出型"です。
 
-型をインポートする場合は、基本的に`src/types/derived`ディレクトリに置かれているものを使用するほうが好ましいです。そのため、パッケージのルートからエクスポートされている型は`src/types/derived`ディレクトリにあるもののみです。`types`直下の型が必要な場合は、ファイルパスで`import`することができます。
+つまり、型をインポートする場合は、基本的に`src/types/derived`ディレクトリに置かれているものを使用するほうが好ましいです。そのため、パッケージのルートからエクスポートされている型は`src/types/derived`ディレクトリにあるもののみです。`types`直下の型が必要な場合は、ファイルパスで`import`することができます。
 
 <details open>
   <summary>例:</summary>
