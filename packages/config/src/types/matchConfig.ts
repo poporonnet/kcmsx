@@ -3,10 +3,19 @@ import { UniqueRecords } from "./uniqueCollection";
 /**
  * @description 1つの試合種別設定の型
  */
-export type MatchConfig = {
-  type: string;
-  name: string;
-  limitSeconds: number;
+export type MatchConfig = DerivedMatchConfig<string, string, number>;
+
+/**
+ * @description 1つの試合種別設定の, リテラル型から導出される型
+ */
+export type DerivedMatchConfig<
+  Type extends string,
+  Name extends string,
+  LimitSeconds extends number,
+> = {
+  type: Type;
+  name: Name;
+  limitSeconds: LimitSeconds;
 };
 
 /**

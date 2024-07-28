@@ -42,14 +42,17 @@ type Pickup<
 /**
  * @description 文字列リテラル配列`Array`の要素がユニークか検査する型
  * ユニークなら`true`, 重複していたら`{ErrorMessage}: {重複している要素}`という文字列リテラル型になる
+ * 文字列リテラルでない`string`要素は検査できないためスキップされる
  */
 type IsUnique<
   Array extends readonly string[],
   ErrorMessage extends string,
 > = Array extends readonly [infer L, ...infer Rest]
   ? Rest extends string[]
-    ? L extends Rest[number]
-      ? `${ErrorMessage}: \`${L}\``
-      : IsUnique<Rest, ErrorMessage>
+    ? string extends L
+      ? IsUnique<Rest, ErrorMessage>
+      : L extends Rest[number]
+        ? `${ErrorMessage}: \`${L}\``
+        : IsUnique<Rest, ErrorMessage>
     : never
   : true;

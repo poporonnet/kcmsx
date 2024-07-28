@@ -3,10 +3,20 @@ import { UniqueRecords } from "./uniqueCollection";
 /**
  * @description 1つの部門設定の型
  */
-export type DepartmentConfig<RobotTypes extends string[]> = {
-  type: string;
-  name: string;
-  robotTypes: RobotTypes[number][];
+export type DepartmentConfig<RobotTypes extends string[]> =
+  DerivedDepartmentConfig<string, string, RobotTypes[number][]>;
+
+/**
+ * @description 1つの部門設定の, リテラル型から導出される型
+ */
+export type DerivedDepartmentConfig<
+  Type extends string,
+  Name extends string,
+  RobotTypes extends string[],
+> = {
+  type: Type;
+  name: Name;
+  robotTypes: RobotTypes;
 };
 
 /**

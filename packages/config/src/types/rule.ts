@@ -41,7 +41,44 @@ export type StateTypes = StateType[RuleType];
 export type Rule<
   Type extends RuleType,
   Initial extends StateType[Type],
-> = RuleBase<Type, Initial> & RuleCondition;
+> = DerivedRule<string, string, Type, Initial>;
+
+/**
+ * @description 1つのルールの, リテラル型から導出される型
+ */
+export type DerivedRule<
+  Name extends string,
+  Label extends string,
+  Type extends RuleType,
+  Initial extends StateType[Type],
+> = DerivedRuleBase<Name, Label, Type, Initial> & RuleCondition;
+
+/**
+ * @description {@link DerivedRuleVariant}のTypeを分割して{@link DerivedRule}にマップする型
+ */
+type _DerivedRuleVariant<
+  Type extends RuleType,
+  Initial extends StateType[Type],
+  Name extends string,
+  Label extends string,
+> = Type extends Type
+  ? DerivedRule<
+      Name,
+      Label,
+      Type,
+      Initial extends StateType[Type] ? Initial : never
+    >
+  : never;
+
+/**
+ * @description 指定した{@link RuleType}に対応する{@link Rule}のユニオン
+ */
+export type DerivedRuleVariant<
+  Type extends RuleType = RuleType,
+  Initial extends StateType[Type] = StateType[Type],
+  Name extends string = string,
+  Label extends string = string,
+> = _DerivedRuleVariant<Type, Initial, Name, Label>;
 
 /**
  * @description 1つのルールの, ルールの状態に依存する部分の型
@@ -49,14 +86,51 @@ export type Rule<
 export type RuleBase<
   Type extends RuleType,
   Initial extends StateType[Type],
+> = DerivedRuleBase<string, string, Type, Initial>;
+
+/**
+ * @description 1つのルールの, ルールの状態に依存する部分の, リテラル型から導出される型
+ */
+export type DerivedRuleBase<
+  Name extends string,
+  Label extends string,
+  Type extends RuleType,
+  Initial extends StateType[Type],
 > = Readonly<{
-  name: string;
-  label: string;
+  name: Name;
+  label: Label;
   type: Type;
   initial: Initial;
   point: (value: StateType[Type]) => number;
   validate?: (value: StateType[Type]) => boolean;
 }>;
+
+/**
+ * @description {@link DerivedRuleBaseVariant}のTypeを分割して{@link DerivedRuleBase}にマップする型
+ */
+type _DerivedRuleBaseVariant<
+  Name extends string,
+  Label extends string,
+  Type extends RuleType,
+  Initial extends StateType[Type],
+> = Type extends Type
+  ? DerivedRuleBase<
+      Name,
+      Label,
+      Type,
+      Initial extends StateType[Type] ? Initial : never
+    >
+  : never;
+
+/**
+ * @description 指定した{@link RuleType}に対応する{@link RuleBase}のユニオン
+ */
+export type DerivedRuleBaseVariant<
+  Type extends RuleType = RuleType,
+  Initial extends StateType[Type] = StateType[Type],
+  Name extends string = string,
+  Label extends string = string,
+> = _DerivedRuleBaseVariant<Name, Label, Type, Initial>;
 
 /**
  * @description 1つのルールの, ルールの状態に依存する部分の型
@@ -78,56 +152,44 @@ export type RuleCondition<
 }>;
 
 /**
- * @description 指定した{@link RuleType}に対応する{@link Rule}のユニオン
- */
-type _RuleVariant<Type extends RuleType> = Type extends Type
-  ? Rule<Type, StateType[Type]>
-  : never;
-
-/**
- * @description ありうる{@link Rule}すべてのユニオン
- */
-type RuleVariant = _RuleVariant<RuleType>;
-
-/**
  * @description ルールの配列の型
  */
-export type RuleList = RuleVariant[];
+export type RuleList<
+  Type extends RuleType = RuleType,
+  Initial extends StateType[Type] = StateType[Type],
+  Name extends string = string,
+  Label extends string = string,
+> = DerivedRuleVariant<Type, Initial, Name, Label>[];
 
-/**
- * @description 指定した{@link RuleType}に対応する{@link RuleBase}のユニオン
- */
-type _RuleBaseVariant<Type extends RuleType> = Type extends Type
-  ? RuleBase<Type, StateType[Type]>
-  : never;
-
-/**
- * @description ありうる{@link RuleBase}すべてのユニオン
- */
-type RuleBaseVariant = _RuleBaseVariant<RuleType>;
-
-export type RuleBaseList = RuleBaseVariant[];
+export type RuleBaseList<
+  Type extends RuleType = RuleType,
+  Initial extends StateType[Type] = StateType[Type],
+  Name extends string = string,
+  Label extends string = string,
+> = DerivedRuleBaseVariant<Type, Initial, Name, Label>[];
 
 /**
  * @description ルールの初期状態の型
  */
-export type DerivedInitialPointState<TRuleBase extends RuleBaseVariant> = {
-  [I in TRuleBase as I["name"]]: I["initial"];
-};
+export type DerivedInitialPointState<TRuleBase extends DerivedRuleBaseVariant> =
+  {
+    [I in TRuleBase as I["name"]]: I["initial"];
+  };
 
 /**
  * @description ルールの状態の型
  */
-export type DerivedPointState<TRuleBase extends RuleBaseVariant> = {
+export type DerivedPointState<TRuleBase extends DerivedRuleBaseVariant> = {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  [R in TRuleBase as R["name"]]: R extends RuleBase<infer Type, infer _Initial>
-    ? StateType[Type]
-    : never;
+  [R in TRuleBase as R["name"]]: StateType[R["type"]];
 };
 
 /**
  * @description {@link RuleList}が有効か判定する型
  * {@link Rule}の`name`属性が重複していたらコンパイルに失敗する
  */
-export type ValidRuleList<R extends RuleList> =
-  UniqueRecords<R, "name"> extends infer U ? (R extends U ? R : U) : never;
+export type ValidRuleList<
+  Type extends RuleType,
+  Initial extends StateType[Type],
+  R extends RuleList<Type, Initial>,
+> = UniqueRecords<R, "name"> extends infer U ? (R extends U ? R : U) : never;
