@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { DerivedDepartmentConfig } from "../types/departmentConfig";
+import { DerivedMatchConfig } from "../types/matchConfig";
 import { DerivedPremiseState } from "../types/premise";
-import { DerivedPointState } from "../types/rule";
+import { DerivedPointState, DerivedRuleBaseVariant } from "../types/rule";
 import { createConfig } from "./createConfig";
 
 describe("正しい設定を生成できる", () => {
@@ -58,18 +60,29 @@ describe("正しい設定を生成できる", () => {
   });
 
   it("複数項目の設定を生成できる", () => {
+    type RobotTypes = [string, ...string[]];
+    type Departments = [
+      DerivedDepartmentConfig<string, string, RobotTypes>,
+      ...DerivedDepartmentConfig<string, string, RobotTypes>[],
+    ];
+    type Matches = [
+      DerivedMatchConfig<string, string, number>,
+      ...DerivedMatchConfig<string, string, number>[],
+    ];
+
     const range = [...new Array(10)].map((_, i) => i);
-    const robotTypes = range.map((i) => `robot${i}`);
+
+    const robotTypes = range.map((i) => `robot${i}`) as RobotTypes;
     const departments = range.map((i) => ({
       type: `department${i}`,
       name: `部門${i}`,
-      robotTypes: robotTypes.slice(0, i),
-    }));
+      robotTypes: robotTypes.slice(0, i) as RobotTypes[number][],
+    })) as Departments;
     const matches = range.map((i) => ({
       type: `match${i}`,
       name: `試合${i}`,
       limitSeconds: 100 * i,
-    }));
+    })) as Matches;
     const singleRules = range.map((i) => ({
       name: `rule${i}-1`,
       label: `ルール${i}-1`,
@@ -85,7 +98,10 @@ describe("正しい設定を生成できる", () => {
       point: (value: number) => value,
       validate: (value: number) => 0 <= value && value <= i * 100,
     }));
-    const rules = [...singleRules, ...countableRules];
+    const rules = [...singleRules, ...countableRules] as [
+      DerivedRuleBaseVariant,
+      ...DerivedRuleBaseVariant[],
+    ];
 
     const config = createConfig(
       {
@@ -94,7 +110,7 @@ describe("正しい設定を生成できる", () => {
         departments,
         matches,
         rules,
-      } as const,
+      },
       {}
     );
 
