@@ -1,27 +1,21 @@
-import {
-  InitialPointState,
-  PointState,
-  PremiseState,
-  initialPointState,
-} from "../../config/types/rule";
-import { PartlyPartial } from "../../types/util";
+import { PointState, PremiseState, initialPointState } from "config";
 import { Point } from "./point";
 
-export type SetGoalTimeSeconds = (goalTimeSec: number | null) => void;
+export type SetGoalTimeSeconds = (goalTimeSec: number | undefined) => void;
 
 export class Team {
   private readonly _point: Point;
-  private _goalTimeSeconds: number | null;
+  private _goalTimeSeconds: number | undefined;
 
   private constructor(
-    _pointState: PartlyPartial<PointState, keyof InitialPointState>,
+    _pointState: Partial<PointState>,
     _premiseState: PremiseState
   ) {
     this._point = new Point(
       { ...initialPointState, ..._pointState },
       _premiseState
     );
-    this._goalTimeSeconds = null;
+    this._goalTimeSeconds = undefined;
   }
 
   get point() {
@@ -33,13 +27,14 @@ export class Team {
   }
 
   static new(
-    _pointState: PartlyPartial<PointState, keyof InitialPointState>,
+    _pointState: Partial<PointState>,
     _premiseState: PremiseState
   ): [Team, SetGoalTimeSeconds] {
     const team = new Team(_pointState, _premiseState);
     return [
       team,
-      (goalTimeSec: number | null) => (team._goalTimeSeconds = goalTimeSec),
+      (goalTimeSec: number | undefined) =>
+        (team._goalTimeSeconds = goalTimeSec),
     ];
   }
 }

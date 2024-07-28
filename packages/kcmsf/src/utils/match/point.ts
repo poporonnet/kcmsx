@@ -1,5 +1,4 @@
-import { ruleList } from "../../config/rule/rule";
-import { PointState, PremiseState } from "../../config/types/rule";
+import { config, PointState, PremiseState } from "config";
 
 export class Point {
   private readonly _state: PointState;
@@ -19,9 +18,9 @@ export class Point {
   }
 
   public point(): number {
-    return ruleList
+    return config.rules
       .map((rule): number => {
-        if ("premise" in rule && !rule.premise(this._premiseState)) return 0;
+        if (rule.scorable && !rule.scorable(this._premiseState)) return 0;
 
         return rule.point(this.state[rule.name] as never);
       })
