@@ -48,7 +48,7 @@ jobs:
       - name: Code Check
         run: bun run check
       - name: Lint
-        run: bun run -lint
+        run: bun run lint
       - name: Test
         run: bun run test:ci
 
