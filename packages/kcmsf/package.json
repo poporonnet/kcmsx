@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "test": "vitest --watch --ui --coverage.enabled=true",
-    "test:ci": "vitest run --coverage.enabled=true"
+    "test:ci": "vitest run --coverage.enabled=true",
+    "check": "prettier --check \"src/**/*.{ts,tsx}\" && tsc -p . --noEmit"
   },
   "dependencies": {
     "@mantine/carousel": "^7.3.1",
