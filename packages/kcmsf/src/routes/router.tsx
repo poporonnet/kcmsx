@@ -1,8 +1,4 @@
-import {
-  Route,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import { Entry } from "../pages/entry.tsx";
 import { EntryBulk } from "../pages/entryBulk.tsx";
 import { EntryList } from "../pages/entryList.tsx";
@@ -14,18 +10,46 @@ import { Result } from "../pages/result.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" element={<Layout />}>
-      <Route index element={<Home />} />
-      <Route path="/entrylist" element={<EntryList />} />
-      <Route path="/ranking" element={<Ranking />} />
-      <Route path="/entry" element={<Entry />} />
-      <Route path="/matchlist" element={<MatchList />} />
-      <Route path="/match" element={<Match />} />
-      <Route path="/result" element={<Result />} />
-      <Route path="/entry/bulk" element={<EntryBulk />} />
-    </Route>
-  ),
+  [
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "entrylist",
+          element: <EntryList />,
+        },
+        {
+          path: "entry",
+          element: <Entry />,
+        },
+        {
+          path: "entrybulk",
+          element: <EntryBulk />,
+        },
+        {
+          path: "match",
+          element: <Match />,
+        },
+        {
+          path: "matchlist",
+          element: <MatchList />,
+        },
+        {
+          path: "ranking",
+          element: <Ranking />,
+        },
+        {
+          path: "result",
+          element: <Result />,
+        },
+      ],
+    },
+  ],
   {
     basename: import.meta.env.BASE_URL,
   }

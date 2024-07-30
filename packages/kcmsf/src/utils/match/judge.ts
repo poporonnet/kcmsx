@@ -1,9 +1,4 @@
-import {
-  InitialPointState,
-  PointState,
-  PremiseState,
-} from "../../config/types/rule";
-import { PartlyPartial } from "../../types/util";
+import { MatchInfo, PointState, PremiseState } from "config";
 import { SetGoalTimeSeconds, Team } from "./team";
 
 export class Judge {
@@ -13,18 +8,30 @@ export class Judge {
   private readonly _setGoalTimeSecRight: SetGoalTimeSeconds;
 
   constructor(
-    _leftPointState: PartlyPartial<PointState, keyof InitialPointState>,
-    _rightPointState: PartlyPartial<PointState, keyof InitialPointState>,
-    _leftPremiseState: Omit<PremiseState, "side">,
-    _rightPremiseState: Omit<PremiseState, "side">
+    _leftPointState: Partial<PointState>,
+    _rightPointState: Partial<PointState>,
+    _leftPremiseState: Omit<PremiseState, "side" | "matchState">,
+    _rightPremiseState: Omit<PremiseState, "side" | "matchState">
   ) {
+    const matchState: PremiseState["matchState"] = {
+      left: {
+        getPointState: () => this._leftTeam.point.state,
+        getGoalTimeSeconds: () => this._leftTeam.goalTimeSeconds,
+      },
+      right: {
+        getPointState: () => this._rightTeam.point.state,
+        getGoalTimeSeconds: () => this._rightTeam.goalTimeSeconds,
+      },
+    };
     [this._leftTeam, this._setGoalTimeSecLeft] = Team.new(_leftPointState, {
       ..._leftPremiseState,
       side: "left",
+      matchState,
     });
     [this._rightTeam, this._setGoalTimeSecRight] = Team.new(_rightPointState, {
       ..._rightPremiseState,
       side: "right",
+      matchState,
     });
   }
 
@@ -36,52 +43,15 @@ export class Judge {
     return this._rightTeam;
   }
 
-  goalLeftTeam(goalTimeSec: number | null) {
+  team(side: keyof MatchInfo["teams"]) {
+    return side === "left" ? this.leftTeam : this.rightTeam;
+  }
+
+  goalLeftTeam(goalTimeSec: number | undefined) {
     this._setGoalTimeSecLeft(goalTimeSec);
-    this.judgeGoalPoint();
   }
 
-  goalRightTeam(goalTimeSec: number | null) {
+  goalRightTeam(goalTimeSec: number | undefined) {
     this._setGoalTimeSecRight(goalTimeSec);
-    this.judgeGoalPoint();
-  }
-
-  private judgeGoalPoint() {
-    const goalTimeLeft = this.leftTeam.goalTimeSeconds;
-    const goalTimeRight = this.rightTeam.goalTimeSeconds;
-
-    this.leftTeam.point.state.firstGoal = false;
-    this.rightTeam.point.state.firstGoal = false;
-
-    const setFirstGoalLeft = () => {
-      this.leftTeam.point.state.firstGoal = true;
-      this.rightTeam.point.state.firstGoal = false;
-    };
-    const setFirstGoalRight = () => {
-      this.leftTeam.point.state.firstGoal = false;
-      this.rightTeam.point.state.firstGoal = true;
-    };
-
-    if (goalTimeLeft != null && goalTimeRight == null) {
-      setFirstGoalLeft();
-      return;
-    }
-    if (goalTimeLeft == null && goalTimeRight != null) {
-      setFirstGoalRight();
-      return;
-    }
-
-    if (goalTimeLeft == null || goalTimeRight == null) {
-      return;
-    }
-
-    if (goalTimeLeft < goalTimeRight) {
-      setFirstGoalLeft();
-      return;
-    }
-    if (goalTimeRight < goalTimeLeft) {
-      setFirstGoalRight();
-      return;
-    }
   }
 }

@@ -1,32 +1,21 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
+import { config, MatchInfo } from "config";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
-import { MatchSubmit } from "../components/matchSubmit";
-import { PointControls } from "../components/pointControls";
-import { config } from "../config/config";
+import { MatchSubmit } from "../components/match/matchSubmit";
+import { PointControls } from "../components/match/PointControls";
 import { useForceReload } from "../hooks/useForceReload";
 import { Judge } from "../utils/match/judge";
 import { expiryTimestamp, parseSeconds } from "../utils/time";
 
 type TimerState = "Initial" | "Started" | "Finished";
-export type TeamInfo = {
-  id: string;
-  teamName: string;
-  isMultiWalk: boolean;
-  category: "elementary" | "open";
-};
-export type MatchInfo = {
-  id: string;
-  teams: { left: TeamInfo; right: TeamInfo };
-  matchType: "primary" | "final";
-};
 
 export const Match = () => {
-  const matchInfo = useLocation().state as MatchInfo | null;
+  const matchInfo = useLocation().state as MatchInfo | undefined;
   const isExhibition = matchInfo == null;
 
-  const matchTimeSec = config.match.matchSeconds;
+  const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
   const [timerState, setTimerState] = useState<TimerState>("Initial");
   const { start, pause, resume, isRunning, totalSeconds } = useTimer({
     expiryTimestamp: expiryTimestamp(matchTimeSec),
@@ -100,7 +89,9 @@ export const Match = () => {
           team={matchJudge.leftTeam}
           onChange={forceReload}
           onGoal={(done) =>
-            matchJudge.goalLeftTeam(done ? matchTimeSec - totalSeconds : null)
+            matchJudge.goalLeftTeam(
+              done ? matchTimeSec - totalSeconds : undefined
+            )
           }
         />
         <Divider orientation="vertical" />
@@ -109,7 +100,9 @@ export const Match = () => {
           team={matchJudge.rightTeam}
           onChange={forceReload}
           onGoal={(done) =>
-            matchJudge.goalRightTeam(done ? matchTimeSec - totalSeconds : null)
+            matchJudge.goalRightTeam(
+              done ? matchTimeSec - totalSeconds : undefined
+            )
           }
         />
       </Flex>

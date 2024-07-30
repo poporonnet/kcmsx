@@ -1,5 +1,4 @@
-import { premise, ruleList } from "../../config/rule/rule";
-import { PointState, PremiseState } from "../../config/types/rule";
+import { config, PointState, PremiseState } from "config";
 
 export class Point {
   private readonly _state: PointState;
@@ -14,14 +13,17 @@ export class Point {
     return this._state;
   }
 
+  get premiseState() {
+    return this._premiseState;
+  }
+
   public point(): number {
-    let point = 0;
-    ruleList.forEach((rule) => {
-      if (!premise[rule.name](this._premiseState)) return;
+    return config.rules
+      .map((rule): number => {
+        if (rule.scorable && !rule.scorable(this._premiseState)) return 0;
 
-      point += rule.point(this.state[rule.name] as never);
-    });
-
-    return point;
+        return rule.point(this.state[rule.name] as never);
+      })
+      .reduce((sum, point) => (sum += point), 0);
   }
 }
