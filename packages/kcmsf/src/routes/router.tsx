@@ -28,7 +28,7 @@ export const router = createBrowserRouter(
           element: <Entry />,
         },
         {
-          path: "entrybulk",
+          path: "entry/bulk",
           element: <EntryBulk />,
         },
         {
