@@ -30,6 +30,9 @@ jobs:
   frontend_build:
     name: "Build & Check (frontend)"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/kcmsf
 
     steps:
       - name: Checkout
@@ -42,12 +45,12 @@ jobs:
 
       - name: Install
         run: bun install --frozen-lockfile
-
-      - name: Lint bun lint
-        run: bun run --cwd packages/kcmsf lint
-
+      - name: Code Check
+        run: bun run check
+      - name: Lint
+        run: bun run lint
       - name: Test
-        run: bun run --cwd packages/kcmsf test:ci
+        run: bun run test:ci
 
   config_check:
     name: "Check (config)"
