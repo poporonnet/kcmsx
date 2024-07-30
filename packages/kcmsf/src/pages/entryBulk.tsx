@@ -60,8 +60,9 @@ export const BulkEntry = () => {
   const checkData = (data: string[][]): boolean[][] => {
     const newErrors = data.map((row) => new Array(row.length).fill(false));
 
-    data.forEach((row, i) => {
+    data.map((row, i) => {
       const [teamName, member1, member2, isMultiWalk, category] = row;
+      if (i === 0) return;
       if (teamName === undefined || teamName === "") {
         ErrorMessage(0);
         newErrors[i][0] = true;
@@ -95,11 +96,11 @@ export const BulkEntry = () => {
         setError(false);
       }
     });
-
     return newErrors;
   };
 
   const sendData = () => {
+    csvData.shift();
     const data = csvData.map((row) => {
       const entry: entryType = {
         teamName: row[0],
@@ -115,6 +116,7 @@ export const BulkEntry = () => {
   };
 
   const clear = () => {
+    setError(true);
     setCsvData([]);
   };
 
@@ -167,7 +169,7 @@ export const BulkEntry = () => {
             リセット
           </Button>
           {error ? (
-            <Button m={"2rem"} onClick={sendData} >
+            <Button m={"2rem"} onClick={sendData}>
               <IconSend stroke={2} />
               登録
             </Button>
