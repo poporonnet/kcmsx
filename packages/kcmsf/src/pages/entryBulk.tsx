@@ -24,7 +24,7 @@ const ErrorMessage = (errorNum: number) => {
   });
 };
 
-export const BulkEntry = () => {
+export const EntryBulk = () => {
   const [csvData, setCsvData] = useState<string[][]>([]);
   const [error, setError] = useState<boolean>(true);
   const [errors, setErrors] = useState<boolean[][]>([]);
