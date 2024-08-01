@@ -8,7 +8,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { Entry as entryType } from "../types/entry";
+import { Entry } from "../types/entry";
 
 const ErrorMessage = (errorNum: number) => {
   const message: string[] = [
@@ -26,7 +26,7 @@ const ErrorMessage = (errorNum: number) => {
 
 export const EntryBulk = () => {
   const [csvData, setCsvData] = useState<string[][]>([]);
-  const [error, setError] = useState<boolean>(true);
+  const [iserror, setisError] = useState<boolean>(false);
   const [errors, setErrors] = useState<boolean[][]>([]);
 
   useEffect(() => {
@@ -38,15 +38,15 @@ export const EntryBulk = () => {
 
   const handleDrop = (files: File[]) => {
     const file = files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const text = reader.result as string;
-        const data = parseCSV(text);
-        setCsvData(data);
-      };
-      reader.readAsText(file);
-    }
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const text = reader.result as string;
+      const data = parseCSV(text);
+      setCsvData(data);
+    };
+    reader.readAsText(file);
   };
 
   const parseCSV = (text: string): string[][] => {
@@ -66,11 +66,12 @@ export const EntryBulk = () => {
       if (teamName === undefined || teamName === "") {
         ErrorMessage(0);
         newErrors[i][0] = true;
-        setError(false);
+        setisError(true);
       }
       if (member1 === undefined || member1.length < 2) {
         ErrorMessage(1);
         newErrors[i][1] = true;
+        setisError(true);
       }
       if (
         member2 === undefined ||
@@ -78,6 +79,7 @@ export const EntryBulk = () => {
       ) {
         ErrorMessage(1);
         newErrors[i][2] = true;
+        setisError(true);
       }
       if (
         isMultiWalk === undefined ||
@@ -85,7 +87,7 @@ export const EntryBulk = () => {
       ) {
         ErrorMessage(2);
         newErrors[i][3] = true;
-        setError(false);
+        setisError(true);
       }
       if (
         category === undefined ||
@@ -93,7 +95,7 @@ export const EntryBulk = () => {
       ) {
         ErrorMessage(3);
         newErrors[i][4] = true;
-        setError(false);
+        setisError(true);
       }
     });
     return newErrors;
@@ -102,7 +104,7 @@ export const EntryBulk = () => {
   const sendData = () => {
     csvData.shift();
     const data = csvData.map((row) => {
-      const entry: entryType = {
+      const entry: Entry = {
         teamName: row[0],
         members: [row[1], row[2]],
         isMultiWalk: row[3] === "歩行型" ? true : false,
@@ -116,7 +118,7 @@ export const EntryBulk = () => {
   };
 
   const clear = () => {
-    setError(true);
+    setisError(false);
     setCsvData([]);
   };
 
@@ -168,20 +170,22 @@ export const EntryBulk = () => {
           <Button m={"2rem"} onClick={clear} variant="default">
             リセット
           </Button>
-          {error ? (
-            <Button m={"2rem"} onClick={sendData}>
-              <IconSend stroke={2} />
-              登録
-            </Button>
-          ) : (
-            <Button m={"2rem"} onClick={sendData} disabled>
-              <IconSend stroke={2} />
-              登録
-            </Button>
-          )}
+          <Button m={"2rem"} onClick={sendData} disabled={iserror}>
+            <IconSend stroke={2} />
+            登録
+          </Button>
         </>
       ) : (
-        <Box maw={620} mx={"auto"} bd="3px solid gray.6" p={rem(10)}>
+        <Box
+          maw={620}
+          style={{
+            boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.2)",
+            borderRadius: rem(15),
+          }}
+          mx="auto"
+          bd="2px solid gray"
+          p={rem(10)}
+        >
           <Dropzone
             onDrop={handleDrop}
             onReject={() => (
