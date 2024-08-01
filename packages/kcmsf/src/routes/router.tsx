@@ -25,11 +25,16 @@ export const router = createBrowserRouter(
         },
         {
           path: "entry",
-          element: <Entry />,
-        },
-        {
-          path: "entry/bulk",
-          element: <EntryBulk />,
+          children: [
+            {
+              index: true,
+              element: <Entry />,
+            },
+            {
+              path: "bulk",
+              element: <EntryBulk />,
+            },
+          ],
         },
         {
           path: "match",
