@@ -100,7 +100,7 @@ importers:
         version: 3.3.3
       tsx:
         specifier: ^4.6.2
-        version: 4.16.3
+        version: 4.16.4
       vitest:
         specifier: ^2.0.0
         version: 2.0.5(@types/node@20.14.13)(@vitest/ui@2.0.5)(jsdom@24.1.1)(sugarss@4.0.1(postcss@8.4.40))
@@ -2228,8 +2228,8 @@ packages:
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
-  tsx@4.16.3:
-    resolution: {integrity: sha512-MP8AEUxVnboD2rCC6kDLxnpDBNWN9k3BSVU/0/nNxgm70bPBnfn+yCKcnOsIVPQwdkbKYoFOlKjjWZWJ2XCXUg==}
+  tsx@4.16.4:
+    resolution: {integrity: sha512-E0EDobc7FtOxdNtG0ZQWztLa9PK/TqC5QvdV0heyIMJySwcJ8vyvziOznzO1MIM2IDfacLGBgfiCUmba6mvI7Q==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -4357,7 +4357,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsx@4.16.3:
+  tsx@4.16.4:
     dependencies:
       esbuild: 0.21.5
       get-tsconfig: 4.7.6
