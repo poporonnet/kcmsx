@@ -54,7 +54,7 @@ export const MatchList = () => {
       }
 
       setLoading(false);
-    } catch (error) {
+    } catch {
       setError(true);
     }
 
