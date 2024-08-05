@@ -32,20 +32,26 @@ entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
   });
 });
 
-entryHandler.post("/bulk", zValidator("json", bulkEntryRequestSchema), async (c) => {
-  const data = c.req.valid("json");
-  
-  const response: {id: string, teamName: string, members: string[], isMultiWalk: boolean, category: "open" | "elementary"}[] = [];
+entryHandler.post('/bulk', zValidator('json', bulkEntryRequestSchema), async (c) => {
+  const data = c.req.valid('json');
+
+  const response: {
+    id: string;
+    teamName: string;
+    members: string[];
+    isMultiWalk: boolean;
+    category: 'open' | 'elementary';
+  }[] = [];
 
   for (const v of data) {
     const res = await controller.create({
       teamName: v.teamName,
       members: v.members,
       isMultiWalk: v.isMultiWalk,
-      category: v.category
-    })
+      category: v.category,
+    });
     if (Result.isErr(res)) {
-      return c.json({error: errorToCode(res[1])}, 400);
+      return c.json({ error: errorToCode(res[1]) }, 400);
     }
     const unwrapped = Result.unwrap(res);
     response.push({
@@ -53,14 +59,12 @@ entryHandler.post("/bulk", zValidator("json", bulkEntryRequestSchema), async (c)
       teamName: unwrapped.teamName,
       members: unwrapped.members,
       isMultiWalk: unwrapped.isMultiWalk,
-      category: unwrapped.category === "open" ? "open" : "elementary"
+      category: unwrapped.category === 'open' ? 'open' : 'elementary',
     });
   }
 
-
   return c.json(response, 200);
-})
-
+});
 
 entryHandler.get('/', async (c) => {
   const res = await controller.get();

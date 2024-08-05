@@ -7,6 +7,4 @@ export const entryRequestSchema = z.object({
   category: z.enum(['Elementary', 'Open']),
 });
 
-export const bulkEntryRequestSchema = z.array(
-  entryRequestSchema
-).max(100);
+export const bulkEntryRequestSchema = z.array(entryRequestSchema).max(100);
