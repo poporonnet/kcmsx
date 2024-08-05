@@ -9,17 +9,17 @@ import {
 } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { Entry } from "../types/entry";
-
-const ErrorMessage = (errorNum: number) => {
-  const message: string[] = [
-    "チーム名が短すぎます。",
-    "メンバーの名前が短すぎます。",
-    "ロボットのカテゴリーは車輪型または歩行型にしてください。",
-    "部門が不正です。",
-  ];
+const errorMessages = {
+  shortTeamName: "チーム名が短すぎます",
+  shortMemberName: "メンバーの名前が短すぎます",
+  invalidCategory: "部門が不正です",
+  invalidRobotCategory:
+    "ロボットのカテゴリーは車輪型または歩行型にしてください",
+};
+const notifyError = (error: keyof typeof errorMessages) => {
   notifications.show({
-    title: "登録失敗",
-    message: "登録に失敗しました。" + message[errorNum],
+    title: "登録に失敗しました",
+    message: errorMessages[error],
     color: "red",
   });
 };
@@ -64,12 +64,12 @@ export const EntryBulk = () => {
       const [teamName, member1, member2, isMultiWalk, category] = row;
       if (i === 0) return;
       if (teamName === undefined || teamName === "") {
-        ErrorMessage(0);
+        notifyError("shortTeamName");
         newErrors[i][0] = true;
         setisError(true);
       }
       if (member1 === undefined || member1.length < 2) {
-        ErrorMessage(1);
+        notifyError("shortMemberName");
         newErrors[i][1] = true;
         setisError(true);
       }
@@ -77,7 +77,7 @@ export const EntryBulk = () => {
         member2 === undefined ||
         (member2.length < 2 && member2.length !== 0)
       ) {
-        ErrorMessage(1);
+        notifyError("shortMemberName");
         newErrors[i][2] = true;
         setisError(true);
       }
@@ -85,7 +85,7 @@ export const EntryBulk = () => {
         isMultiWalk === undefined ||
         (isMultiWalk !== "歩行型" && isMultiWalk !== "車輪型")
       ) {
-        ErrorMessage(2);
+        notifyError("invalidRobotCategory");
         newErrors[i][3] = true;
         setisError(true);
       }
@@ -93,7 +93,7 @@ export const EntryBulk = () => {
         category === undefined ||
         (category !== "Elementary" && category !== "Open")
       ) {
-        ErrorMessage(3);
+        notifyError("invalidCategory");
         newErrors[i][4] = true;
         setisError(true);
       }
@@ -112,9 +112,8 @@ export const EntryBulk = () => {
       };
       return entry;
     });
-    const json = JSON.stringify(data);
-    const obj = JSON.parse(json);
-    return obj;
+    //const json = JSON.stringify(data);
+    //なんかごにょごにょして後ろに渡す
   };
 
   const clear = () => {
@@ -179,7 +178,7 @@ export const EntryBulk = () => {
         <Box
           maw={620}
           style={{
-            boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.2)",
+            boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.05)",
             borderRadius: rem(15),
           }}
           mx="auto"
