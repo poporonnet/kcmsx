@@ -1,4 +1,4 @@
-import { config } from "../../config";
+import { type config } from "../../config";
 
 /**
  * @description 設定されたすべての設定の型
