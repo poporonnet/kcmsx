@@ -39,14 +39,10 @@ export const EntryBulk = () => {
   const handleDrop = (files: File[]) => {
     const file = files[0];
     if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = reader.result as string;
+    file.text().then((text) => {
       const data = parseCSV(text);
       setCsvData(data);
-    };
-    reader.readAsText(file);
+    });
   };
 
   const parseCSV = (text: string): string[][] => {
@@ -54,7 +50,9 @@ export const EntryBulk = () => {
       .replace(/\r\n/g, "\n")
       .split("\n")
       .map((row) => row.split(","));
-    return rows;
+    //もしヘッダーの確認などでヘッダー情報が必要になるならここを変更する
+    const data = rows.slice(1);
+    return data;
   };
 
   const checkData = (data: string[][]): boolean[][] => {
@@ -62,7 +60,6 @@ export const EntryBulk = () => {
 
     data.map((row, i) => {
       const [teamName, member1, member2, isMultiWalk, category] = row;
-      if (i === 0) return;
       if (!teamName || teamName === "") {
         notifyError("shortTeamName");
         newErrors[i][0] = true;
@@ -73,7 +70,7 @@ export const EntryBulk = () => {
         newErrors[i][1] = true;
         setisError(true);
       }
-      if (!member2 || (member2.length < 2 && member2.length !== 0)) {
+      if (member2.length < 2 && member2.length !== 0) {
         notifyError("shortMemberName");
         newErrors[i][2] = true;
         setisError(true);
@@ -96,7 +93,6 @@ export const EntryBulk = () => {
   };
 
   const sendData = () => {
-    csvData.shift();
     const data = csvData.map((row) => {
       const entry: Entry = {
         teamName: row[0],
@@ -107,6 +103,7 @@ export const EntryBulk = () => {
       return entry;
     });
     console.log(data);
+    setisError(true);
     //const json = JSON.stringify(data);
     //なんかごにょごにょして後ろに渡す
   };
@@ -188,7 +185,6 @@ export const EntryBulk = () => {
                   stroke={1.5}
                 />
               </Dropzone.Idle>
-
               <div>
                 <Text size="xl" inline>
                   ここにCSVファイルをドラッグ&ドロップしてください
@@ -218,20 +214,18 @@ const EntryTable = (data: string[][], errors: boolean[][]) => {
         <Table.Tbody>
           {data.map((row, i) => (
             <Table.Tr key={`row-${i}`}>
-              {i === 0
-                ? null
-                : row.map((cell, j) => (
-                    <Table.Td
-                      ta={"left"}
-                      key={`cell-${i}-${j}`}
-                      style={{
-                        backgroundColor:
-                          errors[i] && errors[i][j] ? "#EC777E" : "inherit",
-                      }}
-                    >
-                      {cell}
-                    </Table.Td>
-                  ))}
+              {row.map((cell, j) => (
+                <Table.Td
+                  ta={"left"}
+                  key={`cell-${i}-${j}`}
+                  style={{
+                    backgroundColor:
+                      errors[i] && errors[i][j] ? "#EC777E" : "inherit",
+                  }}
+                >
+                  {cell}
+                </Table.Td>
+              ))}
             </Table.Tr>
           ))}
         </Table.Tbody>
