@@ -63,36 +63,30 @@ export const EntryBulk = () => {
     data.map((row, i) => {
       const [teamName, member1, member2, isMultiWalk, category] = row;
       if (i === 0) return;
-      if (teamName === undefined || teamName === "") {
+      if (!teamName || teamName === "") {
         notifyError("shortTeamName");
         newErrors[i][0] = true;
         setisError(true);
       }
-      if (member1 === undefined || member1.length < 2) {
+      if (!member1 || member1.length < 2) {
         notifyError("shortMemberName");
         newErrors[i][1] = true;
         setisError(true);
       }
-      if (
-        member2 === undefined ||
-        (member2.length < 2 && member2.length !== 0)
-      ) {
+      if (!member2 || (member2.length < 2 && member2.length !== 0)) {
         notifyError("shortMemberName");
         newErrors[i][2] = true;
         setisError(true);
       }
       if (
-        isMultiWalk === undefined ||
+        !isMultiWalk ||
         (isMultiWalk !== "歩行型" && isMultiWalk !== "車輪型")
       ) {
         notifyError("invalidRobotCategory");
         newErrors[i][3] = true;
         setisError(true);
       }
-      if (
-        category === undefined ||
-        (category !== "Elementary" && category !== "Open")
-      ) {
+      if (!category || (category !== "Elementary" && category !== "Open")) {
         notifyError("invalidCategory");
         newErrors[i][4] = true;
         setisError(true);
@@ -112,6 +106,7 @@ export const EntryBulk = () => {
       };
       return entry;
     });
+    console.log(data);
     //const json = JSON.stringify(data);
     //なんかごにょごにょして後ろに渡す
   };
@@ -121,51 +116,13 @@ export const EntryBulk = () => {
     setCsvData([]);
   };
 
-  const showDetails = (data: string[][], errors: boolean[][]) => {
-    return (
-      <Box>
-        <Table>
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>チーム名</Table.Th>
-              <Table.Th>メンバー1</Table.Th>
-              <Table.Th>メンバー2</Table.Th>
-              <Table.Th>歩行型</Table.Th>
-              <Table.Th>部門</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {data.map((row, i) => (
-              <Table.Tr key={i}>
-                {i === 0
-                  ? null
-                  : row.map((cell, j) => (
-                      <Table.Td
-                        ta={"left"}
-                        key={j}
-                        style={{
-                          backgroundColor:
-                            errors[i] && errors[i][j] ? "#EC777E" : "inherit",
-                        }}
-                      >
-                        {cell}
-                      </Table.Td>
-                    ))}
-              </Table.Tr>
-            ))}
-          </Table.Tbody>
-        </Table>
-      </Box>
-    );
-  };
-
   return (
     <>
       <h1>一括エントリー</h1>
       {csvData.length > 0 ? (
         <>
           <p>この内容で登録します</p>
-          <Box>{showDetails(csvData, errors)}</Box>
+          <Box>{EntryTable(csvData, errors)}</Box>
           <Button m={"2rem"} onClick={clear} variant="default">
             リセット
           </Button>
@@ -242,5 +199,43 @@ export const EntryBulk = () => {
         </Box>
       )}
     </>
+  );
+};
+
+const EntryTable = (data: string[][], errors: boolean[][]) => {
+  return (
+    <Box>
+      <Table>
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>チーム名</Table.Th>
+            <Table.Th>メンバー1</Table.Th>
+            <Table.Th>メンバー2</Table.Th>
+            <Table.Th>歩行型</Table.Th>
+            <Table.Th>部門</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {data.map((row, i) => (
+            <Table.Tr key={`row-${i}`}>
+              {i === 0
+                ? null
+                : row.map((cell, j) => (
+                    <Table.Td
+                      ta={"left"}
+                      key={`cell-${i}-${j}`}
+                      style={{
+                        backgroundColor:
+                          errors[i] && errors[i][j] ? "#EC777E" : "inherit",
+                      }}
+                    >
+                      {cell}
+                    </Table.Td>
+                  ))}
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </Box>
   );
 };
