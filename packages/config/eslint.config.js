@@ -10,7 +10,7 @@ const compat = new FlatCompat();
 /** @type {import("eslint").Linter.Config} */
 export default [
   {
-    files: ["config.ts", "*/**/*.ts"],
+    files: ["index.ts", "src/**/*.ts"],
   },
   {
     ignores: ["coverage/**", "node_modules/**"],
