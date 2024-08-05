@@ -59,7 +59,10 @@ export const EntryBulk = () => {
     const newErrors = data.map((row) => new Array(row.length).fill(false));
 
     data.map((row, i) => {
-      const [teamName, member1, member2, isMultiWalk, category] = row;
+      const [teamName, member1, member2, isMultiWalk, category] = row as (
+        | string
+        | undefined
+      )[];
       if (!teamName || teamName === "") {
         notifyError("shortTeamName");
         newErrors[i][0] = true;
@@ -70,7 +73,7 @@ export const EntryBulk = () => {
         newErrors[i][1] = true;
         setisError(true);
       }
-      if (member2.length < 2 && member2.length !== 0) {
+      if (member2 && member2.length < 2) {
         notifyError("shortMemberName");
         newErrors[i][2] = true;
         setisError(true);
