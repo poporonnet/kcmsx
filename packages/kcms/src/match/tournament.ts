@@ -1,4 +1,4 @@
-import { Entry, EntryID } from '../entry/entry.js';
+import { Team, EntryID } from '../entry/models/team.js';
 
 type Tournament = [TournamentRank, TournamentRank] | [Tournament, Tournament];
 
@@ -17,7 +17,7 @@ const generateDummyData = (n: number): TournamentRank[] => {
   for (let i = 1; i < n + 1; i++) {
     res.push({
       rank: i,
-      entry: Entry.new({
+      entry: Team.new({
         id: `${i}` as EntryID,
         teamName: `チーム ${i}`,
         members: [`チーム${i}のメンバー`],
@@ -31,6 +31,6 @@ const generateDummyData = (n: number): TournamentRank[] => {
 const ids = generateDummyData(8);
 export type TournamentRank = {
   rank: number;
-  entry: Entry;
+  entry: Team;
 };
 console.log({ tournament: tournament(ids) }); // => [[[1, 8],[4, 5]],[[2, 7],[3, 6]]]

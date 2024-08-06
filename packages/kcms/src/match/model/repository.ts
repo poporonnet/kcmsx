@@ -5,7 +5,7 @@ import { MainMatch, MainMatchID } from './main.js';
 export interface PreMatchRepository {
   /**
    * @description 試合を作成
-   * @param match 試合する試合オブジェクト (PreMatch)
+   * @param match 試合する試合オブジェクト ({@link PreMatch})
    * @returns 成功時: void 失敗時: Error
    * @example
    *   // PreMatch作成
@@ -16,7 +16,7 @@ export interface PreMatchRepository {
   create(match: PreMatch): Promise<Result.Result<Error, void>>;
   /**
    * @description 試合を作成
-   * @param matches 試合する試合オブジェクトの**配列** (PreMatch)
+   * @param matches 試合する試合オブジェクトの**配列** ({@link PreMatch})
    * @returns 成功時: void 失敗時: Error
    * @example
    *   // PreMatch作成
@@ -28,8 +28,8 @@ export interface PreMatchRepository {
 
   /**
    * @description 試合をIDで検索
-   * @param id 試合ID (PreMatchID)
-   * @returns 試合が見つかった場合: Option.some(指定したIDの型に応じた試合オブジェクト) 試合が見つからなかった場合: Option.none()
+   * @param id 試合ID ({@link PreMatchID})
+   * @returns 試合が見つかった場合: Option.some({@link PreMatch}) 試合が見つからなかった場合: Option.none()
    * @example
    *  // PreMatchを検索する場合
    *  const match = await repository.findByID('12345' as PreMatchID);
@@ -43,7 +43,7 @@ export interface PreMatchRepository {
 
   /**
    * @description 試合を更新
-   * @param match 更新する試合オブジェクト (PreMatch)
+   * @param match 更新する試合オブジェクト ({@link PreMatch})
    * @returns 成功時: void 失敗時: Error
    */
   update(match: PreMatch): Promise<Result.Result<Error, void>>;
@@ -52,13 +52,13 @@ export interface PreMatchRepository {
    * @description 全ての試合を取得
    * @returns 成功時: Result.ok({@link PreMatch}) 失敗時: Error
    */
-  findAll(): Promise<Result.Result<Error, PreMatch>>;
+  findAll(): Promise<Result.Result<Error, PreMatch[]>>;
 }
 
 export interface MainMatchRepository {
   /**
    * @description 試合を作成
-   * @param match 試合する試合オブジェクト (MainMatch)
+   * @param match 試合する試合オブジェクト ({@link MainMatch})
    * @returns 成功時: void 失敗時: Error
    * @example
    *   // MainMatch作成
@@ -69,7 +69,7 @@ export interface MainMatchRepository {
   create(match: MainMatch): Promise<Result.Result<Error, void>>;
   /**
    * @description 試合を作成
-   * @param matches 試合する試合オブジェクトの**配列** (MainMatch)
+   * @param matches 試合する試合オブジェクトの**配列** ({@link MainMatch})
    * @returns 成功時: void 失敗時: Error
    * @example
    *   // MainMatch作成
@@ -81,7 +81,7 @@ export interface MainMatchRepository {
 
   /**
    * @description 試合をIDで検索
-   * @param id 試合ID (MainMatchID)
+   * @param id 試合ID ({@link MainMatchID})
    * @returns 試合が見つかった場合: Option.some(指定したIDの型に応じた試合オブジェクト) 試合が見つからなかった場合: Option.none()
    * @example
    *  // PreMatchを検索する場合
@@ -96,7 +96,7 @@ export interface MainMatchRepository {
 
   /**
    * @description 試合を更新
-   * @param match 更新する試合オブジェクト (MainMatch)
+   * @param match 更新する試合オブジェクト ({@link MainMatch})
    * @returns 成功時: void 失敗時: Error
    */
   update(match: MainMatch): Promise<Result.Result<Error, void>>;
@@ -105,5 +105,5 @@ export interface MainMatchRepository {
    * @description 全ての試合を取得
    * @returns 成功時: Result.ok({@link MainMatch}) 失敗時: Error
    */
-  findAll(): Promise<Result.Result<Error, MainMatch>>;
+  findAll(): Promise<Result.Result<Error, MainMatch[]>>;
 }

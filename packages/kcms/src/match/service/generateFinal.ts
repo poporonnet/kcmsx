@@ -1,8 +1,8 @@
-import { EntryRepository } from '../../entry/repository.js';
+import { EntryRepository } from '../../entry/models/repository.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
-import { Entry } from '../../entry/entry.js';
+import { Team } from '../../entry/models/team.js';
 import { MatchID, Match, MatchResultFinalPair } from '../model/match.js';
-import { MatchRepository } from './repository.js';
+import { MatchRepository } from '../model/repository.js';
 import { GenerateRankingService } from './generateRanking.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
@@ -10,7 +10,7 @@ export type TournamentRank = {
   rank: number;
   points: number;
   time: number;
-  entry: Entry;
+  entry: Team;
 };
 export type Tournament = [TournamentRank, TournamentRank] | [Tournament, Tournament];
 type TournamentPermutation = TournamentRank[];
@@ -165,8 +165,8 @@ export class GenerateFinalMatchService {
     const matches = this.eachSlice(finishedMatch, 2);
 
     // 取り出したら、その中で勝者を取り出す
-    const pickWinner = (match: [Match, Match]): Entry[] => {
-      const res: Entry[] = new Array<Entry>();
+    const pickWinner = (match: [Match, Match]): Team[] => {
+      const res: Team[] = new Array<Team>();
       for (const v of match) {
         const winnerID = (v.getResults() as MatchResultFinalPair).winnerID;
         if (v.getTeams().left!.getId() == winnerID) {
@@ -177,7 +177,7 @@ export class GenerateFinalMatchService {
       }
       return res;
     };
-    const teamPair: Entry[][] = [];
+    const teamPair: Team[][] = [];
     for (const v of matches) {
       teamPair.push(pickWinner(v));
     }

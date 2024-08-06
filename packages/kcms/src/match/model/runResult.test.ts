@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { RunResult, RunResultID } from './runResult.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../entry/models/team.js';
 
 describe('RunResult', () => {
   it('正しくインスタンスを生成できる(ゴール時)', () => {
     const result = RunResult.new({
       id: '999' as RunResultID,
-      teamId: '100' as EntryID,
+      teamId: '100' as TeamID,
       points: 10,
       goalTimeSeconds: 100,
       finishState: 'FINISHED',
@@ -23,7 +23,7 @@ describe('RunResult', () => {
   it('正しくインスタンスを生成できる(フィニッシュ時)', () => {
     const result = RunResult.new({
       id: '999' as RunResultID,
-      teamId: '100' as EntryID,
+      teamId: '100' as TeamID,
       points: 10,
       goalTimeSeconds: 100,
       finishState: 'RETIRED',

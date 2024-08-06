@@ -1,5 +1,5 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { MatchRepository } from './repository.js';
+import { MatchRepository } from '../model/repository.js';
 import { MatchDTO } from './get.js';
 import { ReconstructMatchArgs } from '../model/match.js';
 

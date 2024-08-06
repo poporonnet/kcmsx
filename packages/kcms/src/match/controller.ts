@@ -2,7 +2,7 @@ import { GenerateFinalMatchService } from './service/generateFinal.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { Match } from './model/match.js';
 import { EditMatchService } from './service/edit.js';
-import { Entry, EntryID } from '../entry/entry.js';
+import { Team, TeamID } from '../entry/models/team.js';
 import { GetMatchService } from './service/get.js';
 import { GeneratePrimaryMatchService } from './service/generatePrimary.js';
 
@@ -87,7 +87,7 @@ export class MatchController {
   }
 
   private toJSON(i: Match): matchJSON {
-    const toTeamJSON = (i?: Entry): matchTeamJSON | undefined => {
+    const toTeamJSON = (i?: Team): matchTeamJSON | undefined => {
       if (!i) {
         return i;
       }
@@ -114,7 +114,7 @@ export class MatchController {
 }
 
 interface matchResultJSON {
-  teamID: EntryID;
+  teamID: TeamID;
   points: number;
   time: number;
 }
@@ -126,7 +126,7 @@ interface matchResultPairJSON {
 
 interface matchResultFinalPairJSON {
   results: [matchResultPairJSON, matchResultPairJSON];
-  winnerID: EntryID;
+  winnerID: TeamID;
 }
 
 interface matchUpdateJSON {
