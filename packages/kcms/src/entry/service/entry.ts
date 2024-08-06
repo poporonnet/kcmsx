@@ -1,12 +1,12 @@
-import { EntryRepository } from '../models/repository.js';
+import { TeamRepository } from '../models/repository.js';
 import { Team, TeamCreateArgs, TeamID } from '../models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
 export class EntryService {
-  private readonly repository: EntryRepository;
+  private readonly repository: TeamRepository;
   private readonly idGenerator: SnowflakeIDGenerator;
-  constructor(repository: EntryRepository, idGenerator: SnowflakeIDGenerator) {
+  constructor(repository: TeamRepository, idGenerator: SnowflakeIDGenerator) {
     this.repository = repository;
     this.idGenerator = idGenerator;
   }

@@ -6,11 +6,24 @@ export type Department = 'Elementary' | 'Open';
 export type TeamID = SnowflakeID<'Entry'>;
 
 export interface TeamCreateArgs {
+  /** @desc チームID */
   id: TeamID;
+  /** @desc チーム名 */
   teamName: string;
+  /** @desc メンバー */
   members: Array<string>;
+  /**
+   * @desc 多脚型か
+   *  ToDo: ロボットの種類(RobotType)に変更する
+   * */
   isMultiWalk: boolean;
+  /** @desc 部門 */
   category: Department;
+  /**
+   * @desc エントリーしたか
+   * @default false
+   * */
+  isEntered: boolean;
 }
 
 export class Team {
@@ -19,19 +32,22 @@ export class Team {
   private readonly members: Array<string>;
   private readonly isMultiWalk: boolean;
   private readonly category: Department;
+  private isEntered: boolean;
 
   private constructor(
     id: TeamID,
     teamName: string,
     _members: Array<string>,
     _isMultiWalk: boolean,
-    category: Department
+    category: Department,
+    isEntered: boolean
   ) {
     this.id = id;
     this.teamName = teamName;
     this.members = _members;
     this.isMultiWalk = _isMultiWalk;
     this.category = category;
+    this.isEntered = isEntered;
   }
 
   getId(): TeamID {
@@ -54,7 +70,33 @@ export class Team {
     return this.category;
   }
 
-  public static new(arg: TeamCreateArgs): Team {
-    return new Team(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category);
+  /**
+   * @description エントリーしているかを取得
+   * @returns エントリーしているか
+   * */
+  getIsEntered(): boolean {
+    return this.isEntered;
+  }
+
+  /**
+   * @description エントリーする
+   * */
+  enter(): void {
+    this.isEntered = true;
+  }
+
+  public static new(arg: Omit<TeamCreateArgs, 'isEntered'>): Team {
+    return new Team(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category, false);
+  }
+
+  public static reconstruct(arg: TeamCreateArgs): Team {
+    return new Team(
+      arg.id,
+      arg.teamName,
+      arg.members,
+      arg.isMultiWalk,
+      arg.category,
+      arg.isEntered
+    );
   }
 }

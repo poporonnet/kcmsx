@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DummyRepository } from '../../entry/adaptor/dummyRepository.js';
+import { DummyTeamRepository } from '../../entry/adaptor/dummyRepository.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { GeneratePrimaryMatchService } from './generatePrimary.js';
 import { TestEntrySet } from '../../testData/entry.js';
@@ -7,7 +7,7 @@ import { SnowflakeIDGenerator } from '../../id/main.js';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository.js';
 
 describe('予選の対戦表を正しく生成できる', () => {
-  const repository = new DummyRepository([
+  const repository = new DummyTeamRepository([
     TestEntrySet.ElementaryMultiWalk['101'],
     TestEntrySet.ElementaryMultiWalk['102'],
     TestEntrySet.ElementaryMultiWalk['103'],

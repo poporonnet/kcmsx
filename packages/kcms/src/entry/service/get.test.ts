@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/dummyRepository.js';
+import { DummyTeamRepository } from '../adaptor/dummyRepository.js';
 import { EntryDTO, FindEntryService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry.js';
 
 describe('getEntryService', () => {
-  const repository = new DummyRepository();
+  const repository = new DummyTeamRepository();
   const service = new FindEntryService(repository);
 
   const testEntryData = [

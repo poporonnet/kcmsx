@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
 import { TestRankingPreMatchData } from '../../testData/match.js';
 import { GenerateFinalMatchService } from './generateFinal.js';
-import { DummyRepository } from '../../entry/adaptor/dummyRepository.js';
+import { DummyTeamRepository } from '../../entry/adaptor/dummyRepository.js';
 import { TestEntrySet } from '../../testData/entry.js';
 import { GenerateRankingService } from './generateRanking.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
@@ -12,7 +12,7 @@ import { TeamID } from '../../entry/models/team.js';
 
 describe('GenerateFinal1st', () => {
   const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
-  const entryRepository = new DummyRepository([
+  const entryRepository = new DummyTeamRepository([
     TestEntrySet.ElementaryMultiWalk[101],
     TestEntrySet.ElementaryMultiWalk[102],
     TestEntrySet.ElementaryMultiWalk[103],
@@ -66,7 +66,7 @@ describe('GenerateFinal1st', () => {
 
 describe('GenerateFinalNth', () => {
   const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
-  const entryRepository = new DummyRepository([
+  const entryRepository = new DummyTeamRepository([
     TestEntrySet.ElementaryMultiWalk[101],
     TestEntrySet.ElementaryMultiWalk[102],
     TestEntrySet.ElementaryMultiWalk[103],
@@ -139,7 +139,7 @@ describe('GenerateFinalNth', () => {
 
   it('本選の2回戦目の試合を生成できる', async () => {
     const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
-    const entryRepository = new DummyRepository([
+    const entryRepository = new DummyTeamRepository([
       TestEntrySet.ElementaryMultiWalk[101],
       TestEntrySet.ElementaryMultiWalk[102],
       TestEntrySet.ElementaryMultiWalk[103],

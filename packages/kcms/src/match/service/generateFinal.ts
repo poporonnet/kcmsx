@@ -1,4 +1,4 @@
-import { EntryRepository } from '../../entry/models/repository.js';
+import { TeamRepository } from '../../entry/models/repository.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { Team } from '../../entry/models/team.js';
 import { MatchID, Match, MatchResultFinalPair } from '../model/match.js';
@@ -21,13 +21,13 @@ type Tuple<T, L extends number> = BaseTuple<T, L>;
 
 export class GenerateFinalMatchService {
   private readonly FINAL_TOURNAMENT_COUNT = 8;
-  private readonly entryRepository: EntryRepository;
+  private readonly entryRepository: TeamRepository;
   private readonly matchRepository: MatchRepository;
   private readonly rankingService: GenerateRankingService;
   private readonly idGenerator: SnowflakeIDGenerator;
 
   constructor(
-    entryRepository: EntryRepository,
+    entryRepository: TeamRepository,
     matchRepository: MatchRepository,
     rankingService: GenerateRankingService,
     idGenerator: SnowflakeIDGenerator

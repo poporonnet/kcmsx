@@ -1,18 +1,18 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { Team } from '../../entry/models/team.js';
-import { EntryRepository } from '../../entry/models/repository.js';
+import { TeamRepository } from '../../entry/models/repository.js';
 import { PreMatchRepository } from '../model/repository.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 import { PreMatch, PreMatchID } from '../model/pre.js';
 
 export class GeneratePrimaryMatchService {
-  private readonly entryRepository: EntryRepository;
+  private readonly entryRepository: TeamRepository;
   private readonly matchRepository: PreMatchRepository;
   private readonly idGenerator: SnowflakeIDGenerator;
   private readonly COURSE_COUNT = 3;
 
   constructor(
-    entryRepository: EntryRepository,
+    entryRepository: TeamRepository,
     matchRepository: PreMatchRepository,
     idGenerator: SnowflakeIDGenerator
   ) {

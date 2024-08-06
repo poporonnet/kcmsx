@@ -1,10 +1,10 @@
-import { EntryRepository } from '../models/repository.js';
+import { TeamRepository } from '../models/repository.js';
 import { Option } from '@mikuroxina/mini-fn';
 
 export class DeleteEntryService {
-  private readonly repository: EntryRepository;
+  private readonly repository: TeamRepository;
 
-  constructor(repository: EntryRepository) {
+  constructor(repository: TeamRepository) {
     this.repository = repository;
   }
 
