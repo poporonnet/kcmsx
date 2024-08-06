@@ -1,31 +1,31 @@
 // Elementary: 小学生部門 / Open: オープン部門
 // ToDo: 部門の定義をファイルから読み込むようにする
-import { SnowflakeID } from '../id/main.js';
+import { SnowflakeID } from '../../id/main.js';
 
-export type EntryCategory = 'Elementary' | 'Open';
-export type EntryID = SnowflakeID<'Entry'>;
+export type Department = 'Elementary' | 'Open';
+export type TeamID = SnowflakeID<'Entry'>;
 
-export interface EntryCreateArgs {
-  id: EntryID;
+export interface TeamCreateArgs {
+  id: TeamID;
   teamName: string;
   members: Array<string>;
   isMultiWalk: boolean;
-  category: EntryCategory;
+  category: Department;
 }
 
-export class Entry {
-  private readonly id: EntryID;
+export class Team {
+  private readonly id: TeamID;
   private readonly teamName: string;
   private readonly members: Array<string>;
   private readonly isMultiWalk: boolean;
-  private readonly category: EntryCategory;
+  private readonly category: Department;
 
   private constructor(
-    id: EntryID,
+    id: TeamID,
     teamName: string,
     _members: Array<string>,
     _isMultiWalk: boolean,
-    category: EntryCategory
+    category: Department
   ) {
     this.id = id;
     this.teamName = teamName;
@@ -34,7 +34,7 @@ export class Entry {
     this.category = category;
   }
 
-  getId(): EntryID {
+  getId(): TeamID {
     return this.id;
   }
 
@@ -50,11 +50,11 @@ export class Entry {
     return this.isMultiWalk;
   }
 
-  getCategory(): EntryCategory {
+  getCategory(): Department {
     return this.category;
   }
 
-  public static new(arg: EntryCreateArgs): Entry {
-    return new Entry(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category);
+  public static new(arg: TeamCreateArgs): Team {
+    return new Team(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category);
   }
 }

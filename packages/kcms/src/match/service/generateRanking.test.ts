@@ -1,18 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
+import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
 import { GenerateRankingService } from './generateRanking.js';
-import { TestRankingMatchData } from '../../testData/match.js';
+import { TestRankingPreMatchData } from '../../testData/match.js';
 
 describe('GenerateRankingService', () => {
-  const repository = new DummyMatchRepository(TestRankingMatchData);
+  const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
   const service = new GenerateRankingService(repository);
 
   it('正しくランキングを生成できる', async () => {
     const [actual] = await service.handle();
     /*
-      順位順: 101, 102, 103, 104 107, 108, 109, 110
-      得点:   20   19,   18, 10,   8    6,  6,   4
-      時間:  60,   64,   70, 74, 80,  90,100, 180
+      チームID:  1    2    3    4    5    6    7    8   9
+      得点:    12,  10,   9,   7,   5,   4,   4,   2   1
+      時間:    60,  64,  70,  74,  80,  90, 100, 180 200
     */
     const expected = [
       {

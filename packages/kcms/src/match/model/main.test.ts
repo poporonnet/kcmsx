@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { MainMatch, MainMatchID } from './main.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../entry/models/team.js';
 import { RunResult, RunResultID } from './runResult.js';
 
 describe('MainMatch', () => {
@@ -9,9 +9,9 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
-      winnerId: '2' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
+      winnerId: '2' as TeamID,
       runResults: [],
     };
 
@@ -30,9 +30,9 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
-      winnerId: '2' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
+      winnerId: '2' as TeamID,
       runResults: [],
     };
 
@@ -76,14 +76,14 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) =>
         RunResult.new({
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as EntryID) : ('3' as EntryID),
+          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         })
       ),
@@ -91,7 +91,7 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('2' as EntryID)).not.toThrow(
+    expect(() => mainMatch.setWinnerId('2' as TeamID)).not.toThrow(
       new Error('WinnerId is already set')
     );
   });
@@ -101,15 +101,15 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
-      winnerId: '2' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
+      winnerId: '2' as TeamID,
       runResults: [...Array(4)].map((_, i) => {
         return RunResult.new({
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as EntryID) : ('3' as EntryID),
+          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         });
       }),
@@ -117,7 +117,7 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('2' as EntryID)).toThrowError(
+    expect(() => mainMatch.setWinnerId('2' as TeamID)).toThrowError(
       new Error('WinnerId is already set')
     );
   });
@@ -127,14 +127,14 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) => {
         return RunResult.new({
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as EntryID) : ('3' as EntryID),
+          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         });
       }),
@@ -142,7 +142,7 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('2' as EntryID)).toThrowError(
+    expect(() => mainMatch.setWinnerId('2' as TeamID)).toThrowError(
       new Error('This match is not finished')
     );
   });
@@ -152,14 +152,14 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) => {
         return RunResult.new({
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as EntryID) : ('3' as EntryID),
+          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         });
       }),
@@ -167,10 +167,10 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('0' as EntryID)).toThrowError(
+    expect(() => mainMatch.setWinnerId('0' as TeamID)).toThrowError(
       new Error('WinnerId must be teamId1 or teamId2')
     );
-    expect(() => mainMatch.setWinnerId('1' as EntryID)).toThrowError(
+    expect(() => mainMatch.setWinnerId('1' as TeamID)).toThrowError(
       new Error('WinnerId must be teamId1 or teamId2')
     );
   });

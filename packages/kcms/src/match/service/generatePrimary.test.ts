@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DummyRepository } from '../../entry/adaptor/dummyRepository.js';
-import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
+import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { GeneratePrimaryMatchService } from './generatePrimary.js';
 import { TestEntrySet } from '../../testData/entry.js';
@@ -15,7 +15,7 @@ describe('予選の対戦表を正しく生成できる', () => {
     TestEntrySet.ElementaryWheel['108'],
     TestEntrySet.ElementaryWheel['109'],
   ]);
-  const matchRepository = new DummyMatchRepository();
+  const matchRepository = new DummyMainMatchRepository();
   const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
   const service = new GeneratePrimaryMatchService(repository, matchRepository, idGenerator);
 

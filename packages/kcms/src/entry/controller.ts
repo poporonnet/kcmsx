@@ -1,4 +1,4 @@
-import { EntryRepository } from './repository.js';
+import { EntryRepository } from './models/repository.js';
 import { EntryService } from './service/entry.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { FindEntryService } from './service/get.js';

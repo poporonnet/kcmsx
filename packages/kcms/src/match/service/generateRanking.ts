@@ -1,7 +1,8 @@
 import { TournamentRank } from './generateFinal.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { isMatchResultPair, MatchResultPair } from '../model/match.js';
-import { MatchRepository } from './repository.js';
+import { MatchRepository } from '../model/repository.js';
+import { RunResult } from '../model/runResult.js';
 
 export class GenerateRankingService {
   private readonly matchRepository: MatchRepository;
@@ -14,20 +15,20 @@ export class GenerateRankingService {
     if (Result.isErr(res)) {
       throw res[1];
     }
+    const match = Result.unwrap(res);
+
     // チームごとの得点/時間
     const rankBase: TournamentRank[] = [];
+
     // チームごとの得点を計算したい
     // -> まず全ての対戦を取得
-    for (const v of res[1]) {
-      // 本選は関係ないので飛ばす
-      if (v.getMatchType() !== 'primary') continue;
+    for (const v of match.main) {
       // 終わってない場合は飛ばす
-      if (!v.isEnd() || !v.getResults()) continue;
-      // ToDo: Match.categoryがprimaryのときはMatchResultPairに必ずなるようにする
-      if (!isMatchResultPair(v.getResults())) continue;
+      if (!v.getRunResults()) continue;
+
       // 対戦の結果を取って、tournamentRankを作る
-      const left = (v.getResults() as MatchResultPair).left;
-      const right = (v.getResults() as MatchResultPair).right;
+      const left = v.getRunResults().find((vv) => vv.getTeamId() === v.getTeamId1()) as RunResult;
+      const right = v.getRunResults().find((vv) => vv.getTeamId() === v.getTeamId1()) as RunResult;
 
       // 左チームの結果を追加
       const leftRank = rankBase.find((v) => v.entry.getId() === left.teamID);
@@ -35,8 +36,8 @@ export class GenerateRankingService {
         // なければ作る
         rankBase.push(<TournamentRank>{
           rank: 0,
-          points: left.points,
-          time: left.time,
+          points: left.getPoints(),
+          time: left.getGoalTimeSeconds(),
           entry: v.getTeams().left,
         });
       } else {

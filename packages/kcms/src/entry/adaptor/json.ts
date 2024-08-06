@@ -1,6 +1,6 @@
-import { EntryRepository } from '../repository.js';
+import { EntryRepository } from '../models/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { Entry, EntryCategory, EntryID } from '../entry.js';
+import { Team, Department, TeamID } from '../models/team.js';
 import { readFile, writeFile } from 'node:fs/promises';
 
 interface JSONData {
@@ -17,9 +17,9 @@ export interface EntryJSON {
 }
 
 export class JSONEntryRepository implements EntryRepository {
-  private data: Array<Entry>;
+  private data: Array<Team>;
 
-  private constructor(data?: Array<Entry>) {
+  private constructor(data?: Array<Team>) {
     this.data = data ?? [];
   }
 
@@ -28,7 +28,7 @@ export class JSONEntryRepository implements EntryRepository {
     return new JSONEntryRepository(data.entry.map((e) => JSONEntryRepository.jsonToEntry(e)));
   }
 
-  async create(entry: Entry): Promise<Result.Result<Error, Entry>> {
+  async create(entry: Team): Promise<Result.Result<Error, Team>> {
     if (this.isExists(entry)) {
       return Result.err(new Error('Entry already exists'));
     }
@@ -37,7 +37,7 @@ export class JSONEntryRepository implements EntryRepository {
     return Result.ok(entry);
   }
 
-  async findByTeamName(name: string): Promise<Option.Option<Entry>> {
+  async findByTeamName(name: string): Promise<Option.Option<Team>> {
     const entry = this.data.find((e) => e.getTeamName() === name);
     if (entry === undefined) {
       return Option.none();
@@ -45,7 +45,7 @@ export class JSONEntryRepository implements EntryRepository {
     return Option.some(entry);
   }
 
-  async findByID(id: string): Promise<Option.Option<Entry>> {
+  async findByID(id: string): Promise<Option.Option<Team>> {
     const entry = this.data.find((e) => e.getId() === id);
     if (entry === undefined) {
       return Option.none();
@@ -53,7 +53,7 @@ export class JSONEntryRepository implements EntryRepository {
     return Option.some(entry);
   }
 
-  async findAll(): Promise<Result.Result<Error, Array<Entry>>> {
+  async findAll(): Promise<Result.Result<Error, Array<Team>>> {
     return Result.ok(this.data);
   }
 
@@ -76,7 +76,7 @@ export class JSONEntryRepository implements EntryRepository {
     return JSON.parse(data) as JSONData;
   }
 
-  private isExists(entry: Entry): boolean {
+  private isExists(entry: Team): boolean {
     for (const v of this.data) {
       if (v.getTeamName === entry.getTeamName || v.getId === entry.getId) {
         console.error('Entry already exists');
@@ -86,7 +86,7 @@ export class JSONEntryRepository implements EntryRepository {
     return false;
   }
 
-  private static entryToJSON(entry: Entry): EntryJSON {
+  private static entryToJSON(entry: Team): EntryJSON {
     return {
       id: entry.getId(),
       teamName: entry.getTeamName(),
@@ -96,13 +96,13 @@ export class JSONEntryRepository implements EntryRepository {
     };
   }
 
-  private static jsonToEntry(json: EntryJSON): Entry {
-    return Entry.new({
-      id: json.id as EntryID,
+  private static jsonToEntry(json: EntryJSON): Team {
+    return Team.new({
+      id: json.id as TeamID,
       teamName: json.teamName,
       members: json.members,
       isMultiWalk: json.isMultiWalk,
-      category: json.category as EntryCategory,
+      category: json.category as Department,
     });
   }
 }

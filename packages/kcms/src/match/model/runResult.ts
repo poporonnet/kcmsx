@@ -1,5 +1,5 @@
 import { SnowflakeID } from '../../id/main.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../entry/models/team.js';
 
 export type RunResultID = SnowflakeID<RunResult>;
 
@@ -11,7 +11,7 @@ export type RunResultID = SnowflakeID<RunResult>;
 export type FinishState = 'FINISHED' | 'RETIRED';
 export interface CreateRunResultArgs {
   id: RunResultID;
-  teamId: EntryID;
+  teamId: TeamID;
   points: number;
   goalTimeSeconds: number;
   finishState: FinishState;
@@ -19,14 +19,14 @@ export interface CreateRunResultArgs {
 
 export class RunResult {
   private readonly id: RunResultID;
-  private readonly teamId: EntryID;
+  private readonly teamId: TeamID;
   private readonly points: number;
   private readonly goalTimeSeconds: number;
   private readonly finishState: FinishState;
 
   private constructor(args: {
     id: RunResultID;
-    teamId: EntryID;
+    teamId: TeamID;
     points: number;
     goalTimeSeconds: number;
     finishState: FinishState;
@@ -49,7 +49,7 @@ export class RunResult {
     return this.id;
   }
 
-  public getTeamId(): EntryID {
+  public getTeamId(): TeamID {
     return this.teamId;
   }
 

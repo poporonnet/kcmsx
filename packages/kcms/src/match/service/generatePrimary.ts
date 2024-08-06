@@ -1,9 +1,9 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { MatchDTO } from './get.js';
-import { Entry } from '../../entry/entry.js';
+import { Team } from '../../entry/models/team.js';
 import { MatchID, Match } from '../model/match.js';
-import { EntryRepository } from '../../entry/repository.js';
-import { MatchRepository } from './repository.js';
+import { EntryRepository } from '../../entry/models/repository.js';
+import { MatchRepository } from '../model/repository.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
 export class GeneratePrimaryMatchService {
@@ -39,7 +39,7 @@ export class GeneratePrimaryMatchService {
     const entryRemain = entryNum % this.COURSE_COUNT;
 
     // 振り分ける
-    const courses: Entry[][] = [];
+    const courses: Team[][] = [];
     for (let i = 0; i < this.COURSE_COUNT; i++) {
       const course = entry.slice(i * entryPerCourse, (i + 1) * entryPerCourse);
       if (entryRemain > i) {

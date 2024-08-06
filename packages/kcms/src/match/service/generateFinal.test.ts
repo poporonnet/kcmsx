@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
-import { TestRankingMatchData } from '../../testData/match.js';
+import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
+import { TestRankingPreMatchData } from '../../testData/match.js';
 import { GenerateFinalMatchService } from './generateFinal.js';
 import { DummyRepository } from '../../entry/adaptor/dummyRepository.js';
 import { TestEntrySet } from '../../testData/entry.js';
@@ -8,10 +8,10 @@ import { GenerateRankingService } from './generateRanking.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { MatchResultFinalPair } from '../model/match.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../entry/models/team.js';
 
 describe('GenerateFinal1st', () => {
-  const repository = new DummyMatchRepository(TestRankingMatchData);
+  const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
   const entryRepository = new DummyRepository([
     TestEntrySet.ElementaryMultiWalk[101],
     TestEntrySet.ElementaryMultiWalk[102],
@@ -65,7 +65,7 @@ describe('GenerateFinal1st', () => {
 });
 
 describe('GenerateFinalNth', () => {
-  const repository = new DummyMatchRepository(TestRankingMatchData);
+  const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
   const entryRepository = new DummyRepository([
     TestEntrySet.ElementaryMultiWalk[101],
     TestEntrySet.ElementaryMultiWalk[102],
@@ -138,7 +138,7 @@ describe('GenerateFinalNth', () => {
   });
 
   it('本選の2回戦目の試合を生成できる', async () => {
-    const repository = new DummyMatchRepository(TestRankingMatchData);
+    const repository = new DummyMainMatchRepository(TestRankingPreMatchData);
     const entryRepository = new DummyRepository([
       TestEntrySet.ElementaryMultiWalk[101],
       TestEntrySet.ElementaryMultiWalk[102],
@@ -184,116 +184,116 @@ const TestData: Record<string, MatchResultFinalPair> = {
     results: [
       {
         left: {
-          teamID: '101' as EntryID,
+          teamID: '101' as TeamID,
           points: 10,
           time: 10,
         },
         right: {
-          teamID: '110' as EntryID,
+          teamID: '110' as TeamID,
           points: 0,
           time: 180,
         },
       },
       {
         left: {
-          teamID: '110' as EntryID,
+          teamID: '110' as TeamID,
           points: 0,
           time: 180,
         },
         right: {
-          teamID: '101' as EntryID,
+          teamID: '101' as TeamID,
           points: 10,
           time: 10,
         },
       },
     ],
-    winnerID: '101' as EntryID,
+    winnerID: '101' as TeamID,
   },
   '104-107': {
     results: [
       {
         left: {
-          teamID: '104' as EntryID,
+          teamID: '104' as TeamID,
           points: 10,
           time: 10,
         },
         right: {
-          teamID: '107' as EntryID,
+          teamID: '107' as TeamID,
           points: 0,
           time: 180,
         },
       },
       {
         left: {
-          teamID: '107' as EntryID,
+          teamID: '107' as TeamID,
           points: 0,
           time: 180,
         },
         right: {
-          teamID: '104' as EntryID,
+          teamID: '104' as TeamID,
           points: 10,
           time: 10,
         },
       },
     ],
-    winnerID: '104' as EntryID,
+    winnerID: '104' as TeamID,
   },
   '102-109': {
     results: [
       {
         left: {
-          teamID: '102' as EntryID,
+          teamID: '102' as TeamID,
           points: 10,
           time: 10,
         },
         right: {
-          teamID: '109' as EntryID,
+          teamID: '109' as TeamID,
           points: 0,
           time: 180,
         },
       },
       {
         left: {
-          teamID: '109' as EntryID,
+          teamID: '109' as TeamID,
           points: 0,
           time: 180,
         },
         right: {
-          teamID: '102' as EntryID,
+          teamID: '102' as TeamID,
           points: 10,
           time: 10,
         },
       },
     ],
-    winnerID: '102' as EntryID,
+    winnerID: '102' as TeamID,
   },
   '103-108': {
     results: [
       {
         left: {
-          teamID: '103' as EntryID,
+          teamID: '103' as TeamID,
           points: 10,
           time: 10,
         },
         right: {
-          teamID: '108' as EntryID,
+          teamID: '108' as TeamID,
           points: 0,
           time: 180,
         },
       },
       {
         left: {
-          teamID: '108' as EntryID,
+          teamID: '108' as TeamID,
           points: 0,
           time: 180,
         },
         right: {
-          teamID: '103' as EntryID,
+          teamID: '103' as TeamID,
           points: 10,
           time: 10,
         },
       },
     ],
-    winnerID: '103' as EntryID,
+    winnerID: '103' as TeamID,
   },
 };
