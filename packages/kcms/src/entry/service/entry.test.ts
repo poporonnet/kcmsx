@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/dummyRepository.js';
-import { Entry, EntryID } from '../entry.js';
+import { Team, TeamID } from '../models/team.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { EntryService } from './entry.js';
 import { TestEntryData } from '../../testData/entry.js';
@@ -58,8 +58,8 @@ describe('entryService', () => {
   });
 
   it('オープン部門のメンバーは1人のみ', async () => {
-    const entry = Entry.new({
-      id: '123' as EntryID,
+    const entry = Team.new({
+      id: '123' as TeamID,
       teamName: 'team1',
       members: ['山田四十郎', '山田太郎'],
       isMultiWalk: true,
@@ -77,8 +77,8 @@ describe('entryService', () => {
   });
 
   it('小学生部門のメンバーは1または2人', async () => {
-    const entry = Entry.new({
-      id: '123' as EntryID,
+    const entry = Team.new({
+      id: '123' as TeamID,
       teamName: 'team1',
       members: ['山田四十郎', '山田太郎', '山田次郎'],
       isMultiWalk: true,
@@ -96,8 +96,8 @@ describe('entryService', () => {
   });
 
   it('メンバーが居ないチームは作れない', async () => {
-    const entry = Entry.new({
-      id: '123' as EntryID,
+    const entry = Team.new({
+      id: '123' as TeamID,
       teamName: 'team1',
       members: [],
       isMultiWalk: true,

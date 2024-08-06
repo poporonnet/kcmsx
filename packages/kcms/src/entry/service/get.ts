@@ -1,5 +1,5 @@
-import { EntryRepository } from '../repository.js';
-import { Entry, EntryID } from '../entry.js';
+import { EntryRepository } from '../models/repository.js';
+import { Team, TeamID } from '../models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class FindEntryService {
@@ -60,7 +60,7 @@ export class EntryDTO {
     this._category = category;
   }
 
-  public static fromDomain(d: Entry): EntryDTO {
+  public static fromDomain(d: Team): EntryDTO {
     return new EntryDTO(
       d.getId(),
       d.getTeamName(),
@@ -70,9 +70,9 @@ export class EntryDTO {
     );
   }
 
-  public toToDomain(): Entry {
-    return Entry.new({
-      id: this._id as EntryID,
+  public toToDomain(): Team {
+    return Team.new({
+      id: this._id as TeamID,
       teamName: this._teamName,
       members: this._members,
       isMultiWalk: this._isMultiWalk,

@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
+import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
 import { GetMatchService, MatchDTO } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { TestMatchData } from '../../testData/match.js';
 
 describe('GetMatchService', () => {
-  const repository = new DummyMatchRepository();
+  const repository = new DummyMainMatchRepository();
   repository.create(TestMatchData.ElementaryPrimary);
   const service = new GetMatchService(repository);
 
