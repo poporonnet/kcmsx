@@ -1,101 +1,68 @@
-import { MatchRepository } from '../model/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import {
-  MatchID,
-  Match,
-  MatchResultFinalPair,
-  MatchResultPair,
-  MatchTeams,
-} from '../model/match.js';
+import { MainMatchRepository, PreMatchRepository } from '../model/repository.js';
+import { PreMatch, PreMatchID } from '../model/pre.js';
+import { MainMatch, MainMatchID } from '../model/main.js';
 
+// ToDo: 試合の走行結果の取得を実装する (別Serviceにしても良いかもしれない)
 export class GetMatchService {
-  private readonly repository: MatchRepository;
+  constructor(
+    private readonly preMatchRepository: PreMatchRepository,
+    private readonly mainMatchRepository: MainMatchRepository
+  ) {}
 
-  constructor(repository: MatchRepository) {
-    this.repository = repository;
-  }
-
-  async findById(id: string): Promise<Result.Result<Error, MatchDTO>> {
-    const res = await this.repository.findByID(id);
-    if (Option.isNone(res)) {
-      return Result.err(new Error('Not found'));
+  /**
+   * @description 試合を取得 ※preMatch -> MainMatchの順に取得し、どちらも存在しない場合はエラーを返す
+   * @param id
+   */
+  async findById(
+    id: PreMatchID | MainMatchID
+  ): Promise<Result.Result<Error, PreMatch | MainMatch>> {
+    const preRes = await this.preMatchRepository.findByID(id as PreMatchID);
+    if (Option.isSome(preRes)) {
+      return Result.ok(Option.unwrap(preRes));
     }
 
-    return Result.ok(MatchDTO.fromDomain(res[1]));
-  }
-
-  async findByType(type: string): Promise<Result.Result<Error, MatchDTO[]>> {
-    const res = await this.repository.findByType(type);
-    if (Option.isNone(res)) {
-      return Result.err(new Error('Not found'));
+    const mainRes = await this.mainMatchRepository.findByID(id as MainMatchID);
+    if (Option.isSome(mainRes)) {
+      return Result.ok(Option.unwrap(mainRes));
     }
 
-    return Result.ok(res[1].map(MatchDTO.fromDomain));
-  }
-}
-
-export class MatchDTO {
-  // 試合ID
-  private readonly _id: string;
-  // 試合するチームのID
-  private readonly _teams: MatchTeams;
-  // 試合種別 primary: 予選, final: 本選
-  private readonly _matchType: 'primary' | 'final';
-  // コース番号
-  private readonly _courseIndex: number;
-  // 試合の結果
-  private readonly _results?: MatchResultPair | MatchResultFinalPair;
-  get id(): string {
-    return this._id;
+    return Result.err(new Error('Not found'));
   }
 
-  get teams(): MatchTeams {
-    return this._teams;
+  /**
+   * @description 全ての予選試合を取得
+   * @returns 予選試合のリスト
+   */
+  async findAllPreMatch(): Promise<Result.Result<Error, PreMatch[]>> {
+    return await this.preMatchRepository.findAll();
   }
 
-  get matchType(): 'primary' | 'final' {
-    return this._matchType;
+  /**
+   * @description 全ての本戦試合を取得
+   * @returns 本戦試合のリスト
+   */
+  async findAllMainMatch(): Promise<Result.Result<Error, MainMatch[]>> {
+    return await this.mainMatchRepository.findAll();
   }
 
-  get courseIndex(): number {
-    return this._courseIndex;
-  }
+  /**
+   * @description 全ての試合を取得
+   * @returns 全試合のリスト
+   */
+  async findAll(): Promise<Result.Result<Error, { main: MainMatch[]; pre: PreMatch[] }>> {
+    const mainRes = await this.mainMatchRepository.findAll();
+    if (Result.isErr(mainRes)) {
+      return mainRes;
+    }
+    const main = Result.unwrap(mainRes);
 
-  get results(): MatchResultPair | MatchResultFinalPair | undefined {
-    return this._results;
-  }
+    const preRes = await this.preMatchRepository.findAll();
+    if (Result.isErr(preRes)) {
+      return preRes;
+    }
+    const pre = Result.unwrap(preRes);
 
-  private constructor(
-    id: string,
-    teams: MatchTeams,
-    matchType: 'primary' | 'final',
-    courseIndex: number,
-    results?: MatchResultPair | MatchResultFinalPair
-  ) {
-    this._id = id;
-    this._teams = teams;
-    this._matchType = matchType;
-    this._courseIndex = courseIndex;
-    this._results = results;
-  }
-
-  public static fromDomain(match: Match): MatchDTO {
-    return new MatchDTO(
-      match.getId(),
-      match.getTeams(),
-      match.getMatchType(),
-      match.getCourseIndex(),
-      match.getResults()
-    );
-  }
-
-  public toDomain(): Match {
-    return Match.reconstruct({
-      id: this._id as MatchID,
-      teams: this._teams,
-      matchType: this._matchType,
-      courseIndex: this._courseIndex,
-      results: this._results,
-    });
+    return Result.ok({ main, pre });
   }
 }
