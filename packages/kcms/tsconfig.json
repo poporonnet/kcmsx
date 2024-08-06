@@ -3,7 +3,7 @@
   "compilerOptions": {
     "incremental": true,
     "target": "es2022",
-    "module": "esNext",
+    "module": "ESNext",
     "outDir": "./build",
     "rootDir": ".",
     "noEmit": true,
