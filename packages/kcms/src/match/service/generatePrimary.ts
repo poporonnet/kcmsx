@@ -1,20 +1,19 @@
 import { Result } from '@mikuroxina/mini-fn';
-import { MatchDTO } from './get.js';
 import { Team } from '../../entry/models/team.js';
-import { MatchID, Match } from '../model/match.js';
 import { EntryRepository } from '../../entry/models/repository.js';
-import { MatchRepository } from '../model/repository.js';
+import { PreMatchRepository } from '../model/repository.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
+import { PreMatch, PreMatchID } from '../model/pre.js';
 
 export class GeneratePrimaryMatchService {
   private readonly entryRepository: EntryRepository;
-  private readonly matchRepository: MatchRepository;
+  private readonly matchRepository: PreMatchRepository;
   private readonly idGenerator: SnowflakeIDGenerator;
   private readonly COURSE_COUNT = 3;
 
   constructor(
     entryRepository: EntryRepository,
-    matchRepository: MatchRepository,
+    matchRepository: PreMatchRepository,
     idGenerator: SnowflakeIDGenerator
   ) {
     this.entryRepository = entryRepository;
@@ -22,8 +21,12 @@ export class GeneratePrimaryMatchService {
     this.idGenerator = idGenerator;
   }
 
-  // 予選対戦表の生成
-  async generatePrimaryMatch(): Promise<Result.Result<Error, MatchDTO[][]>> {
+  /**
+   * @description 予選の(全部門)対戦表を生成
+   * @returns 生成した対戦表 コースごとにPreMatch[]が入る
+   */
+  async generatePrimaryMatch(): Promise<Result.Result<Error, PreMatch[][]>> {
+    // ToDo: エントリーしていない人を取り除く
     const res = await this.entryRepository.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
@@ -48,24 +51,26 @@ export class GeneratePrimaryMatchService {
       courses[i] = course;
     }
 
-    const tmpMatches: Match[][] = [];
+    const tmpMatches: PreMatch[][] = [];
     for (let i = 0; i < courses.length; i++) {
-      const courseMatches: Match[] = [];
+      const courseMatches: PreMatch[] = [];
       for (let k = 0; k < courses[i].length; k++) {
         const courseLength = courses[i].length;
         const gap = Math.floor(courseLength / 2);
         const opponentIndex = k + gap >= courseLength ? k + gap - courseLength : k + gap;
 
-        const id = this.idGenerator.generate<Match>();
+        const id = this.idGenerator.generate<PreMatch>();
         if (Result.isErr(id)) {
           return Result.err(id[1]);
         }
 
-        const match = Match.new({
-          id: id[1] as MatchID,
-          matchType: 'primary',
-          teams: { left: courses[i][k], right: courses[i][opponentIndex] },
+        const match = PreMatch.new({
+          id: id[1] as PreMatchID,
+          teamId1: courses[i][k].getId(),
+          teamId2: courses[i][opponentIndex].getId(),
           courseIndex: i,
+          matchIndex: 0,
+          runResults: [],
         });
         courseMatches.push(match);
       }
@@ -78,6 +83,6 @@ export class GeneratePrimaryMatchService {
       }
     }
 
-    return Result.ok(tmpMatches.map((v) => v.map(MatchDTO.fromDomain)));
+    return Result.ok(tmpMatches);
   }
 }
