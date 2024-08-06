@@ -3,7 +3,7 @@
   "compilerOptions": {
     "incremental": true,
     "target": "es2022",
-    "module": "Node16",
+    "module": "esNext",
     "outDir": "./build",
     "rootDir": ".",
     "noEmit": true,
@@ -16,7 +16,7 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "moduleResolution": "Node16",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "pretty": true
