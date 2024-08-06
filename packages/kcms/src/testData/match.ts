@@ -1,39 +1,6 @@
-import { Match, MatchID } from '../match/model/match.js';
-import { TestEntryData } from './entry.js';
 import { TeamID } from '../entry/models/team.js';
 import { RunResult, RunResultID } from '../match/model/runResult.js';
 import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっとデータ数を増やす
-
-// ToDo: もっとデータ数を増やす
-export const TestMatchData = {
-  ElementaryPrimary: Match.reconstruct({
-    id: '1' as MatchID,
-    teams: {
-      left: TestEntryData.ElementaryMultiWalk,
-      right: TestEntryData.ElementaryWheel,
-    },
-    courseIndex: 0,
-    matchType: 'primary',
-  }),
-  ElementaryFinal: Match.reconstruct({
-    id: '2' as MatchID,
-    teams: {
-      left: TestEntryData.ElementaryMultiWalk,
-      right: TestEntryData.ElementaryWheel,
-    },
-    courseIndex: 0,
-    matchType: 'final',
-  }),
-  OpenFinal: Match.reconstruct({
-    id: '3' as MatchID,
-    teams: {
-      left: TestEntryData.OpenMultiWalk,
-      right: TestEntryData.OpenMultiWalk2,
-    },
-    courseIndex: 0,
-    matchType: 'final',
-  }),
-};
 
 // ランキング生成用の試合データ
 // Openは予選がないので、予選の試合データはない
