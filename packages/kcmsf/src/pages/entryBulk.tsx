@@ -18,31 +18,30 @@ const errorMessages = {
 };
 const notifyError = (error: keyof typeof errorMessages) => {
   notifications.show({
-    title: "登録に失敗しました",
+    title: "不正な形式のファイルです",
     message: errorMessages[error],
     color: "red",
   });
 };
 
 export const EntryBulk = () => {
-  const [csvData, setCsvData] = useState<string[][]>([]);
-  const [iserror, setisError] = useState<boolean>(false);
-  const [errors, setErrors] = useState<boolean[][]>([]);
+  const [csvData, setCsvData] = useState<string[][] | undefined>();
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errors, setErrors] = useState<boolean[][] | undefined>();
 
   useEffect(() => {
-    if (csvData.length > 0) {
+    if (csvData) {
       const newErrors = checkData(csvData);
       setErrors(newErrors);
     }
   }, [csvData]);
 
-  const handleDrop = (files: File[]) => {
+  const handleDrop = async (files: File[]) => {
     const file = files[0];
     if (!file) return;
-    file.text().then((text) => {
-      const data = parseCSV(text);
-      setCsvData(data);
-    });
+    const text = await file.text();
+    const data = parseCSV(text);
+    setCsvData(data);
   };
 
   const parseCSV = (text: string): string[][] => {
@@ -66,17 +65,17 @@ export const EntryBulk = () => {
       if (!teamName || teamName === "") {
         notifyError("shortTeamName");
         newErrors[i][0] = true;
-        setisError(true);
+        setIsError(true);
       }
       if (!member1 || member1.length < 2) {
         notifyError("shortMemberName");
         newErrors[i][1] = true;
-        setisError(true);
+        setIsError(true);
       }
       if (member2 && member2.length < 2) {
         notifyError("shortMemberName");
         newErrors[i][2] = true;
-        setisError(true);
+        setIsError(true);
       }
       if (
         !isMultiWalk ||
@@ -84,18 +83,19 @@ export const EntryBulk = () => {
       ) {
         notifyError("invalidRobotCategory");
         newErrors[i][3] = true;
-        setisError(true);
+        setIsError(true);
       }
       if (!category || (category !== "Elementary" && category !== "Open")) {
         notifyError("invalidCategory");
         newErrors[i][4] = true;
-        setisError(true);
+        setIsError(true);
       }
     });
     return newErrors;
   };
 
   const sendData = () => {
+    if (!csvData) return;
     const data = csvData.map((row) => {
       const entry: Entry = {
         teamName: row[0],
@@ -106,27 +106,30 @@ export const EntryBulk = () => {
       return entry;
     });
     console.log(data);
-    setisError(true);
+    setIsError(true);
     //const json = JSON.stringify(data);
     //なんかごにょごにょして後ろに渡す
   };
 
   const clear = () => {
-    setisError(false);
-    setCsvData([]);
+    setIsError(false);
+    setCsvData(undefined);
+    setErrors(undefined);
   };
 
   return (
     <>
       <h1>一括エントリー</h1>
-      {csvData.length > 0 ? (
+      {csvData && errors ? (
         <>
           <p>この内容で登録します</p>
-          <Box>{EntryTable(csvData, errors)}</Box>
+          <Box>
+            <EntryTable data={csvData} errors={errors} />
+          </Box>
           <Button m={"2rem"} onClick={clear} variant="default">
             リセット
           </Button>
-          <Button m={"2rem"} onClick={sendData} disabled={iserror}>
+          <Button m={"2rem"} onClick={sendData} disabled={isError}>
             <IconSend stroke={2} />
             登録
           </Button>
@@ -201,7 +204,7 @@ export const EntryBulk = () => {
   );
 };
 
-const EntryTable = (data: string[][], errors: boolean[][]) => {
+const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
   return (
     <Box>
       <Table>
@@ -215,15 +218,14 @@ const EntryTable = (data: string[][], errors: boolean[][]) => {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {data.map((row, i) => (
+          {props.data.map((row, i) => (
             <Table.Tr key={`row-${i}`}>
               {row.map((cell, j) => (
                 <Table.Td
                   ta={"left"}
                   key={`cell-${i}-${j}`}
                   style={{
-                    backgroundColor:
-                      errors[i] && errors[i][j] ? "#EC777E" : "inherit",
+                    backgroundColor: props.errors[i]?.[j] ? "#EC777E" : "inherit",
                   }}
                 >
                   {cell}
