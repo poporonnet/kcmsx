@@ -11,7 +11,7 @@ export class EntryService {
     this.idGenerator = idGenerator;
   }
   async create(input: Omit<EntryCreateArgs, 'id'>): Promise<Result.Result<Error, Entry>> {
-    const id = this.idGenerator.generate<EntryID>();
+    const id = this.idGenerator.generate<Entry>();
     if (Result.isErr(id)) {
       return Result.err(id[1]);
     }

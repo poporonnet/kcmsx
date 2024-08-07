@@ -12,6 +12,10 @@
   - [utility](#utility)
     - [createConfig(baseConfig, conditions)](#createconfigbaseconfig-conditions-1)
     - [against(side)](#againstside)
+    - [isRobotType(value)](#isrobottypevalue)
+    - [isDepartmentType(value)](#isdepartmenttypevalue)
+    - [isMatchType(value)](#ismatchtypevalue)
+    - [isRuleName(value)](#isrulenamevalue)
   - [For Developers(WIP)](#for-developerswip)
     - [kcmsx/configをモノレポ内の別のパッケージから使う](#kcmsxconfigをモノレポ内の別のパッケージから使う)
     - [型定義ファイルのディレクトリ構造](#型定義ファイルのディレクトリ構造)
@@ -262,7 +266,7 @@ rules: [
 
 ## utility
 
-`utility`ディレクトリ以下に、設定を記述する際に便利な関数群が置かれています。
+`utility`ディレクトリ以下に、設定を記述したり利用したりする際に便利な関数群が置かれています。
 
 ### createConfig(baseConfig, conditions)
 
@@ -280,6 +284,34 @@ rules: [
 - 戻り値の型: `"left" | "right"`
 
 `side`が`"left"`なら`"right"`を、`"right"`なら`"left"`を返します。
+
+### isRobotType(value)
+
+- `value`: `string`
+- 戻り値の型: `value is RobotType`
+
+`RobotType`の型ガードです。`value`が`RobotType`なら`true`を、そうでなければ`false`を返します。
+
+### isDepartmentType(value)
+
+- `value`: `string`
+- 戻り値の型: `value is DepartmentType`
+
+`DepartmentType`の型ガードです。`value`が`DepartmentType`なら`true`を、そうでなければ`false`を返します。
+
+### isMatchType(value)
+
+- `value`: `string`
+- 戻り値の型: `value is MatchType`
+
+`MatchType`の型ガードです。`value`が`MatchType`なら`true`を、そうでなければ`false`を返します。
+
+### isRuleName(value)
+
+- `value`: `string`
+- 戻り値の型: `value is RuleName`
+
+`RuleName`の型ガードです。`value`が`RuleName`なら`true`を、そうでなければ`false`を返します。
 
 ## For Developers(WIP)
 
