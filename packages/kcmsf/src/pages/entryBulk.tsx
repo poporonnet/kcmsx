@@ -225,7 +225,9 @@ const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
                   ta={"left"}
                   key={`cell-${i}-${j}`}
                   style={{
-                    backgroundColor: props.errors[i]?.[j] ? "#EC777E" : "inherit",
+                    backgroundColor: props.errors[i]?.[j]
+                      ? "#EC777E"
+                      : "inherit",
                   }}
                 >
                   {cell}
