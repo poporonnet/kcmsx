@@ -1,4 +1,4 @@
-import { TeamInfo } from "../pages/match";
+import { TeamInfo } from "config";
 
 export type Match = {
   id: string;

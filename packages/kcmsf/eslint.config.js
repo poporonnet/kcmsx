@@ -11,7 +11,7 @@ import globals from "globals";
 
 const compat = new FlatCompat();
 
-/** @type {import("eslint").Linter.FlatConfig} */
+/** @type {import("eslint").Linter.Config} */
 export default [
   {
     files: ["src/**/*.{ts,tsx}"],

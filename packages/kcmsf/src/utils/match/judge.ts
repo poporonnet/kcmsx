@@ -1,10 +1,4 @@
-import {
-  InitialPointState,
-  PointState,
-  PremiseState,
-} from "../../config/types/rule";
-import { MatchInfo } from "../../pages/match";
-import { PartlyPartial } from "../../types/util";
+import { MatchInfo, PointState, PremiseState } from "config";
 import { SetGoalTimeSeconds, Team } from "./team";
 
 export class Judge {
@@ -14,20 +8,30 @@ export class Judge {
   private readonly _setGoalTimeSecRight: SetGoalTimeSeconds;
 
   constructor(
-    _leftPointState: PartlyPartial<PointState, keyof InitialPointState>,
-    _rightPointState: PartlyPartial<PointState, keyof InitialPointState>,
-    _leftPremiseState: Omit<PremiseState, "side" | "judge">,
-    _rightPremiseState: Omit<PremiseState, "side" | "judge">
+    _leftPointState: Partial<PointState>,
+    _rightPointState: Partial<PointState>,
+    _leftPremiseState: Omit<PremiseState, "side" | "matchState">,
+    _rightPremiseState: Omit<PremiseState, "side" | "matchState">
   ) {
+    const matchState: PremiseState["matchState"] = {
+      left: {
+        getPointState: () => this._leftTeam.point.state,
+        getGoalTimeSeconds: () => this._leftTeam.goalTimeSeconds,
+      },
+      right: {
+        getPointState: () => this._rightTeam.point.state,
+        getGoalTimeSeconds: () => this._rightTeam.goalTimeSeconds,
+      },
+    };
     [this._leftTeam, this._setGoalTimeSecLeft] = Team.new(_leftPointState, {
       ..._leftPremiseState,
       side: "left",
-      judge: this,
+      matchState,
     });
     [this._rightTeam, this._setGoalTimeSecRight] = Team.new(_rightPointState, {
       ..._rightPremiseState,
       side: "right",
-      judge: this,
+      matchState,
     });
   }
 
@@ -43,11 +47,11 @@ export class Judge {
     return side === "left" ? this.leftTeam : this.rightTeam;
   }
 
-  goalLeftTeam(goalTimeSec: number | null) {
+  goalLeftTeam(goalTimeSec: number | undefined) {
     this._setGoalTimeSecLeft(goalTimeSec);
   }
 
-  goalRightTeam(goalTimeSec: number | null) {
+  goalRightTeam(goalTimeSec: number | undefined) {
     this._setGoalTimeSecRight(goalTimeSec);
   }
 }

@@ -10,14 +10,17 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "test": "vitest --watch --ui --coverage.enabled=true",
-    "test:ci": "vitest run --coverage.enabled=true"
+    "test:ci": "vitest run --coverage.enabled=true",
+    "check": "prettier --check \"src/**/*.{ts,tsx}\" && tsc -p . --noEmit"
   },
   "dependencies": {
     "@mantine/carousel": "^7.3.1",
     "@mantine/core": "^7.3.1",
+    "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.3.1",
-    "@mantine/notifications": "7.11.2",
+    "@mantine/notifications": "7.12.0",
     "@tabler/icons-react": "^3.0.0",
+    "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
     "react": "^18.2.0",
@@ -32,8 +35,8 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
-    "@typescript-eslint/eslint-plugin": "^7.0.0",
-    "@typescript-eslint/parser": "^7.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "@vitest/coverage-v8": "^2.0.0",
@@ -52,5 +55,5 @@
     "vite": "^5.0.0",
     "vitest": "^2.0.0"
   },
-  "packageManager": "pnpm@9.5.0"
+  "packageManager": "pnpm@9.7.0"
 }

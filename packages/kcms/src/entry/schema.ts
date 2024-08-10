@@ -6,3 +6,5 @@ export const entryRequestSchema = z.object({
   isMultiWalk: z.boolean(),
   category: z.enum(['Elementary', 'Open']),
 });
+
+export const bulkEntryRequestSchema = z.array(entryRequestSchema).max(100);

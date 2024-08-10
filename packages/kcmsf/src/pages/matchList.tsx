@@ -54,7 +54,7 @@ export const MatchList = () => {
       }
 
       setLoading(false);
-    } catch (error) {
+    } catch {
       setError(true);
     }
 
@@ -112,7 +112,9 @@ export const MatchList = () => {
                             status={match.results ? "end" : "future"}
                             id={match.id}
                             teams={match.teams}
-                            matchType={match.matchType}
+                            matchType={
+                              match.matchType == "primary" ? "pre" : "main"
+                            }
                           />
                         </Center>
                       </Table.Td>

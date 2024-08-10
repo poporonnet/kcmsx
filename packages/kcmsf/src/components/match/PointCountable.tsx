@@ -6,6 +6,7 @@ interface Props {
   color: MantineColor;
   onChange: (count: number) => void;
   validate: (count: number) => boolean;
+  disabled: boolean;
   children: React.ReactNode;
 }
 
@@ -39,8 +40,8 @@ export const PointCountable = (props: Props) => {
         size="xl"
         variant="transparent"
         onClick={decrement}
-        c={decrementable ? props.color : undefined}
-        disabled={!decrementable}
+        c={!props.disabled && decrementable ? props.color : undefined}
+        disabled={props.disabled || !decrementable}
         bg="white"
       >
         <svg
@@ -67,8 +68,8 @@ export const PointCountable = (props: Props) => {
         size="xl"
         variant="transparent"
         onClick={increment}
-        c={incrementable ? props.color : undefined}
-        disabled={!incrementable}
+        c={!props.disabled && incrementable ? props.color : undefined}
+        disabled={props.disabled || !incrementable}
         bg="white"
       >
         <svg

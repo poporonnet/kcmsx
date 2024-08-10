@@ -1,0 +1,30 @@
+{
+  "name": "config",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "lint": "eslint --cache \"src/**/*.ts\" \"index.ts\"",
+    "format": "prettier . --write",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage",
+    "check": "prettier --check \"src/**/*.ts\" \"index.ts\" && tsc -p . --noEmit"
+  },
+  "keywords": [],
+  "author": "Poporon Network (tufusa) & Other Contributors",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.0.0",
+    "@eslint/js": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "@vitest/coverage-v8": "^2.0.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-vitest": "^0.5.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-organize-imports": "^4.0.0",
+    "vitest": "^2.0.0"
+  }
+}
