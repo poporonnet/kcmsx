@@ -1,5 +1,9 @@
 import { ActionIcon, Group, MantineColor, Text } from "@mantine/core";
 import { useCallback, useState } from "react";
+import {
+  IconSquareChevronLeftFilled,
+  IconSquareChevronRightFilled,
+} from "@tabler/icons-react";
 
 interface Props {
   initial: number;
@@ -44,21 +48,9 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !decrementable}
         bg="white"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="icon icon-tabler icon-tabler-minus"
-          width="44"
-          height="44"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="#2c3e50"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M5 12l14 0" />
-        </svg>
+         <IconSquareChevronLeftFilled
+          style={{ width: "100%", height: "100%" }}
+        />
      
       </ActionIcon>
       <Text w="auto" size="xl" style={{ flexGrow: 1 }}>
@@ -72,22 +64,9 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !incrementable}
         bg="white"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="icon icon-tabler icon-tabler-plus"
-          width="44"
-          height="44"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="#2c3e50"
-          fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <path d="M12 5l0 14" />
-          <path d="M5 12l14 0" />
-        </svg>
+         <IconSquareChevronRightFilled
+          style={{ width: "100%", height: "100%" }}
+        />
       </ActionIcon>
     </Group>
   );

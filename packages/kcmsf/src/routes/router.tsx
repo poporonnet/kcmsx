@@ -25,9 +25,7 @@ export const router = createBrowserRouter(
         },
         {
           path: "entry",
-<<<<<<< HEAD
-          element: <Entry />,
-=======
+
           children: [
             {
               index: true,
@@ -38,7 +36,6 @@ export const router = createBrowserRouter(
               element: <EntryBulk />,
             },
           ],
->>>>>>> origin
         },
         {
           path: "match",
