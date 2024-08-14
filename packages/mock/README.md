@@ -17,5 +17,5 @@ pnpm dev
 
 ### デプロイ
 ```
-pnpm deploy
+pnpm run deploy
 ```
