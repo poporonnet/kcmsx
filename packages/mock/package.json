@@ -1,0 +1,15 @@
+{
+  "name": "mock",
+  "scripts": {
+    "dev": "wrangler dev src/main.ts",
+    "deploy": "wrangler deploy --minify src/main.ts"
+  },
+  "dependencies": {
+    "hono": "^4.5.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240529.0",
+    "wrangler": "^3.71.0"
+  },
+  "packageManager": "pnpm@9.6.0"
+}
