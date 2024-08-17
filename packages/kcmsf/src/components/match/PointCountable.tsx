@@ -1,9 +1,6 @@
 import { ActionIcon, Group, MantineColor, Text } from "@mantine/core";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { useCallback, useState } from "react";
-import {
-  IconPlus,
-  IconMinus
-} from "@tabler/icons-react";
 
 interface Props {
   initial: number;
@@ -48,10 +45,7 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !decrementable}
         bg="white"
       >
-        <IconMinus
-          style={{ width: "100%", height: "100%" }}
-        />
-     
+        <IconMinus style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
       <Text w="auto" size="xl" style={{ flexGrow: 1 }}>
         {count}
@@ -64,9 +58,7 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !incrementable}
         bg="white"
       >
-        <IconPlus
-          style={{ width: "100%", height: "100%" }}
-        />
+        <IconPlus style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
     </Group>
   );
