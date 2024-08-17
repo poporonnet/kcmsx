@@ -48,7 +48,7 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !decrementable}
         bg="white"
       >
-         <IconMinus
+        <IconMinus
           style={{ width: "100%", height: "100%" }}
         />
      
@@ -64,7 +64,7 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !incrementable}
         bg="white"
       >
-         <IconPlus
+        <IconPlus
           style={{ width: "100%", height: "100%" }}
         />
       </ActionIcon>
