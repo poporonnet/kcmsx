@@ -25,7 +25,6 @@ export const router = createBrowserRouter(
         },
         {
           path: "entry",
-
           children: [
             {
               index: true,
