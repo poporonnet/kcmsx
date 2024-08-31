@@ -7,11 +7,13 @@
   "scripts": {
     "backend": "pnpm -F \"kcms\"",
     "frontend": "pnpm -F \"kcmsf\"",
+    "mock": "pnpm -F \"mock\"",
     "start:backend": "pnpm backend start",
     "start:frontend": "pnpm frontend start",
     "dev:backend": "pnpm backend dev",
     "dev:frontend": "pnpm frontend dev",
-    "format": "pnpm frontend format && pnpm backend format",
+    "dev:mock": "pnpm mock dev",
+    "format": "pnpm frontend format && pnpm backend format && pnpm mock format",
     "lint": "pnpm frontend lint && pnpm backend lint",
     "test:backend": "pnpm backend t",
     "test:frontend": "pnpm frontend t"
