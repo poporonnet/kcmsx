@@ -119,7 +119,7 @@ const MatchResultSchema = z.array(z.object({
   teamID: z.string(),
   points: z.number(),
   goalTimeSeconds: z.union([z.number(), z.null()]),
-  finishState: z.union([z.literal("retired"), z.literal("finished")])
+  finishState: z.enum(["retired","finished"])
 }))
 app.post("/match/:matchType/:id/run_result", zValidator('json', MatchResultSchema), (c) => {
   const { matchType, id } = c.req.param();
