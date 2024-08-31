@@ -3,7 +3,7 @@ export interface Team {
   name: string;
   entryId: string;
   members: string[];
-  club?: string;
+  clubName: string;
   robotType: string;
   category: string;
   isEntered: boolean;
@@ -15,7 +15,7 @@ export const teams = [
     name: "かに1",
     entryId: "1",
     members: ["メンバー1", "メンバー2"],
-    club: "RubyClub",
+    clubName: "RubyClub",
     robotType: "wheel",
     category: "elementary",
     isEntered: true,
@@ -25,7 +25,7 @@ export const teams = [
     name: "かに2",
     entryId: "2",
     members: ["メンバー3"],
-    club: "RubyClub",
+    clubName: "RubyClub",
     robotType: "wheel",
     category: "elementary",
     isEntered: false,
@@ -35,6 +35,7 @@ export const teams = [
     name: "かに3",
     entryId: "3",
     members: ["メンバー4"],
+    clubName: "",
     robotType: "leg",
     category: "open",
     isEntered: true,
