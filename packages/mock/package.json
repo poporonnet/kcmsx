@@ -2,7 +2,8 @@
   "name": "mock",
   "scripts": {
     "dev": "wrangler dev src/main.ts",
-    "deploy": "wrangler deploy --minify src/main.ts"
+    "deploy": "wrangler deploy --minify src/main.ts",
+    "format": "prettier . --write"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.2.0",
@@ -12,6 +13,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20240529.0",
+    "prettier": "^3.3.3",
     "wrangler": "^3.71.0"
   },
   "packageManager": "pnpm@9.6.0"

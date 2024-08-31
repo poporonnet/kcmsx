@@ -241,6 +241,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20240529.0
         version: 4.20240806.0
+      prettier:
+        specifier: ^3.3.3
+        version: 3.3.3
       wrangler:
         specifier: ^3.71.0
         version: 3.71.0(@cloudflare/workers-types@4.20240806.0)
