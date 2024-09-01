@@ -53,7 +53,7 @@
   // ロボットのタイプ (robotTypes 設定依存)
   "robotType": "wheel",
   // チームのカテゴリ (category 設定依存)
-  "category": "elementary",
+  "category": "elementary"
 }
 ```
 
@@ -392,6 +392,10 @@
 
 ## 試合種別・部門種別ごとに、試合表を生成
 `POST /match/{matchType}/{departmentType}/generate`
+### 入力
+```
+なし
+```
 ## 出力 `200 OK`
 `pre`の場合
 ```jsonc
@@ -434,6 +438,10 @@
 
 ## ある試合の走行結果をすべて取得
 `GET /match/{matchType}/{matchID}/run_result`
+### 入力
+```
+なし
+```
 ### 出力 `200 OK`
 ```jsonc
 [
@@ -472,7 +480,9 @@
 ]
 ```
 ### 出力 `200 OK`
-
+```
+レスポンスボディは存在しない
+```
 
 ## 試合種別・部門種別ごとに、エントリーしたチームの(現在時点での)ランキングを返す
 > [!WARNING]
