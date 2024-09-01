@@ -12,28 +12,27 @@
 ### 出力 `200 OK`
 ```jsonc
 {
-	"teams":
-	  [
-		  {
-		    "id": "1392387",
-		    "name": "かに1",
-		    
-		    "entryCode": "1",
-		    // チームに所属するメンバー
-		    "members": [
-		      "メンバー1",
-		      "メンバー2"
-		    ],
-		    // チームの所属するクラブ(string | "")
-		    "clubName": "RubyClub",
-		    // ロボットのタイプ (robotTypes 設定依存)
-		    "robotType": "leg",
-		    // チームのカテゴリ (category 設定依存)
-		    "category": "elementary",
-		    // エントリーしたか (true | false)
-		    "isEntered": true
-		 }
-	]
+  "teams":[
+    {
+      "id": "1392387",
+      "name": "かに1",
+
+      "entryCode": "1",
+      // チームに所属するメンバー
+      "members": [
+        "メンバー1",
+        "メンバー2"
+      ],
+      // チームの所属するクラブ(string | "")
+      "clubName": "RubyClub",
+      // ロボットのタイプ (robotTypes 設定依存)
+      "robotType": "leg",
+      // チームのカテゴリ (category 設定依存)
+      "category": "elementary",
+      // エントリーしたか (true | false)
+      "isEntered": true
+    }
+  ]
 }
 ```
 
@@ -67,7 +66,7 @@
   "entryCode": "2",
   // チームメンバー
   "members": [
-      "メンバー3"
+    "メンバー3"
   ],
   // チームの所属するクラブ(なければ空文字)
   "clubName": "RubyClub",
@@ -242,15 +241,15 @@
     "matchCode": "1-3",
     // 左チーム (空になる可能性あり)
     "leftTeam": {
-	    // チームのID
-	    "id": "45098607",
-	    "teamName": "チーム1"
+    // チームのID
+    "id": "45098607",
+    "teamName": "チーム1"
     },
     // 右チーム (空になる可能性あり)
     "rightTeam": {
-	    "id": "2230392",
-	    "teamName": "チーム2"
-	   },
+    "id": "2230392",
+    "teamName": "チーム2"
+    },
     // 走行結果
     "runResults": [
       {
@@ -271,41 +270,41 @@
 `main`の場合
 ```jsonc
 [
-	{
-		"id": "70983405",
-		// 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
-		"matchCode": "1-3",
-		// 左チーム (空になる可能性あり)
+  {
+    "id": "70983405",
+    // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
+    "matchCode": "1-3",
+    // 左チーム (空になる可能性あり)
     "leftTeam": {
-	    // チームのID
-	    "id": "45098607",
-	    "teamName": "チーム1"
+      // チームのID
+      "id": "45098607",
+      "teamName": "チーム1"
     },
     // 右チーム (空になる可能性あり)
     "rightTeam": {
-	    "id": "2230392",
-	    "teamName": "チーム2"
-	  },
-		// 勝者のID
-		"winnerID": "45098607",
-		/* 走行結果
-		* その試合がまだ行われていない場合は空配列になる
-		*/
-		"runResults": [
-			{
-				// 走行結果ID
-				"id": "60980640",
-				// チームID
-				"teamID": "45098607",
-				// 獲得したポイント
-				"points": 4,
-				// ゴールタイム (秒), リタイアした場合はnullが入る
-				"goalTimeSeconds": 30,
-				// フィニッシュしたか ("finished" or "retired")
-				"finishState": "finished"
-			}
-		]
-	}
+      "id": "2230392",
+      "teamName": "チーム2"
+    },
+    // 勝者のID
+    "winnerID": "45098607",
+    /* 走行結果
+    * その試合がまだ行われていない場合は空配列になる
+    */
+    "runResults": [
+      {
+        // 走行結果ID
+        "id": "60980640",
+        // チームID
+        "teamID": "45098607",
+        // 獲得したポイント
+        "points": 4,
+        // ゴールタイム (秒), リタイアした場合はnullが入る
+        "goalTimeSeconds": 30,
+        // フィニッシュしたか ("finished" or "retired")
+        "finishState": "finished"
+      }
+    ]
+  }
 ]
 ```
 ## ある試合種別の試合を取得
@@ -333,8 +332,8 @@
     "teamName": "チーム2"
   },
   /* 走行結果
-   * その試合がまだ行われていない場合は空配列になる
-   */
+  * その試合がまだ行われていない場合は空配列になる
+  */
   "runResults": [
     {
       // 走行結果ID
@@ -346,7 +345,7 @@
       // ゴールタイム (秒), リタイアした場合はnullが入る
       "goalTimeSeconds": 30,
       // フィニッシュしたか ("finished" or "retired")
-	    "finishState": "retired"
+      "finishState": "retired"
     }
   ]
 }
@@ -371,8 +370,8 @@
   // 勝者のID
   "winnerID": "45098607",
   /* 走行結果
-   * その試合がまだ行われていない場合は空配列になる
-   */
+  * その試合がまだ行われていない場合は空配列になる
+  */
   "runResults": [
     {
       // 走行結果ID
@@ -419,20 +418,20 @@
 `main`の場合
 ```jsonc
 [
-	{
-		"id": "70983405",
-		// 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
-		"matchCode": "1-3",
-		// ロボットのタイプ (robotTypes 設定依存)
-		"leftTeamID": "45098607",
-		// 右チームのID (空になる可能性あり)
-		"rightTeamID": "2230392",
-		// 勝者のID
-		"winnerID": "",
-		// 走行結果 (生成直後は必ず空になる)
-		"runResults": [
-		]
-	}
+  {
+    "id": "70983405",
+    // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
+    "matchCode": "1-3",
+    // ロボットのタイプ (robotTypes 設定依存)
+    "leftTeamID": "45098607",
+    // 右チームのID (空になる可能性あり)
+    "rightTeamID": "2230392",
+    // 勝者のID
+    "winnerID": "",
+    // 走行結果 (生成直後は必ず空になる)
+    "runResults": [
+    ]
+  }
 ]
 ```
 
@@ -495,17 +494,17 @@
 ### 出力 `200 OK`
 ```jsonc
 [
-	{
-		"rank": 1,
-		// チームID
-		"teamID": "3098230883",
-		// チーム名
-		"teamName": "Team 1",
-		// 獲得したポイントの合計
-		"points": 60,
-		// ゴールタイムの最も短いもの
-		"goalTimeSeconds": 30
-	}
+  {
+    "rank": 1,
+    // チームID
+    "teamID": "3098230883",
+    // チーム名
+    "teamName": "Team 1",
+    // 獲得したポイントの合計
+    "points": 60,
+    // ゴールタイムの最も短いもの
+    "goalTimeSeconds": 30
+  }
 ]
 ```
 
@@ -519,15 +518,15 @@
 画像のパス(URL) + クラス(ゴールド・シルバーetc)
 ```jsonc
 {
-	"sponsors": [
-		{
-		  // スポンサー名
-			"name": "team Poporon Network",
-			// スポンサーの格
-			"class": "Gold",
-			// スポンサーのurl
-			"url": "https://cdn.example.com/poporonnet.png"
-		}
-	]
+  "sponsors": [
+    {
+      // スポンサー名
+      "name": "team Poporon Network",
+      // スポンサーの格
+      "class": "Gold",
+      // スポンサーのurl
+      "url": "https://cdn.example.com/poporonnet.png"
+    }
+  ]
 }
 ```
