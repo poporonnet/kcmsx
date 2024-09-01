@@ -215,7 +215,7 @@
           "points": 4,
           // ゴールタイム (秒), リタイアした場合はnullが入る
           "goalTimeSeconds": 30,
-          // フィニッシュしたか ("goal" or "retired")
+          // フィニッシュしたか ("finished" or "retired")
           "finishState": "retired"
         }
       ]
