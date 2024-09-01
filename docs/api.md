@@ -1,7 +1,8 @@
 # バックエンドのAPIリファレンス
 > [!NOTE]
-> もしかしたら出力のレスポンスステータスコードが違う時があるかもしれないです。
 > 出力は成功した場合のみ記述してます。
+> 
+> 返ってくる値がなにかをわかりやすいようにコメントを記述していますが、実際の入力・出力にコメントは含まれません
 ## チーム一覧の取得
 `Get /team`
 ### 入力
@@ -59,23 +60,23 @@
 ### 出力 `200 OK`
 ```jsonc
 {
-    "id": "7549586",
-    // チーム名
-    "name": "かに2",
-    // エントリーコード(ゼッケン番号)
-    "entryCode": "2",
-    // チームメンバー
-    "members": [
-        "メンバー3"
-    ],
-    // チームの所属するクラブ(なければ空文字)
-    "clubName": "RubyClub",
-    // ロボットのタイプ (robotTypes 設定依存)
-    "robotType": "wheel",
-    // チームのカテゴリ (category 設定依存)
-    "category": "elementary",
-    // エントリーしたか (true | false)
-    "isEntered": false
+  "id": "7549586",
+  // チーム名
+  "name": "かに2",
+  // エントリーコード(ゼッケン番号)
+  "entryCode": "2",
+  // チームメンバー
+  "members": [
+      "メンバー3"
+  ],
+  // チームの所属するクラブ(なければ空文字)
+  "clubName": "RubyClub",
+  // ロボットのタイプ (robotTypes 設定依存)
+  "robotType": "wheel",
+  // チームのカテゴリ (category 設定依存)
+  "category": "elementary",
+  // エントリーしたか (true | false)
+  "isEntered": false
 }
 ```
 
@@ -117,7 +118,7 @@
 ```
 ### 出力 `204 No Content`
 ```
-レスポンスは存在しない
+レスポンスボディは存在しない
 ```
 
 ## チームをエントリー登録する
@@ -128,7 +129,7 @@
 ```
 ### 出力 `200 OK`
 ```
-レスポンスは存在しない
+レスポンスボディは存在しない
 ```
 
 ## チームのエントリー登録の解除
@@ -137,9 +138,9 @@
 ```
 なし
 ```
-### 出力 `200 OK`
+### 出力 `204 No Content`
 ```
-レスポンスは存在しない
+レスポンスボディは存在しない
 ```
 
 ## 試合一覧を取得
@@ -177,8 +178,8 @@
           "points": 4,
           // ゴールタイム (秒), リタイアした場合はnullが入る
           "finishedTimeSeconds": 30,
-          // フィニッシュしたか ("goad" or "retired")
-          "finishState": "goal"
+          // フィニッシュしたか ("finished" or "retired")
+          "finishState": "retired"
         }
       ]
     }
@@ -214,7 +215,7 @@
           "points": 4,
           // ゴールタイム (秒), リタイアした場合はnullが入る
           "goalTimeSeconds": 30,
-          // フィニッシュしたか ("goad" or "retired")
+          // フィニッシュしたか ("goal" or "retired")
           "finishState": "retired"
         }
       ]
@@ -239,8 +240,6 @@
     "id": "320984",
     // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
     "matchCode": "1-3",
-    // ロボットのタイプ (robotTypes 設定依存)
-    "robotType": "wheel",
     // 左チーム (空になる可能性あり)
     "leftTeam": {
 	    // チームのID
@@ -262,8 +261,8 @@
         "points": 4,
         // ゴールタイム (秒), リタイアした場合はnullが入る
         "goalTimeSeconds": 30,
-        // フィニッシュしたか ("goad" or "retired")
-        "finishState": "goal"
+        // フィニッシュしたか ("finished" or "retired")
+        "finishState": "retired"
       }
     ]
   }
@@ -286,7 +285,7 @@
     "rightTeam": {
 	    "id": "2230392",
 	    "teamName": "チーム2"
-	   },
+	  },
 		// 勝者のID
 		"winnerID": "45098607",
 		/* 走行結果
@@ -302,8 +301,8 @@
 				"points": 4,
 				// ゴールタイム (秒), リタイアした場合はnullが入る
 				"goalTimeSeconds": 30,
-				// フィニッシュしたか ("goad" or "retired")
-				"finishState": "goal"
+				// フィニッシュしたか ("finished" or "retired")
+				"finishState": "finished"
 			}
 		]
 	}
@@ -322,7 +321,6 @@
   "id": "70983405",
   // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
   "matchCode": "1-3",
-  // ロボットのタイプ (robotTypes 設定依存)
   // 左チーム (空になる可能性あり)
   "leftTeam": {
     // チームのID
@@ -347,7 +345,7 @@
       "points": 4,
       // ゴールタイム (秒), リタイアした場合はnullが入る
       "goalTimeSeconds": 30,
-      // フィニッシュしたか ("goal" or "retired")
+      // フィニッシュしたか ("finished" or "retired")
 	    "finishState": "retired"
     }
   ]
@@ -359,7 +357,6 @@
   "id": "70983405",
   // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
   "matchCode": "1-3",
-  // ロボットのタイプ (robotTypes 設定依存)
   // 左チーム (空になる可能性あり)
   "team1": {
     // チームのID
@@ -386,8 +383,8 @@
       "points": 4,
       // ゴールタイム (秒), リタイアした場合はnullが入る
       "goalTimeSeconds": 30,
-      // フィニッシュしたか ("goad" or "retired")
-      "finishState": "goal"
+      // フィニッシュしたか ("finished" or "retired")
+      "finishState": "retired"
     }
   ]
 }
@@ -395,7 +392,7 @@
 
 ## 試合種別・部門種別ごとに、試合表を生成
 `POST /match/{matchType}/{departmentType}/generate`
-## 出力 `201 Created`
+## 出力 `200 OK`
 `pre`の場合
 ```jsonc
 [
@@ -449,7 +446,7 @@
     "points": 4,
     // ゴールタイム (秒), リタイアした場合はnullが入る
     "goalTimeSeconds": 30,
-    // フィニッシュしたか ("retired" or "retired")
+    // フィニッシュしたか ("finished" or "retired")
     "finishState": "finished"
   }
 ]
@@ -476,7 +473,10 @@
 ```
 ### 出力 `200 OK`
 
+
 ## 試合種別・部門種別ごとに、エントリーしたチームの(現在時点での)ランキングを返す
+> [!WARNING]
+> このAPIはmockでも未実装です
 `GET /contest/{matchType}/{departmentType}/ranking`
 ### 入力
 ```
