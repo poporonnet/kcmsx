@@ -24,7 +24,7 @@ importers:
         version: 8.3.0(eslint@9.9.1)(typescript@5.5.4)
       '@vitest/coverage-v8':
         specifier: ^2.0.0
-        version: 2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)))
       eslint:
         specifier: ^9.0.0
         version: 9.9.1
@@ -33,7 +33,7 @@ importers:
         version: 9.1.0(eslint@9.9.1)
       eslint-plugin-vitest:
         specifier: ^0.5.0
-        version: 0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)))
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -42,7 +42,7 @@ importers:
         version: 4.0.0(prettier@3.3.3)(typescript@5.5.4)
       vitest:
         specifier: ^2.0.0
-        version: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+        version: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
 
   packages/kcms:
     dependencies:
@@ -85,7 +85,7 @@ importers:
         version: 8.3.0(eslint@9.9.1)(typescript@5.5.4)
       '@vitest/coverage-v8':
         specifier: ^2.0.0
-        version: 2.0.5(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 2.0.5(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)))
       eslint:
         specifier: ^9.0.0
         version: 9.9.1
@@ -94,7 +94,7 @@ importers:
         version: 9.1.0(eslint@9.9.1)
       eslint-plugin-vitest:
         specifier: ^0.5.0
-        version: 0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)))
       prettier:
         specifier: ^3.1.0
         version: 3.3.3
@@ -103,7 +103,7 @@ importers:
         version: 4.19.0
       vitest:
         specifier: ^2.0.0
-        version: 2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+        version: 2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
 
   packages/kcmsf:
     dependencies:
@@ -173,13 +173,13 @@ importers:
         version: 8.3.0(eslint@9.9.1)(typescript@5.5.4)
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.3.1(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 4.3.1(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)))
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
-        version: 3.7.0(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 3.7.0(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)))
       '@vitest/coverage-v8':
         specifier: ^2.0.0
-        version: 2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))
+        version: 2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.42)))
       '@vitest/ui':
         specifier: ^2.0.0
         version: 2.0.5(vitest@2.0.5)
@@ -196,17 +196,17 @@ importers:
         specifier: ^15.8.0
         version: 15.9.0
       jsdom:
-        specifier: ^24.0.0
-        version: 24.1.3
+        specifier: ^25.0.0
+        version: 25.0.0
       postcss:
         specifier: ^8.4.32
-        version: 8.4.41
+        version: 8.4.42
       postcss-preset-mantine:
         specifier: ^1.11.1
-        version: 1.17.0(postcss@8.4.41)
+        version: 1.17.0(postcss@8.4.42)
       postcss-simple-vars:
         specifier: ^7.0.1
-        version: 7.0.1(postcss@8.4.41)
+        version: 7.0.1(postcss@8.4.42)
       prettier:
         specifier: 3.3.3
         version: 3.3.3
@@ -218,10 +218,10 @@ importers:
         version: 5.5.4
       vite:
         specifier: ^5.0.0
-        version: 5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41))
+        version: 5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42))
       vitest:
         specifier: ^2.0.0
-        version: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+        version: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.42))
 
   packages/mock:
     dependencies:
@@ -2076,8 +2076,8 @@ packages:
     resolution: {integrity: sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==}
     hasBin: true
 
-  jsdom@24.1.3:
-    resolution: {integrity: sha512-MyL55p3Ut3cXbeBEG7Hcv0mVM8pp8PBNWxRqchZnSfAiES1v1mRnMeFfaHWIPULpwsYfvO+ZmMZz5tGCnjzDUQ==}
+  jsdom@25.0.0:
+    resolution: {integrity: sha512-OhoFVT59T7aEq75TVw9xxEfkXgacpqAhQaYgP9y/fDqWQCMB/b1H66RfmPm/MaeaAIU9nDwMOVTlPN51+ao6CQ==}
     engines: {node: '>=18'}
     peerDependencies:
       canvas: ^2.11.2
@@ -2342,8 +2342,12 @@ packages:
     peerDependencies:
       postcss: ^8.2.1
 
-  postcss@8.4.41:
-    resolution: {integrity: sha512-TesUflQ0WKZqAvg52PWL6kHgLKP6xB6heTOdoYM0Wt2UHyxNa4K25EZZMgKns3BH1RLVbZCREPpLY0rhnNoHVQ==}
+  postcss@8.4.42:
+    resolution: {integrity: sha512-hywKUQB9Ra4dR1mGhldy5Aj1X3MWDSIA1cEi+Uy0CjheLvP6Ual5RlwMCh8i/X121yEDLDIKBsrCQ8ba3FDMfQ==}
+    engines: {node: ^10 || ^12 || >=14}
+
+  postcss@8.4.43:
+    resolution: {integrity: sha512-gJAQVYbh5R3gYm33FijzCZj7CHyQ3hWMgJMprLUlIYqCwTeZhBQ19wp0e9mA25BUbEvY5+EXuuaAjqQsrBxQBQ==}
     engines: {node: ^10 || ^12 || >=14}
 
   prelude-ls@1.2.1:
@@ -3932,25 +3936,25 @@ snapshots:
       '@typescript-eslint/types': 8.3.0
       eslint-visitor-keys: 3.4.3
 
-  '@vitejs/plugin-react-swc@3.7.0(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)))':
+  '@vitejs/plugin-react-swc@3.7.0(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)))':
     dependencies:
       '@swc/core': 1.7.2
-      vite: 5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41))
+      vite: 5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42))
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitejs/plugin-react@4.3.1(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)))':
+  '@vitejs/plugin-react@4.3.1(vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)))':
     dependencies:
       '@babel/core': 7.24.9
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.24.9)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.9)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41))
+      vite: 5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42))
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))':
+  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -3964,11 +3968,11 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+      vitest: 2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
     transitivePeerDependencies:
       - supports-color
 
-  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)))':
+  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.42)))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@bcoe/v8-coverage': 0.2.3
@@ -3982,7 +3986,25 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.42))
+    transitivePeerDependencies:
+      - supports-color
+
+  '@vitest/coverage-v8@2.0.5(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)))':
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@bcoe/v8-coverage': 0.2.3
+      debug: 4.3.6
+      istanbul-lib-coverage: 3.2.2
+      istanbul-lib-report: 3.0.1
+      istanbul-lib-source-maps: 5.0.6
+      istanbul-reports: 3.1.7
+      magic-string: 0.30.11
+      magicast: 0.3.4
+      std-env: 3.7.0
+      test-exclude: 7.0.1
+      tinyrainbow: 1.2.0
+      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
     transitivePeerDependencies:
       - supports-color
 
@@ -4021,7 +4043,7 @@ snapshots:
       pathe: 1.1.2
       sirv: 2.0.4
       tinyrainbow: 1.2.0
-      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
 
   '@vitest/utils@2.0.5':
     dependencies:
@@ -4377,24 +4399,24 @@ snapshots:
     dependencies:
       eslint: 9.9.1
 
-  eslint-plugin-vitest@0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))):
+  eslint-plugin-vitest@0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))):
     dependencies:
       '@typescript-eslint/utils': 7.17.0(eslint@9.9.1)(typescript@5.5.4)
       eslint: 9.9.1
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)
-      vitest: 2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+      vitest: 2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  eslint-plugin-vitest@0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))):
+  eslint-plugin-vitest@0.5.4(@typescript-eslint/eslint-plugin@8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)(vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))):
     dependencies:
       '@typescript-eslint/utils': 7.17.0(eslint@9.9.1)(typescript@5.5.4)
       eslint: 9.9.1
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.3.0(@typescript-eslint/parser@8.3.0(eslint@9.9.1)(typescript@5.5.4))(eslint@9.9.1)(typescript@5.5.4)
-      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41))
+      vitest: 2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43))
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -4706,7 +4728,7 @@ snapshots:
     dependencies:
       argparse: 2.0.1
 
-  jsdom@24.1.3:
+  jsdom@25.0.0:
     dependencies:
       cssstyle: 4.0.1
       data-urls: 5.0.0
@@ -4927,40 +4949,46 @@ snapshots:
 
   picomatch@2.3.1: {}
 
-  postcss-js@4.0.1(postcss@8.4.41):
+  postcss-js@4.0.1(postcss@8.4.42):
     dependencies:
       camelcase-css: 2.0.1
-      postcss: 8.4.41
+      postcss: 8.4.42
 
-  postcss-mixins@9.0.4(postcss@8.4.41):
+  postcss-mixins@9.0.4(postcss@8.4.42):
     dependencies:
       fast-glob: 3.3.2
-      postcss: 8.4.41
-      postcss-js: 4.0.1(postcss@8.4.41)
-      postcss-simple-vars: 7.0.1(postcss@8.4.41)
-      sugarss: 4.0.1(postcss@8.4.41)
+      postcss: 8.4.42
+      postcss-js: 4.0.1(postcss@8.4.42)
+      postcss-simple-vars: 7.0.1(postcss@8.4.42)
+      sugarss: 4.0.1(postcss@8.4.42)
 
-  postcss-nested@6.2.0(postcss@8.4.41):
+  postcss-nested@6.2.0(postcss@8.4.42):
     dependencies:
-      postcss: 8.4.41
+      postcss: 8.4.42
       postcss-selector-parser: 6.1.1
 
-  postcss-preset-mantine@1.17.0(postcss@8.4.41):
+  postcss-preset-mantine@1.17.0(postcss@8.4.42):
     dependencies:
-      postcss: 8.4.41
-      postcss-mixins: 9.0.4(postcss@8.4.41)
-      postcss-nested: 6.2.0(postcss@8.4.41)
+      postcss: 8.4.42
+      postcss-mixins: 9.0.4(postcss@8.4.42)
+      postcss-nested: 6.2.0(postcss@8.4.42)
 
   postcss-selector-parser@6.1.1:
     dependencies:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
-  postcss-simple-vars@7.0.1(postcss@8.4.41):
+  postcss-simple-vars@7.0.1(postcss@8.4.42):
     dependencies:
-      postcss: 8.4.41
+      postcss: 8.4.42
 
-  postcss@8.4.41:
+  postcss@8.4.42:
+    dependencies:
+      nanoid: 3.3.7
+      picocolors: 1.0.1
+      source-map-js: 1.2.0
+
+  postcss@8.4.43:
     dependencies:
       nanoid: 3.3.7
       picocolors: 1.0.1
@@ -5261,9 +5289,14 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  sugarss@4.0.1(postcss@8.4.41):
+  sugarss@4.0.1(postcss@8.4.42):
     dependencies:
-      postcss: 8.4.41
+      postcss: 8.4.42
+
+  sugarss@4.0.1(postcss@8.4.43):
+    dependencies:
+      postcss: 8.4.43
+    optional: true
 
   supports-color@5.5.0:
     dependencies:
@@ -5405,13 +5438,13 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite-node@2.0.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.41)):
+  vite-node@2.0.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.43)):
     dependencies:
       cac: 6.7.14
       debug: 4.3.6
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.41))
+      vite: 5.3.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.43))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5422,13 +5455,13 @@ snapshots:
       - supports-color
       - terser
 
-  vite-node@2.0.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)):
+  vite-node@2.0.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)):
     dependencies:
       cac: 6.7.14
       debug: 4.3.6
       pathe: 1.1.2
       tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41))
+      vite: 5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42))
     transitivePeerDependencies:
       - '@types/node'
       - less
@@ -5439,37 +5472,64 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.3.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.41)):
+  vite-node@2.0.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.43)):
+    dependencies:
+      cac: 6.7.14
+      debug: 4.3.6
+      pathe: 1.1.2
+      tinyrainbow: 1.2.0
+      vite: 5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.43))
+    transitivePeerDependencies:
+      - '@types/node'
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+
+  vite@5.3.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.43)):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.41
+      postcss: 8.4.43
       rollup: 4.19.0
     optionalDependencies:
       '@types/node': 20.16.2
       fsevents: 2.3.3
-      sugarss: 4.0.1(postcss@8.4.41)
+      sugarss: 4.0.1(postcss@8.4.43)
 
-  vite@5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)):
+  vite@5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.41
+      postcss: 8.4.43
       rollup: 4.19.0
     optionalDependencies:
       '@types/node': 22.5.1
       fsevents: 2.3.3
-      sugarss: 4.0.1(postcss@8.4.41)
+      sugarss: 4.0.1(postcss@8.4.42)
 
-  vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41)):
+  vite@5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.43)):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.41
+      postcss: 8.4.43
+      rollup: 4.19.0
+    optionalDependencies:
+      '@types/node': 22.5.1
+      fsevents: 2.3.3
+      sugarss: 4.0.1(postcss@8.4.43)
+
+  vite@5.4.2(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42)):
+    dependencies:
+      esbuild: 0.21.5
+      postcss: 8.4.42
       rollup: 4.21.0
     optionalDependencies:
       '@types/node': 22.5.1
       fsevents: 2.3.3
-      sugarss: 4.0.1(postcss@8.4.41)
+      sugarss: 4.0.1(postcss@8.4.42)
 
-  vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)):
+  vitest@2.0.5(@types/node@20.16.2)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -5487,13 +5547,13 @@ snapshots:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.41))
-      vite-node: 2.0.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.41))
+      vite: 5.3.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.43))
+      vite-node: 2.0.5(@types/node@20.16.2)(sugarss@4.0.1(postcss@8.4.43))
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.16.2
       '@vitest/ui': 2.0.5(vitest@2.0.5)
-      jsdom: 24.1.3
+      jsdom: 25.0.0
     transitivePeerDependencies:
       - less
       - lightningcss
@@ -5503,7 +5563,7 @@ snapshots:
       - supports-color
       - terser
 
-  vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@24.1.3)(sugarss@4.0.1(postcss@8.4.41)):
+  vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.42)):
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@vitest/expect': 2.0.5
@@ -5521,13 +5581,47 @@ snapshots:
       tinybench: 2.9.0
       tinypool: 1.0.0
       tinyrainbow: 1.2.0
-      vite: 5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41))
-      vite-node: 2.0.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.41))
+      vite: 5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42))
+      vite-node: 2.0.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.42))
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 22.5.1
       '@vitest/ui': 2.0.5(vitest@2.0.5)
-      jsdom: 24.1.3
+      jsdom: 25.0.0
+    transitivePeerDependencies:
+      - less
+      - lightningcss
+      - sass
+      - stylus
+      - sugarss
+      - supports-color
+      - terser
+
+  vitest@2.0.5(@types/node@22.5.1)(@vitest/ui@2.0.5)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.43)):
+    dependencies:
+      '@ampproject/remapping': 2.3.0
+      '@vitest/expect': 2.0.5
+      '@vitest/pretty-format': 2.0.5
+      '@vitest/runner': 2.0.5
+      '@vitest/snapshot': 2.0.5
+      '@vitest/spy': 2.0.5
+      '@vitest/utils': 2.0.5
+      chai: 5.1.1
+      debug: 4.3.6
+      execa: 8.0.1
+      magic-string: 0.30.11
+      pathe: 1.1.2
+      std-env: 3.7.0
+      tinybench: 2.9.0
+      tinypool: 1.0.0
+      tinyrainbow: 1.2.0
+      vite: 5.3.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.43))
+      vite-node: 2.0.5(@types/node@22.5.1)(sugarss@4.0.1(postcss@8.4.43))
+      why-is-node-running: 2.3.0
+    optionalDependencies:
+      '@types/node': 22.5.1
+      '@vitest/ui': 2.0.5(vitest@2.0.5)
+      jsdom: 25.0.0
     transitivePeerDependencies:
       - less
       - lightningcss
