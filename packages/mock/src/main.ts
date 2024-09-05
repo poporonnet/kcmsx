@@ -1,11 +1,18 @@
 import { zValidator } from "@hono/zod-validator";
 import { config } from "config";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { z } from "zod";
 import { matches, teams } from "./data/main";
 
 const RobotTypes = z.enum(config.robotTypes);
 const app = new Hono();
+
+app.use(
+  cors({
+    origin: ["https://kcmsx.pages.dev", "http://localhost:5173"],
+  })
+);
 
 app.get("/", (c) => {
   return c.json({ message: "kcmsx/mock is up." });
