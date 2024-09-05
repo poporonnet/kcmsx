@@ -1,5 +1,5 @@
 import { EntryRepository } from '../models/repository.js';
-import { Team, TeamCreateArgs, TeamID } from '../models/team.js';
+import { Team, TeamCreateArgs } from '../models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
@@ -10,13 +10,14 @@ export class EntryService {
     this.repository = repository;
     this.idGenerator = idGenerator;
   }
+
   async create(input: Omit<TeamCreateArgs, 'id'>): Promise<Result.Result<Error, Team>> {
-    const id = this.idGenerator.generate<TeamID>();
+    const id = this.idGenerator.generate<Team>();
     if (Result.isErr(id)) {
       return Result.err(id[1]);
     }
     const createArgs: TeamCreateArgs = {
-      id: id[1] as TeamID,
+      id: id[1],
       teamName: input.teamName,
       members: input.members,
       isMultiWalk: input.isMultiWalk,

@@ -5,10 +5,10 @@ export type RunResultID = SnowflakeID<RunResult>;
 
 /*
  * FinishState
- *   FINISHED: ゴールした
- *   RETIRED: フィニッシュ(リタイア)した
+ *   GOAL: ゴールした
+ *   FINISHED: フィニッシュ(リタイア)した
  * */
-export type FinishState = 'FINISHED' | 'RETIRED';
+export type FinishState = 'GOAL' | 'FINISHED';
 export interface CreateRunResultArgs {
   id: RunResultID;
   teamId: TeamID;
@@ -39,7 +39,7 @@ export class RunResult {
   }
 
   public static new(args: CreateRunResultArgs): RunResult {
-    if (args.finishState === 'RETIRED') {
+    if (args.finishState === 'FINISHED') {
       args.goalTimeSeconds = Infinity;
     }
     return new RunResult(args);
@@ -64,14 +64,14 @@ export class RunResult {
   /*
    * @return {boolean} ゴールしたかどうか
    * */
-  public isFinished(): boolean {
-    return this.finishState === 'FINISHED';
+  public isGoal(): boolean {
+    return this.finishState === 'GOAL';
   }
 
   /*
-   * @return {boolean} リタイア(フィニッシュ)したかどうか
+   * @return {boolean} フィニッシュ(リタイア)したかどうか
    */
-  public isRetired(): boolean {
-    return this.finishState === 'RETIRED';
+  public isFinished(): boolean {
+    return this.finishState === 'FINISHED';
   }
 }

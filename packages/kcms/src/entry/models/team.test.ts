@@ -17,4 +17,22 @@ describe('正しくインスタンスを生成できる', () => {
     expect(actual.getIsMultiWalk()).toBe(false);
     expect(actual.getCategory()).toBe('Open');
   });
+
+  it('正しくインスタンスを生成できる - クラブを含む場合', () => {
+    const actual = Team.new({
+      id: '123' as TeamID,
+      teamName: 'チーム1',
+      members: ['山田太郎', 'テスト大介'],
+      isMultiWalk: false,
+      category: 'Open',
+      clubName: 'テストクラブ',
+    });
+
+    expect(actual.getId()).toBe('123');
+    expect(actual.getTeamName()).toBe('チーム1');
+    expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
+    expect(actual.getIsMultiWalk()).toBe(false);
+    expect(actual.getCategory()).toBe('Open');
+    expect(actual.getClubName()).toBe('テストクラブ');
+  });
 });

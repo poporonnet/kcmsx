@@ -3,7 +3,7 @@
 import { SnowflakeID } from '../../id/main.js';
 
 export type Department = 'Elementary' | 'Open';
-export type TeamID = SnowflakeID<'Entry'>;
+export type TeamID = SnowflakeID<Team>;
 
 export interface TeamCreateArgs {
   id: TeamID;
@@ -11,6 +11,7 @@ export interface TeamCreateArgs {
   members: Array<string>;
   isMultiWalk: boolean;
   category: Department;
+  clubName?: string;
 }
 
 export class Team {
@@ -19,19 +20,22 @@ export class Team {
   private readonly members: Array<string>;
   private readonly isMultiWalk: boolean;
   private readonly category: Department;
+  private readonly clubName?: string;
 
   private constructor(
     id: TeamID,
     teamName: string,
     _members: Array<string>,
     _isMultiWalk: boolean,
-    category: Department
+    category: Department,
+    clubName?: string
   ) {
     this.id = id;
     this.teamName = teamName;
     this.members = _members;
     this.isMultiWalk = _isMultiWalk;
     this.category = category;
+    this.clubName = clubName;
   }
 
   getId(): TeamID {
@@ -54,7 +58,11 @@ export class Team {
     return this.category;
   }
 
+  getClubName(): string | undefined {
+    return this.clubName;
+  }
+
   public static new(arg: TeamCreateArgs): Team {
-    return new Team(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category);
+    return new Team(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category, arg.clubName);
   }
 }
