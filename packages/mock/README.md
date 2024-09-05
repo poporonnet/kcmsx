@@ -12,7 +12,7 @@ pnpm install
 ```
 
 ### 開発用サーバの起動
-
+kcmsとの併用はできません
 ```
 pnpm dev
 ```
