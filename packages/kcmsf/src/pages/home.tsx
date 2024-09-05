@@ -14,6 +14,8 @@ export const Home = () => {
       <Link to="/result">試合結果</Link>
       <br />
       <Link to="/ranking">ランキング</Link>
+      <br />
+      <Link to="/match">エキシビション</Link>
     </>
   );
 };
