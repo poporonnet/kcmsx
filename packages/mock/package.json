@@ -1,7 +1,7 @@
 {
   "name": "mock",
   "scripts": {
-    "dev": "wrangler dev --port 3000 src/main.ts",
+    "dev": "wrangler dev src/main.ts",
     "deploy": "wrangler deploy --minify src/main.ts",
     "format": "prettier . --write"
   },
