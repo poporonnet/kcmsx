@@ -5,7 +5,7 @@ const TeamSchema = z.object({
   id: z.string().openapi({ example: '1392387' }),
   name: z.string().openapi({ example: 'かに１' }),
   entryCode: z.string().openapi({ example: '1' }),
-  menubar: z
+  member: z
     .string()
     .array()
     .max(2)
