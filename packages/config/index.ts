@@ -9,4 +9,5 @@ export * from "./src/types/derived/rule";
 
 // utility
 export * from "./src/utility/against";
+export * from "./src/utility/pick";
 export * from "./src/utility/typeGuard";
