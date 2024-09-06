@@ -6,15 +6,15 @@ import { MatchInfo } from "config";
 type TeamResult = {
   id: string;
   points: number;
-  time: number;
+  time?: number;
 };
 
-type MatchResult = {
-  results: {
-    left: TeamResult;
-    right: TeamResult;
-  };
-};
+type APIPostRunResults = {
+  teamID: string; // `teamId`でないことに注意
+  points: number;
+  goalTimeSeconds: number | null;
+  finishState: "goal" | "finished";
+}[];
 
 export const MatchSubmit = (props: {
   matchInfo: MatchInfo;
@@ -25,40 +25,46 @@ export const MatchSubmit = (props: {
   };
 }) => {
   const submit = async () => {
-    const matchResult: MatchResult = {
-      results: {
-        left: {
-          id: props.matchInfo.teams.left.id,
-          ...props.result.left,
-        },
-        right: {
-          id: props.matchInfo.teams.right.id,
-          ...props.result.right,
-        },
-      },
-    };
-
-    return fetch(
-      `${import.meta.env.VITE_API_URL}/match/${props.matchInfo.id}`,
+    const runResults: APIPostRunResults = [
       {
-        method: "put",
-        body: JSON.stringify(matchResult),
+        teamID: props.matchInfo.teams.left.id,
+        points: props.result.left.points,
+        goalTimeSeconds: props.result.left.time ?? null,
+        finishState: props.result.left.time != null ? "goal" : "finished",
+      },
+      {
+        teamID: props.matchInfo.teams.right.id,
+        points: props.result.right.points,
+        goalTimeSeconds: props.result.right.time ?? null,
+        finishState: props.result.right.time != null ? "goal" : "finished",
+      },
+    ];
+
+    const result = await fetch(
+      `${import.meta.env.VITE_API_URL}/match/${props.matchInfo.matchType}/${props.matchInfo.id}/run_result`,
+      {
+        method: "post",
+        body: JSON.stringify(runResults),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    )
-      .then(() =>
-        notifications.show({
-          title: "送信成功",
-          message: "結果が正常に送信されました",
-          color: "green",
-        })
-      )
-      .catch(() =>
-        notifications.show({
-          title: "送信失敗",
-          message: "結果の送信に失敗しました",
-          color: "red",
-        })
-      );
+    ).catch(() => undefined);
+    console.log(await result?.json());
+
+    notifications.show(
+      result?.ok
+        ? {
+            title: "送信成功",
+            message: "結果が正常に送信されました",
+            color: "green",
+          }
+        : {
+            title: "送信失敗",
+            message: "結果の送信に失敗しました",
+            color: "red",
+          }
+    );
   };
 
   return (
