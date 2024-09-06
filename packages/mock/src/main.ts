@@ -130,7 +130,6 @@ app.get("/match/:matchType/:id/run_result", (c) => {
 
 const MatchResultSchema = z.array(
   z.object({
-    id: z.string(),
     teamID: z.string(),
     points: z.number(),
     goalTimeSeconds: z.union([z.number(), z.null()]),
