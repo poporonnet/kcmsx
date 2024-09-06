@@ -3,6 +3,7 @@ import { DerivedDepartmentConfig } from "../types/departmentConfig";
 import { DerivedMatchConfig } from "../types/matchConfig";
 import { DerivedPremiseState } from "../types/premise";
 import { DerivedPointState, DerivedRuleBaseVariant } from "../types/rule";
+import { DerivedSponsorConfig, SponsorClass } from "../types/sponsorConfig";
 import { createConfig } from "./createConfig";
 
 describe("正しい設定を生成できる", () => {
@@ -26,6 +27,7 @@ describe("正しい設定を生成できる", () => {
             point,
           },
         ],
+        sponsors: [],
       } as const,
       {}
     );
@@ -69,6 +71,10 @@ describe("正しい設定を生成できる", () => {
       DerivedMatchConfig<string, string, number>,
       ...DerivedMatchConfig<string, string, number>[],
     ];
+    type Sponsors = [
+      DerivedSponsorConfig<string, SponsorClass, string>,
+      ...DerivedSponsorConfig<string, SponsorClass, string>[],
+    ];
 
     const range = [...new Array(10)].map((_, i) => i);
 
@@ -102,6 +108,11 @@ describe("正しい設定を生成できる", () => {
       DerivedRuleBaseVariant,
       ...DerivedRuleBaseVariant[],
     ];
+    const sponsors = range.map((i) => ({
+      name: `スポンサー${i}`,
+      class: (["platinum", "gold", "silver", "bronze"] as const)[i % 4],
+      logo: `https://sponsor${i}.example.com/logo`,
+    })) as Sponsors;
 
     const config = createConfig(
       {
@@ -110,6 +121,7 @@ describe("正しい設定を生成できる", () => {
         departments,
         matches,
         rules,
+        sponsors,
       },
       {}
     );
@@ -118,6 +130,7 @@ describe("正しい設定を生成できる", () => {
     expect(config.departments).toEqual(departments);
     expect(config.matches).toEqual(matches);
     expect(config.rules).toEqual(rules);
+    expect(config.sponsors).toEqual(sponsors);
     range.map((i) =>
       expect(config.department).toHaveProperty(
         [`department${i}`, "name"],
@@ -167,7 +180,8 @@ describe("正しい設定を生成できる", () => {
             validate: (done: boolean) => done,
           },
         ],
-      } as const,
+        sponsors: [],
+      },
       {
         goal: {
           visible,
