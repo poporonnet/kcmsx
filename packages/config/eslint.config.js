@@ -34,4 +34,11 @@ export default [
       ...vitest.configs.recommended.rules,
     },
   },
+  {
+    settings: {
+      vitest: {
+        typecheck: true,
+      },
+    },
+  },
 ];
