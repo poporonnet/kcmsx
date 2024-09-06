@@ -18,6 +18,7 @@ import {
   ValidRuleList,
 } from "../types/rule";
 import { DerivedRuleList } from "../types/ruleList";
+import { DerivedSponsorConfig, SponsorClass } from "../types/sponsorConfig";
 
 export const createConfig = <
   ContestName extends string,
@@ -48,6 +49,15 @@ export const createConfig = <
     RuleBaseLabel
   >,
   RuleBases extends [RuleBase, ...RuleBase[]],
+  SponsorName extends string,
+  SponsorClassType extends SponsorClass,
+  SponsorLogo extends string,
+  Sponsor extends DerivedSponsorConfig<
+    SponsorName,
+    SponsorClassType,
+    SponsorLogo
+  >,
+  Sponsors extends [] | [Sponsor, ...Sponsor[]],
   Conditions extends ConditionsConfig<
     RobotTypes,
     RuleBases,
@@ -62,7 +72,8 @@ export const createConfig = <
     Matches,
     RuleBaseType,
     RuleBaseInitial,
-    RuleBases
+    RuleBases,
+    Sponsors
   >,
   conditions: ConditionsConfig<RobotTypes, RuleBases, Matches, Departments>
 ): Readonly<
@@ -73,7 +84,8 @@ export const createConfig = <
     Matches,
     RuleBaseType,
     RuleBaseInitial,
-    DerivedRuleList<RuleBases, RobotTypes, Matches, Departments, Conditions>
+    DerivedRuleList<RuleBases, RobotTypes, Matches, Departments, Conditions>,
+    Sponsors
   >
 > => ({
   contestName: baseConfig.contestName,
@@ -101,6 +113,7 @@ export const createConfig = <
     RuleBaseInitial,
     DerivedRuleList<RuleBases, RobotTypes, Matches, Departments, Conditions>
   >,
+  sponsors: baseConfig.sponsors,
   department: Object.fromEntries(
     baseConfig.departments.map<
       [Departments[number]["type"], Omit<DepartmentConfig<RobotTypes>, "type">]
