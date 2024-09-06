@@ -132,8 +132,8 @@ const MatchResultSchema = z.array(
   z.object({
     teamID: z.string(),
     points: z.number(),
-    goalTimeSeconds: z.union([z.number(), z.null()]),
-    finishState: z.enum(["retired", "finished"]),
+    goalTimeSeconds: z.number().nullable(),
+    finishState: z.enum(["goal", "finished"]),
   })
 );
 app.post(
