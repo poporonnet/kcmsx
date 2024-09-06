@@ -16,6 +16,7 @@
     - [isDepartmentType(value)](#isdepartmenttypevalue)
     - [isMatchType(value)](#ismatchtypevalue)
     - [isRuleName(value)](#isrulenamevalue)
+    - [pick(array, key)](#pickarray-key)
   - [For Developers(WIP)](#for-developerswip)
     - [kcmsx/configをモノレポ内の別のパッケージから使う](#kcmsxconfigをモノレポ内の別のパッケージから使う)
     - [型定義ファイルのディレクトリ構造](#型定義ファイルのディレクトリ構造)
@@ -312,6 +313,30 @@ rules: [
 - 戻り値の型: `value is RuleName`
 
 `RuleName`の型ガードです。`value`が`RuleName`なら`true`を、そうでなければ`false`を返します。
+
+### pick(array, key)
+
+- `array`: `Record<Key, Value>[]`
+- `key`: `Key`
+- 戻り値の型: `Value`
+
+`config`オブジェクトの配列のプロパティから、型安全に各オブジェクトの1つのプロパティをマップする関数です。
+
+<details open>
+<summary>例:</summary>
+
+```ts
+const array = [
+  { value: "A" },
+  { value: "B" },
+  { value: "C" },
+] as const satisfies { value: string }[];
+
+const mappedValues = array.map((o) => o.value); // `("A" | "B" | "C")[]`と型推論されてしまう
+const pickedValues = pick(array, "value"); // `["A", "B", "C"]`と型推論される
+```
+
+</details>
 
 ## For Developers(WIP)
 
