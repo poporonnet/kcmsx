@@ -87,13 +87,42 @@ export const config = createConfig(
         point: (count: number) => count,
         validate: (value: number) => 0 <= value && value <= 3,
       },
+      {
+        name: "finish",
+        label: "フィニッシュ",
+        type: "single",
+        initial: false,
+        point: () => 0,
+      },
     ],
   },
   {
     multiWalk: {
       visible: () => false,
     },
+    leaveBase: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+    },
+    overMiddle: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+    },
+    enterDestination: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+    },
+    placeBall: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+    },
+    returnBase: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+    },
     goal: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
       scorable: (state) => {
         if (state.matchInfo?.matchType !== "main") return false; // 本戦以外では先ゴールに得点を与えない
 
@@ -105,6 +134,13 @@ export const config = createConfig(
         if (otherTime == null) return true; // 自分がゴールしていて、相手がゴールしていないなら先ゴール
         return selfTime < otherTime; // どちらもゴールしていて、自分のゴールタイムのほうが小さければ先ゴール
       },
+    },
+    bringBall: {
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+    },
+    finish: {
+      changeable: (state) => !state.matchState[state.side].getPointState().goal,
     },
   }
 );
