@@ -95,6 +95,7 @@ export const config = createConfig(
         point: () => 0,
       },
     ],
+    sponsors: [],
   },
   {
     multiWalk: {
