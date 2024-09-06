@@ -50,7 +50,6 @@ export const MatchSubmit = (props: {
         },
       }
     ).catch(() => undefined);
-    console.log(await result?.json());
 
     notifications.show(
       result?.ok
