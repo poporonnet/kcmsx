@@ -40,43 +40,47 @@
 `POST /team`
 ### 入力
 ```jsonc
-{
-  // チーム名
-  "name": "かに2",
-  // チームメンバー
-  "members": [
-    "メンバー3"
-  ],
-  // チームの所属するクラブ(string | "")
-  "clubName": "RubyClub",
-  // ロボットのタイプ (robotTypes 設定依存)
-  "robotType": "wheel",
-  // チームのカテゴリ (category 設定依存)
-  "category": "elementary"
-}
+[
+  {
+    // チーム名
+    "name": "かに2",
+    // チームメンバー
+    "members": [
+      "メンバー3"
+    ],
+    // チームの所属するクラブ(string | "")
+    "clubName": "RubyClub",
+    // ロボットのタイプ (robotTypes 設定依存)
+    "robotType": "wheel",
+    // チームのカテゴリ (category 設定依存)
+    "category": "elementary"
+  }
+]
 ```
 
 ### 出力 `200 OK`
 ```jsonc
-{
-  "id": "7549586",
-  // チーム名
-  "name": "かに2",
-  // エントリーコード(ゼッケン番号)
-  "entryCode": "2",
-  // チームメンバー
-  "members": [
-    "メンバー3"
-  ],
-  // チームの所属するクラブ(なければ空文字)
-  "clubName": "RubyClub",
-  // ロボットのタイプ (robotTypes 設定依存)
-  "robotType": "wheel",
-  // チームのカテゴリ (category 設定依存)
-  "category": "elementary",
-  // エントリーしたか (true | false)
-  "isEntered": false
-}
+[
+  {
+    "id": "7549586",
+    // チーム名
+    "name": "かに2",
+    // エントリーコード(ゼッケン番号)
+    "entryCode": "2",
+    // チームメンバー
+    "members": [
+      "メンバー3"
+    ],
+    // チームの所属するクラブ(なければ空文字)
+    "clubName": "RubyClub",
+    // ロボットのタイプ (robotTypes 設定依存)
+    "robotType": "wheel",
+    // チームのカテゴリ (category 設定依存)
+    "category": "elementary",
+    // エントリーしたか (true | false)
+    "isEntered": false
+  }
+]
 ```
 
 ## チームを取得
