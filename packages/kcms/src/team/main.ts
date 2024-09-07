@@ -3,12 +3,12 @@ import { zValidator } from '@hono/zod-validator';
 import { bulkEntryRequestSchema, entryRequestSchema } from './schema.js';
 import { Controller } from './controller.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { JSONEntryRepository } from './adaptor/json.js';
 import { errorToCode } from './adaptor/errors.js';
+import { DummyRepository } from './adaptor/dummyRepository';
 
 export const entryHandler = new Hono();
 // export const controller = new Controller(new DummyRepository());
-export const controller = new Controller(await JSONEntryRepository.new());
+export const controller = new Controller(new DummyRepository());
 
 entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
   const { teamName, members, isMultiWalk, category } = c.req.valid('json');
