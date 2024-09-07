@@ -1,6 +1,10 @@
 import { z } from '@hono/zod-openapi';
 import { config, pick } from 'config';
 
+export const CommonErrorSchema = z.object({
+  description: z.string().openapi({ example: '存在しないカテゴリです' }),
+});
+
 const TeamSchema = z.object({
   id: z.string().openapi({ example: '1392387' }),
   name: z.string().openapi({ example: 'かに１' }),
