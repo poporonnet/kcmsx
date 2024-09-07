@@ -9,7 +9,7 @@ import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっと
    得点:    12,  10,   9,   7,   5,   4,   4,   2   1
    時間:    60,  64,  70,  74,  80,  90, 100, 180 200
 */
-export const TestRankingPreMatchData = [
+export const testRankingPreMatchData = [
   PreMatch.new({
     id: '100' as PreMatchID,
     courseIndex: 0,
@@ -232,6 +232,6 @@ export const TestRankingPreMatchData = [
   }),
 ];
 
-export const TestRankingMainMatchData = [
+export const testRankingMainMatchData = [
   // ToDo: L/Rを入れるとL/Rを入れ替えたデータも作れるようにしたい
 ];

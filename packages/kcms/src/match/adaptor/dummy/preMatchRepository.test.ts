@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest';
-import { TestRankingPreMatchData } from '../../../testData/match.js';
+import { testRankingPreMatchData } from '../../../testData/match.js';
 import { PreMatch, PreMatchID } from '../../model/pre.js';
 import { RunResult, RunResultID } from '../../model/runResult.js';
 import { TeamID } from '../../../team/models/team.js';
@@ -10,7 +10,7 @@ describe('DummyPreMatchRepository', () => {
   const repository = new DummyPreMatchRepository();
 
   beforeEach(() => {
-    repository.clear([...TestRankingPreMatchData]);
+    repository.clear([...testRankingPreMatchData]);
   });
 
   it('作成できる', async () => {

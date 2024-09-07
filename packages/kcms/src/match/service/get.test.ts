@@ -4,7 +4,7 @@ import { GetMatchService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository.js';
 import { PreMatchID } from '../model/pre.js';
-import { TestRankingPreMatchData } from '../../testData/match.js';
+import { testRankingPreMatchData } from '../../testData/match.js';
 
 describe('GetMatchService', () => {
   const mainMatchRepository = new DummyMainMatchRepository();
@@ -13,14 +13,14 @@ describe('GetMatchService', () => {
   const service = new GetMatchService(preMatchRepository, mainMatchRepository);
 
   beforeEach(() => {
-    preMatchRepository.clear(TestRankingPreMatchData);
+    preMatchRepository.clear(testRankingPreMatchData);
   });
 
   it('取得できる(PreMatch)', async () => {
     const res = await service.findById('100' as PreMatchID);
 
     expect(Result.isErr(res)).toStrictEqual(false);
-    expect(res[1]).toStrictEqual(TestRankingPreMatchData[0]);
+    expect(res[1]).toStrictEqual(testRankingPreMatchData[0]);
   });
 
   it.todo('取得できる(MainMatch)');
@@ -36,7 +36,7 @@ describe('GetMatchService', () => {
     const res = await service.findAllPreMatch();
 
     expect(Result.isErr(res)).toStrictEqual(false);
-    expect(res[1]).toStrictEqual(TestRankingPreMatchData);
+    expect(res[1]).toStrictEqual(testRankingPreMatchData);
   });
 
   it.todo('全ての本戦試合を取得できる');
@@ -44,7 +44,7 @@ describe('GetMatchService', () => {
   it('全ての試合を取得できる', async () => {
     const res = await service.findAll();
     expect(Result.isErr(res)).toStrictEqual(false);
-    expect(Result.unwrap(res).pre).toStrictEqual(TestRankingPreMatchData);
+    expect(Result.unwrap(res).pre).toStrictEqual(testRankingPreMatchData);
 
     // ToDo: 本戦試合の取得
   });
