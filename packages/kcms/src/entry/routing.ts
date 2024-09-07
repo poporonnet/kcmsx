@@ -1,5 +1,5 @@
 import { createRoute } from '@hono/zod-openapi';
-import { TeamsResponseSchema } from './adaptor/validator/team';
+import { TeamsResponseSchema, CommonErrorSchema } from './adaptor/validator/team';
 
 export const GetTeamsRoute = createRoute({
   method: 'get',
@@ -12,6 +12,14 @@ export const GetTeamsRoute = createRoute({
         },
       },
       description: 'Team list',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common Error',
     },
   },
 });

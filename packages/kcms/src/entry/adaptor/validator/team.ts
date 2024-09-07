@@ -21,3 +21,7 @@ export const TeamsResponseSchema = z
     teams: z.array(TeamSchema),
   })
   .openapi('Teams');
+
+export const CommonErrorSchema = z.object({
+  description: z.string().openapi({ example: '存在しないカテゴリです' }),
+});
