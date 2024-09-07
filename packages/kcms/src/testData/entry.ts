@@ -54,6 +54,22 @@ export const TestEntryData = {
     isMultiWalk: true,
     category: 'Open',
   }),
+  NotEntered: Team.reconstruct({
+    id: '6' as TeamID,
+    teamName: 'TestTeam6',
+    members: ['TestTaro6'],
+    isMultiWalk: true,
+    category: 'Elementary',
+    isEntered: false,
+  }),
+  Entered: Team.reconstruct({
+    id: '7' as TeamID,
+    teamName: 'TestTeam7',
+    members: ['TestTaro7'],
+    isMultiWalk: true,
+    category: 'Elementary',
+    isEntered: true,
+  }),
 };
 
 type entryBase<I extends string, M extends boolean, C extends 'Elementary' | 'Open'> = {
