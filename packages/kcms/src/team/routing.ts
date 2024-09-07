@@ -1,5 +1,10 @@
 import { createRoute } from '@hono/zod-openapi';
-import { TeamsResponseSchema, CommonErrorSchema } from './adaptor/validator/team';
+import {
+  GetTeamsResponseSchema,
+  CommonErrorSchema,
+  PostTeamsRequestSchema,
+  PostTeamsResponseSchema,
+} from './adaptor/validator/team';
 
 export const GetTeamsRoute = createRoute({
   method: 'get',
@@ -8,10 +13,10 @@ export const GetTeamsRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: TeamsResponseSchema,
+          schema: GetTeamsResponseSchema,
         },
       },
-      description: 'Team list',
+      description: 'Retrieve all teams',
     },
     400: {
       content: {
@@ -19,7 +24,40 @@ export const GetTeamsRoute = createRoute({
           schema: CommonErrorSchema,
         },
       },
-      description: 'Common Error',
+      description: 'Common error',
+    },
+  },
+});
+
+export const PostTeamsRoute = createRoute({
+  method: 'post',
+  path: '/team',
+  request: {
+    body: {
+      required: true,
+      content: {
+        'application/json': {
+          schema: PostTeamsRequestSchema,
+        },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: PostTeamsResponseSchema,
+        },
+      },
+      description: 'Register teams',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
     },
   },
 });
