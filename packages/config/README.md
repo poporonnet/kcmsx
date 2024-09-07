@@ -8,6 +8,7 @@
     - [baseConfig.departments](#baseconfigdepartments)
     - [baseConfig.matches](#baseconfigmatches)
     - [baseConfig.rules](#baseconfigrules)
+    - [baseConfig.sponsors](#baseconfigsponsors)
   - [conditions](#conditions)
   - [utility](#utility)
     - [createConfig(baseConfig, conditions)](#createconfigbaseconfig-conditions-1)
@@ -35,6 +36,7 @@ export const config = createConfig(
     departments: [],
     matches: [],
     rules: [],
+    sponsors: [],
   },
   {}
 );
@@ -50,7 +52,7 @@ export const config = createConfig(
 - 型: `BaseConfig`
 
 主要なほとんどの設定を含むオブジェクトです。
-`contestName`, `robotTypes`, `departments`, `matches`, `rules`プロパティが必要です。
+`contestName`, `robotTypes`, `departments`, `matches`, `rules`, `sponsors`プロパティが必要です。
 以下でプロパティの詳細について説明しています。
 
 ### baseConfig.contestName
@@ -216,6 +218,37 @@ rules: [
     validate: (value: number) => 0 <= value && value <= 3, // 持ち帰ることのできるボールの個数は0個以上かつ3個以下
   },
 ];
+```
+
+</details>
+
+### baseConfig.sponsors
+
+- 型: `SponsorConfig[]`
+
+スポンサーの情報を記述する設定です。空にしておくこともできます。以下で、配列の要素である`SponsorConfig`のプロパティについて説明しています。
+
+- `name`
+  - 型: `string`
+  - スポンサーの表示名です。主にフロントエンドでの表示に使われます。
+- `class`
+  - 型: `"platinum" | "gold" | "silver" | "bronze"`
+  - スポンサーの格(プラン)です。格が高いほど、フロントエンドで表示されるロゴが大きくなります。
+- `logo`
+  - 型: `string`
+  - スポンサーのロゴのURLです。主にフロントエンドでの表示に使われます。
+
+<details open>
+<summary>例:</summary>
+
+```ts
+sponsors: [
+  {
+    name: "Poporon Network",
+    class: "gold",
+    logo: "https://avatars.githubusercontent.com/u/131351461"
+  },
+],
 ```
 
 </details>
