@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { RunResult, RunResultID } from './runResult.js';
-import { TeamID } from '../../entry/models/team.js';
+import { TeamID } from '../../team/models/team.js';
 
 describe('RunResult', () => {
   it('正しくインスタンスを生成できる(ゴール時)', () => {

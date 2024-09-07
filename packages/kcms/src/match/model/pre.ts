@@ -1,6 +1,6 @@
 import { SnowflakeID } from '../../id/main.js';
 import { RunResult } from './runResult.js';
-import { TeamID } from '../../entry/models/team.js';
+import { TeamID } from '../../team/models/team.js';
 
 /** @description 予選試合ID
  * @example "20983209840"

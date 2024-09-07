@@ -1,4 +1,4 @@
-import { Team, TeamID } from '../entry/models/team.js';
+import { Team, TeamID } from '../team/models/team.js';
 
 export const TestEntryData = {
   ElementaryMultiWalk: Team.new({

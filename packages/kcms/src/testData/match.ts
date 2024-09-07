@@ -1,4 +1,4 @@
-import { TeamID } from '../entry/models/team.js';
+import { TeamID } from '../team/models/team.js';
 import { RunResult, RunResultID } from '../match/model/runResult.js';
 import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっとデータ数を増やす
 

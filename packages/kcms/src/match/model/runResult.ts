@@ -1,5 +1,5 @@
 import { SnowflakeID } from '../../id/main.js';
-import { TeamID } from '../../entry/models/team.js';
+import { TeamID } from '../../team/models/team.js';
 
 export type RunResultID = SnowflakeID<RunResult>;
 
