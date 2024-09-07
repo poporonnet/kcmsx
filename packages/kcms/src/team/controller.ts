@@ -1,5 +1,5 @@
 import { TeamRepository } from './models/repository.js';
-import { CreateTeamService } from './service/entry.js';
+import { CreateTeamService } from './service/createTeam';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { FindEntryService } from './service/get.js';
 import { DeleteEntryService } from './service/delete.js';

@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/dummyRepository.js';
 import { Team, TeamID } from '../models/team.js';
 import { Result } from '@mikuroxina/mini-fn';
-import { CreateTeamService } from './entry.js';
+import { CreateTeamService } from './createTeam';
 import { TestEntryData } from '../../testData/entry.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
@@ -17,7 +17,7 @@ describe('entryService', () => {
     repository.reset();
   });
 
-  it('エントリーできる', async () => {
+  it('参加登録できる', async () => {
     const data = TestEntryData['ElementaryMultiWalk'];
     const actual = await service.create({
       teamName: data.getTeamName(),
@@ -57,46 +57,8 @@ describe('entryService', () => {
     expect(result[1]).toStrictEqual(new Error('teamName Exists'));
   });
 
-  it('オープン部門のメンバーは1人のみ', async () => {
-    const entry = Team.new({
-      id: '123' as TeamID,
-      teamName: 'team1',
-      members: ['山田四十郎', '山田太郎'],
-      isMultiWalk: true,
-      category: 'Open',
-    });
-    const actual = await service.create({
-      teamName: entry.getTeamName(),
-      members: entry.getMembers(),
-      isMultiWalk: entry.getIsMultiWalk(),
-      category: entry.getCategory(),
-    });
-
-    expect(Result.isErr(actual)).toBe(true);
-    expect(actual[1]).toStrictEqual(new Error('too many members'));
-  });
-
-  it('小学生部門のメンバーは1または2人', async () => {
-    const entry = Team.new({
-      id: '123' as TeamID,
-      teamName: 'team1',
-      members: ['山田四十郎', '山田太郎', '山田次郎'],
-      isMultiWalk: true,
-      category: 'Elementary',
-    });
-    const actual = await service.create({
-      teamName: entry.getTeamName(),
-      members: entry.getMembers(),
-      isMultiWalk: entry.getIsMultiWalk(),
-      category: entry.getCategory(),
-    });
-
-    expect(Result.isErr(actual)).toBe(true);
-    expect(actual[1]).toStrictEqual(new Error('too many members'));
-  });
-
   it('メンバーが居ないチームは作れない', async () => {
-    const entry = Team.new({
+    const team = Team.new({
       id: '123' as TeamID,
       teamName: 'team1',
       members: [],
@@ -104,13 +66,32 @@ describe('entryService', () => {
       category: 'Elementary',
     });
     const actual = await service.create({
-      teamName: entry.getTeamName(),
-      members: entry.getMembers(),
-      isMultiWalk: entry.getIsMultiWalk(),
-      category: entry.getCategory(),
+      teamName: team.getTeamName(),
+      members: team.getMembers(),
+      isMultiWalk: team.getIsMultiWalk(),
+      category: team.getCategory(),
     });
 
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('no member'));
+  });
+
+  it('メンバーが3人以上のチームは作れない', async () => {
+    const team = Team.new({
+      id: '123' as TeamID,
+      teamName: 'team1',
+      members: ['A太郎', 'B太郎', 'C太郎'],
+      isMultiWalk: true,
+      category: 'Elementary',
+    });
+    const actual = await service.create({
+      teamName: team.getTeamName(),
+      members: team.getMembers(),
+      isMultiWalk: team.getIsMultiWalk(),
+      category: team.getCategory(),
+    });
+
+    expect(Result.isErr(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(new Error('too many members'));
   });
 });

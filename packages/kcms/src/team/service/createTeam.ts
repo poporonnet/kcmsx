@@ -12,6 +12,12 @@ export class CreateTeamService {
     this.idGenerator = idGenerator;
   }
 
+  /**
+   * チームを作成(参加登録)します\
+   * - チーム名は重複できない
+   * - チームのメンバー数は最大2人
+   * @param input {@link TeamCreateArgs} チームのデータ
+   */
   async create(
     input: Omit<TeamCreateArgs, 'id' | 'isEntered'>
   ): Promise<Result.Result<Error, Team>> {
@@ -19,13 +25,6 @@ export class CreateTeamService {
     if (Result.isErr(id)) {
       return Result.err(id[1]);
     }
-    const createArgs: Omit<TeamCreateArgs, 'isEntered'> = {
-      id: id[1],
-      teamName: input.teamName,
-      members: input.members,
-      isMultiWalk: input.isMultiWalk,
-      category: input.category,
-    };
 
     // チーム名は重複できない
     if (await this.isExists(input.teamName)) {
@@ -38,18 +37,18 @@ export class CreateTeamService {
       return Result.err(new Error('no member'));
     }
 
-    if (input.category === 'Open') {
-      // オープン部門->1人
-      if (input.members.length > 1) {
-        return Result.err(new Error('too many members'));
-      }
-    } else {
-      // 小学生部門 -> 1 or 2人
-      if (input.members.length > 2) {
-        return Result.err(new Error('too many members'));
-      }
+    // 最大は2人
+    if (input.members.length > 2) {
+      return Result.err(new Error('too many members'));
     }
 
+    const createArgs: Omit<TeamCreateArgs, 'isEntered'> = {
+      id: id[1],
+      teamName: input.teamName,
+      members: input.members,
+      isMultiWalk: input.isMultiWalk,
+      category: input.category,
+    };
     const e = Team.new(createArgs);
     const res = await this.repository.create(e);
     if (Result.isErr(res)) {
@@ -59,6 +58,9 @@ export class CreateTeamService {
     return Result.ok(res[1]);
   }
 
+  /**
+   * チーム名が存在するかを返す
+   */
   private async isExists(teamName: string) {
     const res = await this.repository.findByTeamName(teamName);
     return Option.isSome(res);
