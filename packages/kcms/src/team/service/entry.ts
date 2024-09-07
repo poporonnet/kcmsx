@@ -11,12 +11,14 @@ export class EntryService {
     this.idGenerator = idGenerator;
   }
 
-  async create(input: Omit<TeamCreateArgs, 'id'>): Promise<Result.Result<Error, Team>> {
+  async create(
+    input: Omit<TeamCreateArgs, 'id' | 'isEntered'>
+  ): Promise<Result.Result<Error, Team>> {
     const id = this.idGenerator.generate<Team>();
     if (Result.isErr(id)) {
       return Result.err(id[1]);
     }
-    const createArgs: TeamCreateArgs = {
+    const createArgs: Omit<TeamCreateArgs, 'isEntered'> = {
       id: id[1],
       teamName: input.teamName,
       members: input.members,
