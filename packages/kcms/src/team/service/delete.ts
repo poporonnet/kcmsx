@@ -1,4 +1,4 @@
-import { EntryRepository } from '../repository.js';
+import { EntryRepository } from '../models/repository.js';
 import { Option } from '@mikuroxina/mini-fn';
 
 export class DeleteEntryService {

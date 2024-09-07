@@ -1,41 +1,51 @@
-import { describe, expect, it } from 'vitest';
-import { DummyMatchRepository } from '../adaptor/dummyRepository.js';
-import { GetMatchService, MatchDTO } from './get.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
+import { GetMatchService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
-import { TestMatchData } from '../../testData/match.js';
+import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository.js';
+import { PreMatchID } from '../model/pre.js';
+import { testRankingPreMatchData } from '../../testData/match.js';
 
 describe('GetMatchService', () => {
-  const repository = new DummyMatchRepository();
-  repository.create(TestMatchData.ElementaryPrimary);
-  const service = new GetMatchService(repository);
+  const mainMatchRepository = new DummyMainMatchRepository();
+  const preMatchRepository = new DummyPreMatchRepository();
 
-  it('取得できる', async () => {
-    const res = await service.findById(TestMatchData.ElementaryPrimary.getId());
+  const service = new GetMatchService(preMatchRepository, mainMatchRepository);
 
-    expect(Result.isErr(res)).toStrictEqual(false);
-    expect(res[1]).toStrictEqual(MatchDTO.fromDomain(TestMatchData.ElementaryPrimary));
+  beforeEach(() => {
+    preMatchRepository.clear(testRankingPreMatchData);
   });
 
+  it('取得できる(PreMatch)', async () => {
+    const res = await service.findById('100' as PreMatchID);
+
+    expect(Result.isErr(res)).toStrictEqual(false);
+    expect(res[1]).toStrictEqual(testRankingPreMatchData[0]);
+  });
+
+  it.todo('取得できる(MainMatch)');
+
   it('存在しないときはエラー', async () => {
-    const res = await service.findById('222');
+    const res = await service.findById('222' as PreMatchID);
 
     expect(Result.isErr(res)).toStrictEqual(true);
     expect(res[1]).toStrictEqual(new Error('Not found'));
   });
-});
 
-describe('MatchDTO', () => {
-  const domain = TestMatchData.ElementaryPrimary;
+  it('全ての予選試合を取得できる', async () => {
+    const res = await service.findAllPreMatch();
 
-  it('domain dto間で相互変換できる', async () => {
-    const toDomain = MatchDTO.fromDomain(domain).toDomain();
-    const toDTO = MatchDTO.fromDomain(toDomain);
+    expect(Result.isErr(res)).toStrictEqual(false);
+    expect(res[1]).toStrictEqual(testRankingPreMatchData);
+  });
 
-    expect(toDomain.getId()).toStrictEqual(toDTO.id);
-    expect(toDomain.getTeams().left!.getId).toStrictEqual(toDTO.teams.left!.getId);
-    expect(toDomain.getTeams().right!.getId).toStrictEqual(toDTO.teams.right!.getId);
-    expect(toDomain.getMatchType()).toStrictEqual(toDTO.matchType);
-    expect(toDomain.getCourseIndex()).toStrictEqual(toDTO.courseIndex);
-    expect(toDomain.getResults()).toStrictEqual(toDTO.results);
+  it.todo('全ての本戦試合を取得できる');
+
+  it('全ての試合を取得できる', async () => {
+    const res = await service.findAll();
+    expect(Result.isErr(res)).toStrictEqual(false);
+    expect(Result.unwrap(res).pre).toStrictEqual(testRankingPreMatchData);
+
+    // ToDo: 本戦試合の取得
   });
 });

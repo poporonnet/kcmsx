@@ -1,15 +1,15 @@
 import { SnowflakeID } from '../../id/main.js';
 import { RunResult } from './runResult.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../team/models/team.js';
 
 export type MainMatchID = SnowflakeID<MainMatch>;
 export interface CreateMainMatchArgs {
   id: MainMatchID;
   courseIndex: number;
   matchIndex: number;
-  teamId1?: EntryID;
-  teamId2?: EntryID;
-  winnerId?: EntryID;
+  teamId1?: TeamID;
+  teamId2?: TeamID;
+  winnerId?: TeamID;
   runResults: RunResult[];
 }
 
@@ -20,9 +20,9 @@ export class MainMatch {
   private readonly id: MainMatchID;
   private readonly courseIndex: number;
   private readonly matchIndex: number;
-  private readonly teamId1?: EntryID;
-  private readonly teamId2?: EntryID;
-  private winnerId?: EntryID;
+  private readonly teamId1?: TeamID;
+  private readonly teamId2?: TeamID;
+  private winnerId?: TeamID;
   private runResults: RunResult[];
 
   private constructor(args: CreateMainMatchArgs) {
@@ -63,7 +63,7 @@ export class MainMatch {
     return this.winnerId;
   }
 
-  setWinnerId(winnerId: EntryID) {
+  setWinnerId(winnerId: TeamID) {
     if (this.winnerId !== undefined) {
       throw new Error('WinnerId is already set');
     }

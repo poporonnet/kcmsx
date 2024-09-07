@@ -1,15 +1,24 @@
 import { SnowflakeID } from '../../id/main.js';
 import { RunResult } from './runResult.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../team/models/team.js';
 
+/** @description 予選試合ID
+ * @example "20983209840"
+ * */
 export type PreMatchID = SnowflakeID<PreMatch>;
 
 export interface CreatePreMatchArgs {
+  /** @description 試合ID*/
   id: PreMatchID;
+  /** @description コース番号(1始まり) */
   courseIndex: number;
+  /** @description 試合番号(1始まり) */
   matchIndex: number;
-  teamId1: EntryID;
-  teamId2?: EntryID;
+  /** @description チーム1のID 左を走るチーム */
+  teamId1: TeamID;
+  /** @description チーム2のID 右を走るチーム */
+  teamId2?: TeamID;
+  /** @description 走行結果 */
   runResults: RunResult[];
 }
 
@@ -20,9 +29,9 @@ export class PreMatch {
   private readonly id: PreMatchID;
   private readonly courseIndex: number;
   private readonly matchIndex: number;
-  private readonly teamId1: EntryID;
+  private readonly teamId1: TeamID;
   // NOTE: 予選参加者は奇数になる可能性があるので2チーム目はいないことがある
-  private readonly teamId2?: EntryID;
+  private readonly teamId2?: TeamID;
   private runResults: RunResult[];
 
   private constructor(args: CreatePreMatchArgs) {
@@ -50,11 +59,11 @@ export class PreMatch {
     return this.matchIndex;
   }
 
-  getTeamId1(): EntryID {
+  getTeamId1(): TeamID {
     return this.teamId1;
   }
 
-  getTeamId2(): EntryID | undefined {
+  getTeamId2(): TeamID | undefined {
     return this.teamId2;
   }
 
@@ -62,7 +71,10 @@ export class PreMatch {
     return this.runResults;
   }
 
-  appendRunResults(runResults: RunResult[]) {
+  /**
+   * @description 試合に走行結果を追加する 試合結果は1チーム1つづつなので1または2個になる
+   * */
+  appendRunResults(runResults: RunResult[]): void {
     // 1チーム1つずつ結果を持つので,1 or 2個
     const appendedLength = this.runResults.length + runResults.length;
     if (appendedLength !== 1 && appendedLength !== 2) {

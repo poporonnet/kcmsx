@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { Entry, EntryID } from './entry.js';
+import { Team, TeamID } from './team.js';
 
 describe('正しくインスタンスを生成できる', () => {
   it('正しくインスタンスを生成できる', () => {
-    const actual = Entry.new({
-      id: '123' as EntryID,
+    const actual = Team.new({
+      id: '123' as TeamID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,
@@ -19,8 +19,8 @@ describe('正しくインスタンスを生成できる', () => {
   });
 
   it('正しくインスタンスを生成できる - クラブを含む場合', () => {
-    const actual = Entry.new({
-      id: '123' as EntryID,
+    const actual = Team.new({
+      id: '123' as TeamID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,

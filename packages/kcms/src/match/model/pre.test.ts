@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { PreMatch, PreMatchID } from './pre.js';
-import { EntryID } from '../../entry/entry.js';
+import { TeamID } from '../../team/models/team.js';
 import { RunResult, RunResultID } from './runResult.js';
 
 describe('PreMatch', () => {
@@ -9,8 +9,8 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [],
     };
     const res = PreMatch.new(args);
@@ -28,14 +28,14 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) =>
         RunResult.new({
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as EntryID) : ('3' as EntryID),
+          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         })
       ),
@@ -50,8 +50,8 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [],
     };
 
@@ -95,8 +95,8 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
-      teamId1: '2' as EntryID,
-      teamId2: '3' as EntryID,
+      teamId1: '2' as TeamID,
+      teamId2: '3' as TeamID,
       runResults: [],
     };
     const res = PreMatch.new(args);
@@ -108,7 +108,7 @@ describe('PreMatch', () => {
             id: String(i) as RunResultID,
             goalTimeSeconds: i * 10,
             points: 10 + i,
-            teamId: i % 2 == 0 ? args.teamId1 : ('999' as EntryID),
+            teamId: i % 2 == 0 ? args.teamId1 : ('999' as TeamID),
             finishState: 'FINISHED',
           });
         })
