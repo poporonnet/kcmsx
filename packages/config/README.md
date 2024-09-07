@@ -8,6 +8,7 @@
     - [baseConfig.departments](#baseconfigdepartments)
     - [baseConfig.matches](#baseconfigmatches)
     - [baseConfig.rules](#baseconfigrules)
+    - [baseConfig.sponsors](#baseconfigsponsors)
   - [conditions](#conditions)
   - [utility](#utility)
     - [createConfig(baseConfig, conditions)](#createconfigbaseconfig-conditions-1)
@@ -16,6 +17,7 @@
     - [isDepartmentType(value)](#isdepartmenttypevalue)
     - [isMatchType(value)](#ismatchtypevalue)
     - [isRuleName(value)](#isrulenamevalue)
+    - [pick(array, key)](#pickarray-key)
   - [For Developers(WIP)](#for-developerswip)
     - [kcmsx/configをモノレポ内の別のパッケージから使う](#kcmsxconfigをモノレポ内の別のパッケージから使う)
     - [型定義ファイルのディレクトリ構造](#型定義ファイルのディレクトリ構造)
@@ -34,6 +36,7 @@ export const config = createConfig(
     departments: [],
     matches: [],
     rules: [],
+    sponsors: [],
   },
   {}
 );
@@ -49,7 +52,7 @@ export const config = createConfig(
 - 型: `BaseConfig`
 
 主要なほとんどの設定を含むオブジェクトです。
-`contestName`, `robotTypes`, `departments`, `matches`, `rules`プロパティが必要です。
+`contestName`, `robotTypes`, `departments`, `matches`, `rules`, `sponsors`プロパティが必要です。
 以下でプロパティの詳細について説明しています。
 
 ### baseConfig.contestName
@@ -219,6 +222,37 @@ rules: [
 
 </details>
 
+### baseConfig.sponsors
+
+- 型: `SponsorConfig[]`
+
+スポンサーの情報を記述する設定です。空にしておくこともできます。以下で、配列の要素である`SponsorConfig`のプロパティについて説明しています。
+
+- `name`
+  - 型: `string`
+  - スポンサーの表示名です。主にフロントエンドでの表示に使われます。
+- `class`
+  - 型: `"platinum" | "gold" | "silver" | "bronze"`
+  - スポンサーの格(プラン)です。格が高いほど、フロントエンドで表示されるロゴが大きくなります。
+- `logo`
+  - 型: `string`
+  - スポンサーのロゴのURLです。主にフロントエンドでの表示に使われます。
+
+<details open>
+<summary>例:</summary>
+
+```ts
+sponsors: [
+  {
+    name: "Poporon Network",
+    class: "gold",
+    logo: "https://avatars.githubusercontent.com/u/131351461"
+  },
+],
+```
+
+</details>
+
 ## conditions
 
 - 型: `ConditionsConfig`
@@ -312,6 +346,30 @@ rules: [
 - 戻り値の型: `value is RuleName`
 
 `RuleName`の型ガードです。`value`が`RuleName`なら`true`を、そうでなければ`false`を返します。
+
+### pick(array, key)
+
+- `array`: `Record<Key, Value>[]`
+- `key`: `Key`
+- 戻り値の型: `Value`
+
+`config`オブジェクトの配列のプロパティから、型安全に各オブジェクトの1つのプロパティをマップする関数です。
+
+<details open>
+<summary>例:</summary>
+
+```ts
+const array = [
+  { value: "A" },
+  { value: "B" },
+  { value: "C" },
+] as const satisfies { value: string }[];
+
+const mappedValues = array.map((o) => o.value); // `("A" | "B" | "C")[]`と型推論されてしまう
+const pickedValues = pick(array, "value"); // `["A", "B", "C"]`と型推論される
+```
+
+</details>
 
 ## For Developers(WIP)
 
