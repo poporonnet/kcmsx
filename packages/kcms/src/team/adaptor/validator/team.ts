@@ -26,6 +26,12 @@ export const GetTeamsResponseSchema = z
   })
   .openapi('Teams');
 
-export const CommonErrorSchema = z.object({
-  description: z.string().openapi({ example: '存在しないカテゴリです' }),
-});
+export const PostTeamsRequestSchema = z.array(
+  TeamSchema.omit({
+    id: true,
+    entryCode: true,
+    isEntered: true,
+  })
+);
+
+export const PostTeamsResponseSchema = z.array(TeamSchema).openapi('Teams');
