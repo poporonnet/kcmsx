@@ -1,14 +1,14 @@
 import { createRoute } from '@hono/zod-openapi';
-import { TeamsSchema } from './adaptor/validator/team';
+import { TeamResponseSchema } from './adaptor/validator/team';
 
-export const route = createRoute({
+export const GetTeamRoute = createRoute({
   method: 'get',
   path: '/team',
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: TeamsSchema,
+          schema: TeamResponseSchema,
         },
       },
       description: 'Team list',

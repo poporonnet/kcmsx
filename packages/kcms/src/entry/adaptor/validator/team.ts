@@ -16,7 +16,7 @@ const TeamSchema = z.object({
   isEntered: z.boolean().openapi({ example: true }),
 });
 
-export const TeamsSchema = z
+export const TeamResponseSchema = z
   .object({
     teams: z.array(TeamSchema),
   })
