@@ -2,13 +2,13 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/dummyRepository.js';
 import { Team, TeamID } from '../models/team.js';
 import { Result } from '@mikuroxina/mini-fn';
-import { EntryService } from './entry.js';
+import { CreateTeamService } from './entry.js';
 import { TestEntryData } from '../../testData/entry.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
 describe('entryService', () => {
   const repository = new DummyRepository();
-  const service = new EntryService(
+  const service = new CreateTeamService(
     repository,
     new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
   );

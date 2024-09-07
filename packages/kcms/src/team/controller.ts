@@ -1,5 +1,5 @@
-import { EntryRepository } from './models/repository.js';
-import { EntryService } from './service/entry.js';
+import { TeamRepository } from './models/repository.js';
+import { CreateTeamService } from './service/entry.js';
 import { Result, Option } from '@mikuroxina/mini-fn';
 import { FindEntryService } from './service/get.js';
 import { DeleteEntryService } from './service/delete.js';
@@ -14,12 +14,12 @@ interface baseEntry {
 }
 
 export class Controller {
-  private readonly entry: EntryService;
+  private readonly entry: CreateTeamService;
   private readonly find: FindEntryService;
   private readonly deleteService: DeleteEntryService;
 
-  constructor(repository: EntryRepository) {
-    this.entry = new EntryService(
+  constructor(repository: TeamRepository) {
+    this.entry = new CreateTeamService(
       repository,
       new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
     );

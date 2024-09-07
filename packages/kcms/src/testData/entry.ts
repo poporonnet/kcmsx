@@ -79,6 +79,7 @@ const entryArgsBuilder = <I extends string, M extends boolean, C extends 'Elemen
 };
 
 // TestEntrySet テスト用エントリー用データ, Matchのテスト用に偶数にしてある
+// ToDo: Team.newだとエントリーしていない状態で初期化されるので、Team.reconstructを使う
 export const TestEntrySet = {
   // 小学生部門 多脚型
   ElementaryMultiWalk: {

@@ -1,4 +1,4 @@
-import { EntryRepository } from '../models/repository.js';
+import { TeamRepository } from '../models/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { Team, Department, TeamID } from '../models/team.js';
 import { readFile, writeFile } from 'node:fs/promises';
@@ -16,7 +16,7 @@ export interface EntryJSON {
   category: string;
 }
 
-export class JSONEntryRepository implements EntryRepository {
+export class JSONEntryRepository implements TeamRepository {
   private data: Array<Team>;
 
   private constructor(data?: Array<Team>) {

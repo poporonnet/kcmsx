@@ -1,8 +1,8 @@
-import { EntryRepository } from '../models/repository.js';
+import { TeamRepository } from '../models/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { Team } from '../models/team.js';
 
-export class DummyRepository implements EntryRepository {
+export class DummyRepository implements TeamRepository {
   private data: Array<Team>;
   constructor(data?: Array<Team>) {
     this.data = data ?? [];
