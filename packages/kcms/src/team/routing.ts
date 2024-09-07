@@ -4,6 +4,7 @@ import {
   CommonErrorSchema,
   PostTeamsRequestSchema,
   PostTeamsResponseSchema,
+  TeamIdParamsSchema,
 } from './adaptor/validator/team';
 
 export const GetTeamsRoute = createRoute({
@@ -58,6 +59,27 @@ export const PostTeamsRoute = createRoute({
         },
       },
       description: 'Common error',
+    },
+  },
+});
+
+export const DeleteTeamRoute = createRoute({
+  method: 'delete',
+  path: '/team/{teamid}',
+  request: {
+    params: TeamIdParamsSchema,
+  },
+  responses: {
+    204: {
+      description: 'Delete Team',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common Error',
     },
   },
 });

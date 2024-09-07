@@ -35,3 +35,13 @@ export const PostTeamsRequestSchema = z.array(
 );
 
 export const PostTeamsResponseSchema = z.array(TeamSchema).openapi('Teams');
+
+export const TeamIdParamsSchema = z.object({
+  teamid: z.string().openapi({
+    param: {
+      name: 'teamid',
+      in: 'path',
+    },
+    example: '7549586',
+  }),
+});
