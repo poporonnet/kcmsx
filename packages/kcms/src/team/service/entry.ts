@@ -40,7 +40,7 @@ export class EntryService {
     }
     const team = Option.unwrap(teamRes);
 
-    team.cancel();
+    team.cancelEntry();
     const res = await this.teamRepository.update(team);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
