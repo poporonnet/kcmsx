@@ -8,7 +8,6 @@ describe('GeneratePreMatchService', () => {
   it('正しく予選対戦表を生成できる', async () => {
     const res = await generateService.handle(dummyTeamsName);
 
-    expect(true).toBe(true);
     expect(res[0]).toStrictEqual([
       ['A1', 'B3'],
       ['A4', 'N1'],
