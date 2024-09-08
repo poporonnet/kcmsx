@@ -65,6 +65,6 @@ export type ValidMatchConfigs<Matches extends MatchConfig[]> =
  * {@link MatchConfig}の`course`オブジェクトが空ならコンパイルに失敗する
  */
 type ValidCourseConfigs<Matches extends MatchConfig[]> =
-  {} extends Matches[number]["course"]
+  object extends Matches[number]["course"]
     ? "Empty `course` is not allowed"
     : Matches;
