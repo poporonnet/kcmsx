@@ -141,6 +141,9 @@ departments: [
 - `limitSeconds`
   - 型: `number`
   - 試合の制限時間です。単位は秒です。
+- `course`
+  - 型: `CourseConfig`
+  - コース数の設定です。部門種別ごとに使用するコースの数を設定します。`baseConfig.departments`の`type`に指定した値がキーになります。空にすることはできません。
 
 <details open>
 <summary>例: 予選と本戦の2種別の場合</summary>
@@ -151,11 +154,19 @@ matches: [
     type: "pre",
     name: "予選",
     limitSeconds: 180,
+    course: {
+      elementary: 3, // 予選は小学生部門が3コース
+      // 部門は省略可能 この場合、オープン部門の予選は行われないことになる
+    },
   },
   {
     type: "main",
     name: "本戦",
     limitSeconds: 180,
+    course: {
+      elementary: 2, // 本選は小学生部門が2コース
+      open: 1, // オープン部門は本選の1コースのみ
+    },
   },
 ],
 ```

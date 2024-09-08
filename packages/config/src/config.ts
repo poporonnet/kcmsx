@@ -22,11 +22,19 @@ export const config = createConfig(
         type: "pre",
         name: "予選",
         limitSeconds: 180,
+        course: {
+          elementary: 2,
+          open: 1,
+        },
       },
       {
         type: "main",
         name: "本戦",
         limitSeconds: 180,
+        course: {
+          elementary: 2,
+          open: 1,
+        },
       },
     ],
     rules: [
