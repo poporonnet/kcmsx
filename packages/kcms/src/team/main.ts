@@ -7,7 +7,6 @@ import { errorToCode } from './adaptor/errors.js';
 import { DummyRepository } from './adaptor/dummyRepository';
 
 export const entryHandler = new Hono();
-// export const controller = new Controller(new DummyRepository());
 export const controller = new Controller(new DummyRepository());
 
 entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
