@@ -6,6 +6,7 @@ import {
   DerivedDepartmentConfig,
 } from "../types/departmentConfig";
 import {
+  DerivedCourseConfig,
   DerivedMatch,
   DerivedMatchConfig,
   MatchConfig,
@@ -36,7 +37,15 @@ export const createConfig = <
   MatchType extends string,
   MatchName extends string,
   MatchLimitSeconds extends number,
-  Match extends DerivedMatchConfig<MatchType, MatchName, MatchLimitSeconds>,
+  MatchCourse extends DerivedCourseConfig<RobotTypes, Departments>,
+  Match extends DerivedMatchConfig<
+    MatchType,
+    MatchName,
+    MatchLimitSeconds,
+    RobotTypes,
+    Departments,
+    MatchCourse
+  >,
   Matches extends [Match, ...Match[]],
   RuleBaseName extends string,
   RuleBaseLabel extends string,
@@ -122,6 +131,9 @@ export const createConfig = <
   match: Object.fromEntries(
     baseConfig.matches.map<
       [Matches[number]["type"], Omit<MatchConfig, "type">]
-    >(({ type, name, limitSeconds }) => [type, { name, limitSeconds }])
+    >(({ type, name, limitSeconds, course }) => [
+      type,
+      { name, limitSeconds, course },
+    ])
   ) as DerivedMatch<Matches>,
 });
