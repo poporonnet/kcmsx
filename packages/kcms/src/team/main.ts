@@ -17,6 +17,7 @@ entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
     members,
     isMultiWalk,
     category,
+    departmentType: category === 'Open' ? 'open' : 'elementary',
   });
   if (Result.isErr(res)) {
     return c.json({ error: errorToCode(res[1]) }, 400);
@@ -48,6 +49,7 @@ entryHandler.post('/bulk', zValidator('json', bulkEntryRequestSchema), async (c)
       members: v.members,
       isMultiWalk: v.isMultiWalk,
       category: v.category,
+      departmentType: v.category === 'Open' ? 'open' : 'elementary',
     });
     if (Result.isErr(res)) {
       return c.json({ error: errorToCode(res[1]) }, 400);

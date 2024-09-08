@@ -1,16 +1,92 @@
-export class GeneratePreMatchService {
-  private readonly COURSE_COUNT = 3;
+import { Result } from '@mikuroxina/mini-fn';
+import { PreMatch } from '../model/pre';
+import { config, DepartmentType } from 'config';
+import { FetchTeamService } from '../../team/service/get';
+import { Team } from '../../team/models/team';
+import { SnowflakeIDGenerator } from '../../id/main';
+import { PreMatchRepository } from '../model/repository';
 
-  async handle(data: string[]): Promise<(string | undefined)[][][]> {
-    // チームをクラブ名でソートする
-    const teams = data.sort();
+export class GeneratePreMatchService {
+  constructor(
+    private readonly fetchTeam: FetchTeamService,
+    private readonly idGenerator: SnowflakeIDGenerator,
+    private readonly preMatchRepository: PreMatchRepository
+  ) {}
+
+  async handle(departmentType: DepartmentType): Promise<Result.Result<Error, PreMatch[]>> {
+    if (!config.match.pre.course[departmentType]) {
+      return Result.err(new Error('DepartmentType is not defined'));
+    }
+    const pair = await this.makePairs(departmentType);
+    return await this.makeMatches(pair);
+  }
+
+  private async makeMatches(
+    data: (Team | undefined)[][][]
+  ): Promise<Result.Result<Error, PreMatch[]>> {
+    // 与えられたペアをもとに試合を生成する
+
+    // コースごとに生成
+    const generated = data.map((course, courseIndex) => {
+      // ペアをもとに試合を生成
+      return course.map((pair, matchIndex): Result.Result<Error, PreMatch> => {
+        const id = this.idGenerator.generate<PreMatch>();
+        if (Result.isErr(id)) {
+          return id;
+        }
+        const match = PreMatch.new({
+          id: Result.unwrap(id),
+          // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
+          courseIndex: courseIndex + 1,
+          matchIndex: matchIndex + 1,
+          teamId1: pair[0]?.getId(),
+          teamId2: pair[1]?.getId(),
+          runResults: [],
+        });
+        return Result.ok(match);
+      });
+    });
+    const flatten = generated.flat();
+    const match = flatten.filter((v) => Result.isOk(v)).map((v) => Result.unwrap(v));
+
+    const res = await this.preMatchRepository.createBulk(match);
+    if (Result.isErr(res)) {
+      return res;
+    }
+
+    return Result.ok(match);
+  }
+
+  /**
+   * チームのペアだけを作る関数
+   */
+  async makePairs(departmentType: DepartmentType): Promise<(Team | undefined)[][][]> {
+    // 多言語環境でソート可能にするためにcollatorを使う
+    const collator = new Intl.Collator('ja');
+    const courseCount = config.match['pre'].course[departmentType];
+
+    // エントリー済みのチームを取得
+    const teamRes = await this.fetchTeam.findAll();
+    if (Result.isErr(teamRes)) {
+      return [];
+    }
+    const team = Result.unwrap(teamRes).filter(
+      (v) => v.getIsEntered() && v.getDepartmentType() === departmentType
+    );
+
+    // チームをクラブ名でソートする (ToDo: クラブ名がない場合にどこの位置に動かすかを決める必要がありそう
+    const teams = team.sort((a, b) =>
+      collator.compare(a.getClubName() ?? 'N', b.getClubName() ?? 'N')
+    );
 
     // コースの数でスライスする
     // 初期化時に必要な個数作っておく
-    const slicedTeams: string[][] = new Array(Math.ceil(teams.length / this.COURSE_COUNT)).fill([]);
-    for (let i = 0; i < Math.ceil(teams.length / this.COURSE_COUNT); i++) {
+    const slicedTeams: Team[][] = new Array(
+      Math.ceil(teams.length / config.match['pre'].course[departmentType])
+    ).fill([]);
+    for (let i = 0; i < Math.ceil(teams.length / courseCount); i++) {
       // コース数
-      slicedTeams[i] = teams.slice(i * this.COURSE_COUNT, (i + 1) * this.COURSE_COUNT);
+      slicedTeams[i] = teams.slice(i * courseCount, (i + 1) * courseCount);
     }
 
     /* スライスされた配列を転置する

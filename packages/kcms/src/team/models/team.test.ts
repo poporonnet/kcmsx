@@ -9,6 +9,7 @@ describe('正しくインスタンスを生成できる', () => {
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,
       category: 'Open',
+      departmentType: 'open',
       isEntered: true,
     });
 
@@ -26,6 +27,7 @@ describe('正しくインスタンスを生成できる', () => {
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,
       category: 'Open',
+      departmentType: 'open',
       isEntered: true,
       clubName: 'テストクラブ',
     });
@@ -45,6 +47,7 @@ describe('正しくインスタンスを生成できる', () => {
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,
       category: 'Open',
+      departmentType: 'open',
     });
 
     team.enter();
@@ -59,6 +62,7 @@ describe('正しくインスタンスを生成できる', () => {
       members: ['山田太郎', 'テスト大介'],
       isMultiWalk: false,
       category: 'Open',
+      departmentType: 'open',
     });
 
     team.enter();
