@@ -14,16 +14,16 @@ interface baseEntry {
 }
 
 export class Controller {
-  private readonly entry: CreateTeamService;
-  private readonly find: FindEntryService;
+  private readonly createTeam: CreateTeamService;
+  private readonly findEntry: FindEntryService;
   private readonly deleteService: DeleteEntryService;
 
   constructor(repository: TeamRepository) {
-    this.entry = new CreateTeamService(
+    this.createTeam = new CreateTeamService(
       repository,
       new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
     );
-    this.find = new FindEntryService(repository);
+    this.findEntry = new FindEntryService(repository);
     this.deleteService = new DeleteEntryService(repository);
   }
 
@@ -33,7 +33,7 @@ export class Controller {
     isMultiWalk: boolean;
     category: 'Elementary' | 'Open';
   }): Promise<Result.Result<Error, baseEntry>> {
-    const res = await this.entry.create(args);
+    const res = await this.createTeam.create(args);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
@@ -49,7 +49,7 @@ export class Controller {
   }
 
   async get(): Promise<Result.Result<Error, baseEntry[]>> {
-    const res = await this.find.findAll();
+    const res = await this.findEntry.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }

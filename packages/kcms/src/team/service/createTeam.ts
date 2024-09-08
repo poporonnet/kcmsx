@@ -27,7 +27,7 @@ export class CreateTeamService {
     }
 
     // チーム名は重複できない
-    if (await this.isExists(input.teamName)) {
+    if (await this.isTeamNameExists(input.teamName)) {
       return Result.err(new Error('teamName Exists'));
     }
 
@@ -49,8 +49,8 @@ export class CreateTeamService {
       isMultiWalk: input.isMultiWalk,
       category: input.category,
     };
-    const e = Team.new(createArgs);
-    const res = await this.repository.create(e);
+    const team = Team.new(createArgs);
+    const res = await this.repository.create(team);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
@@ -61,7 +61,7 @@ export class CreateTeamService {
   /**
    * チーム名が存在するかを返す
    */
-  private async isExists(teamName: string) {
+  private async isTeamNameExists(teamName: string) {
     const res = await this.repository.findByTeamName(teamName);
     return Option.isSome(res);
   }

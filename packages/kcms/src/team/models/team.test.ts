@@ -62,7 +62,7 @@ describe('正しくインスタンスを生成できる', () => {
     });
 
     team.enter();
-    team.cancel();
+    team.cancelEntry();
 
     expect(team.getIsEntered()).toBe(false);
   });

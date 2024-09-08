@@ -98,7 +98,7 @@ export class Team {
   /**
    * エントリーを取り消す
    * */
-  cancel() {
+  cancelEntry() {
     this.isEntered = false;
   }
 

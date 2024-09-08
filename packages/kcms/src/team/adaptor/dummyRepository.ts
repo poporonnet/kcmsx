@@ -9,33 +9,33 @@ export class DummyRepository implements TeamRepository {
     this.data = new Map<TeamID, Team>(data.map((v) => [v.getId(), v]));
   }
 
-  async create(entry: Team): Promise<Result.Result<Error, Team>> {
-    const res = this.data.set(entry.getId(), entry);
+  async create(team: Team): Promise<Result.Result<Error, Team>> {
+    const res = this.data.set(team.getId(), team);
     if (!res) {
       return Result.err(new Error('Team not found'));
     }
 
-    return Result.ok(entry);
+    return Result.ok(team);
   }
 
   async findByTeamName(name: string): Promise<Option.Option<Team>> {
-    const entry = [...this.data].map((v) => v[1]).find((e) => e.getTeamName() === name);
-    if (!entry) {
+    const team = [...this.data.values()].find((v) => v.getTeamName() === name);
+    if (!team) {
       return Option.none();
     }
-    return Option.some(entry);
+    return Option.some(team);
   }
 
   async findByID(id: string): Promise<Option.Option<Team>> {
-    const entry = [...this.data].map((v) => v[1]).find((e) => e.getId() === id);
-    if (entry === undefined) {
+    const team = [...this.data.values()].find((v) => v.getId() === id);
+    if (!team) {
       return Option.none();
     }
-    return Option.some(entry);
+    return Option.some(team);
   }
 
   async findAll(): Promise<Result.Result<Error, Team[]>> {
-    return Result.ok([...this.data].map((v) => v[1]));
+    return Result.ok([...this.data.values()]);
   }
 
   async delete(id: TeamID): Promise<Option.Option<Error>> {

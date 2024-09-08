@@ -9,7 +9,7 @@ describe('EntryService', () => {
   const service = new EntryService(teamRepository);
 
   it('エントリーできる', async () => {
-    await service.entry(TestEntryData.NotEntered.getId());
+    await service.enter(TestEntryData.NotEntered.getId());
 
     const res = await teamRepository.findByID(TestEntryData.NotEntered.getId());
     expect(Option.isNone(res)).toBe(false);

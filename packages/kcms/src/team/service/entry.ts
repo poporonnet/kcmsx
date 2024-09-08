@@ -13,7 +13,7 @@ export class EntryService {
    * @param teamID 出席するチームのID
    * @returns 出席登録後のチームデータ
    */
-  async entry(teamID: TeamID): Promise<Result.Result<Error, Team>> {
+  async enter(teamID: TeamID): Promise<Result.Result<Error, Team>> {
     const teamRes = await this.teamRepository.findByID(teamID);
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));

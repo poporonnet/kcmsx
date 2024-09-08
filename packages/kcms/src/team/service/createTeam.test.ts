@@ -6,7 +6,7 @@ import { CreateTeamService } from './createTeam';
 import { TestEntryData } from '../../testData/entry.js';
 import { SnowflakeIDGenerator } from '../../id/main.js';
 
-describe('entryService', () => {
+describe('CreateTeamService', () => {
   const repository = new DummyRepository();
   const service = new CreateTeamService(
     repository,
