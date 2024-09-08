@@ -1,11 +1,11 @@
-import { EntryRepository } from '../models/repository.js';
+import { TeamRepository } from '../models/repository.js';
 import { Team, TeamID } from '../models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class FindEntryService {
-  private readonly repository: EntryRepository;
+  private readonly repository: TeamRepository;
 
-  constructor(repository: EntryRepository) {
+  constructor(repository: TeamRepository) {
     this.repository = repository;
   }
 
