@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { DerivedDepartmentConfig } from "../types/departmentConfig";
-import { DerivedMatchConfig } from "../types/matchConfig";
+import { DerivedCourseConfig, DerivedMatchConfig } from "../types/matchConfig";
 import { DerivedPremiseState } from "../types/premise";
 import { DerivedPointState, DerivedRuleBaseVariant } from "../types/rule";
 import { DerivedSponsorConfig, SponsorClass } from "../types/sponsorConfig";
@@ -17,7 +17,14 @@ describe("正しい設定を生成できる", () => {
         departments: [
           { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],
-        matches: [{ type: "pre", name: "予選", limitSeconds: 180 }],
+        matches: [
+          {
+            type: "pre",
+            name: "予選",
+            limitSeconds: 180,
+            course: { elementary: 3 },
+          },
+        ],
         rules: [
           {
             name: "goal",
@@ -63,51 +70,63 @@ describe("正しい設定を生成できる", () => {
 
   it("複数項目の設定を生成できる", () => {
     type RobotTypes = [string, ...string[]];
-    type Departments = [
-      DerivedDepartmentConfig<string, string, RobotTypes>,
-      ...DerivedDepartmentConfig<string, string, RobotTypes>[],
-    ];
-    type Matches = [
-      DerivedMatchConfig<string, string, number>,
-      ...DerivedMatchConfig<string, string, number>[],
-    ];
-    type Sponsors = [
-      DerivedSponsorConfig<string, SponsorClass, string>,
-      ...DerivedSponsorConfig<string, SponsorClass, string>[],
-    ];
+    type Department = DerivedDepartmentConfig<string, string, RobotTypes>;
+    type Departments = [Department, ...Department[]];
+    type Match = DerivedMatchConfig<
+      string,
+      string,
+      number,
+      string[],
+      Departments,
+      DerivedCourseConfig<string[], Departments> & { __department0: 0 } // ValidCourseConfigsを通過させるため
+    >;
+    type Matches = [Match, ...Match[]];
+    type Sponsor = DerivedSponsorConfig<string, SponsorClass, string>;
+    type Sponsors = [Sponsor, ...Sponsor[]];
+    type Rule = DerivedRuleBaseVariant;
+    type Rules = [Rule, ...Rule[]];
 
     const range = [...new Array(10)].map((_, i) => i);
 
     const robotTypes = range.map((i) => `robot${i}`) as RobotTypes;
-    const departments = range.map((i) => ({
-      type: `department${i}`,
-      name: `部門${i}`,
-      robotTypes: robotTypes.slice(0, i) as RobotTypes[number][],
-    })) as Departments;
-    const matches = range.map((i) => ({
-      type: `match${i}`,
-      name: `試合${i}`,
-      limitSeconds: 100 * i,
-    })) as Matches;
-    const singleRules = range.map((i) => ({
-      name: `rule${i}-1`,
-      label: `ルール${i}-1`,
-      type: "single" as const,
-      initial: i % 2 == 0,
-      point: (done: boolean) => (done ? 1 : 0),
-    }));
-    const countableRules = range.map((i) => ({
-      name: `rule${i}-2`,
-      label: `ルール${i}-2`,
-      type: "countable" as const,
-      initial: i,
-      point: (value: number) => value,
-      validate: (value: number) => 0 <= value && value <= i * 100,
-    }));
-    const rules = [...singleRules, ...countableRules] as [
-      DerivedRuleBaseVariant,
-      ...DerivedRuleBaseVariant[],
-    ];
+    const departments = range.map(
+      (i): Department => ({
+        type: `department${i}`,
+        name: `部門${i}`,
+        robotTypes: robotTypes.slice(0, i + 1) as RobotTypes,
+      })
+    ) as Departments;
+    const matches = range.map(
+      (i): Match => ({
+        type: `match${i}`,
+        name: `試合${i}`,
+        limitSeconds: 100 * i,
+        course: {
+          [`department${i}`]: 3,
+          __department0: 0, // ValidCourseConfigsを通過させるため
+        },
+      })
+    ) as Matches;
+    const singleRules = range.map(
+      (i): Rule => ({
+        name: `rule${i}-1`,
+        label: `ルール${i}-1`,
+        type: "single" as const,
+        initial: i % 2 == 0,
+        point: (done: boolean) => (done ? 1 : 0),
+      })
+    );
+    const countableRules = range.map(
+      (i): Rule => ({
+        name: `rule${i}-2`,
+        label: `ルール${i}-2`,
+        type: "countable" as const,
+        initial: i,
+        point: (value: number) => value,
+        validate: (value: number) => 0 <= value && value <= i * 100,
+      })
+    );
+    const rules = [...singleRules, ...countableRules] as Rules;
     const sponsors = range.map((i) => ({
       name: `スポンサー${i}`,
       class: (["platinum", "gold", "silver", "bronze"] as const)[i % 4],
@@ -169,7 +188,14 @@ describe("正しい設定を生成できる", () => {
         departments: [
           { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],
-        matches: [{ type: "pre", name: "予選", limitSeconds: 180 }],
+        matches: [
+          {
+            type: "pre",
+            name: "予選",
+            limitSeconds: 180,
+            course: { elementary: 3 },
+          },
+        ],
         rules: [
           {
             name: "goal",
