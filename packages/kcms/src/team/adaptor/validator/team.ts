@@ -36,10 +36,10 @@ export const PostTeamsRequestSchema = z.array(
 
 export const PostTeamsResponseSchema = z.array(TeamSchema).openapi('Teams');
 
-export const TeamIdParamsSchema = z.object({
-  teamid: z.string().openapi({
+export const DeleteTeamParamsSchema = z.object({
+  teamId: z.string().openapi({
     param: {
-      name: 'teamid',
+      name: 'teamId',
       in: 'path',
     },
     example: '7549586',
