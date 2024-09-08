@@ -54,6 +54,22 @@ export const TestEntryData = {
     isMultiWalk: true,
     category: 'Open',
   }),
+  NotEntered: Team.reconstruct({
+    id: '6' as TeamID,
+    teamName: 'TestTeam6',
+    members: ['TestTaro6'],
+    isMultiWalk: true,
+    category: 'Elementary',
+    isEntered: false,
+  }),
+  Entered: Team.reconstruct({
+    id: '7' as TeamID,
+    teamName: 'TestTeam7',
+    members: ['TestTaro7'],
+    isMultiWalk: true,
+    category: 'Elementary',
+    isEntered: true,
+  }),
 };
 
 type entryBase<I extends string, M extends boolean, C extends 'Elementary' | 'Open'> = {
@@ -79,6 +95,7 @@ const entryArgsBuilder = <I extends string, M extends boolean, C extends 'Elemen
 };
 
 // TestEntrySet テスト用エントリー用データ, Matchのテスト用に偶数にしてある
+// ToDo: Team.newだとエントリーしていない状態で初期化されるので、Team.reconstructを使う
 export const TestEntrySet = {
   // 小学生部門 多脚型
   ElementaryMultiWalk: {

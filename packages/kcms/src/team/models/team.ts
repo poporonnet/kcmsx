@@ -2,6 +2,9 @@
 // ToDo: 部門の定義をファイルから読み込むようにする
 import { SnowflakeID } from '../../id/main.js';
 
+/**
+ * @deprecated ToDo: Configで設定されている値を使う
+ */
 export type Department = 'Elementary' | 'Open';
 export type TeamID = SnowflakeID<Team>;
 
@@ -9,9 +12,19 @@ export interface TeamCreateArgs {
   id: TeamID;
   teamName: string;
   members: Array<string>;
+  /**
+   * @deprecated ToDo: Configで設定されている値を使う
+   */
   isMultiWalk: boolean;
+  /**
+   * @deprecated ToDo: Configで設定されている値を使う
+   */
   category: Department;
   clubName?: string;
+  /**
+   * 当日参加するかどうか (エントリーしたかどうか)
+   */
+  isEntered: boolean;
 }
 
 export class Team {
@@ -21,6 +34,7 @@ export class Team {
   private readonly isMultiWalk: boolean;
   private readonly category: Department;
   private readonly clubName?: string;
+  private isEntered: boolean;
 
   private constructor(
     id: TeamID,
@@ -28,6 +42,7 @@ export class Team {
     _members: Array<string>,
     _isMultiWalk: boolean,
     category: Department,
+    isEntered: boolean,
     clubName?: string
   ) {
     this.id = id;
@@ -36,6 +51,7 @@ export class Team {
     this.isMultiWalk = _isMultiWalk;
     this.category = category;
     this.clubName = clubName;
+    this.isEntered = isEntered;
   }
 
   getId(): TeamID {
@@ -50,6 +66,9 @@ export class Team {
     return this.members;
   }
 
+  /**
+   * @deprecated Configで設定されている値を使う
+   */
   getIsMultiWalk(): boolean {
     return this.isMultiWalk;
   }
@@ -62,7 +81,48 @@ export class Team {
     return this.clubName;
   }
 
-  public static new(arg: TeamCreateArgs): Team {
-    return new Team(arg.id, arg.teamName, arg.members, arg.isMultiWalk, arg.category, arg.clubName);
+  /**
+   * エントリー(当日参加するか)したかどうかを取得
+   */
+  getIsEntered(): boolean {
+    return this.isEntered;
+  }
+
+  /**
+   * エントリーする
+   * */
+  enter() {
+    this.isEntered = true;
+  }
+
+  /**
+   * エントリーを取り消す
+   * */
+  cancelEntry() {
+    this.isEntered = false;
+  }
+
+  public static new(arg: Omit<TeamCreateArgs, 'isEntered'>): Team {
+    return new Team(
+      arg.id,
+      arg.teamName,
+      arg.members,
+      arg.isMultiWalk,
+      arg.category,
+      false,
+      arg.clubName
+    );
+  }
+
+  public static reconstruct(arg: TeamCreateArgs): Team {
+    return new Team(
+      arg.id,
+      arg.teamName,
+      arg.members,
+      arg.isMultiWalk,
+      arg.category,
+      arg.isEntered,
+      arg.clubName
+    );
   }
 }

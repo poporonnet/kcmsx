@@ -1,44 +1,59 @@
-import { EntryRepository } from '../models/repository.js';
+import { TeamRepository } from '../models/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { Team } from '../models/team.js';
+import { Team, TeamID } from '../models/team.js';
 
-export class DummyRepository implements EntryRepository {
-  private data: Array<Team>;
-  constructor(data?: Array<Team>) {
-    this.data = data ?? [];
+export class DummyRepository implements TeamRepository {
+  private data: Map<TeamID, Team>;
+
+  constructor(data: Team[] = []) {
+    this.data = new Map<TeamID, Team>(data.map((v) => [v.getId(), v]));
   }
 
-  async create(entry: Team): Promise<Result.Result<Error, Team>> {
-    this.data.push(entry);
-    return Result.ok(entry);
+  async create(team: Team): Promise<Result.Result<Error, Team>> {
+    const res = this.data.set(team.getId(), team);
+    if (!res) {
+      return Result.err(new Error('Team not found'));
+    }
+
+    return Result.ok(team);
   }
 
   async findByTeamName(name: string): Promise<Option.Option<Team>> {
-    const entry = this.data.find((e) => e.getTeamName() === name);
-    if (entry === undefined) {
+    const team = [...this.data.values()].find((v) => v.getTeamName() === name);
+    if (!team) {
       return Option.none();
     }
-    return Option.some(entry);
+    return Option.some(team);
   }
 
   async findByID(id: string): Promise<Option.Option<Team>> {
-    const entry = this.data.find((e) => e.getId() === id);
-    if (entry === undefined) {
+    const team = [...this.data.values()].find((v) => v.getId() === id);
+    if (!team) {
       return Option.none();
     }
-    return Option.some(entry);
+    return Option.some(team);
   }
 
-  async findAll(): Promise<Result.Result<Error, Array<Team>>> {
-    return Result.ok(this.data);
+  async findAll(): Promise<Result.Result<Error, Team[]>> {
+    return Result.ok([...this.data.values()]);
   }
 
-  async delete(id: string): Promise<Option.Option<Error>> {
-    this.data = this.data.filter((e) => e.getId() !== id);
+  async delete(id: TeamID): Promise<Option.Option<Error>> {
+    this.data.delete(id);
     return Option.none();
   }
 
-  reset() {
-    this.data = [];
+  async update(team: Team): Promise<Result.Result<Error, Team>> {
+    const res = this.data.get(team.getId());
+    if (!res) {
+      return Result.err(new Error('Team not found'));
+    }
+
+    this.data.set(team.getId(), team);
+    return Result.ok(team);
+  }
+
+  reset(data: Team[] = []) {
+    this.data = new Map<TeamID, Team>(data.map((v) => [v.getId(), v]));
   }
 }
