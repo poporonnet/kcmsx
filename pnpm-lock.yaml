@@ -179,10 +179,10 @@ importers:
         version: 8.5.0(eslint@9.10.0)(typescript@5.6.2)
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.3.1(vite@5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))
+        version: 4.3.1(vite@5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))
       '@vitejs/plugin-react-swc':
         specifier: ^3.5.0
-        version: 3.7.0(vite@5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))
+        version: 3.7.0(vite@5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))
       '@vitest/coverage-v8':
         specifier: ^2.0.0
         version: 2.1.0(vitest@2.1.0(@types/node@22.5.5)(@vitest/ui@2.1.0)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.45)))
@@ -224,7 +224,7 @@ importers:
         version: 5.6.2
       vite:
         specifier: ^5.0.0
-        version: 5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45))
+        version: 5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45))
       vitest:
         specifier: ^2.0.0
         version: 2.1.0(@types/node@22.5.5)(@vitest/ui@2.1.0)(jsdom@25.0.0)(sugarss@4.0.1(postcss@8.4.45))
@@ -2771,37 +2771,6 @@ packages:
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
 
-  vite@5.4.4:
-    resolution: {integrity: sha512-RHFCkULitycHVTtelJ6jQLd+KSAAzOgEYorV32R2q++M6COBjKJR6BxqClwp5sf0XaBDjVMuJ9wnNfyAJwjMkA==}
-    engines: {node: ^18.0.0 || >=20.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || >=20.0.0
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.4.0
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-
   vite@5.4.5:
     resolution: {integrity: sha512-pXqR0qtb2bTwLkev4SE3r4abCNioP3GkjvIDLlzziPpXtHgiJIjuKl+1GN6ESOT3wMjG3JTeARopj2SwYaHTOA==}
     engines: {node: ^18.0.0 || >=20.0.0}
@@ -3873,21 +3842,21 @@ snapshots:
       '@typescript-eslint/types': 8.5.0
       eslint-visitor-keys: 3.4.3
 
-  '@vitejs/plugin-react-swc@3.7.0(vite@5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))':
+  '@vitejs/plugin-react-swc@3.7.0(vite@5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))':
     dependencies:
       '@swc/core': 1.7.2
-      vite: 5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45))
+      vite: 5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45))
     transitivePeerDependencies:
       - '@swc/helpers'
 
-  '@vitejs/plugin-react@4.3.1(vite@5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))':
+  '@vitejs/plugin-react@4.3.1(vite@5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)))':
     dependencies:
       '@babel/core': 7.24.9
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.24.9)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.9)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45))
+      vite: 5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45))
     transitivePeerDependencies:
       - supports-color
 
@@ -4935,6 +4904,7 @@ snapshots:
       nanoid: 3.3.7
       picocolors: 1.1.0
       source-map-js: 1.2.1
+    optional: true
 
   prelude-ls@1.2.1: {}
 
@@ -5411,20 +5381,10 @@ snapshots:
       - supports-color
       - terser
 
-  vite@5.4.4(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)):
-    dependencies:
-      esbuild: 0.21.5
-      postcss: 8.4.45
-      rollup: 4.21.3
-    optionalDependencies:
-      '@types/node': 22.5.5
-      fsevents: 2.3.3
-      sugarss: 4.0.1(postcss@8.4.45)
-
   vite@5.4.5(@types/node@20.16.5)(sugarss@4.0.1(postcss@8.4.47)):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.47
+      postcss: 8.4.45
       rollup: 4.21.3
     optionalDependencies:
       '@types/node': 20.16.5
@@ -5434,7 +5394,7 @@ snapshots:
   vite@5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.45)):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.47
+      postcss: 8.4.45
       rollup: 4.21.3
     optionalDependencies:
       '@types/node': 22.5.5
@@ -5444,7 +5404,7 @@ snapshots:
   vite@5.4.5(@types/node@22.5.5)(sugarss@4.0.1(postcss@8.4.47)):
     dependencies:
       esbuild: 0.21.5
-      postcss: 8.4.47
+      postcss: 8.4.45
       rollup: 4.21.3
     optionalDependencies:
       '@types/node': 22.5.5
