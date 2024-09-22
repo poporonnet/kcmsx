@@ -6,10 +6,10 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 import { errorToCode } from './adaptor/errors.js';
 import { DummyRepository } from './adaptor/dummyRepository';
 
-export const entryHandler = new Hono();
+export const teamHandler = new Hono();
 export const controller = new Controller(new DummyRepository());
 
-entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
+teamHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
   const { teamName, members, isMultiWalk, category } = c.req.valid('json');
 
   const res = await controller.create({
@@ -31,7 +31,7 @@ entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
   });
 });
 
-entryHandler.post('/bulk', zValidator('json', bulkEntryRequestSchema), async (c) => {
+teamHandler.post('/bulk', zValidator('json', bulkEntryRequestSchema), async (c) => {
   const data = c.req.valid('json');
 
   const response: {
@@ -65,7 +65,7 @@ entryHandler.post('/bulk', zValidator('json', bulkEntryRequestSchema), async (c)
   return c.json(response, 200);
 });
 
-entryHandler.get('/', async (c) => {
+teamHandler.get('/', async (c) => {
   const res = await controller.get();
   if (Result.isErr(res)) {
     return c.json({ error: errorToCode(res[1]) }, 400);
@@ -74,7 +74,7 @@ entryHandler.get('/', async (c) => {
   return c.json([...res[1]]);
 });
 
-entryHandler.delete('/:id', async (c) => {
+teamHandler.delete('/:id', async (c) => {
   const res = await controller.delete(c.req.param().id);
   if (Option.isSome(res)) {
     return c.json({ error: res[1].message }, 400);

@@ -23,7 +23,6 @@ export interface TeamRepository {
   /**
    * @description 全てのチームを取得
    * @return 成功時: Team[], 失敗時: Error
-   * ToDo: Result.Result<Error, Team[]> で置き換える
    */
   findAll(): Promise<Result.Result<Error, Team[]>>;
 
