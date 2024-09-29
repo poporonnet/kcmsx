@@ -51,7 +51,7 @@ importers:
         version: 1.13.1(hono@4.6.3)
       '@hono/zod-openapi':
         specifier: ^0.16.0
-        version: 0.16.0(hono@4.6.3)(zod@3.23.8)
+        version: 0.16.2(hono@4.6.3)(zod@3.23.8)
       '@hono/zod-validator':
         specifier: ^0.2.0
         version: 0.2.2(hono@4.6.3)(zod@3.23.8)
@@ -263,8 +263,8 @@ packages:
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
 
-  '@asteasolutions/zod-to-openapi@7.1.1':
-    resolution: {integrity: sha512-lF0d1gAc0lYLO9/BAGivwTwE2Sh9h6CHuDcbk5KnGBfIuAsAkDC+Fdat4dkQY3CS/zUWKHRmFEma0B7X132Ymw==}
+  '@asteasolutions/zod-to-openapi@7.1.2':
+    resolution: {integrity: sha512-tuDcV4aGAlY4eaZ8Qmf1efPL33hwJKdpCSbI6vJqXU5Wkz9IIyCrb3u3fExZyyMGzmLKcJH+CHI5UKvNBPlyjg==}
     peerDependencies:
       zod: ^3.20.2
 
@@ -1069,8 +1069,8 @@ packages:
     peerDependencies:
       hono: ^4
 
-  '@hono/zod-openapi@0.16.0':
-    resolution: {integrity: sha512-jTnccfMTxDmA50FZeyTDD5oNDpcYo0qPzugwMuinnEQRYHLEqOXLv+sP89KNZWCGcL3Ccl+cr5GGE4yxenozqw==}
+  '@hono/zod-openapi@0.16.2':
+    resolution: {integrity: sha512-MxlZzvHTXmOihKgIqYrEH5TysIs3Ep0PlTfmdaXe22HR0o2BULbpWW3F7W4I+2jAbt9rxLbxcs3aE2MXnIuAbw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       hono: '>=4.3.6'
@@ -1078,6 +1078,12 @@ packages:
 
   '@hono/zod-validator@0.2.2':
     resolution: {integrity: sha512-dSDxaPV70Py8wuIU2QNpoVEIOSzSXZ/6/B/h4xA7eOMz7+AarKTSGV8E6QwrdcCbBLkpqfJ4Q2TmBO0eP1tCBQ==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.19.1
+
+  '@hono/zod-validator@0.3.0':
+    resolution: {integrity: sha512-7XcTk3yYyk6ldrO/VuqsroE7stvDZxHJQcpATRAyha8rUxJNBPV3+6waDrARfgEqxOVlzIadm3/6sE/dPseXgQ==}
     peerDependencies:
       hono: '>=3.9.0'
       zod: ^3.19.1
@@ -3179,7 +3185,7 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@asteasolutions/zod-to-openapi@7.1.1(zod@3.23.8)':
+  '@asteasolutions/zod-to-openapi@7.1.2(zod@3.23.8)':
     dependencies:
       openapi3-ts: 4.4.0
       zod: 3.23.8
@@ -3736,14 +3742,19 @@ snapshots:
     dependencies:
       hono: 4.6.3
 
-  '@hono/zod-openapi@0.16.0(hono@4.6.3)(zod@3.23.8)':
+  '@hono/zod-openapi@0.16.2(hono@4.6.3)(zod@3.23.8)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.1.1(zod@3.23.8)
-      '@hono/zod-validator': 0.2.2(hono@4.6.3)(zod@3.23.8)
+      '@asteasolutions/zod-to-openapi': 7.1.2(zod@3.23.8)
+      '@hono/zod-validator': 0.3.0(hono@4.6.3)(zod@3.23.8)
       hono: 4.6.3
       zod: 3.23.8
 
   '@hono/zod-validator@0.2.2(hono@4.6.3)(zod@3.23.8)':
+    dependencies:
+      hono: 4.6.3
+      zod: 3.23.8
+
+  '@hono/zod-validator@0.3.0(hono@4.6.3)(zod@3.23.8)':
     dependencies:
       hono: 4.6.3
       zod: 3.23.8
