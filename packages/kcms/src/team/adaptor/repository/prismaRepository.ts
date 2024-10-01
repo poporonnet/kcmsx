@@ -79,7 +79,7 @@ export class PrismaTeamRepository implements TeamRepository {
     }
   }
 
-  async findByTeamName(name: string): Promise<Option.Option<Team>> {
+  async findByTeamName(): Promise<Option.Option<Team>> {
     // ToDo: Team.name を @uniqueにする
     throw new Error('Method not implemented.');
   }
