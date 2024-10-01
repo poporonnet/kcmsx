@@ -35,7 +35,7 @@ export class Team {
   private readonly members: Array<string>;
   private readonly isMultiWalk: boolean;
   private readonly category: Department;
-  private readonly depatmentType: DepartmentType;
+  private readonly departmentType: DepartmentType;
   private readonly clubName?: string;
   private isEntered: boolean;
 
@@ -56,7 +56,7 @@ export class Team {
     this.category = category;
     this.clubName = clubName;
     this.isEntered = isEntered;
-    this.depatmentType = departmentType;
+    this.departmentType = departmentType;
   }
 
   getId(): TeamID {
@@ -83,7 +83,7 @@ export class Team {
   }
 
   getDepartmentType(): DepartmentType {
-    return this.depatmentType;
+    return this.departmentType;
   }
 
   getClubName(): string | undefined {
