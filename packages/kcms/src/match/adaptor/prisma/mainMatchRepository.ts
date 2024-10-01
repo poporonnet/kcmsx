@@ -88,7 +88,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
 
   async findByID(id: MainMatchID): Promise<Option.Option<MainMatch>> {
     try {
-      const res = await this.client.mainMatch.findMany({
+      const res = await this.client.mainMatch.findUnique({
         where: {
           id: id,
         },
@@ -96,8 +96,11 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
           runResult: true,
         },
       });
+      if (!res) {
+        return Option.none();
+      }
 
-      return Option.some(this.deserialize(res)[0]);
+      return Option.some(this.deserialize([res])[0]);
     } catch {
       return Option.none();
     }
