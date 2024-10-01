@@ -1,6 +1,6 @@
-import { TeamRepository } from '../models/repository.js';
+import { TeamRepository } from '../../models/repository';
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { Team, TeamID } from '../models/team.js';
+import { Team, TeamID } from '../../models/team';
 
 export class DummyRepository implements TeamRepository {
   private data: Map<TeamID, Team>;

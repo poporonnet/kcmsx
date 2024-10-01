@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/dummyRepository.js';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { DeleteEntryService } from './delete.js';
 import { Option } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry.js';

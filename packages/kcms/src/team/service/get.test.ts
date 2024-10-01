@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/dummyRepository.js';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { FetchTeamService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry.js';
