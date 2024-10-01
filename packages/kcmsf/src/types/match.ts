@@ -1,11 +1,12 @@
-import { TeamInfo } from "config";
+import { MatchType, TeamInfo } from "config";
 
 export type Match = {
   id: string;
   courseIndex: number;
   category: "elementary" | "open";
-  teams: { right: TeamInfo; left: TeamInfo };
-  matchType: "primary" | "final";
+  right: TeamInfo;
+  left: TeamInfo;
+  matchType: MatchType;
   results?: {
     left: TeamResult;
     right: TeamResult;

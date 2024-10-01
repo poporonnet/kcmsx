@@ -40,12 +40,12 @@ export const Result = () => {
   const [primarymatch, setprimaryMatch] = useState<Match[]>([]);
   const [finalmatch, setfinalMatch] = useState<Match[]>([]);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/match/primary`)
+    fetch(`${import.meta.env.VITE_API_URL}/match/pre`)
       .then((res) => res.json())
       .then((json) => setprimaryMatch(json));
   }, []);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/match/final`)
+    fetch(`${import.meta.env.VITE_API_URL}/match/main`)
       .then((res) => res.json())
       .then((json) => setfinalMatch(json));
   }, []);

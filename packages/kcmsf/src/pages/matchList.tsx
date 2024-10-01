@@ -25,7 +25,7 @@ export const MatchList = () => {
     console.log("fetching");
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/match/primary`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/match/pre`, {
         method: "GET",
       });
 
@@ -98,12 +98,12 @@ export const MatchList = () => {
                       </Table.Td>
                       <Table.Td>
                         <Text fw={700} miw={200} ta={"start"}>
-                          {match.teams.left.teamName}
+                          {match.left.teamName}
                         </Text>
                       </Table.Td>
                       <Table.Td>
                         <Text fw={700} miw={200} ta={"start"}>
-                          {match.teams.right.teamName}
+                          {match.right.teamName}
                         </Text>
                       </Table.Td>
                       <Table.Td>
@@ -111,10 +111,7 @@ export const MatchList = () => {
                           <MatchStatusButton
                             status={match.results ? "end" : "future"}
                             id={match.id}
-                            teams={match.teams}
-                            matchType={
-                              match.matchType == "primary" ? "pre" : "main"
-                            }
+                            matchType={match.matchType == "pre" ? "pre" : "pre"}
                           />
                         </Center>
                       </Table.Td>
