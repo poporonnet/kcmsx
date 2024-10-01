@@ -6,6 +6,7 @@ import {
   PostTeamsResponseSchema,
   DeleteTeamParamsSchema,
   PostEntryTeamParamsSchema,
+  DeleteEntryTeamParamsSchema,
 } from './adaptor/validator/team';
 
 export const GetTeamsRoute = createRoute({
@@ -85,7 +86,7 @@ export const DeleteTeamRoute = createRoute({
   },
 });
 
-export const EntryTeamRoute = createRoute({
+export const PostEntryTeamRoute = createRoute({
   method: 'post',
   path: '/team/{teamId}/entry',
   request: {
@@ -94,6 +95,27 @@ export const EntryTeamRoute = createRoute({
   responses: {
     200: {
       description: 'Entry Team',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common Error',
+    },
+  },
+});
+
+export const DeleteEntryTeamRoute = createRoute({
+  method: 'delete',
+  path: '/team/{teamId}/entry',
+  request: {
+    params: DeleteEntryTeamParamsSchema,
+  },
+  responses: {
+    204: {
+      description: 'Delete Entry Team',
     },
     400: {
       content: {
