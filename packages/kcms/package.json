@@ -22,6 +22,7 @@
     "@hono/zod-openapi": "^0.16.0",
     "@hono/zod-validator": "^0.3.0",
     "@mikuroxina/mini-fn": "^6.0.0",
+    "@prisma/client": "5.20.0",
     "config": "workspace:^",
     "esbuild": "^0.24.0",
     "hono": "^4.0.0",
