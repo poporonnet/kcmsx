@@ -12,7 +12,8 @@
     "format": "prettier . --write",
     "test": "vitest run",
     "coverage": "vitest run --coverage",
-    "check": "prettier --check 'src/**/**.ts' && tsc -p . --noEmit"
+    "check": "prettier --check 'src/**/**.ts' && tsc -p . --noEmit",
+    "prepare": "prisma generate"
   },
   "keywords": [],
   "author": "Poporon Network (Tatsuto C. YAMAMOTO) & Other Contributors",
