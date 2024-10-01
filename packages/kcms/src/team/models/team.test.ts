@@ -7,16 +7,17 @@ describe('正しくインスタンスを生成できる', () => {
       id: '123' as TeamID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
-      isMultiWalk: false,
-      category: 'Open',
+      departmentType: 'open',
+      robotType: 'wheel',
       isEntered: true,
     });
 
     expect(actual.getId()).toBe('123');
     expect(actual.getTeamName()).toBe('チーム1');
     expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
-    expect(actual.getIsMultiWalk()).toBe(false);
-    expect(actual.getCategory()).toBe('Open');
+    expect(actual.getDepartmentType()).toBe('open');
+    expect(actual.getClubName()).toBe(undefined);
+    expect(actual.getRobotType()).toBe('wheel');
   });
 
   it('正しくインスタンスを生成できる - クラブを含む場合', () => {
@@ -24,8 +25,8 @@ describe('正しくインスタンスを生成できる', () => {
       id: '123' as TeamID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
-      isMultiWalk: false,
-      category: 'Open',
+      departmentType: 'open',
+      robotType: 'wheel',
       isEntered: true,
       clubName: 'テストクラブ',
     });
@@ -33,9 +34,9 @@ describe('正しくインスタンスを生成できる', () => {
     expect(actual.getId()).toBe('123');
     expect(actual.getTeamName()).toBe('チーム1');
     expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
-    expect(actual.getIsMultiWalk()).toBe(false);
-    expect(actual.getCategory()).toBe('Open');
+    expect(actual.getDepartmentType()).toBe('open');
     expect(actual.getClubName()).toBe('テストクラブ');
+    expect(actual.getRobotType()).toBe('wheel');
   });
 
   it('エントリーできる', () => {
@@ -43,8 +44,8 @@ describe('正しくインスタンスを生成できる', () => {
       id: '1' as TeamID,
       teamName: 'team1',
       members: ['山田太郎', 'テスト大介'],
-      isMultiWalk: false,
-      category: 'Open',
+      departmentType: 'open',
+      robotType: 'wheel',
     });
 
     team.enter();
@@ -57,8 +58,8 @@ describe('正しくインスタンスを生成できる', () => {
       id: '1' as TeamID,
       teamName: 'team1',
       members: ['山田太郎', 'テスト大介'],
-      isMultiWalk: false,
-      category: 'Open',
+      departmentType: 'open',
+      robotType: 'wheel',
     });
 
     team.enter();

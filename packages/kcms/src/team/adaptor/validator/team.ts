@@ -16,6 +16,7 @@ const TeamSchema = z.object({
     .openapi({ example: ['メンバー1', 'メンバー2'] }),
   clubName: z.string().openapi({ example: 'RubyClub' }),
   robotType: z.enum(config.robotTypes).openapi({ example: 'leg' }),
+  // ToDo: departmentTypeにリネームする
   category: z.enum(pick(config.departments, 'type')).openapi({ example: 'elementary' }),
   isEntered: z.boolean().openapi({ example: true }),
 });

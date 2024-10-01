@@ -22,8 +22,8 @@ describe('CreateTeamService', () => {
     const actual = await service.create({
       teamName: data.getTeamName(),
       members: data.getMembers(),
-      isMultiWalk: data.getIsMultiWalk(),
-      category: data.getCategory(),
+      robotType: data.getRobotType(),
+      departmentType: data.getDepartmentType(),
     });
 
     expect(Result.isOk(actual)).toBe(true);
@@ -33,8 +33,8 @@ describe('CreateTeamService', () => {
 
     expect(actual[1].getMembers()).toStrictEqual(['TestTaro1']);
     expect(actual[1].getTeamName()).toBe('TestTeam1');
-    expect(actual[1].getIsMultiWalk()).toBe(true);
-    expect(actual[1].getCategory()).toBe('Elementary');
+    expect(actual[1].getRobotType()).toBe('leg');
+    expect(actual[1].getDepartmentType()).toBe('elementary');
   });
 
   it('チーム名が重複するときはエラー終了する', async () => {
@@ -43,14 +43,14 @@ describe('CreateTeamService', () => {
     await service.create({
       teamName: data.getTeamName(),
       members: data.getMembers(),
-      isMultiWalk: data.getIsMultiWalk(),
-      category: data.getCategory(),
+      robotType: data.getRobotType(),
+      departmentType: data.getDepartmentType(),
     });
     const result = await service.create({
       teamName: existsData.getTeamName(),
       members: existsData.getMembers(),
-      isMultiWalk: existsData.getIsMultiWalk(),
-      category: existsData.getCategory(),
+      robotType: existsData.getRobotType(),
+      departmentType: existsData.getDepartmentType(),
     });
 
     expect(Result.isErr(result)).toBe(true);
@@ -62,14 +62,14 @@ describe('CreateTeamService', () => {
       id: '123' as TeamID,
       teamName: 'team1',
       members: [],
-      isMultiWalk: true,
-      category: 'Elementary',
+      robotType: 'leg',
+      departmentType: 'elementary',
     });
     const actual = await service.create({
       teamName: team.getTeamName(),
       members: team.getMembers(),
-      isMultiWalk: team.getIsMultiWalk(),
-      category: team.getCategory(),
+      robotType: team.getRobotType(),
+      departmentType: team.getDepartmentType(),
     });
 
     expect(Result.isErr(actual)).toBe(true);
@@ -81,14 +81,14 @@ describe('CreateTeamService', () => {
       id: '123' as TeamID,
       teamName: 'team1',
       members: ['A太郎', 'B太郎', 'C太郎'],
-      isMultiWalk: true,
-      category: 'Elementary',
+      robotType: 'leg',
+      departmentType: 'elementary',
     });
     const actual = await service.create({
       teamName: team.getTeamName(),
       members: team.getMembers(),
-      isMultiWalk: team.getIsMultiWalk(),
-      category: team.getCategory(),
+      robotType: team.getRobotType(),
+      departmentType: team.getDepartmentType(),
     });
 
     expect(Result.isErr(actual)).toBe(true);

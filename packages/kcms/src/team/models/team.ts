@@ -1,25 +1,20 @@
 // Elementary: 小学生部門 / Open: オープン部門
 // ToDo: 部門の定義をファイルから読み込むようにする
 import { SnowflakeID } from '../../id/main.js';
+import { DepartmentType, RobotType } from 'config';
 
-/**
- * @deprecated ToDo: Configで設定されている値を使う
- */
-export type Department = 'Elementary' | 'Open';
 export type TeamID = SnowflakeID<Team>;
 
 export interface TeamCreateArgs {
   id: TeamID;
   teamName: string;
-  members: Array<string>;
+  members: string[];
   /**
-   * @deprecated ToDo: Configで設定されている値を使う
+   * ロボットの種類(Configで定義済みのもの)\
+   * ToDo: 部門で使用可能なロボット種類のみを指定できるように
    */
-  isMultiWalk: boolean;
-  /**
-   * @deprecated ToDo: Configで設定されている値を使う
-   */
-  category: Department;
+  robotType: RobotType;
+  departmentType: DepartmentType;
   clubName?: string;
   /**
    * 当日参加するかどうか (エントリーしたかどうか)
@@ -28,28 +23,29 @@ export interface TeamCreateArgs {
 }
 
 export class Team {
+  // ToDo: ゼッケン番号(entryCode)を追加する
   private readonly id: TeamID;
   private readonly teamName: string;
-  private readonly members: Array<string>;
-  private readonly isMultiWalk: boolean;
-  private readonly category: Department;
+  private readonly members: string[];
+  private readonly departmentType: DepartmentType;
+  private readonly robotType: RobotType;
   private readonly clubName?: string;
   private isEntered: boolean;
 
   private constructor(
     id: TeamID,
     teamName: string,
-    _members: Array<string>,
-    _isMultiWalk: boolean,
-    category: Department,
+    members: string[],
+    departmentType: DepartmentType,
+    robotType: RobotType,
     isEntered: boolean,
     clubName?: string
   ) {
     this.id = id;
     this.teamName = teamName;
-    this.members = _members;
-    this.isMultiWalk = _isMultiWalk;
-    this.category = category;
+    this.members = members;
+    this.departmentType = departmentType;
+    this.robotType = robotType;
     this.clubName = clubName;
     this.isEntered = isEntered;
   }
@@ -62,19 +58,16 @@ export class Team {
     return this.teamName;
   }
 
-  getMembers(): Array<string> {
+  getMembers(): string[] {
     return this.members;
   }
 
-  /**
-   * @deprecated Configで設定されている値を使う
-   */
-  getIsMultiWalk(): boolean {
-    return this.isMultiWalk;
+  getDepartmentType(): DepartmentType {
+    return this.departmentType;
   }
 
-  getCategory(): Department {
-    return this.category;
+  getRobotType(): RobotType {
+    return this.robotType;
   }
 
   getClubName(): string | undefined {
@@ -107,8 +100,9 @@ export class Team {
       arg.id,
       arg.teamName,
       arg.members,
-      arg.isMultiWalk,
-      arg.category,
+      arg.departmentType,
+      arg.robotType,
+      // NOTE: 生成時はエントリーしていない状態にする
       false,
       arg.clubName
     );
@@ -119,8 +113,8 @@ export class Team {
       arg.id,
       arg.teamName,
       arg.members,
-      arg.isMultiWalk,
-      arg.category,
+      arg.departmentType,
+      arg.robotType,
       arg.isEntered,
       arg.clubName
     );
