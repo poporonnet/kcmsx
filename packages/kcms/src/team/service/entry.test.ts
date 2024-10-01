@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/dummyRepository';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { TestEntryData } from '../../testData/entry';
 import { EntryService } from './entry';
 import { Option } from '@mikuroxina/mini-fn';
