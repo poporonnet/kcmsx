@@ -58,3 +58,5 @@ const EntryTeamParamsSchema = z.object({
 });
 
 export const PostEntryTeamParamsSchema = EntryTeamParamsSchema;
+
+export const DeleteEntryTeamParamsSchema = EntryTeamParamsSchema;
