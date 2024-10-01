@@ -1,9 +1,10 @@
 // Elementary: 小学生部門 / Open: オープン部門
 // ToDo: 部門の定義をファイルから読み込むようにする
 import { SnowflakeID } from '../../id/main.js';
+import { DepartmentType } from 'config';
 
 /**
- * @deprecated ToDo: Configで設定されている値を使う
+ * @deprecated この型は廃止予定. {@link DepartmentType}を使うこと
  */
 export type Department = 'Elementary' | 'Open';
 export type TeamID = SnowflakeID<Team>;
@@ -20,6 +21,7 @@ export interface TeamCreateArgs {
    * @deprecated ToDo: Configで設定されている値を使う
    */
   category: Department;
+  departmentType: DepartmentType;
   clubName?: string;
   /**
    * 当日参加するかどうか (エントリーしたかどうか)
@@ -33,6 +35,7 @@ export class Team {
   private readonly members: Array<string>;
   private readonly isMultiWalk: boolean;
   private readonly category: Department;
+  private readonly depatmentType: DepartmentType;
   private readonly clubName?: string;
   private isEntered: boolean;
 
@@ -42,6 +45,7 @@ export class Team {
     _members: Array<string>,
     _isMultiWalk: boolean,
     category: Department,
+    departmentType: DepartmentType,
     isEntered: boolean,
     clubName?: string
   ) {
@@ -52,6 +56,7 @@ export class Team {
     this.category = category;
     this.clubName = clubName;
     this.isEntered = isEntered;
+    this.depatmentType = departmentType;
   }
 
   getId(): TeamID {
@@ -75,6 +80,10 @@ export class Team {
 
   getCategory(): Department {
     return this.category;
+  }
+
+  getDepartmentType(): DepartmentType {
+    return this.depatmentType;
   }
 
   getClubName(): string | undefined {
@@ -109,6 +118,7 @@ export class Team {
       arg.members,
       arg.isMultiWalk,
       arg.category,
+      arg.departmentType,
       false,
       arg.clubName
     );
@@ -121,6 +131,7 @@ export class Team {
       arg.members,
       arg.isMultiWalk,
       arg.category,
+      arg.departmentType,
       arg.isEntered,
       arg.clubName
     );

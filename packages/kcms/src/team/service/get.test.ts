@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/dummyRepository.js';
-import { EntryDTO, FindEntryService } from './get.js';
+import { FetchTeamService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry.js';
 
 describe('getEntryService', () => {
   const repository = new DummyRepository();
-  const service = new FindEntryService(repository);
+  const service = new FetchTeamService(repository);
 
   const testEntryData = [
     TestEntryData['ElementaryMultiWalk'],
@@ -25,19 +25,19 @@ describe('getEntryService', () => {
     const actual = await service.findAll();
 
     expect(Result.isOk(actual)).toBe(true);
-    expect(actual[1]).toStrictEqual(testEntryData.map((d) => EntryDTO.fromDomain(d)));
+    expect(actual[1]).toStrictEqual(testEntryData);
   });
 
   it('チーム名で取得できる', async () => {
     const actual = await service.findByTeamName(testEntryData[0].getTeamName());
     expect(Result.isOk(actual)).toBe(true);
-    expect(actual[1]).toStrictEqual(EntryDTO.fromDomain(testEntryData[0]));
+    expect(actual[1]).toStrictEqual(testEntryData[0]);
   });
 
   it('チームIDで取得できる', async () => {
     const actual = await service.findByID(testEntryData[0].getId());
     expect(Result.isOk(actual)).toBe(true);
-    expect(actual[1]).toStrictEqual(EntryDTO.fromDomain(testEntryData[0]));
+    expect(actual[1]).toStrictEqual(testEntryData[0]);
   });
 
   it('存在しないときはエラーを返す', async () => {
