@@ -22,9 +22,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         id: data.id as MainMatchID,
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
-        teamId1: data.leftTeamId != undefined ? (data.leftTeamId as TeamID) : undefined,
-        teamId2: data.rightTeamId != undefined ? (data.rightTeamId as TeamID) : undefined,
-        winnerId: data.winnerTeamId != undefined ? (data.winnerTeamId as TeamID) : undefined,
+        teamId1: (data.leftTeamId as TeamID) ?? undefined,
+        teamId2: (data.rightTeamId as TeamID) ?? undefined,
+        winnerId: (data.winnerTeamId as TeamID) ?? undefined,
         runResults: data.runResult.map((v) =>
           RunResult.new({
             id: v.id as RunResultID,

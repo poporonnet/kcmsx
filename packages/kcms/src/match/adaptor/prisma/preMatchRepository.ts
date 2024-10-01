@@ -22,8 +22,8 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
         id: data.id as PreMatchID,
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
-        teamId1: data.leftTeamID != undefined ? (data.leftTeamID as TeamID) : undefined,
-        teamId2: data.rightTeamID != undefined ? (data.rightTeamID as TeamID) : undefined,
+        teamId1: (data.leftTeamID as TeamID) ?? undefined,
+        teamId2: (data.rightTeamID as TeamID) ?? undefined,
         runResults: data.runResult.map((v) =>
           RunResult.new({
             id: v.id as RunResultID,

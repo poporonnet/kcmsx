@@ -8,7 +8,7 @@ export class PrismaTeamRepository implements TeamRepository {
   constructor(private readonly client: PrismaClient) {}
 
   private deserialize(data: Prisma.PromiseReturnType<typeof this.client.team.findUnique>): Team {
-    if (!data) throw new Error('Team not found');
+    if (!data) throw new Error('invalid data');
 
     return Team.reconstruct({
       id: data.id as TeamID,
@@ -20,7 +20,7 @@ export class PrismaTeamRepository implements TeamRepository {
       // ToDo: 廃止予定なので適当なデータを入れておく
       category: 'Open',
       departmentType: data.department as DepartmentType,
-      clubName: data.clubName != undefined ? data.clubName : undefined,
+      clubName: data.clubName ?? undefined,
       isEntered: data.isEntered,
     });
   }
