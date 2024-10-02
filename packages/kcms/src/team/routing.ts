@@ -123,7 +123,7 @@ export const DeleteEntryTeamRoute = createRoute({
           schema: CommonErrorSchema,
         },
       },
-      description: 'Common Error',
+      description: 'Common error',
     },
   },
 });

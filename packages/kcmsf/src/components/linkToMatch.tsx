@@ -1,6 +1,6 @@
-import { MatchInfo } from "config";
+import { MatchType } from "config";
 import { Link, LinkProps } from "react-router-dom";
 
 export const LinkToMatch = (
-  props: { info: MatchInfo } & Omit<LinkProps, "to" | "state">
-) => <Link to="/match" state={props.info} {...props} />;
+  props: { id: string; matchType: MatchType } & Omit<LinkProps, "to" | "state">
+) => <Link to={`/match/${props.matchType}/${props.id}`} {...props} />;
