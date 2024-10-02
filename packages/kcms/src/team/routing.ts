@@ -8,7 +8,6 @@ import {
   PostEntryTeamParamsSchema,
   DeleteEntryTeamParamsSchema,
 } from './adaptor/validator/team';
-import { GetMatchResponseSchema } from './adaptor/validator/match';
 
 export const GetTeamsRoute = createRoute({
   method: 'get',
@@ -117,29 +116,6 @@ export const DeleteEntryTeamRoute = createRoute({
   responses: {
     204: {
       description: 'Delete Entry Team',
-    },
-    400: {
-      content: {
-        'application/json': {
-          schema: CommonErrorSchema,
-        },
-      },
-      description: 'Common error',
-    },
-  },
-});
-
-export const GetMatchRoute = createRoute({
-  method: 'get',
-  path: '/match',
-  responses: {
-    200: {
-      content: {
-        'application/json': {
-          schema: GetMatchResponseSchema,
-        },
-      },
-      description: 'Retrieve all matches',
     },
     400: {
       content: {
