@@ -5,8 +5,6 @@ import { EntryList } from "../pages/entryList.tsx";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
-import { Ranking } from "../pages/ranking.tsx";
-import { Result } from "../pages/result.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
@@ -41,16 +39,12 @@ export const router = createBrowserRouter(
           element: <Match />,
         },
         {
+          path: "match/:matchType/:id",
+          element: <Match />,
+        },
+        {
           path: "matchlist",
           element: <MatchList />,
-        },
-        {
-          path: "ranking",
-          element: <Ranking />,
-        },
-        {
-          path: "result",
-          element: <Result />,
         },
       ],
     },
