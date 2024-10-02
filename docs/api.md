@@ -29,8 +29,8 @@
       "clubName": "RubyClub",
       // ロボットのタイプ (robotTypes 設定依存)
       "robotType": "leg",
-      // チームのカテゴリ (category 設定依存)
-      "category": "elementary",
+      // チームのカテゴリ (departmentType 設定依存)
+      "departmentType": "elementary",
       // エントリーしたか (true | false)
       "isEntered": true,
     },
@@ -53,8 +53,8 @@
     "clubName": "RubyClub",
     // ロボットのタイプ (robotTypes 設定依存)
     "robotType": "wheel",
-    // チームのカテゴリ (category 設定依存)
-    "category": "elementary",
+    // チームのカテゴリ (departmentType 設定依存)
+    "departmentType": "elementary",
   },
 ]
 ```
@@ -75,8 +75,8 @@
     "clubName": "RubyClub",
     // ロボットのタイプ (robotTypes 設定依存)
     "robotType": "wheel",
-    // チームのカテゴリ (category 設定依存)
-    "category": "elementary",
+    // チームのカテゴリ (departmentType 設定依存)
+    "departmentType": "elementary",
     // エントリーしたか (true | false)
     "isEntered": false,
   },
@@ -107,8 +107,8 @@
   "clubName": "RubyClub",
   // ロボットのタイプ (robotTypes 設定依存)
   "robotType": "wheel",
-  // チームのカテゴリ (category 設定依存)
-  "category": "elementary",
+  // チームのカテゴリ (departmentType 設定依存)
+  "departmentType": "elementary",
   // エントリーしたか (true | false)
   "isEntered": false,
 }
