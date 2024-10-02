@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/dummyRepository.js';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { Team, TeamID } from '../models/team.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { CreateTeamService } from './createTeam';

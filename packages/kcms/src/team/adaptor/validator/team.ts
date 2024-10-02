@@ -45,3 +45,18 @@ export const DeleteTeamParamsSchema = z.object({
     example: '7549586',
   }),
 });
+
+//ポストメソッドとデリートメソッドで併用
+const EntryTeamParamsSchema = z.object({
+  teamId: z.string().openapi({
+    param: {
+      name: 'teamId',
+      in: 'path',
+    },
+    example: '7549586',
+  }),
+});
+
+export const PostEntryTeamParamsSchema = EntryTeamParamsSchema;
+
+export const DeleteEntryTeamParamsSchema = EntryTeamParamsSchema;

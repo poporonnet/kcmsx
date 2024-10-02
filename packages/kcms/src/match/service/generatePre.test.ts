@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GeneratePreMatchService } from './generatePre';
-import { DummyRepository } from '../../team/adaptor/dummyRepository';
+import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
 import { testTeamData } from '../../testData/entry';
 import { FetchTeamService } from '../../team/service/get';
 import { SnowflakeIDGenerator } from '../../id/main';
