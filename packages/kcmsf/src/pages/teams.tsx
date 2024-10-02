@@ -304,7 +304,6 @@ const TeamHeader = ({
       {filterable && filterData && filterState && setFilterState && (
         <Filter
           active={filterState[keyName] != null}
-          label={label}
           data={filterData[keyName] ?? []}
           value={`${filterState[keyName]}`}
           onFilter={(value) =>

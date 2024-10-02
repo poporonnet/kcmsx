@@ -11,14 +11,12 @@ import { IconFilterFilled } from "@tabler/icons-react";
 
 export const Filter = ({
   active,
-  label,
   data,
   value,
   onFilter,
   ...props
 }: {
   active: boolean;
-  label: string;
   data: ComboboxItem[];
   value?: string;
   onFilter: (value?: string) => void;
