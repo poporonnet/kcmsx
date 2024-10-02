@@ -12,9 +12,8 @@ import { useEffect, useState } from "react";
 import { CourseSelector } from "../components/courseSelector";
 import { MatchStatusButton } from "../components/matchStatus";
 import { Match } from "../types/match";
-
 export const MatchList = () => {
-  const [primaryMatches, setPrimaryMatches] = useState<Match[]>([]);
+  const [preMatches, setPreMatches] = useState<Match[]>([]);
   const [courses, setCourses] = useState<number[]>([]);
   const [select, setSelect] = useState<number | "all">("all");
   const [loading, setLoading] = useState<boolean>(false);
@@ -22,10 +21,8 @@ export const MatchList = () => {
   const fetchPrimaries = async () => {
     setError(false);
     setLoading(true);
-    console.log("fetching");
-
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/match/primary`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/match/pre`, {
         method: "GET",
       });
 
@@ -44,7 +41,7 @@ export const MatchList = () => {
         return;
       }
 
-      setPrimaryMatches(data);
+      setPreMatches(data);
 
       if (data) {
         const courses: number[] = [
@@ -70,7 +67,7 @@ export const MatchList = () => {
       <Title order={1} m="1rem">
         試合表
       </Title>
-      {primaryMatches.length > 0 && (
+      {preMatches.length > 0 && (
         <>
           <Flex justify="flex-end" mb={"1rem"}>
             <CourseSelector courses={courses} selector={setSelect} />
@@ -87,7 +84,7 @@ export const MatchList = () => {
               </Table.Tr>
             </Table.Thead>
             <Table.Tbody>
-              {primaryMatches.map(
+              {preMatches.map(
                 (match) =>
                   (select === "all" || match.courseIndex === select) && (
                     <Table.Tr key={match.id}>
@@ -98,12 +95,12 @@ export const MatchList = () => {
                       </Table.Td>
                       <Table.Td>
                         <Text fw={700} miw={200} ta={"start"}>
-                          {match.teams.left.teamName}
+                          {match.left.teamName}
                         </Text>
                       </Table.Td>
                       <Table.Td>
                         <Text fw={700} miw={200} ta={"start"}>
-                          {match.teams.right.teamName}
+                          {match.right.teamName}
                         </Text>
                       </Table.Td>
                       <Table.Td>
@@ -111,10 +108,7 @@ export const MatchList = () => {
                           <MatchStatusButton
                             status={match.results ? "end" : "future"}
                             id={match.id}
-                            teams={match.teams}
-                            matchType={
-                              match.matchType == "primary" ? "pre" : "main"
-                            }
+                            matchType={"pre"}
                           />
                         </Center>
                       </Table.Td>
@@ -142,7 +136,7 @@ export const MatchList = () => {
           </Button>
         </>
       )}
-      {primaryMatches.length === 0 && !loading && !error && (
+      {preMatches.length === 0 && !loading && !error && (
         <>
           <Text>現在試合はありません。</Text>
           <Button m={"2rem"} onClick={fetchPrimaries}>
