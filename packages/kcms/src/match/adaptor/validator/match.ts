@@ -40,3 +40,9 @@ export const GetMatchResponseSchema = z.object({
   pre: z.array(PreSchema),
   main: z.array(MainSchema),
 });
+
+export const GetMatchTypeParamsSchema = z.object({
+  matchType: z.enum(['pre', 'main']).openapi({ example: 'main' }),
+});
+
+export const GetMatchTypeResponseSchema = PreSchema.or(MainSchema);
