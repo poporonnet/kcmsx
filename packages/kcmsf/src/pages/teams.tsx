@@ -1,5 +1,7 @@
 import {
+  Button,
   Checkbox,
+  ComboboxItem,
   Flex,
   Loader,
   Space,
@@ -8,9 +10,9 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Cat } from "@mikuroxina/mini-fn";
-import { IconFilterFilled } from "@tabler/icons-react";
 import { config, DepartmentType, RobotType } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Filter } from "../components/Filter";
 import { Order, Sort } from "../components/Sort";
 
 type Team = {
@@ -32,10 +34,14 @@ type Comparer = {
   [K in keyof Team]?: (a: Team[K], b: Team[K]) => number;
 };
 
+type FilterData = Partial<Record<keyof Team, ComboboxItem[]>>;
+
 type SortState = {
   key?: keyof Team;
   order?: Order;
 };
+
+type FilterState = Partial<Team>;
 
 export const Teams = () => {
   const [teams, setTeams] = useState<Team[]>();
@@ -43,6 +49,7 @@ export const Teams = () => {
     key: "entryCode",
     order: "asc",
   });
+  const [filterState, setFilterState] = useState<FilterState>({});
 
   const comparer: Comparer = useMemo(
     () => ({
@@ -55,6 +62,41 @@ export const Teams = () => {
     }),
     []
   );
+
+  const filterData: FilterData = useMemo(() => {
+    if (!teams) return {};
+
+    const clubNames = [
+      ...new Set<string>(
+        teams.map((team) => team.clubName).filter((value) => value != "")
+      ),
+    ].sort((a, b) => a.localeCompare(b));
+    const clubName: { value: string; label: string }[] = clubNames
+      .map((clubName) => ({
+        value: clubName,
+        label: clubName,
+      }))
+      .concat([{ value: "", label: "(所属なし)" }]);
+    const robotType: { value: RobotType; label: string }[] = [
+      { value: "leg", label: "歩行型" },
+      { value: "wheel", label: "車輪型" },
+    ];
+    const category: { value: DepartmentType; label: string }[] = [
+      { value: "elementary", label: config.department["elementary"].name },
+      { value: "open", label: config.department["open"].name },
+    ];
+    const isEntered: { value: string; label: string }[] = [
+      { value: `${false}`, label: "未エントリー" },
+      { value: `${true}`, label: "エントリー済み" },
+    ];
+
+    return {
+      clubName,
+      robotType,
+      category,
+      isEntered,
+    };
+  }, [teams]);
 
   const sort = useCallback(
     (teams: Team[]) => {
@@ -72,9 +114,17 @@ export const Teams = () => {
     [sortState, comparer]
   );
 
-  const filter = useCallback((teams: Team[]) => {
-    return teams;
-  }, []);
+  const filter = useCallback(
+    (teams: Team[]) => {
+      return teams.filter((team) =>
+        (Object.keys(team) as (keyof Team)[]).every(
+          (key) =>
+            filterState[key] == null || `${filterState[key]}` === `${team[key]}`
+        )
+      );
+    },
+    [filterState]
+  );
 
   const processedTeams = useMemo(
     () => (teams ? Cat.cat(teams).feed(sort).feed(filter).value : undefined),
@@ -98,12 +148,23 @@ export const Teams = () => {
       <Title m="md">チーム一覧</Title>
       <Space h={20} />
       {processedTeams ? (
-        <TeamTable
-          teams={processedTeams}
-          sortState={sortState}
-          setSortState={setSortState}
-          enterable={false}
-        />
+        <>
+          <Flex w="100%" justify="right">
+            <Button onClick={() => setFilterState({})} variant="outline">
+              フィルターをリセット
+            </Button>
+          </Flex>
+          <Space h={10} />
+          <TeamTable
+            teams={processedTeams}
+            sortState={sortState}
+            setSortState={setSortState}
+            filterData={filterData}
+            filterState={filterState}
+            setFilterState={setFilterState}
+            enterable={false}
+          />
+        </>
       ) : (
         <Loader m="xl" />
       )}
@@ -115,11 +176,17 @@ const TeamTable = ({
   teams,
   sortState,
   setSortState,
+  filterData,
+  filterState,
+  setFilterState,
   enterable,
 }: {
   teams: Team[];
   sortState: SortState;
   setSortState: (sortState: SortState) => void;
+  filterData: FilterData;
+  filterState: FilterState;
+  setFilterState: (filterState: FilterState) => void;
   enterable: boolean;
 }) => (
   <Table
@@ -153,6 +220,9 @@ const TeamTable = ({
           sortState={sortState}
           setSortState={setSortState}
           filterable
+          filterData={filterData}
+          filterState={filterState}
+          setFilterState={setFilterState}
         />
         <TeamHeader
           keyName="robotType"
@@ -161,6 +231,9 @@ const TeamTable = ({
           sortState={sortState}
           setSortState={setSortState}
           filterable
+          filterData={filterData}
+          filterState={filterState}
+          setFilterState={setFilterState}
         />
         <TeamHeader
           keyName="category"
@@ -169,6 +242,9 @@ const TeamTable = ({
           sortState={sortState}
           setSortState={setSortState}
           filterable
+          filterData={filterData}
+          filterState={filterState}
+          setFilterState={setFilterState}
         />
         <TeamHeader
           keyName="isEntered"
@@ -177,6 +253,9 @@ const TeamTable = ({
           sortState={sortState}
           setSortState={setSortState}
           filterable
+          filterData={filterData}
+          filterState={filterState}
+          setFilterState={setFilterState}
         />
       </Table.Tr>
     </Table.Thead>
@@ -195,6 +274,9 @@ const TeamHeader = ({
   filterable,
   sortState,
   setSortState,
+  filterData,
+  filterState,
+  setFilterState,
 }: {
   keyName: keyof Team;
   label: string;
@@ -202,22 +284,35 @@ const TeamHeader = ({
   filterable?: boolean;
   sortState?: SortState;
   setSortState?: (sortState: SortState) => void;
+  filterData?: FilterData;
+  filterState?: FilterState;
+  setFilterState?: (filterState: FilterState) => void;
 }) => (
   <Table.Th style={{ textAlign: "center" }}>
     <Flex direction="row" align="center" justify="center">
       {label}
       {(sortable || filterable) && <Space w={10} />}
-      {sortable && setSortState && (
+      {sortable && sortState && setSortState && (
         <Sort
-          active={sortState?.key == keyName}
-          defaultOrder={sortState?.key == keyName ? sortState.order : undefined}
+          active={sortState.key == keyName}
+          defaultOrder={sortState.key == keyName ? sortState.order : undefined}
           onSort={(order) => setSortState({ key: keyName, order })}
           size={22}
           style={{ minWidth: 22 }}
         />
       )}
-      {filterable && (
-        <IconFilterFilled size={20} color="gray" style={{ minWidth: 20 }} />
+      {filterable && filterData && filterState && setFilterState && (
+        <Filter
+          active={filterState[keyName] != null}
+          label={label}
+          data={filterData[keyName] ?? []}
+          value={`${filterState[keyName]}`}
+          onFilter={(value) =>
+            setFilterState({ ...filterState, [keyName]: value })
+          }
+          size={20}
+          style={{ minWidth: 20 }}
+        />
       )}
     </Flex>
   </Table.Th>
