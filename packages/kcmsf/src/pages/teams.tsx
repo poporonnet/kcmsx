@@ -95,7 +95,7 @@ export const Teams = () => {
 
   return (
     <Flex direction="column" align="center" justify="center">
-      <Title>チーム一覧</Title>
+      <Title m="md">チーム一覧</Title>
       <Space h={20} />
       {processedTeams ? (
         <TeamTable
