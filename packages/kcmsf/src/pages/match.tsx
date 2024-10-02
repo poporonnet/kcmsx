@@ -1,5 +1,11 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
-import { config, DepartmentType, MatchInfo, MatchType, RobotType } from "config";
+import {
+  config,
+  DepartmentType,
+  MatchInfo,
+  MatchType,
+  RobotType,
+} from "config";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
