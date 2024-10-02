@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import { Entry } from "../pages/entry.tsx";
 import { EntryBulk } from "../pages/entryBulk.tsx";
-import { EntryList } from "../pages/entryList.tsx";
+import { Teams } from "../pages/teams.tsx";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
@@ -20,8 +20,8 @@ export const router = createBrowserRouter(
           element: <Home />,
         },
         {
-          path: "entrylist",
-          element: <EntryList />,
+          path: "team",
+          element: <Teams />,
         },
         {
           path: "entry",
