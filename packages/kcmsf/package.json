@@ -19,6 +19,7 @@
     "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.3.1",
     "@mantine/notifications": "7.13.0",
+    "@mikuroxina/mini-fn": "^6.0.0",
     "@tabler/icons-react": "^3.0.0",
     "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
