@@ -36,7 +36,16 @@ export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
   const isExhibition = !id || !matchType;
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
-  const [matchJudge, setMatchJudge] = useState<Judge>();
+  const [matchJudge, setMatchJudge] = useState<Judge | undefined>(
+    isExhibition
+      ? new Judge(
+          { multiWalk: false },
+          { multiWalk: false },
+          { matchInfo },
+          { matchInfo }
+        )
+      : undefined
+  );
   useEffect(() => {
     if (isExhibition) return;
     const fetchMatchInfo = async () => {
