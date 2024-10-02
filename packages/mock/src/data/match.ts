@@ -1,39 +1,57 @@
 import { RunResult } from "./runResult";
 import { teams } from "./team";
 
-export interface Match {
+export interface preMatch {
   id: string;
   matchCode: `${number}-${number}`;
-  left:
+  leftTeam:
     | {
         id: (typeof teams)[number]["id"];
         teamName: (typeof teams)[number]["name"];
       }
-    | {};
-  right:
+    | undefined;
+  rightTeam:
     | {
         id: (typeof teams)[number]["id"];
         teamName: (typeof teams)[number]["name"];
       }
-    | {};
-  winnerId?: (typeof teams)[number]["id"];
+    | undefined;
+  runResults: RunResult[];
+}
+
+export interface mainMatch {
+  id: string;
+  matchCode: `${number}-${number}`;
+  Team1:
+    | {
+        id: (typeof teams)[number]["id"];
+        teamName: (typeof teams)[number]["name"];
+      }
+    | undefined;
+  Team2:
+    | {
+        id: (typeof teams)[number]["id"];
+        teamName: (typeof teams)[number]["name"];
+      }
+    | undefined;
+  winnerId: (typeof teams)[number]["id"];
   runResults: RunResult[];
 }
 
 interface Matches {
-  pre: Match[];
-  main: Match[];
+  pre: preMatch[];
+  main: mainMatch[];
 }
 
-export const preMatches: Match[] = [
+export const preMatches: preMatch[] = [
   {
     id: "6582553",
     matchCode: "1-1",
-    left: {
+    leftTeam: {
       id: "1392387",
       teamName: "かに1",
     },
-    right: {
+    rightTeam: {
       id: "7549586",
       teamName: "かに2",
     },
@@ -49,18 +67,18 @@ export const preMatches: Match[] = [
         id: "13847917",
         teamId: "7549586",
         points: 4,
-        finishState: "retired",
+        finishState: "goal",
       },
     ],
   },
   {
     id: "1583452",
     matchCode: "3-1",
-    left: {
+    leftTeam: {
       id: "4578932",
       teamName: "かに3",
     },
-    right: {},
+    rightTeam: undefined,
     runResults: [
       {
         id: "983156",
@@ -73,15 +91,15 @@ export const preMatches: Match[] = [
   },
 ];
 
-export const mainMatches: Match[] = [
+export const mainMatches: mainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    left: {
+    Team1: {
       id: "1392387",
       teamName: "かに1",
     },
-    right: {
+    Team2: {
       id: "7549586",
       teamName: "かに2",
     },

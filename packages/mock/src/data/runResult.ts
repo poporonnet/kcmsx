@@ -5,5 +5,5 @@ export interface RunResult {
   teamId: (typeof teams)[number]["id"];
   points: number;
   goalTimeSeconds?: number;
-  finishState: "finished" | "retired";
+  finishState: "finished" | "goal";
 }
