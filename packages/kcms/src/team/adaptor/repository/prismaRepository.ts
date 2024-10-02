@@ -15,11 +15,9 @@ export class PrismaTeamRepository implements TeamRepository {
       teamName: data.name,
       // ToDo: メンバーをどう扱うかを決める
       members: [],
-      // ToDo: 廃止予定なので適当なデータを入れておく
-      isMultiWalk: true,
-      // ToDo: 廃止予定なので適当なデータを入れておく
-      category: 'Open',
       departmentType: data.department as DepartmentType,
+      // ToDo: RobotTypeを入れる(Teamモデルにメンバーを追加する)
+      robotType: 'leg',
       clubName: data.clubName ?? undefined,
       isEntered: data.isEntered,
     });

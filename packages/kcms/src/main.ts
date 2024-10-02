@@ -5,13 +5,13 @@ MIT License.
 */
 import { Hono } from 'hono';
 import { serve } from '@hono/node-server';
-import { entryHandler } from './team/main.js';
+import { teamHandler } from './team/main.js';
 import { cors } from 'hono/cors';
 
 const app = new Hono();
 
 app.use('*', cors());
-app.route('/entry', entryHandler);
+app.route('/entry', teamHandler);
 
 serve(app, (p) => {
   console.log(`server started at http://${p.address}:${p.port}`);
