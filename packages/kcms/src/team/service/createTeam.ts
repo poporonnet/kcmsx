@@ -46,9 +46,8 @@ export class CreateTeamService {
       id: id[1],
       teamName: input.teamName,
       members: input.members,
-      isMultiWalk: input.isMultiWalk,
-      category: input.category,
       departmentType: input.departmentType,
+      robotType: input.robotType,
     };
     const team = Team.new(createArgs);
     const res = await this.repository.create(team);

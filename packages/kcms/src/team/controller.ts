@@ -1,18 +1,12 @@
 import { TeamRepository } from './models/repository.js';
 import { CreateTeamService } from './service/createTeam';
-import { Result, Option } from '@mikuroxina/mini-fn';
+import { Option, Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from './service/get.js';
 import { DeleteEntryService } from './service/delete.js';
 import { SnowflakeIDGenerator } from '../id/main.js';
-import { DepartmentType } from 'config';
-
-interface baseEntry {
-  id: string;
-  teamName: string;
-  members: string[];
-  isMultiWalk: boolean;
-  category: string;
-}
+import { DepartmentType, RobotType } from 'config';
+import { GetTeamsResponseSchema } from './adaptor/validator/team';
+import { z } from '@hono/zod-openapi';
 
 export class Controller {
   private readonly createTeam: CreateTeamService;
@@ -31,10 +25,9 @@ export class Controller {
   async create(args: {
     teamName: string;
     members: string[];
-    isMultiWalk: boolean;
-    category: 'Elementary' | 'Open';
+    robotType: RobotType;
     departmentType: DepartmentType;
-  }): Promise<Result.Result<Error, baseEntry>> {
+  }): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
     const res = await this.createTeam.create(args);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
@@ -42,31 +35,42 @@ export class Controller {
 
     const unwrapped = Result.unwrap(res);
     return Result.ok({
-      id: unwrapped.getId(),
-      teamName: unwrapped.getTeamName(),
-      members: unwrapped.getMembers(),
-      isMultiWalk: unwrapped.getIsMultiWalk(),
-      category: unwrapped.getCategory(),
+      teams: [
+        {
+          id: unwrapped.getId(),
+          name: unwrapped.getTeamName(),
+          members: unwrapped.getMembers() as [string, ...string[]],
+          clubName: unwrapped.getClubName() ?? '',
+          entryCode: '',
+          robotType: unwrapped.getRobotType(),
+          category: unwrapped.getDepartmentType(),
+          isEntered: unwrapped.getIsEntered(),
+        },
+      ],
     });
   }
 
-  async get(): Promise<Result.Result<Error, baseEntry[]>> {
+  async get(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
     const res = await this.findEntry.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
+    const teams = Result.unwrap(res);
 
-    return Result.ok(
-      res[1].map((v) => {
+    return Result.ok({
+      teams: teams.map((v) => {
         return {
           id: v.getId(),
-          teamName: v.getTeamName(),
-          members: v.getMembers(),
-          isMultiWalk: v.getIsMultiWalk(),
-          category: v.getCategory(),
+          name: v.getTeamName(),
+          members: v.getMembers() as [string, ...string[]],
+          clubName: v.getClubName() ?? '',
+          entryCode: '',
+          robotType: v.getRobotType(),
+          category: v.getDepartmentType(),
+          isEntered: v.getIsEntered(),
         };
-      })
-    );
+      }),
+    });
   }
 
   async delete(id: string): Promise<Option.Option<Error>> {
