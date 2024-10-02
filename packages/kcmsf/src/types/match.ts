@@ -1,9 +1,9 @@
-import { MatchType, TeamInfo } from "config";
+import { Department, MatchType, TeamInfo } from "config";
 
 export type Match = {
   id: string;
   courseIndex: number;
-  category: "elementary" | "open";
+  category: Department["type"];
   right: TeamInfo;
   left: TeamInfo;
   matchType: MatchType;

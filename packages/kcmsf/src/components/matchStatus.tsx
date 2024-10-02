@@ -23,10 +23,8 @@ export const MatchStatusButton = (props: StatusButtonProps) => {
   const status = getColorAndText();
   return (
     <LinkToMatch
-      info={{
-        id: props.id,
-        matchType: props.matchType,
-      }}
+      id={props.id}
+      matchType={props.matchType}
     >
       <Button variant="filled" color={status.color} radius={"lg"} size="xs">
         <Text fw={700}>{status.text}</Text>

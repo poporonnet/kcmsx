@@ -1,5 +1,5 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
-import { config, MatchInfo, MatchType, RobotType } from "config";
+import { config, DepartmentType, MatchInfo, MatchType, RobotType } from "config";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
@@ -10,67 +10,62 @@ import { Judge } from "../utils/match/judge";
 import { expiryTimestamp, parseSeconds } from "../utils/time";
 
 type TimerState = "Initial" | "Started" | "Finished";
-type TeamFetchRes = {
+type TeamFetchResponse = {
   id: string;
   name: string;
-  entryId: string;
-  members: string[2];
+  entryCode: string;
+  members: string[];
   clubName: string;
   robotType: RobotType;
-  category: "elementary" | "open";
+  category: DepartmentType;
   isEntered: boolean;
+};
+type TeamFetchResponseData = {
+  id: string;
+  matchType: MatchType;
+  left: { id: string; teamName: string };
+  right: { id: string; teamName: string };
 };
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
-  const isExhibition = id == null || matchType == null;
-  const [matchInfo, setMatchInfo] = useState<MatchInfo | undefined>(undefined);
-  const [matchJudge, setMatchJudge] = useState<Judge>(
-    new Judge(
-      { multiWalk: false },
-      { multiWalk: false },
-      { matchInfo },
-      { matchInfo }
-    )
-  );
+  const isExhibition = !id || !matchType;
+  const [matchInfo, setMatchInfo] = useState<MatchInfo>();
+  const [matchJudge, setMatchJudge] = useState<Judge>();
   useEffect(() => {
+    if (isExhibition) return;
     const fetchMatchInfo = async () => {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
         { method: "GET" }
       );
-      const data = (await res.json()) as {
-        id: string;
-        matchType: MatchType;
-        left: { id: string; teamName: string };
-        right: { id: string; teamName: string };
-      };
-      const leftres = await fetch(
+      const data = (await res.json()) as TeamFetchResponseData;
+      const leftRes = await fetch(
         `${import.meta.env.VITE_API_URL}/team/${data.left.id}`,
         { method: "GET" }
       );
-      const leftdata = (await leftres.json()) as TeamFetchRes;
+      const leftData = (await leftRes.json()) as TeamFetchResponse;
 
-      const rightres = await fetch(
+      const rightRes = await fetch(
         `${import.meta.env.VITE_API_URL}/team/${data.right.id}`,
         { method: "GET" }
       );
-      const rightdata = (await rightres.json()) as TeamFetchRes;
+      const rightData = (await rightRes.json()) as TeamFetchResponse;
 
       const matchInfo: MatchInfo = {
         id: data.id,
         matchType: data.matchType,
         teams: {
           left: {
-            id: leftdata.id,
-            teamName: leftdata.name,
-            isMultiWalk: leftdata.robotType === "leg" ? true : false,
-            category: leftdata.category,
+            id: leftData.id,
+            teamName: leftData.name,
+            isMultiWalk: leftData.robotType === "leg" ? true : false,
+            category: leftData.category,
           },
           right: {
-            id: rightdata.id,
-            teamName: rightdata.name,
-            isMultiWalk: rightdata.robotType === "leg" ? true : false,
-            category: rightdata.category,
+            id: rightData.id,
+            teamName: rightData.name,
+            isMultiWalk: rightData.robotType === "leg" ? true : false,
+            category: rightData.category,
           },
         },
       };
@@ -84,7 +79,6 @@ export const Match = () => {
         )
       );
     };
-    if (isExhibition) return;
     fetchMatchInfo();
   }, []);
   const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
@@ -131,11 +125,11 @@ export const Match = () => {
           )}
           <Flex pb="sm" gap="sm">
             <Text size="4rem" c="blue">
-              {matchJudge.leftTeam.point.point()}
+              {matchJudge && matchJudge.leftTeam.point.point()}
             </Text>
             <Text size="4rem">-</Text>
             <Text size="4rem" c="red">
-              {matchJudge.rightTeam.point.point()}
+              {matchJudge && matchJudge.rightTeam.point.point()}
             </Text>
           </Flex>
           {!isExhibition && matchInfo && (
@@ -146,30 +140,32 @@ export const Match = () => {
         </Flex>
       </Paper>
       <Divider w="100%" />
-      <Flex direction="row" gap="2rem" align="center" justify="center">
-        <PointControls
-          color="blue"
-          team={matchJudge.leftTeam}
-          onChange={forceReload}
-          onGoal={(done) =>
-            matchJudge.goalLeftTeam(
-              done ? matchTimeSec - totalSeconds : undefined
-            )
-          }
-        />
-        <Divider orientation="vertical" />
-        <PointControls
-          color="red"
-          team={matchJudge.rightTeam}
-          onChange={forceReload}
-          onGoal={(done) =>
-            matchJudge.goalRightTeam(
-              done ? matchTimeSec - totalSeconds : undefined
-            )
-          }
-        />
-      </Flex>
-      {!isExhibition && matchInfo && (
+      {matchJudge && (
+        <Flex direction="row" gap="2rem" align="center" justify="center">
+          <PointControls
+            color="blue"
+            team={matchJudge.leftTeam}
+            onChange={forceReload}
+            onGoal={(done) =>
+              matchJudge.goalLeftTeam(
+                done ? matchTimeSec - totalSeconds : undefined
+              )
+            }
+          />
+          <Divider orientation="vertical" />
+          <PointControls
+            color="red"
+            team={matchJudge.rightTeam}
+            onChange={forceReload}
+            onGoal={(done) =>
+              matchJudge.goalRightTeam(
+                done ? matchTimeSec - totalSeconds : undefined
+              )
+            }
+          />
+        </Flex>
+      )}
+      {!isExhibition && matchInfo && matchJudge && (
         <MatchSubmit
           matchInfo={matchInfo}
           available={

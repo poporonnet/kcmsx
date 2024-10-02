@@ -5,7 +5,6 @@ import { EntryList } from "../pages/entryList.tsx";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
-import { Result } from "../pages/result.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
@@ -46,14 +45,6 @@ export const router = createBrowserRouter(
         {
           path: "matchlist",
           element: <MatchList />,
-        },
-        // { 救えなかった...すまない...
-        //   path: "ranking",
-        //   element: <Ranking />,
-        // },
-        {
-          path: "result",
-          element: <Result />,
         },
       ],
     },
