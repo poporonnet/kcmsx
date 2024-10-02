@@ -10,7 +10,10 @@ const app = new Hono();
 
 app.use(
   cors({
-    origin: ["https://kcmsx.pages.dev", "http://localhost:5173"],
+    origin: (origin) =>
+      origin.match(/https:\/\/([a-zA-Z0-9\-]+\.)?kcmsx\.pages\.dev/) // Pagesのプレビュービルドのため
+        ? origin
+        : "http://localhost:5173",
   })
 );
 
