@@ -15,7 +15,7 @@ export interface CreatePreMatchArgs {
   /** @description 試合番号(1始まり) */
   matchIndex: number;
   /** @description チーム1のID 左を走るチーム */
-  teamId1: TeamID;
+  teamId1?: TeamID;
   /** @description チーム2のID 右を走るチーム */
   teamId2?: TeamID;
   /** @description 走行結果 */
@@ -29,8 +29,7 @@ export class PreMatch {
   private readonly id: PreMatchID;
   private readonly courseIndex: number;
   private readonly matchIndex: number;
-  private readonly teamId1: TeamID;
-  // NOTE: 予選参加者は奇数になる可能性があるので2チーム目はいないことがある
+  private readonly teamId1?: TeamID;
   private readonly teamId2?: TeamID;
   private runResults: RunResult[];
 
@@ -59,7 +58,7 @@ export class PreMatch {
     return this.matchIndex;
   }
 
-  getTeamId1(): TeamID {
+  getTeamId1(): TeamID | undefined {
     return this.teamId1;
   }
 

@@ -6,7 +6,7 @@
     "format": "prettier . --write"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.2.0",
+    "@hono/zod-validator": "^0.3.0",
     "config": "workspace:^",
     "hono": "^4.5.4",
     "zod": "^3.22.4"
@@ -16,5 +16,5 @@
     "prettier": "^3.3.3",
     "wrangler": "^3.71.0"
   },
-  "packageManager": "pnpm@9.10.0"
+  "packageManager": "pnpm@9.11.0"
 }
