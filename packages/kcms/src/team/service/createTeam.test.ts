@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/dummyRepository.js';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { Team, TeamID } from '../models/team.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { CreateTeamService } from './createTeam';
@@ -24,6 +24,7 @@ describe('CreateTeamService', () => {
       members: data.getMembers(),
       isMultiWalk: data.getIsMultiWalk(),
       category: data.getCategory(),
+      departmentType: data.getDepartmentType(),
     });
 
     expect(Result.isOk(actual)).toBe(true);
@@ -45,12 +46,14 @@ describe('CreateTeamService', () => {
       members: data.getMembers(),
       isMultiWalk: data.getIsMultiWalk(),
       category: data.getCategory(),
+      departmentType: data.getDepartmentType(),
     });
     const result = await service.create({
       teamName: existsData.getTeamName(),
       members: existsData.getMembers(),
       isMultiWalk: existsData.getIsMultiWalk(),
       category: existsData.getCategory(),
+      departmentType: existsData.getDepartmentType(),
     });
 
     expect(Result.isErr(result)).toBe(true);
@@ -64,12 +67,14 @@ describe('CreateTeamService', () => {
       members: [],
       isMultiWalk: true,
       category: 'Elementary',
+      departmentType: 'elementary',
     });
     const actual = await service.create({
       teamName: team.getTeamName(),
       members: team.getMembers(),
       isMultiWalk: team.getIsMultiWalk(),
       category: team.getCategory(),
+      departmentType: team.getDepartmentType(),
     });
 
     expect(Result.isErr(actual)).toBe(true);
@@ -83,12 +88,14 @@ describe('CreateTeamService', () => {
       members: ['A太郎', 'B太郎', 'C太郎'],
       isMultiWalk: true,
       category: 'Elementary',
+      departmentType: 'elementary',
     });
     const actual = await service.create({
       teamName: team.getTeamName(),
       members: team.getMembers(),
       isMultiWalk: team.getIsMultiWalk(),
       category: team.getCategory(),
+      departmentType: team.getDepartmentType(),
     });
 
     expect(Result.isErr(actual)).toBe(true);

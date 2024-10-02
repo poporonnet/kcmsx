@@ -1,9 +1,10 @@
 import { TeamRepository } from './models/repository.js';
 import { CreateTeamService } from './service/createTeam';
 import { Result, Option } from '@mikuroxina/mini-fn';
-import { FindEntryService } from './service/get.js';
+import { FetchTeamService } from './service/get.js';
 import { DeleteEntryService } from './service/delete.js';
 import { SnowflakeIDGenerator } from '../id/main.js';
+import { DepartmentType } from 'config';
 
 interface baseEntry {
   id: string;
@@ -15,7 +16,7 @@ interface baseEntry {
 
 export class Controller {
   private readonly createTeam: CreateTeamService;
-  private readonly findEntry: FindEntryService;
+  private readonly findEntry: FetchTeamService;
   private readonly deleteService: DeleteEntryService;
 
   constructor(repository: TeamRepository) {
@@ -23,7 +24,7 @@ export class Controller {
       repository,
       new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
     );
-    this.findEntry = new FindEntryService(repository);
+    this.findEntry = new FetchTeamService(repository);
     this.deleteService = new DeleteEntryService(repository);
   }
 
@@ -32,6 +33,7 @@ export class Controller {
     members: string[];
     isMultiWalk: boolean;
     category: 'Elementary' | 'Open';
+    departmentType: DepartmentType;
   }): Promise<Result.Result<Error, baseEntry>> {
     const res = await this.createTeam.create(args);
     if (Result.isErr(res)) {
@@ -57,11 +59,11 @@ export class Controller {
     return Result.ok(
       res[1].map((v) => {
         return {
-          id: v.id,
-          teamName: v.teamName,
-          members: v.members,
-          isMultiWalk: v.isMultiWalk,
-          category: v.category,
+          id: v.getId(),
+          teamName: v.getTeamName(),
+          members: v.getMembers(),
+          isMultiWalk: v.getIsMultiWalk(),
+          category: v.getCategory(),
         };
       })
     );

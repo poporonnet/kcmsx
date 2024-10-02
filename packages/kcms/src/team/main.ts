@@ -4,7 +4,7 @@ import { bulkEntryRequestSchema, entryRequestSchema } from './schema.js';
 import { Controller } from './controller.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { errorToCode } from './adaptor/errors.js';
-import { DummyRepository } from './adaptor/dummyRepository';
+import { DummyRepository } from './adaptor/repository/dummyRepository';
 
 export const entryHandler = new Hono();
 export const controller = new Controller(new DummyRepository());
@@ -17,6 +17,7 @@ entryHandler.post('/', zValidator('json', entryRequestSchema), async (c) => {
     members,
     isMultiWalk,
     category,
+    departmentType: category === 'Open' ? 'open' : 'elementary',
   });
   if (Result.isErr(res)) {
     return c.json({ error: errorToCode(res[1]) }, 400);
@@ -48,6 +49,7 @@ entryHandler.post('/bulk', zValidator('json', bulkEntryRequestSchema), async (c)
       members: v.members,
       isMultiWalk: v.isMultiWalk,
       category: v.category,
+      departmentType: v.category === 'Open' ? 'open' : 'elementary',
     });
     if (Result.isErr(res)) {
       return c.json({ error: errorToCode(res[1]) }, 400);

@@ -18,7 +18,7 @@
     "@mantine/core": "^7.3.1",
     "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.3.1",
-    "@mantine/notifications": "7.12.2",
+    "@mantine/notifications": "7.13.0",
     "@tabler/icons-react": "^3.0.0",
     "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
@@ -55,5 +55,5 @@
     "vite": "^5.0.0",
     "vitest": "^2.0.0"
   },
-  "packageManager": "pnpm@9.10.0"
+  "packageManager": "pnpm@9.11.0"
 }

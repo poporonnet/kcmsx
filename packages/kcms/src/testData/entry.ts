@@ -1,4 +1,5 @@
 import { Team, TeamID } from '../team/models/team.js';
+import { DepartmentType } from 'config';
 
 export const TestEntryData = {
   ElementaryMultiWalk: Team.new({
@@ -7,6 +8,7 @@ export const TestEntryData = {
     members: ['TestTaro1'],
     isMultiWalk: true,
     category: 'Elementary',
+    departmentType: 'elementary',
   }),
   ElementaryWheel: Team.new({
     id: '2' as TeamID,
@@ -14,6 +16,7 @@ export const TestEntryData = {
     members: ['TestTaro2'],
     isMultiWalk: false,
     category: 'Elementary',
+    departmentType: 'elementary',
   }),
   // Openで車輪型は存在しない
   OpenMultiWalk: Team.new({
@@ -22,6 +25,7 @@ export const TestEntryData = {
     members: ['TestTaro3'],
     isMultiWalk: true,
     category: 'Open',
+    departmentType: 'open',
   }),
   OpenMultiWalk2: Team.new({
     id: '4' as TeamID,
@@ -29,6 +33,7 @@ export const TestEntryData = {
     members: ['TestTaro4'],
     isMultiWalk: true,
     category: 'Open',
+    departmentType: 'open',
   }),
   // 1の重複
   ElementaryMultiWalkExists: Team.new({
@@ -37,6 +42,7 @@ export const TestEntryData = {
     members: ['TestTaro1'],
     isMultiWalk: true,
     category: 'Elementary',
+    departmentType: 'elementary',
   }),
   // 2の重複
   ElementaryWheelExists: Team.new({
@@ -45,6 +51,7 @@ export const TestEntryData = {
     members: ['TestTaro2'],
     isMultiWalk: false,
     category: 'Elementary',
+    departmentType: 'elementary',
   }),
   // 3の重複
   OpenMultiWalkExists: Team.new({
@@ -53,6 +60,7 @@ export const TestEntryData = {
     members: ['TestTaro3'],
     isMultiWalk: true,
     category: 'Open',
+    departmentType: 'open',
   }),
   NotEntered: Team.reconstruct({
     id: '6' as TeamID,
@@ -60,6 +68,7 @@ export const TestEntryData = {
     members: ['TestTaro6'],
     isMultiWalk: true,
     category: 'Elementary',
+    departmentType: 'elementary',
     isEntered: false,
   }),
   Entered: Team.reconstruct({
@@ -68,60 +77,44 @@ export const TestEntryData = {
     members: ['TestTaro7'],
     isMultiWalk: true,
     category: 'Elementary',
+    departmentType: 'elementary',
     isEntered: true,
   }),
 };
 
-type entryBase<I extends string, M extends boolean, C extends 'Elementary' | 'Open'> = {
-  id: I;
-  teamName: `TestTeam${I}`;
-  members: [`TestTaro${I}`];
-  isMultiWalk: M;
-  category: C;
+const testDataGenerator = (args: {
+  clubName?: string;
+  teamName: string;
+  department: DepartmentType;
+  isEntered: boolean;
+}) => {
+  return Team.reconstruct({
+    id: Math.random().toString() as TeamID,
+    teamName: `${args.clubName ?? 'N'}${args.teamName}`,
+    members: [`TestTaro ${Math.random()}`],
+    isMultiWalk: true,
+    category: args.department === 'elementary' ? 'Elementary' : 'Open',
+    departmentType: args.department,
+    clubName: args.clubName,
+    isEntered: args.isEntered,
+  });
 };
 
-const entryArgsBuilder = <I extends string, M extends boolean, C extends 'Elementary' | 'Open'>(
-  i: I,
-  m: M,
-  c: C
-): entryBase<I, M, C> => {
-  return {
-    id: i,
-    teamName: `TestTeam${i}`,
-    members: [`TestTaro${i}`],
-    isMultiWalk: m,
-    category: c,
-  };
-};
-
-// TestEntrySet テスト用エントリー用データ, Matchのテスト用に偶数にしてある
-// ToDo: Team.newだとエントリーしていない状態で初期化されるので、Team.reconstructを使う
-export const TestEntrySet = {
-  // 小学生部門 多脚型
-  ElementaryMultiWalk: {
-    101: Team.new(entryArgsBuilder('101' as TeamID, true, 'Elementary')),
-    102: Team.new(entryArgsBuilder('102' as TeamID, true, 'Elementary')),
-    103: Team.new(entryArgsBuilder('103' as TeamID, true, 'Elementary')),
-    104: Team.new(entryArgsBuilder('104' as TeamID, true, 'Elementary')),
-    105: Team.new(entryArgsBuilder('105' as TeamID, true, 'Elementary')),
-    106: Team.new(entryArgsBuilder('106' as TeamID, true, 'Elementary')),
-  },
-  // 小学生部門 車輪型
-  ElementaryWheel: {
-    107: Team.new(entryArgsBuilder('107' as TeamID, false, 'Elementary')),
-    108: Team.new(entryArgsBuilder('108' as TeamID, false, 'Elementary')),
-    109: Team.new(entryArgsBuilder('109' as TeamID, false, 'Elementary')),
-    110: Team.new(entryArgsBuilder('110' as TeamID, false, 'Elementary')),
-    111: Team.new(entryArgsBuilder('111' as TeamID, false, 'Elementary')),
-    112: Team.new(entryArgsBuilder('112' as TeamID, false, 'Elementary')),
-  },
-  // オープン部門 (多脚型のみ)
-  OpenMultiWalk: {
-    113: Team.new(entryArgsBuilder('113' as TeamID, false, 'Open')),
-    114: Team.new(entryArgsBuilder('114' as TeamID, false, 'Open')),
-    115: Team.new(entryArgsBuilder('115' as TeamID, false, 'Open')),
-    116: Team.new(entryArgsBuilder('116' as TeamID, false, 'Open')),
-    117: Team.new(entryArgsBuilder('117' as TeamID, false, 'Open')),
-    118: Team.new(entryArgsBuilder('118' as TeamID, false, 'Open')),
-  },
-} as const;
+/*
+ * TestEntrySet テスト用エントリー用データ, Matchのテスト用
+ */
+export const testTeamData: Map<TeamID, Team> = new Map<TeamID, Team>(
+  [
+    testDataGenerator({ clubName: 'A', teamName: '1', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'A', teamName: '2', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'A', teamName: '3', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'A', teamName: '4', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'B', teamName: '1', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'B', teamName: '2', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'B', teamName: '3', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'C', teamName: '1', department: 'elementary', isEntered: true }),
+    testDataGenerator({ clubName: 'C', teamName: '2', department: 'elementary', isEntered: true }),
+    testDataGenerator({ teamName: '1', department: 'elementary', isEntered: true }), // N1
+    testDataGenerator({ teamName: '2', department: 'elementary', isEntered: true }), // N2
+  ].map((v) => [v.getId(), v])
+);

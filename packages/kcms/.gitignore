@@ -132,3 +132,5 @@ dist
 
 build/
 data.json
+*.db
+*.db-journal
