@@ -108,7 +108,6 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
 
   async update(match: MainMatch): Promise<Result.Result<Error, void>> {
     try {
-      // ToDo: ここでrunResultも更新する
       await this.client.mainMatch.update({
         where: {
           id: match.getId(),
