@@ -5,7 +5,7 @@ export interface Team {
   members: string[];
   clubName: string;
   robotType: string;
-  category: string;
+  departmentType: string;
   isEntered: boolean;
 }
 
@@ -17,7 +17,7 @@ export const teams = [
     members: ["メンバー1", "メンバー2"],
     clubName: "RubyClub",
     robotType: "wheel",
-    category: "elementary",
+    departmentType: "elementary",
     isEntered: true,
   },
   {
@@ -27,7 +27,7 @@ export const teams = [
     members: ["メンバー3"],
     clubName: "RubyClub",
     robotType: "wheel",
-    category: "elementary",
+    departmentType: "elementary",
     isEntered: false,
   },
   {
@@ -37,7 +37,7 @@ export const teams = [
     members: ["メンバー4"],
     clubName: "",
     robotType: "leg",
-    category: "open",
+    departmentType: "open",
     isEntered: true,
   },
 ] as const satisfies Team[];

@@ -43,7 +43,7 @@ export class Controller {
           clubName: unwrapped.getClubName() ?? '',
           entryCode: '',
           robotType: unwrapped.getRobotType(),
-          category: unwrapped.getDepartmentType(),
+          departmentType: unwrapped.getDepartmentType(),
           isEntered: unwrapped.getIsEntered(),
         },
       ],
@@ -66,7 +66,7 @@ export class Controller {
           clubName: v.getClubName() ?? '',
           entryCode: '',
           robotType: v.getRobotType(),
-          category: v.getDepartmentType(),
+          departmentType: v.getDepartmentType(),
           isEntered: v.getIsEntered(),
         };
       }),
