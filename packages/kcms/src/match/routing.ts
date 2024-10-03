@@ -4,8 +4,10 @@ import {
   GetMatchResponseSchema,
   GetMatchTypeParamsSchema,
   GetMatchTypeResponseSchema,
+  GetMatchIdParamsSchema,
+  GetMatchIdResponseSchema,
   GetMatchRunResultResponseSchema,
-  GetMatchRunResultRequestSchema,
+  GetMatchRunResultParamsSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -55,10 +57,34 @@ export const GetMatchTypeRoute = createRoute({
   },
 });
 
+export const GetMatchIdRoute = createRoute({
+  method: 'get',
+  path: '/match/{matchType}/{matchId}',
+  request: { params: GetMatchIdParamsSchema },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetMatchIdResponseSchema,
+        },
+      },
+      description: 'Retrieve all matches by match type',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
 export const GetMatchRunResultRoute = createRoute({
   method: 'get',
   path: '/match/{matchType}/{matchId}/run_result',
-  request: { params: GetMatchRunResultRequestSchema },
+  request: { params: GetMatchRunResultParamsSchema },
   responses: {
     200: {
       content: {
