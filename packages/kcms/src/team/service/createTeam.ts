@@ -19,43 +19,48 @@ export class CreateTeamService {
    * @param input {@link TeamCreateArgs} チームのデータ
    */
   async create(
-    input: Omit<TeamCreateArgs, 'id' | 'isEntered'>
-  ): Promise<Result.Result<Error, Team>> {
-    const id = this.idGenerator.generate<Team>();
-    if (Result.isErr(id)) {
-      return Result.err(id[1]);
-    }
+    input: Omit<TeamCreateArgs, 'id' | 'isEntered'>[]
+  ): Promise<Result.Result<Error, Team[]>> {
+    const res: Team[] = [];
 
-    // チーム名は重複できない
-    if (await this.isTeamNameExists(input.teamName)) {
-      return Result.err(new Error('teamName Exists'));
-    }
+    for (const v of input) {
+      const id = this.idGenerator.generate<Team>();
+      if (Result.isErr(id)) {
+        return Result.err(id[1]);
+      }
 
-    // チームメンバーの制約
-    // 共通: 0人のチームは作れない
-    if (input.members.length === 0) {
-      return Result.err(new Error('no member'));
-    }
+      // チーム名は重複できない
+      if (await this.isTeamNameExists(v.teamName)) {
+        return Result.err(new Error('teamName Exists'));
+      }
 
-    // 最大は2人
-    if (input.members.length > 2) {
-      return Result.err(new Error('too many members'));
-    }
+      // チームメンバーの制約
+      // 共通: 0人のチームは作れない
+      if (v.members.length === 0) {
+        return Result.err(new Error('no member'));
+      }
 
-    const createArgs: Omit<TeamCreateArgs, 'isEntered'> = {
-      id: id[1],
-      teamName: input.teamName,
-      members: input.members,
-      departmentType: input.departmentType,
-      robotType: input.robotType,
-    };
-    const team = Team.new(createArgs);
-    const res = await this.repository.create(team);
-    if (Result.isErr(res)) {
-      return Result.err(res[1]);
-    }
+      // 最大は2人
+      if (v.members.length > 2) {
+        return Result.err(new Error('too many members'));
+      }
 
-    return Result.ok(res[1]);
+      const createArgs: Omit<TeamCreateArgs, 'isEntered'> = {
+        id: id[1],
+        teamName: v.teamName,
+        members: v.members,
+        departmentType: v.departmentType,
+        robotType: v.robotType,
+      };
+      const team = Team.new(createArgs);
+      const teamRes = await this.repository.create(team);
+      if (Result.isErr(teamRes)) {
+        return Result.err(teamRes[1]);
+      }
+
+      res.push(team);
+    }
+    return Result.ok(res);
   }
 
   /**
