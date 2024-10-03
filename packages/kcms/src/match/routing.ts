@@ -76,5 +76,4 @@ export const GetMatchRunResultRoute = createRoute({
       description: 'Common error',
     },
   },
-  
 });
