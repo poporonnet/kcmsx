@@ -22,13 +22,13 @@ export interface PreMatch {
 export interface MainMatch {
   id: string;
   matchCode: `${number}-${number}`;
-  Team1:
+  team1:
     | {
         id: (typeof teams)[number]["id"];
         teamName: (typeof teams)[number]["name"];
       }
     | undefined;
-  Team2:
+  team2:
     | {
         id: (typeof teams)[number]["id"];
         teamName: (typeof teams)[number]["name"];
@@ -95,11 +95,11 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    Team1: {
+    team1: {
       id: "1392387",
       teamName: "かに1",
     },
-    Team2: {
+    team2: {
       id: "7549586",
       teamName: "かに2",
     },
