@@ -105,8 +105,8 @@ export const PostMatchGenerateResponseSchema = z.array(
         team1: true,
         team2: true,
       }).extend({
-        Team1ID: z.string().optional().openapi({ example: '45098607' }),
-        Team2ID: z.string().optional().openapi({ example: '2230392' }),
+        team1ID: z.string().optional().openapi({ example: '45098607' }),
+        team2ID: z.string().optional().openapi({ example: '2230392' }),
       })
     )
 );
