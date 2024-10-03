@@ -46,3 +46,4 @@ export const GetMatchTypeParamsSchema = z.object({
 });
 
 export const GetMatchTypeResponseSchema = PreSchema.or(MainSchema);
+export const GetMatchRunResultSchema = RunResultSchema;
