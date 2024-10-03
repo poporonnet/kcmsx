@@ -1,5 +1,5 @@
 import { z } from '@hono/zod-openapi';
-
+import { config, pick } from 'config';
 export const CommonErrorSchema = z.object({
   description: z.string().openapi({ example: '存在しないカテゴリです' }),
 });
@@ -46,4 +46,9 @@ export const GetMatchTypeParamsSchema = z.object({
 });
 
 export const GetMatchTypeResponseSchema = PreSchema.or(MainSchema);
-export const GetMatchRunResultSchema = RunResultSchema;
+export const GetMatchRunResultResponseSchema = z.array(RunResultSchema).max(4);
+
+export const GetMatchRunResultRequestSchema = z.object({
+  matchType: z.enum(pick(config.matches, 'type')).openapi({ example: config.matches[0].type }),
+  matchId: z.string().openapi({ example: '320984' }),
+});
