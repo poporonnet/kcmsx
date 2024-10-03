@@ -52,3 +52,27 @@ export const GetMatchTypeRoute = createRoute({
     },
   },
 });
+
+export const GetMatchIdRoute = createRoute({
+  method: 'get',
+  path: '/match/{matchType}/{matchId}',
+  request: { params: GetMatchTypeParamsSchema },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetMatchTypeResponseSchema,
+        },
+      },
+      description: 'Retrieve all matches by match type',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});

@@ -41,8 +41,17 @@ export const GetMatchResponseSchema = z.object({
   main: z.array(MainSchema),
 });
 
+const MatchTypeSchema = z.enum(['pre', 'main']).openapi({ example: 'main' });
+
+const MatchIdSchema = z.string().openapi({ example: '70983405' });
+
 export const GetMatchTypeParamsSchema = z.object({
-  matchType: z.enum(['pre', 'main']).openapi({ example: 'main' }),
+  matchType: MatchTypeSchema,
 });
 
 export const GetMatchTypeResponseSchema = PreSchema.or(MainSchema);
+
+export const GetMatchIdSchema = z.object({
+  matchType: MatchTypeSchema,
+  matchId: MatchIdSchema,
+});
