@@ -58,6 +58,14 @@ const MatchIdSchema = z.string().openapi({
   example: '70983405',
 });
 
+const DepartmentTypeSchema = z.enum(pick(config.departments, 'type')).openapi({
+  param: {
+    name: 'departmentType',
+    in: 'path',
+  },
+  example: config.departments[0].type,
+});
+
 export const GetMatchTypeParamsSchema = z.object({
   matchType: MatchTypeSchema,
 });
@@ -77,3 +85,28 @@ export const GetMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
   matchId: MatchIdSchema,
 });
+
+export const PostMatchGenerateParamsSchema = z.object({
+  matchType: MatchTypeSchema,
+  departmentType: DepartmentTypeSchema,
+});
+
+export const PostMatchGenerateResponseSchema = z.array(
+  PreSchema.omit({
+    rightTeam: true,
+    leftTeam: true,
+  })
+    .extend({
+      leftTeamID: z.string().optional().openapi({ example: '45098607' }),
+      rightTeamID: z.string().optional().openapi({ example: '2230392' }),
+    })
+    .or(
+      MainSchema.omit({
+        team1: true,
+        team2: true,
+      }).extend({
+        Team1ID: z.string().optional().openapi({ example: '45098607' }),
+        Team2ID: z.string().optional().openapi({ example: '2230392' }),
+      })
+    )
+);
