@@ -49,9 +49,11 @@ export const GetMatchTypeParamsSchema = z.object({
   matchType: MatchTypeSchema,
 });
 
-export const GetMatchTypeResponseSchema = PreSchema.or(MainSchema);
+export const GetMatchTypeResponseSchema = z.array(PreSchema.or(MainSchema));
 
-export const GetMatchIdSchema = z.object({
+export const GetMatchIdParamsSchema = z.object({
   matchType: MatchTypeSchema,
   matchId: MatchIdSchema,
 });
+
+export const GetMatchIdResponseSchema = PreSchema.or(MainSchema);
