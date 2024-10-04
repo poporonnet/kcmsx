@@ -73,7 +73,7 @@ export const GetMatchIdResponseSchema = PreSchema.or(MainSchema);
 
 export const GetMatchRunResultResponseSchema = z.array(RunResultSchema).max(4);
 
-export const GetMatchRunResultRequestSchema = z.object({
+export const GetMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
   matchId: MatchIdSchema,
 });

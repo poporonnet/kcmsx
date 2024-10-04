@@ -7,9 +7,9 @@ import {
   GetMatchIdParamsSchema,
   GetMatchIdResponseSchema,
   GetMatchRunResultResponseSchema,
-  GetMatchRunResultRequestSchema,
   PostMatchRunResultRequestSchema,
   PostMatchRunResultRequestPathParamsSchema,
+  GetMatchRunResultParamsSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -86,7 +86,7 @@ export const GetMatchIdRoute = createRoute({
 export const GetMatchRunResultRoute = createRoute({
   method: 'get',
   path: '/match/{matchType}/{matchId}/run_result',
-  request: { params: GetMatchRunResultRequestSchema },
+  request: { params: GetMatchRunResultParamsSchema },
   responses: {
     200: {
       content: {
