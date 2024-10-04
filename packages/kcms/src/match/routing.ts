@@ -7,6 +7,8 @@ import {
   GetMatchIdParamsSchema,
   GetMatchIdResponseSchema,
   GetMatchRunResultResponseSchema,
+  PostMatchRunResultRequestSchema,
+  PostMatchRunResultRequestPathParamsSchema,
   GetMatchRunResultParamsSchema,
 } from '../match/adaptor/validator/match';
 
@@ -93,6 +95,31 @@ export const GetMatchRunResultRoute = createRoute({
         },
       },
       description: 'Retrieve run result',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+export const PostMatchRunResultRoute = createRoute({
+  method: 'post',
+  path: '/match/{matchType}/{id}/run_result',
+  request: {
+    params: PostMatchRunResultRequestPathParamsSchema,
+    body: {
+      content: {
+        'application/json': { schema: PostMatchRunResultRequestSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'Post run result',
     },
     400: {
       content: {
