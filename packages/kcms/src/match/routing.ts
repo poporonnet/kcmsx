@@ -8,7 +8,7 @@ import {
   GetMatchIdResponseSchema,
   GetMatchRunResultResponseSchema,
   PostMatchRunResultRequestSchema,
-  PostMatchRunResultRequestPathParamsSchema,
+  PostMatchRunResultParamsSchema,
   GetMatchRunResultParamsSchema,
 } from '../match/adaptor/validator/match';
 
@@ -110,7 +110,7 @@ export const PostMatchRunResultRoute = createRoute({
   method: 'post',
   path: '/match/{matchType}/{id}/run_result',
   request: {
-    params: PostMatchRunResultRequestPathParamsSchema,
+    params: PostMatchRunResultParamsSchema,
     body: {
       content: {
         'application/json': { schema: PostMatchRunResultRequestSchema },
