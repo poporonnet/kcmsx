@@ -52,7 +52,7 @@ const MatchTypeSchema = z.enum(pick(config.matches, 'type')).openapi({
 
 const MatchIdSchema = z.string().openapi({
   param: {
-    name: 'matchId',
+    name: 'matchID',
     in: 'path',
   },
   example: '70983405',
@@ -74,7 +74,7 @@ export const GetMatchTypeResponseSchema = z.array(PreSchema.or(MainSchema));
 
 export const GetMatchIdParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  matchId: MatchIdSchema,
+  matchID: MatchIdSchema,
 });
 
 export const GetMatchIdResponseSchema = PreSchema.or(MainSchema);
@@ -83,7 +83,7 @@ export const GetMatchRunResultResponseSchema = z.array(RunResultSchema).max(4);
 
 export const GetMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  matchId: MatchIdSchema,
+  matchID: MatchIdSchema,
 });
 
 export const PostMatchGenerateParamsSchema = z.object({
@@ -112,7 +112,7 @@ export const PostMatchGenerateResponseSchema = z.array(
 
 export const PostMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  id: z.string().openapi({ example: '320984' }),
+  matchID: z.string().openapi({ example: '320984' }),
 });
 
 export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).min(1);
