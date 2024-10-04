@@ -1,5 +1,6 @@
 import { z } from '@hono/zod-openapi';
 import { config, pick } from 'config';
+
 export const CommonErrorSchema = z.object({
   description: z.string().openapi({ example: '存在しないカテゴリです' }),
 });
@@ -41,22 +42,44 @@ export const GetMatchResponseSchema = z.object({
   main: z.array(MainSchema),
 });
 
-export const GetMatchTypeParamsSchema = z.object({
-  matchType: z.enum(['pre', 'main']).openapi({ example: 'main' }),
+const MatchTypeSchema = z.enum(pick(config.matches, 'type')).openapi({
+  param: {
+    name: 'matchType',
+    in: 'path',
+  },
+  example: config.matches[1].type,
 });
 
-export const GetMatchTypeResponseSchema = PreSchema.or(MainSchema);
+const MatchIdSchema = z.string().openapi({
+  param: {
+    name: 'matchId',
+    in: 'path',
+  },
+  example: '70983405',
+});
+
+export const GetMatchTypeParamsSchema = z.object({
+  matchType: MatchTypeSchema,
+});
+
+export const GetMatchTypeResponseSchema = z.array(PreSchema.or(MainSchema));
+
+export const GetMatchIdParamsSchema = z.object({
+  matchType: MatchTypeSchema,
+  matchId: MatchIdSchema,
+});
+
+export const GetMatchIdResponseSchema = PreSchema.or(MainSchema);
+
 export const GetMatchRunResultResponseSchema = z.array(RunResultSchema).max(4);
 
 export const GetMatchRunResultRequestSchema = z.object({
-  matchType: z.enum(pick(config.matches, 'type')).openapi({ example: config.matches[0].type }),
-  matchId: z.string().openapi({ example: '320984' }),
+  matchType: MatchTypeSchema,
+  matchId: MatchIdSchema,
 });
-
 
 export const PostMatchRunResultRequestPathParamsSchema = z.object({
   matchType: z.enum(pick(config.matches, 'type')).openapi({ example: config.matches[0].type }),
   id: z.string().openapi({ example: '320984' }),
 });
 export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).min(1);
-

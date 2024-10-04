@@ -1,70 +1,88 @@
 import { RunResult } from "./runResult";
 import { teams } from "./team";
 
-export interface Match {
+export interface PreMatch {
   id: string;
   matchCode: `${number}-${number}`;
-  left:
+  leftTeam:
     | {
         id: (typeof teams)[number]["id"];
         teamName: (typeof teams)[number]["name"];
       }
-    | {};
-  right:
+    | undefined;
+  rightTeam:
     | {
         id: (typeof teams)[number]["id"];
         teamName: (typeof teams)[number]["name"];
       }
-    | {};
-  winnerId?: (typeof teams)[number]["id"];
+    | undefined;
+  runResults: RunResult[];
+}
+
+export interface MainMatch {
+  id: string;
+  matchCode: `${number}-${number}`;
+  team1:
+    | {
+        id: (typeof teams)[number]["id"];
+        teamName: (typeof teams)[number]["name"];
+      }
+    | undefined;
+  team2:
+    | {
+        id: (typeof teams)[number]["id"];
+        teamName: (typeof teams)[number]["name"];
+      }
+    | undefined;
+  winnerID: (typeof teams)[number]["id"];
   runResults: RunResult[];
 }
 
 interface Matches {
-  pre: Match[];
-  main: Match[];
+  pre: PreMatch[];
+  main: MainMatch[];
 }
 
-export const preMatches: Match[] = [
+export const preMatches: PreMatch[] = [
   {
     id: "6582553",
     matchCode: "1-1",
-    left: {
+    leftTeam: {
       id: "1392387",
       teamName: "かに1",
     },
-    right: {
+    rightTeam: {
       id: "7549586",
       teamName: "かに2",
     },
     runResults: [
       {
         id: "3548129",
-        teamId: "1392387",
+        teamID: "1392387",
         points: 4,
         goalTimeSeconds: 130,
         finishState: "finished",
       },
       {
         id: "13847917",
-        teamId: "7549586",
+        teamID: "7549586",
         points: 4,
-        finishState: "retired",
+        finishState: "goal",
       },
     ],
   },
   {
     id: "1583452",
     matchCode: "3-1",
-    left: {
+    leftTeam: {
       id: "4578932",
       teamName: "かに3",
     },
-    right: {},
+    rightTeam: undefined,
     runResults: [
       {
         id: "983156",
-        teamId: "4578932",
+        teamID: "4578932",
         points: 8,
         goalTimeSeconds: 120,
         finishState: "finished",
@@ -73,30 +91,30 @@ export const preMatches: Match[] = [
   },
 ];
 
-export const mainMatches: Match[] = [
+export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    left: {
+    team1: {
       id: "1392387",
       teamName: "かに1",
     },
-    right: {
+    team2: {
       id: "7549586",
       teamName: "かに2",
     },
-    winnerId: "1392387",
+    winnerID: "1392387",
     runResults: [
       {
         id: "4279861",
-        teamId: "1392387",
+        teamID: "1392387",
         points: 5,
         goalTimeSeconds: 150,
         finishState: "finished",
       },
       {
         id: "987326732",
-        teamId: "7549586",
+        teamID: "7549586",
         points: 4,
         goalTimeSeconds: 130,
         finishState: "finished",

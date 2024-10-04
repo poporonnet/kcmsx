@@ -4,6 +4,8 @@ import {
   GetMatchResponseSchema,
   GetMatchTypeParamsSchema,
   GetMatchTypeResponseSchema,
+  GetMatchIdParamsSchema,
+  GetMatchIdResponseSchema,
   GetMatchRunResultResponseSchema,
   GetMatchRunResultRequestSchema,
   PostMatchRunResultRequestSchema,
@@ -42,6 +44,30 @@ export const GetMatchTypeRoute = createRoute({
       content: {
         'application/json': {
           schema: GetMatchTypeResponseSchema,
+        },
+      },
+      description: 'Retrieve all matches by match type',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetMatchIdRoute = createRoute({
+  method: 'get',
+  path: '/match/{matchType}/{matchId}',
+  request: { params: GetMatchIdParamsSchema },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetMatchIdResponseSchema,
         },
       },
       description: 'Retrieve all matches by match type',
