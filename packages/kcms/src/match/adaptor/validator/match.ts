@@ -78,8 +78,8 @@ export const GetMatchRunResultParamsSchema = z.object({
   matchId: MatchIdSchema,
 });
 
-export const PostMatchRunResultRequestPathParamsSchema = z.object({
-  matchType: z.enum(pick(config.matches, 'type')).openapi({ example: config.matches[0].type }),
+export const PostMatchRunResultParamsSchema = z.object({
+  matchType: MatchTypeSchema,
   id: z.string().openapi({ example: '320984' }),
 });
 export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).min(1);
