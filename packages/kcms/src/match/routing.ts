@@ -72,7 +72,7 @@ export const GetMatchIdRoute = createRoute({
           schema: GetMatchIdResponseSchema,
         },
       },
-      description: 'Retrieve all matches by matchId',
+      description: 'Retrieve matches by matchId',
     },
     400: {
       content: {
