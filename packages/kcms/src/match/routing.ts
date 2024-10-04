@@ -61,7 +61,7 @@ export const GetMatchTypeRoute = createRoute({
 
 export const GetMatchIdRoute = createRoute({
   method: 'get',
-  path: '/match/{matchType}/{matchId}',
+  path: '/match/{matchType}/{matchID}',
   request: { params: GetMatchIdParamsSchema },
   responses: {
     200: {
@@ -85,7 +85,7 @@ export const GetMatchIdRoute = createRoute({
 
 export const GetMatchRunResultRoute = createRoute({
   method: 'get',
-  path: '/match/{matchType}/{matchId}/run_result',
+  path: '/match/{matchType}/{matchID}/run_result',
   request: { params: GetMatchRunResultParamsSchema },
   responses: {
     200: {
@@ -108,7 +108,7 @@ export const GetMatchRunResultRoute = createRoute({
 });
 export const PostMatchRunResultRoute = createRoute({
   method: 'post',
-  path: '/match/{matchType}/{id}/run_result',
+  path: '/match/{matchType}/{matchID}/run_result',
   request: {
     params: PostMatchRunResultParamsSchema,
     body: {
