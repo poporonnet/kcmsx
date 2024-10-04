@@ -10,7 +10,7 @@ export class FetchRunResultService {
     private readonly mainMatchRepository: MainMatchRepository,
     private readonly preMatchRepository: PreMatchRepository
   ) {}
-  async fetch(
+  async handle(
     matchType: MatchType,
     matchID: MainMatchID | PreMatchID
   ): Promise<Result.Result<Error, RunResult[]>> {
