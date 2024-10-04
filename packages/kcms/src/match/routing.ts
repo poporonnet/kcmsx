@@ -131,6 +131,7 @@ export const GetMatchGenerateRoute = createRoute({
       description: 'Common error',
     },
   },
+});
 
 export const PostMatchRunResultRoute = createRoute({
   method: 'post',
