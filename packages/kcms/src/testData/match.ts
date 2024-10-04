@@ -258,14 +258,14 @@ export const testRankingMainMatchData = [
         finishState: 'FINISHED',
       }),
       RunResult.new({
-        id: '80' as RunResultID,
+        id: '82' as RunResultID,
         teamId: '91' as TeamID,
         points: 12,
         goalTimeSeconds: Infinity,
         finishState: 'FINISHED',
       }),
       RunResult.new({
-        id: '81' as RunResultID,
+        id: '83' as RunResultID,
         teamId: '92' as TeamID,
         points: 1,
         goalTimeSeconds: 80,
