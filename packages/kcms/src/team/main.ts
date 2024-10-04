@@ -8,7 +8,6 @@ import { PrismaTeamRepository } from './adaptor/repository/prismaRepository';
 import { prismaClient } from '../adaptor';
 
 export const teamHandler = new OpenAPIHono();
-console.log(process.env.NODE_ENV);
 const isProduction = process.env.NODE_ENV === 'production';
 export const controller = new Controller(
   isProduction ? new PrismaTeamRepository(prismaClient) : new DummyRepository()
@@ -31,7 +30,6 @@ teamHandler.openapi(PostTeamsRoute, async (c) => {
 
   const res = await controller.create(request);
   if (Result.isErr(res)) {
-    console.log(res);
     return c.json({ description: errorToCode(res[1]) }, 400);
   }
   const teams = Result.unwrap(res);
