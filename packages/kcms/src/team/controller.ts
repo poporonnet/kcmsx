@@ -4,8 +4,11 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from './service/get.js';
 import { DeleteEntryService } from './service/delete.js';
 import { SnowflakeIDGenerator } from '../id/main.js';
-import { DepartmentType, RobotType } from 'config';
-import { GetTeamsResponseSchema } from './adaptor/validator/team';
+import {
+  GetTeamsResponseSchema,
+  PostTeamsRequestSchema,
+  PostTeamsResponseSchema,
+} from './adaptor/validator/team';
 import { z } from '@hono/zod-openapi';
 
 export class Controller {
@@ -22,32 +25,38 @@ export class Controller {
     this.deleteService = new DeleteEntryService(repository);
   }
 
-  async create(args: {
-    teamName: string;
-    members: string[];
-    robotType: RobotType;
-    departmentType: DepartmentType;
-  }): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
-    const res = await this.createTeam.create(args);
+  async create(
+    args: z.infer<typeof PostTeamsRequestSchema>
+  ): Promise<Result.Result<Error, z.infer<typeof PostTeamsResponseSchema>>> {
+    const res = await this.createTeam.create(
+      args.map((v) => {
+        return {
+          teamName: v.name,
+          members: v.members,
+          departmentType: v.departmentType,
+          robotType: v.robotType,
+        };
+      })
+    );
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
 
     const unwrapped = Result.unwrap(res);
-    return Result.ok({
-      teams: [
-        {
-          id: unwrapped.getId(),
-          name: unwrapped.getTeamName(),
-          members: unwrapped.getMembers() as [string, ...string[]],
-          clubName: unwrapped.getClubName() ?? '',
+    return Result.ok(
+      unwrapped.map((v) => {
+        return {
+          id: v.getId(),
+          name: v.getTeamName(),
+          members: v.getMembers() as [string, ...string[]],
+          clubName: v.getClubName() ?? '',
           entryCode: '',
-          robotType: unwrapped.getRobotType(),
-          departmentType: unwrapped.getDepartmentType(),
-          isEntered: unwrapped.getIsEntered(),
-        },
-      ],
-    });
+          robotType: v.getRobotType(),
+          departmentType: v.getDepartmentType(),
+          isEntered: v.getIsEntered(),
+        };
+      })
+    );
   }
 
   async get(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
