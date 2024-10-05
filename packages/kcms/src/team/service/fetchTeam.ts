@@ -1,5 +1,5 @@
 import { TeamRepository } from '../models/repository';
-import { Team } from '../models/team';
+import { Team, TeamID } from '../models/team';
 import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class FetchTeamService {
@@ -9,12 +9,11 @@ export class FetchTeamService {
     this.repository = repository;
   }
 
-  async handle(teamID: string): Promise<Result.Result<Error, Team>> {
+  async handle(teamID: TeamID): Promise<Result.Result<Error, Team>> {
     const teamRes = await this.repository.findByID(teamID);
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));
     }
-    const team = Option.unwrap(teamRes);
-    return Result.ok(team);
+    return Result.ok(Option.unwrap(teamRes));
   }
 }
