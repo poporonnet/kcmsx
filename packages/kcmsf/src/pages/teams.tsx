@@ -1,11 +1,11 @@
 import {
   Button,
-  Checkbox,
   ComboboxItem,
   Flex,
   Loader,
   Space,
   Table,
+  Text,
   Title,
   Tooltip,
 } from "@mantine/core";
@@ -13,6 +13,7 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { config, DepartmentType, RobotType } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter } from "../components/Filter";
+import { LoaderButton } from "../components/LoaderButton";
 import { Order, Sort } from "../components/Sort";
 
 type Team = {
@@ -44,7 +45,7 @@ type SortState = {
 type FilterState = Partial<Team>;
 
 export const Teams = () => {
-  const [teams, setTeams] = useState<Team[]>();
+  const [teams, setTeams] = useState<Map<string, Team>>();
   const [sortState, setSortState] = useState<SortState>({
     key: "entryCode",
     order: "asc",
@@ -68,7 +69,9 @@ export const Teams = () => {
 
     const clubNames = [
       ...new Set<string>(
-        teams.map((team) => team.clubName).filter((value) => value != "")
+        [...teams.values()]
+          .map((team) => team.clubName)
+          .filter((value) => value != "")
       ),
     ].sort((a, b) => a.localeCompare(b));
     const clubName: { value: string; label: string }[] = clubNames
@@ -127,8 +130,38 @@ export const Teams = () => {
   );
 
   const processedTeams = useMemo(
-    () => (teams ? Cat.cat(teams).feed(sort).feed(filter).value : undefined),
+    () =>
+      teams
+        ? Cat.cat([...teams.values()])
+            .feed(sort)
+            .feed(filter).value
+        : undefined,
     [teams, sort, filter]
+  );
+
+  const entry = useCallback(
+    async (teamID: string, isEnter: boolean) => {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/team/${teamID}/entry`,
+        {
+          method: isEnter ? "POST" : "DELETE",
+        }
+      );
+      if (!response.ok) return;
+
+      setTeams((prev) => {
+        if (!prev) return prev;
+
+        const team = prev.get(teamID);
+        if (!team) return prev;
+
+        team.isEntered = isEnter;
+        prev.set(teamID, team);
+
+        return new Map(prev);
+      });
+    },
+    [setTeams]
   );
 
   useEffect(() => {
@@ -138,7 +171,11 @@ export const Teams = () => {
       }).catch(() => undefined);
       const teamResponse = (await response?.json()) as TeamResponse | undefined;
 
-      setTeams(teamResponse?.teams);
+      setTeams(
+        teamResponse
+          ? new Map(teamResponse.teams.map((team) => [team.id, team]))
+          : undefined
+      );
     };
     getTeams();
   }, []);
@@ -162,7 +199,8 @@ export const Teams = () => {
             filterData={filterData}
             filterState={filterState}
             setFilterState={setFilterState}
-            enterable={false}
+            enterable={true} // TODO: バックエンドにエントリー期間か判定する機能を作る？
+            entry={entry}
           />
         </>
       ) : (
@@ -180,6 +218,7 @@ const TeamTable = ({
   filterState,
   setFilterState,
   enterable,
+  entry,
 }: {
   teams: Team[];
   sortState: SortState;
@@ -188,6 +227,7 @@ const TeamTable = ({
   filterState: FilterState;
   setFilterState: (filterState: FilterState) => void;
   enterable: boolean;
+  entry: (teamID: string, isEnter: boolean) => Promise<void>;
 }) => (
   <Table
     striped
@@ -260,8 +300,13 @@ const TeamTable = ({
       </Table.Tr>
     </Table.Thead>
     <Table.Tbody>
-      {teams.map((team, i) => (
-        <TeamColumn team={team} enterable={enterable} key={`${team.id}-${i}`} />
+      {teams.map((team) => (
+        <TeamColumn
+          team={team}
+          enterable={enterable}
+          entry={() => entry(team.id, !team.isEntered)}
+          key={team.id}
+        />
       ))}
     </Table.Tbody>
   </Table>
@@ -320,9 +365,11 @@ const TeamHeader = ({
 const TeamColumn = ({
   team,
   enterable,
+  entry,
 }: {
   team: Team;
   enterable: boolean;
+  entry: () => Promise<void>;
 }) => (
   <Table.Tr>
     <Table.Td>{team.entryCode}</Table.Td>
@@ -333,16 +380,25 @@ const TeamColumn = ({
     <Table.Td>{config.department[team.category].name}</Table.Td>
     <Table.Td>
       <Flex direction="row" justify="center">
-        <Tooltip label={enterable ? "クリックしてエントリー" : "変更不可"}>
-          <Checkbox
-            {...(enterable
-              ? { defaultChecked: team.isEntered }
-              : {
-                  checked: team.isEntered,
-                  readOnly: true,
-                  disabled: !team.isEntered,
-                })}
-          />
+        <Tooltip
+          label={
+            enterable
+              ? "クリックしてエントリー"
+              : "エントリー期間ではありません"
+          }
+        >
+          {enterable ? (
+            <LoaderButton
+              load={entry}
+              variant={team.isEntered ? "filled" : "outline"}
+            >
+              {team.isEntered ? "エントリー済み" : "エントリーする"}
+            </LoaderButton>
+          ) : (
+            <Text c={team.isEntered ? "blue" : "red"}>
+              {team.isEntered ? "エントリー済み" : "未エントリー"}
+            </Text>
+          )}
         </Tooltip>
       </Flex>
     </Table.Td>
