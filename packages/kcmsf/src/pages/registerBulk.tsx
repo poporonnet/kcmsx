@@ -98,9 +98,7 @@ export const RegisterBulk = () => {
         !isRobotType(robotType) ||
         !department ||
         !isDepartmentType(department) ||
-        !config.department[department as DepartmentType].robotTypes.find(
-          (v) => v === robotType
-        )
+        !config.department[department].robotTypes.find((v) => v === robotType)
       ) {
         notifyError("invalidRobotCategory");
         newErrors[i][3] = true;

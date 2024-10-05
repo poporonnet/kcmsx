@@ -80,7 +80,7 @@ export const Register = () => {
           placeholder="メンバー(1人目)を入力してください"
           value={member[0]}
           onChange={(event) =>
-            setMember([event.currentTarget.value, member[1]])
+            setMember((prev) => [event.currentTarget.value, prev[1]])
           }
         />
         <TextInput
@@ -89,7 +89,7 @@ export const Register = () => {
           placeholder="メンバー(2人目)を入力してください"
           value={member[1]}
           onChange={(event) =>
-            setMember([member[0], event.currentTarget.value])
+            setMember((prev) => [prev[0], event.currentTarget.value])
           }
         />
         <SegmentedControl
@@ -105,12 +105,10 @@ export const Register = () => {
         <SegmentedControl
           fullWidth
           mt={"md"}
-          data={config.department[category].robotTypes.map((v) => {
-            return {
-              label: v,
-              value: v,
-            };
-          })}
+          data={config.department[category].robotTypes.map((v) => ({
+            label: v,
+            value: v,
+          }))}
           value={robotType}
           onChange={(value) => setRobotType(value as RobotType)}
         />
