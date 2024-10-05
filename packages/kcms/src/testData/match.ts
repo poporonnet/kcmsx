@@ -1,6 +1,7 @@
 import { TeamID } from '../team/models/team.js';
 import { RunResult, RunResultID } from '../match/model/runResult.js';
 import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっとデータ数を増やす
+import { MainMatch, MainMatchID } from '../match/model/main.js';
 
 // ランキング生成用の試合データ
 // Openは予選がないので、予選の試合データはない
@@ -234,4 +235,42 @@ export const testRankingPreMatchData = [
 
 export const testRankingMainMatchData = [
   // ToDo: L/Rを入れるとL/Rを入れ替えたデータも作れるようにしたい
+  MainMatch.new({
+    id: '900' as MainMatchID,
+    courseIndex: 1,
+    matchIndex: 1,
+    teamId1: '91' as TeamID,
+    teamId2: '92' as TeamID,
+    winnerId: '91' as TeamID,
+    runResults: [
+      RunResult.new({
+        id: '80' as RunResultID,
+        teamId: '91' as TeamID,
+        points: 12,
+        goalTimeSeconds: 60,
+        finishState: 'GOAL',
+      }),
+      RunResult.new({
+        id: '81' as RunResultID,
+        teamId: '92' as TeamID,
+        points: 10,
+        goalTimeSeconds: Infinity,
+        finishState: 'FINISHED',
+      }),
+      RunResult.new({
+        id: '82' as RunResultID,
+        teamId: '91' as TeamID,
+        points: 12,
+        goalTimeSeconds: Infinity,
+        finishState: 'FINISHED',
+      }),
+      RunResult.new({
+        id: '83' as RunResultID,
+        teamId: '92' as TeamID,
+        points: 1,
+        goalTimeSeconds: 80,
+        finishState: 'GOAL',
+      }),
+    ],
+  }),
 ];
