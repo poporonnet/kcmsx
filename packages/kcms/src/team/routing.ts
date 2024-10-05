@@ -8,6 +8,7 @@ import {
   PostEntryTeamParamsSchema,
   DeleteEntryTeamParamsSchema,
   GetTeamParamsSchema,
+  GetTeamResponseSchema,
 } from './adaptor/validator/team';
 
 export const GetTeamsRoute = createRoute({
@@ -76,7 +77,7 @@ export const GetTeamRoute = createRoute({
     200: {
       content: {
         'application/json': {
-          schema: GetTeamsResponseSchema,
+          schema: GetTeamResponseSchema,
         },
       },
       description: 'Get Team',
