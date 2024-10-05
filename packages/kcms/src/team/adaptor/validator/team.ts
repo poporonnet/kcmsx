@@ -49,7 +49,7 @@ export const GetTeamParamsSchema = z.object({
 });
 
 export const DeleteTeamParamsSchema = z.object({
-  teamID:TeamIDSchema,
+  teamID: TeamIDSchema,
 });
 
 //ポストメソッドとデリートメソッドで併用
