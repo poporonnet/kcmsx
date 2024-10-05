@@ -10,6 +10,8 @@ import {
   PostMatchRunResultRequestSchema,
   PostMatchRunResultParamsSchema,
   GetMatchRunResultParamsSchema,
+  GetRankingParamsSchema,
+  GetRankingResponseSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -106,6 +108,7 @@ export const GetMatchRunResultRoute = createRoute({
     },
   },
 });
+
 export const PostMatchRunResultRoute = createRoute({
   method: 'post',
   path: '/match/{matchType}/{matchID}/run_result',
@@ -120,6 +123,30 @@ export const PostMatchRunResultRoute = createRoute({
   responses: {
     200: {
       description: 'Post run result',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetRankingRoute = createRoute({
+  method: 'get',
+  path: '/contest/{matchType}/{departmentType}/ranking',
+  request: { params: GetRankingParamsSchema },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetRankingResponseSchema,
+        },
+      },
+      description: 'Retrieve run result',
     },
     400: {
       content: {
