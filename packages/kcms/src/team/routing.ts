@@ -7,6 +7,7 @@ import {
   DeleteTeamParamsSchema,
   PostEntryTeamParamsSchema,
   DeleteEntryTeamParamsSchema,
+  GetTeamParamsSchema,
 } from './adaptor/validator/team';
 
 export const GetTeamsRoute = createRoute({
@@ -65,9 +66,35 @@ export const PostTeamsRoute = createRoute({
   },
 });
 
+export const GetTeamRoute = createRoute({
+  method: 'get',
+  path: '/team/{teamID}',
+  request: {
+    params: GetTeamParamsSchema,
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetTeamsResponseSchema,
+        },
+      },
+      description: 'Get Team',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common Error',
+    },
+  },
+});
+
 export const DeleteTeamRoute = createRoute({
   method: 'delete',
-  path: '/team/{teamId}',
+  path: '/team/{teamID}',
   request: {
     params: DeleteTeamParamsSchema,
   },
@@ -88,7 +115,7 @@ export const DeleteTeamRoute = createRoute({
 
 export const PostEntryTeamRoute = createRoute({
   method: 'post',
-  path: '/team/{teamId}/entry',
+  path: '/team/{teamID}/entry',
   request: {
     params: PostEntryTeamParamsSchema,
   },
@@ -109,7 +136,7 @@ export const PostEntryTeamRoute = createRoute({
 
 export const DeleteEntryTeamRoute = createRoute({
   method: 'delete',
-  path: '/team/{teamId}/entry',
+  path: '/team/{teamID}/entry',
   request: {
     params: DeleteEntryTeamParamsSchema,
   },

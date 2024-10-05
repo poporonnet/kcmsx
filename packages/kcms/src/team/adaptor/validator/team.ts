@@ -36,27 +36,29 @@ export const PostTeamsRequestSchema = z.array(
 
 export const PostTeamsResponseSchema = z.array(TeamSchema).openapi('Teams');
 
+const TeamIDSchema = z.string().openapi({
+  param: {
+    name: 'teamID',
+    in: 'path',
+  },
+  example: '7549586',
+});
+
+export const GetTeamParamsSchema = z.object({
+  teamID: TeamIDSchema,
+});
+
 export const DeleteTeamParamsSchema = z.object({
-  teamId: z.string().openapi({
-    param: {
-      name: 'teamId',
-      in: 'path',
-    },
-    example: '7549586',
-  }),
+  teamID:TeamIDSchema,
 });
 
 //ポストメソッドとデリートメソッドで併用
 const EntryTeamParamsSchema = z.object({
-  teamId: z.string().openapi({
-    param: {
-      name: 'teamId',
-      in: 'path',
-    },
-    example: '7549586',
-  }),
+  teamID: TeamIDSchema,
 });
 
 export const PostEntryTeamParamsSchema = EntryTeamParamsSchema;
+
+export const GetTeamResponseSchema = TeamSchema;
 
 export const DeleteEntryTeamParamsSchema = EntryTeamParamsSchema;
