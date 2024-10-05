@@ -80,11 +80,11 @@ export const Teams = () => {
     const robotType: { value: RobotType; label: string }[] = [
       { value: "leg", label: "歩行型" },
       { value: "wheel", label: "車輪型" },
-    ];
-    const category: { value: DepartmentType; label: string }[] = [
-      { value: "elementary", label: config.department["elementary"].name },
-      { value: "open", label: config.department["open"].name },
-    ];
+    ]; // TODO: ラベルをconfigで設定する
+    const category = config.departments.map(({ type, name }) => ({
+      value: type,
+      label: name,
+    }));
     const isEntered: { value: string; label: string }[] = [
       { value: `${false}`, label: "未エントリー" },
       { value: `${true}`, label: "エントリー済み" },
