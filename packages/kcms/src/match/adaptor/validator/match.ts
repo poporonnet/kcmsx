@@ -13,7 +13,6 @@ const BriefTeamSchema = z
   .optional();
 
 const RunResultSchema = z.object({
-  id: z.string().openapi({ example: '60980640' }),
   teamID: z.string().openapi({ example: '45098607' }),
   points: z.number().openapi({ example: 4 }),
   goalTimeSeconds: z.number().nullable().openapi({ example: 30 }),
