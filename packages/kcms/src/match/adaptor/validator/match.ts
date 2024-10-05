@@ -116,3 +116,18 @@ export const PostMatchRunResultParamsSchema = z.object({
 });
 
 export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).min(1);
+
+export const GetRankingParamsSchema = z.object({
+  matchType: MatchTypeSchema,
+  DepartmentType: DepartmentTypeSchema,
+});
+
+export const GetRankingResponseSchema = z.array(
+  z.object({
+    rank: z.number().openapi({ example: 1 }),
+    teamID: z.string().openapi({ example: '3098230883' }),
+    teamName: z.string().openapi({ example: 'team 1' }),
+    points: z.number().openapi({ example: 60 }),
+    goalTimeSeconds: z.number().nullable().openapi({ example: 30 }),
+  })
+);
