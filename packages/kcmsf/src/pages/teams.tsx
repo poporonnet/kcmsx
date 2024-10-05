@@ -23,7 +23,7 @@ type Team = {
   members: string[];
   clubName: string;
   robotType: RobotType;
-  category: DepartmentType;
+  departmentType: DepartmentType;
   isEntered: boolean;
 };
 
@@ -58,7 +58,7 @@ export const Teams = () => {
       name: (a, b) => a.localeCompare(b),
       clubName: (a, b) => a.localeCompare(b),
       robotType: (a, b) => a.localeCompare(b),
-      category: (a, b) => a.localeCompare(b),
+      departmentType: (a, b) => a.localeCompare(b),
       isEntered: (a, b) => (a ? 1 : 0) - (b ? 1 : 0),
     }),
     []
@@ -276,7 +276,7 @@ const TeamTable = ({
           setFilterState={setFilterState}
         />
         <TeamHeader
-          keyName="category"
+          keyName="departmentType"
           label="部門"
           sortable
           sortState={sortState}
@@ -377,7 +377,7 @@ const TeamColumn = ({
     <Table.Td>{team.members.join(", ")}</Table.Td>
     <Table.Td>{team.clubName}</Table.Td>
     <Table.Td>{team.robotType == "leg" ? "歩行型" : "車輪型"}</Table.Td>
-    <Table.Td>{config.department[team.category].name}</Table.Td>
+    <Table.Td>{config.department[team.departmentType].name}</Table.Td>
     <Table.Td>
       <Flex direction="row" justify="center">
         <Tooltip
