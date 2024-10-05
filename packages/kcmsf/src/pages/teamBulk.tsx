@@ -1,4 +1,4 @@
-import { Box, Button, Group, Table, Text, rem } from "@mantine/core";
+import { Box, Button, Group, rem, Table, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import {
@@ -7,14 +7,23 @@ import {
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
+import {
+  config,
+  DepartmentType,
+  isDepartmentType,
+  isRobotType,
+  RobotType,
+} from "config";
 import { useEffect, useState } from "react";
 import { Entry } from "../types/entry";
+
 const errorMessages = {
   shortTeamName: "チーム名が短すぎます",
   shortMemberName: "メンバーの名前が短すぎます",
   invalidCategory: "部門が不正です",
   invalidRobotCategory:
     "ロボットのカテゴリーは車輪型または歩行型にしてください",
+  shortClubName: "クラブ名が短すぎます",
 };
 const notifyError = (error: keyof typeof errorMessages) => {
   notifications.show({
@@ -24,7 +33,7 @@ const notifyError = (error: keyof typeof errorMessages) => {
   });
 };
 
-export const EntryBulk = () => {
+export const TeamBulk = () => {
   const [csvData, setCsvData] = useState<string[][] | undefined>();
   const [isError, setIsError] = useState<boolean>(false);
   const [errors, setErrors] = useState<boolean[][] | undefined>();
@@ -50,18 +59,15 @@ export const EntryBulk = () => {
       .split("\n")
       .map((row) => row.split(","));
     //もしヘッダーの確認などでヘッダー情報が必要になるならここを変更する
-    const data = rows.slice(1);
-    return data;
+    return rows.slice(1);
   };
 
   const checkData = (data: string[][]): boolean[][] => {
     const newErrors = data.map((row) => new Array(row.length).fill(false));
 
     data.map((row, i) => {
-      const [teamName, member1, member2, isMultiWalk, category] = row as (
-        | string
-        | undefined
-      )[];
+      const [teamName, member1, member2, robotType, department, clubName] =
+        row as (string | undefined)[];
       if (!teamName || teamName === "") {
         notifyError("shortTeamName");
         newErrors[i][0] = true;
@@ -77,38 +83,63 @@ export const EntryBulk = () => {
         newErrors[i][2] = true;
         setIsError(true);
       }
+      if (!department || !isDepartmentType(department)) {
+        notifyError("invalidCategory");
+        newErrors[i][4] = true;
+        setIsError(true);
+      }
+      if (clubName && clubName.length < 1) {
+        notifyError("shortClubName");
+        newErrors[i][5] = true;
+        setIsError(true);
+      }
+      // NOTE: departmentがundefinedでないことを確認してからでないと成立しないのでこの場所に置いている
       if (
-        !isMultiWalk ||
-        (isMultiWalk !== "歩行型" && isMultiWalk !== "車輪型")
+        !robotType ||
+        !isRobotType(robotType) ||
+        !config.department[department as DepartmentType].robotTypes.find(
+          (v) => v === robotType
+        )
       ) {
         notifyError("invalidRobotCategory");
         newErrors[i][3] = true;
-        setIsError(true);
-      }
-      if (!category || (category !== "Elementary" && category !== "Open")) {
-        notifyError("invalidCategory");
-        newErrors[i][4] = true;
         setIsError(true);
       }
     });
     return newErrors;
   };
 
-  const sendData = () => {
+  const sendData = async () => {
     if (!csvData) return;
     const data = csvData.map((row) => {
-      const entry: Entry = {
-        teamName: row[0],
+      return {
+        name: row[0],
         members: [row[1], row[2]],
-        isMultiWalk: row[3] === "歩行型" ? true : false,
-        category: row[4] as "Elementary" | "Open",
-      };
-      return entry;
+        robotType: row[3] as RobotType,
+        departmentType: row[4] as DepartmentType,
+        clubName: row[5],
+      } satisfies Entry;
     });
-    console.log(data);
-    setIsError(true);
-    //const json = JSON.stringify(data);
-    //なんかごにょごにょして後ろに渡す
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    if (res.ok) {
+      notifications.show({
+        title: "登録完了",
+        message: "登録が完了しました",
+        color: "green",
+      });
+    } else {
+      notifications.show({
+        title: "登録失敗",
+        message: "登録に失敗しました",
+        color: "red",
+      });
+    }
   };
 
   const clear = () => {
@@ -213,8 +244,9 @@ const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
             <Table.Th>チーム名</Table.Th>
             <Table.Th>メンバー1</Table.Th>
             <Table.Th>メンバー2</Table.Th>
-            <Table.Th>歩行型</Table.Th>
+            <Table.Th>ロボットの種別</Table.Th>
             <Table.Th>部門</Table.Th>
+            <Table.Th>クラブ名</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>

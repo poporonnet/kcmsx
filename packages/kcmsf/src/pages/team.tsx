@@ -31,7 +31,6 @@ export const Team = () => {
       departmentType: category,
       robotType: robotType,
     } satisfies CreateTeamRequestBody;
-    console.log(data);
     const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",
       headers: {

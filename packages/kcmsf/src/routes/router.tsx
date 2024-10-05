@@ -1,10 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
-import { EntryBulk } from "../pages/entryBulk.tsx";
 import { EntryList } from "../pages/entryList.tsx";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
 import { Team } from "../pages/team.tsx";
+import { TeamBulk } from "../pages/teamBulk.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
@@ -30,7 +30,7 @@ export const router = createBrowserRouter(
             },
             {
               path: "bulk",
-              element: <EntryBulk />,
+              element: <TeamBulk />,
             },
           ],
         },
