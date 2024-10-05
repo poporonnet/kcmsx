@@ -3,8 +3,8 @@ import { EntryList } from "../pages/entryList.tsx";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
-import { Team } from "../pages/team.tsx";
-import { TeamBulk } from "../pages/teamBulk.tsx";
+import { Register } from "../pages/register.tsx";
+import { RegisterBulk } from "../pages/registerBulk.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
@@ -26,11 +26,11 @@ export const router = createBrowserRouter(
           children: [
             {
               index: true,
-              element: <Team />,
+              element: <Register />,
             },
             {
               path: "bulk",
-              element: <TeamBulk />,
+              element: <RegisterBulk />,
             },
           ],
         },

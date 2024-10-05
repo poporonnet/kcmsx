@@ -33,7 +33,7 @@ const notifyError = (error: keyof typeof errorMessages) => {
   });
 };
 
-export const TeamBulk = () => {
+export const RegisterBulk = () => {
   const [csvData, setCsvData] = useState<string[][] | undefined>();
   const [isError, setIsError] = useState<boolean>(false);
   const [errors, setErrors] = useState<boolean[][] | undefined>();
@@ -93,10 +93,11 @@ export const TeamBulk = () => {
         newErrors[i][5] = true;
         setIsError(true);
       }
-      // NOTE: departmentがundefinedでないことを確認してからでないと成立しないのでこの場所に置いている
       if (
         !robotType ||
         !isRobotType(robotType) ||
+        !department ||
+        !isDepartmentType(department) ||
         !config.department[department as DepartmentType].robotTypes.find(
           (v) => v === robotType
         )
@@ -111,14 +112,14 @@ export const TeamBulk = () => {
 
   const sendData = async () => {
     if (!csvData) return;
-    const data = csvData.map((row) => {
+    const data: Entry[] = csvData.map((row) => {
       return {
         name: row[0],
         members: [row[1], row[2]],
         robotType: row[3] as RobotType,
         departmentType: row[4] as DepartmentType,
         clubName: row[5],
-      } satisfies Entry;
+      };
     });
     const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",

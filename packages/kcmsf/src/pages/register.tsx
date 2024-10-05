@@ -11,7 +11,7 @@ interface CreateTeamRequestBody {
   departmentType: DepartmentType;
 }
 
-export const Team = () => {
+export const Register = () => {
   const [teamName, setTeamName] = useState("");
   const [clubName, setClubName] = useState("");
   const [robotType, setRobotType] = useState<RobotType>(
@@ -20,17 +20,19 @@ export const Team = () => {
   const [category, setCategory] = useState<DepartmentType>(
     config.departments[0].type
   );
+  const [member, setMember] = useState<[string, string]>(["", ""]);
+
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // メンバーは、オープン部門または小学生部門かつメンバーが1人の場合は配列の要素数を1つにする
     // 2024/1/5 仕様変更に伴いメンバーは入力せずに登録できるようにする
-    const data = {
+    const data: CreateTeamRequestBody = {
       name: teamName,
-      members: ["aa"],
+      members: member.filter((v) => v !== ""),
       clubName: clubName,
       departmentType: category,
       robotType: robotType,
-    } satisfies CreateTeamRequestBody;
+    };
     const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",
       headers: {
@@ -71,6 +73,25 @@ export const Team = () => {
           value={clubName}
           onChange={(event) => setClubName(event.currentTarget.value)}
         />
+        <TextInput
+          mt={"md"}
+          required
+          label="メンバーの名前(1人目)"
+          placeholder="メンバー(1人目)を入力してください"
+          value={member[0]}
+          onChange={(event) =>
+            setMember([event.currentTarget.value, member[1]])
+          }
+        />
+        <TextInput
+          mt={"md"}
+          label="メンバーの名前(2人目)"
+          placeholder="メンバー(2人目)を入力してください"
+          value={member[1]}
+          onChange={(event) =>
+            setMember([member[0], event.currentTarget.value])
+          }
+        />
         <SegmentedControl
           mt={"md"}
           fullWidth
@@ -85,7 +106,10 @@ export const Team = () => {
           fullWidth
           mt={"md"}
           data={config.department[category].robotTypes.map((v) => {
-            return { label: v, value: v };
+            return {
+              label: v,
+              value: v,
+            };
           })}
           value={robotType}
           onChange={(value) => setRobotType(value as RobotType)}
