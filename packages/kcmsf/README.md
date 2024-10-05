@@ -37,25 +37,26 @@ pnpm build
 - teamNameは1文字以上
 - member1は3文字以上
 - member2は3文字以上(0文字を除く)
-- multiWalkは車輪型もしくは歩行型
-- departmentはOpenもしくはElementary
+- robotTypeはconfigで設定された値のいずれか
+- departmentはconfigで設定された値のいずれか
+- clubNameは0文字以上
 
 ### 登録できるCSVファイルの例
 
-| teamName | member1 | member2 | multiWalk | department |
-| -------- | ------- | ------- | --------- | ---------- |
-| チーム1  | Suzune  | Suzu    | 車輪型    | Open       |
-| チーム2  | tufusa  |         | 歩行型    | Open       |
-| チーム3  | laminne | Master  | 車輪型    | Elementary |
+| teamName | member1 | member2 | robotType | department | clubName        |
+| -------- | ------- | ------- |-----------|------------|-----------------|
+| チーム1  | Suzune  | Suzu    | leg       | open       |                 |
+| チーム2  | tufusa  |         | leg       | open       | poporon network | 
+| チーム3  | laminne | Master  | wheel     | elementary |                 | 
 
 #### CSVの例
 
 ```CSV
-teamName,member1,member2,multiWalk,department
-1,さくら,あお,歩行型,Open
-2,ちひろ,ゆう,歩行型,Open
-3,れいか,やどん,歩行型,Open
-4,かに,,車輪型,Elementary
+teamName,member1,member2,robotType,department,clubName
+1,さくら,あお,leg,open,club1
+2,ちひろ,ゆう,leg,open,
+3,れいか,やどん,leg,open,club2
+4,かに,,wheel,elementary,
 ```
 
 ### Authors
