@@ -35,6 +35,7 @@ export class Controller {
           members: v.members,
           departmentType: v.departmentType,
           robotType: v.robotType,
+          clubName: v.clubName,
         };
       })
     );
