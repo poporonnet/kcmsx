@@ -1,26 +1,43 @@
 import { Box, Button, Group, SegmentedControl, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
+import { config, DepartmentType, RobotType } from "config";
 import { useState } from "react";
-export const Entry = () => {
+
+interface CreateTeamRequestBody {
+  name: string;
+  members: string[];
+  clubName: string;
+  robotType: RobotType;
+  departmentType: DepartmentType;
+}
+
+export const Team = () => {
   const [teamName, setTeamName] = useState("");
-  const [isMultiWalk, setIsMultiWalk] = useState(true); // ロボットが多足歩行型か
-  const [category, setCategory] = useState("Elementary"); // 出場する部門 小学生部門:メンバー最大2人 オープン部門：1人
+  const [clubName, setClubName] = useState("");
+  const [robotType, setRobotType] = useState<RobotType>(
+    config.departments[0].robotTypes[0]
+  );
+  const [category, setCategory] = useState<DepartmentType>(
+    config.departments[0].type
+  );
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     // メンバーは、オープン部門または小学生部門かつメンバーが1人の場合は配列の要素数を1つにする
     // 2024/1/5 仕様変更に伴いメンバーは入力せずに登録できるようにする
     const data = {
-      teamName: teamName,
+      name: teamName,
       members: ["aa"],
-      isMultiWalk: isMultiWalk,
-      category: category,
-    };
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/entry`, {
+      clubName: clubName,
+      departmentType: category,
+      robotType: robotType,
+    } satisfies CreateTeamRequestBody;
+    console.log(data);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify([data]),
     });
     if (res.ok) {
       notifications.show({
@@ -36,6 +53,7 @@ export const Entry = () => {
       });
     }
   }
+
   return (
     <Box maw={620} mx={"auto"}>
       <form onSubmit={submit}>
@@ -47,25 +65,31 @@ export const Entry = () => {
           value={teamName}
           onChange={(event) => setTeamName(event.currentTarget.value)}
         />
+        <TextInput
+          mt={"md"}
+          label="クラブ名"
+          placeholder="クラブ名を入力してください"
+          value={clubName}
+          onChange={(event) => setClubName(event.currentTarget.value)}
+        />
         <SegmentedControl
           mt={"md"}
           fullWidth
-          data={[
-            { label: "小学生部門", value: "Elementary" },
-            { label: "オープン部門", value: "Open" },
-          ]}
+          data={config.departments.map((v) => ({
+            label: v.name,
+            value: v.type,
+          }))}
           value={category}
-          onChange={(value) => setCategory(value)}
+          onChange={(value) => setCategory(value as DepartmentType)}
         />
         <SegmentedControl
           fullWidth
           mt={"md"}
-          data={[
-            { label: "歩行型", value: "walk" },
-            { label: "車輪型", value: "tire" },
-          ]}
-          value={isMultiWalk ? "walk" : "tire"}
-          onChange={(value) => setIsMultiWalk(value === "walk")}
+          data={config.department[category].robotTypes.map((v) => {
+            return { label: v, value: v };
+          })}
+          value={robotType}
+          onChange={(value) => setRobotType(value as RobotType)}
         />
         <Group justify={"flex-start"}>
           <Button mt={"md"} type="submit">
