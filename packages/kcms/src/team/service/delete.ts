@@ -1,8 +1,7 @@
 import { TeamRepository } from '../models/repository.js';
 import { Option } from '@mikuroxina/mini-fn';
 
-// ToDo: DeleteTeamServiceにリネームする
-export class DeleteEntryService {
+export class DeleteTeamService {
   private readonly repository: TeamRepository;
 
   constructor(repository: TeamRepository) {
