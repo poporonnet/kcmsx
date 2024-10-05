@@ -146,7 +146,7 @@ export const GetRankingRoute = createRoute({
           schema: GetRankingResponseSchema,
         },
       },
-      description: 'Retrieve run result',
+      description: 'Get Ranking',
     },
     400: {
       content: {
