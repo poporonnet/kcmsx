@@ -50,6 +50,7 @@ export class CreateTeamService {
         teamName: v.teamName,
         members: v.members,
         departmentType: v.departmentType,
+        clubName: v.clubName,
         robotType: v.robotType,
       };
       const team = Team.new(createArgs);

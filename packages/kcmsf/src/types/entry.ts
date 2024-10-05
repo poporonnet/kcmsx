@@ -1,6 +1,9 @@
+import { DepartmentType, RobotType } from "config";
+
 export type Entry = {
-  teamName: string;
+  name: string;
   members: string[];
-  isMultiWalk: boolean;
-  category: "Elementary" | "Open";
+  robotType: RobotType;
+  departmentType: DepartmentType;
+  clubName: string;
 };
