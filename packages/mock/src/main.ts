@@ -56,7 +56,7 @@ app.post("/team", zValidator("json", PostTeamSchema), (c) => {
   return c.json<Team>({
     id: "7549586",
     name: data.name,
-    entryCode: 2,
+    entryCode: "2",
     members: data.members,
     clubName: data.clubName,
     robotType: data.robotType,
