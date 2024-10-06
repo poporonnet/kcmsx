@@ -32,6 +32,14 @@ export type DerivedDepartment<
 };
 
 /**
+ * @description {@link Department}の配列から導出される部門設定の`type`属性の配列
+ */
+export type DerivedDepartmentTypes<
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
+> = Collect<DepartmentConfig<Robots>, Departments, "type">;
+
+/**
  * @description {@link Departments}が有効か判定する型
  * {@link DepartmentConfig}の`type`属性が重複していたらコンパイルに失敗する
  */

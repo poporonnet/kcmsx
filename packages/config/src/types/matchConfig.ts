@@ -1,3 +1,4 @@
+import { Collect } from "../utility/pick";
 import { DepartmentConfig } from "./departmentConfig";
 import { RobotConfig } from "./robotConfig";
 import { UniqueRecords } from "./uniqueCollection";
@@ -45,6 +46,15 @@ export type DerivedCourseConfig<
 export type DerivedMatch<Matches extends MatchConfig[]> = {
   [M in Matches[number] as M["type"]]: Omit<M, "type">;
 };
+
+/**
+ * @description {@link MatchConfig}の配列から導出される試合種別設定の`type`属性の配列
+ */
+export type DerivedMatchTypes<Matches extends MatchConfig[]> = Collect<
+  MatchConfig,
+  Matches,
+  "type"
+>;
 
 /**
  * @description {@link Matches}が有効か判定する型
