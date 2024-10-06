@@ -12,12 +12,7 @@ export type DerivedRuleList<
   Robots extends RobotConfig[],
   Matches extends MatchConfig[],
   Departments extends DepartmentConfig<Robots>[],
-  Conditions extends ConditionsConfig<
-    Robots,
-    RuleBases,
-    Matches,
-    Departments
-  >,
+  Conditions extends ConditionsConfig<Robots, RuleBases, Matches, Departments>,
 > = {
   [K in keyof RuleBases]: RuleBases[K] &
     Readonly<Conditions[RuleBases[K]["name"]]>;
