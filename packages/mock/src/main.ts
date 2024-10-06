@@ -1,11 +1,10 @@
 import { zValidator } from "@hono/zod-validator";
-import { config } from "config";
+import { config, pick } from "config";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
-import { matches, teams } from "./data/main";
+import { matches, Team, teams } from "./data/main";
 
-const RobotTypes = z.enum(config.robotTypes);
 const app = new Hono();
 
 app.use(
@@ -44,24 +43,24 @@ app.delete("/team/:id", (c) => {
 });
 
 // チームの登録
-const teamEntrySchema = z.object({
+const PostTeamSchema = z.object({
   name: z.string(),
   members: z.array(z.string()),
   clubName: z.string(),
-  robotType: RobotTypes,
-  category: z.union([z.literal("elementary"), z.literal("open")]),
+  robotType: z.enum(config.robotTypes),
+  departmentType: z.enum(pick(config.departments, "type")),
 });
-app.post("/team", zValidator("json", teamEntrySchema), (c) => {
+app.post("/team", zValidator("json", PostTeamSchema), (c) => {
   const data = c.req.valid("json");
   // 返ってくる値はだいたい決め打ちします
-  return c.json({
+  return c.json<Team>({
     id: "7549586",
     name: data.name,
     entryCode: "2",
     members: data.members,
     clubName: data.clubName,
     robotType: data.robotType,
-    category: data.category,
+    departmentType: data.departmentType,
     isEntered: false,
   });
 });
