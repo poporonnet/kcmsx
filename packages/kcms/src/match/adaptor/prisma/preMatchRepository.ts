@@ -30,7 +30,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
             teamID: v.teamID as TeamID,
             points: v.points,
             goalTimeSeconds: v.goalTimeSeconds,
-            finishState: v.finishState === 0 ? "GOAL" : "FINISHED",
+            finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
         ),
       })
