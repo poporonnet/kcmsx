@@ -1,4 +1,5 @@
 import { DepartmentConfig } from "./departmentConfig";
+import { RobotConfig } from "./robotConfig";
 import { UniqueRecords } from "./uniqueCollection";
 
 /**
@@ -8,9 +9,9 @@ export type MatchConfig = DerivedMatchConfig<
   string,
   string,
   number,
-  string[],
-  DepartmentConfig<string[]>[],
-  DerivedCourseConfig<string[], DepartmentConfig<string[]>[]>
+  RobotConfig[],
+  DepartmentConfig<RobotConfig[]>[],
+  DerivedCourseConfig<RobotConfig[], DepartmentConfig<RobotConfig[]>[]>
 >;
 
 /**
@@ -20,9 +21,9 @@ export type DerivedMatchConfig<
   Type extends string,
   Name extends string,
   LimitSeconds extends number,
-  RobotTypes extends string[],
-  Departments extends DepartmentConfig<RobotTypes>[],
-  Course extends DerivedCourseConfig<RobotTypes, Departments>,
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
+  Course extends DerivedCourseConfig<Robots, Departments>,
 > = {
   type: Type;
   name: Name;
@@ -34,8 +35,8 @@ export type DerivedMatchConfig<
  * @description 1つのコース設定の, リテラル型から導出される型
  */
 export type DerivedCourseConfig<
-  RobotTypes extends string[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
 > = Partial<Record<Departments[number]["type"], number>>;
 
 /**

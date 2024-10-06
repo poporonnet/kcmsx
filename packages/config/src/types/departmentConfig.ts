@@ -1,10 +1,12 @@
+import { Collect } from "../utility/pick";
+import { RobotConfig } from "./robotConfig";
 import { UniqueRecords } from "./uniqueCollection";
 
 /**
  * @description 1つの部門設定の型
  */
-export type DepartmentConfig<RobotTypes extends string[]> =
-  DerivedDepartmentConfig<string, string, RobotTypes[number][]>;
+export type DepartmentConfig<Robots extends RobotConfig[]> =
+  DerivedDepartmentConfig<string, string, Robots[number]["type"][]>;
 
 /**
  * @description 1つの部門設定の, リテラル型から導出される型
@@ -23,8 +25,8 @@ export type DerivedDepartmentConfig<
  * @description {@link DepartmentConfig}の配列から導出される部門設定のオブジェクト
  */
 export type DerivedDepartment<
-  RobotTypes extends string[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
 > = {
   [D in Departments[number] as D["type"]]: Omit<D, "type">;
 };
@@ -34,8 +36,8 @@ export type DerivedDepartment<
  * {@link DepartmentConfig}の`type`属性が重複していたらコンパイルに失敗する
  */
 export type ValidDepartmentConfigs<
-  RobotTypes extends string[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
 > =
   UniqueRecords<Departments, "type"> extends infer U
     ? Departments extends U

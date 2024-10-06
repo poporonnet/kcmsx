@@ -1,6 +1,7 @@
 import { ConditionsConfig } from "./conditionsConfig";
 import { DepartmentConfig } from "./departmentConfig";
 import { MatchConfig } from "./matchConfig";
+import { RobotConfig } from "./robotConfig";
 import { RuleBaseList } from "./rule";
 
 /**
@@ -8,11 +9,11 @@ import { RuleBaseList } from "./rule";
  */
 export type DerivedRuleList<
   RuleBases extends RuleBaseList,
-  RobotTypes extends string[],
+  Robots extends RobotConfig[],
   Matches extends MatchConfig[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Departments extends DepartmentConfig<Robots>[],
   Conditions extends ConditionsConfig<
-    RobotTypes,
+    Robots,
     RuleBases,
     Matches,
     Departments
