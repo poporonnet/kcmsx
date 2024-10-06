@@ -3,7 +3,7 @@ export const Home = () => {
   return (
     <>
       <h1>Home</h1>
-      <Link to="/entrylist">参加者一覧</Link>
+      <Link to="/team">参加者一覧</Link>
       <br />
       <Link to="/entry">参加者登録</Link>
       <br />

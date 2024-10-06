@@ -4,7 +4,16 @@ import { createConfig } from "./utility/createConfig";
 export const config = createConfig(
   {
     contestName: "第2回 Matz葉がにロボコン",
-    robotTypes: ["wheel", "leg"],
+    robots: [
+      {
+        type: "leg",
+        name: "歩行型",
+      },
+      {
+        type: "wheel",
+        name: "車輪型",
+      },
+    ],
     departments: [
       {
         type: "elementary",
