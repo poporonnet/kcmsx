@@ -15,22 +15,23 @@ import { useForceReload } from "../hooks/useForceReload";
 import { Judge } from "../utils/match/judge";
 import { expiryTimestamp, parseSeconds } from "../utils/time";
 
-type TimerState = "Initial" | "Started" | "Finished";
-type TeamFetchResponse = {
+type TimerState = "initial" | "counting" | "finished";
+type GetTeamResponse = {
   id: string;
   name: string;
   entryCode: string;
   members: string[];
   clubName: string;
   robotType: RobotType;
-  category: DepartmentType;
+  departmentType: DepartmentType;
   isEntered: boolean;
 };
-type TeamFetchResponseData = {
+type GetMatchResponse = {
   id: string;
-  matchType: MatchType;
-  left: { id: string; teamName: string };
-  right: { id: string; teamName: string };
+  matchCode: string;
+  leftTeam: { id: string; teamName: string };
+  rightTeam: { id: string; teamName: string };
+  // TODO: RunResultの扱い
 };
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
@@ -53,34 +54,34 @@ export const Match = () => {
         `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
         { method: "GET" }
       );
-      const data = (await res.json()) as TeamFetchResponseData;
+      const match = (await res.json()) as GetMatchResponse;
       const leftRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${data.left.id}`,
+        `${import.meta.env.VITE_API_URL}/team/${match.leftTeam.id}`,
         { method: "GET" }
       );
-      const leftData = (await leftRes.json()) as TeamFetchResponse;
+      const leftTeam = (await leftRes.json()) as GetTeamResponse;
 
       const rightRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${data.right.id}`,
+        `${import.meta.env.VITE_API_URL}/team/${match.rightTeam.id}`,
         { method: "GET" }
       );
-      const rightData = (await rightRes.json()) as TeamFetchResponse;
+      const rightTeam = (await rightRes.json()) as GetTeamResponse;
 
       const matchInfo: MatchInfo = {
-        id: data.id,
-        matchType: data.matchType,
+        id: match.id,
+        matchType,
         teams: {
           left: {
-            id: leftData.id,
-            teamName: leftData.name,
-            isMultiWalk: leftData.robotType === "leg" ? true : false,
-            category: leftData.category,
+            id: leftTeam.id,
+            teamName: leftTeam.name,
+            isMultiWalk: leftTeam.robotType === "leg" ? true : false,
+            category: leftTeam.departmentType,
           },
           right: {
-            id: rightData.id,
-            teamName: rightData.name,
-            isMultiWalk: rightData.robotType === "leg" ? true : false,
-            category: rightData.category,
+            id: rightTeam.id,
+            teamName: rightTeam.name,
+            isMultiWalk: rightTeam.robotType === "leg" ? true : false,
+            category: rightTeam.departmentType,
           },
         },
       };
@@ -95,20 +96,20 @@ export const Match = () => {
       );
     };
     fetchMatchInfo();
-  }, []);
+  }, [id, isExhibition, matchType]);
   const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
-  const [timerState, setTimerState] = useState<TimerState>("Initial");
+  const [timerState, setTimerState] = useState<TimerState>("initial");
   const { start, pause, resume, isRunning, totalSeconds } = useTimer({
     expiryTimestamp: expiryTimestamp(matchTimeSec),
     autoStart: false,
-    onExpire: () => setTimerState("Finished"),
+    onExpire: () => setTimerState("finished"),
   });
   const forceReload = useForceReload();
 
   const onClickTimer = () => {
-    if (timerState == "Initial") {
+    if (timerState == "initial") {
       start();
-      setTimerState("Started");
+      setTimerState("counting");
       return;
     }
 
@@ -126,7 +127,7 @@ export const Match = () => {
         h="auto"
         pb="sm"
         variant="filled"
-        color={timerState == "Finished" ? "pink" : isRunning ? "teal" : "gray"}
+        color={timerState == "finished" ? "pink" : isRunning ? "teal" : "gray"}
         onClick={onClickTimer}
       >
         <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
