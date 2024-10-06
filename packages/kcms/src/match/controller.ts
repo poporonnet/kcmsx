@@ -1,10 +1,12 @@
-import { z } from '@hono/zod-openapi';
-import { Result } from '@mikuroxina/mini-fn';
-import { SnowflakeIDGenerator } from '../id/main';
-import { TeamID } from '../team/models/team';
-import { PostMatchRunResultRequestSchema } from './adaptor/validator/match';
-import { FinishState } from './model/runResult';
-import { CreateRunResultService } from './service/createRunResult';
+import { Result } from "@mikuroxina/mini-fn";
+import { MatchType } from "config";
+import { SnowflakeIDGenerator } from "../id/main";
+import { TeamID } from "../team/models/team";
+import { MainMatchID } from "./model/main";
+import { PreMatchID } from "./model/pre";
+import { MainMatchRepository, PreMatchRepository } from "./model/repository";
+import { CreateRunResultArgs, FinishState } from "./model/runResult";
+import { CreateRunResultService } from "./service/createRunResult";
 type MatchResults = {
   teamID: TeamID;
   points: number;
@@ -12,37 +14,39 @@ type MatchResults = {
   finishState: FinishState;
 }[];
 export class Controller {
-  private readonly createRunResult: CreateRunResultService;
-  constructor() {
-    this.createRunResult = new CreateRunResultService(
-      new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
+  private readonly createResult: CreateRunResultService;
+  constructor(
+    idGenerator: SnowflakeIDGenerator,
+    preMatchRepository: PreMatchRepository,
+    mainMatchRepository: MainMatchRepository
+  ) {
+    this.createResult = new CreateRunResultService(
+      idGenerator,
+      preMatchRepository,
+      mainMatchRepository
     );
   }
-  async create(args: z.infer<typeof PostMatchRunResultRequestSchema>) {
-    const matchResults = args.map((m) => {
+  async createRunResult(
+    matchType: MatchType,
+    matchID: PreMatchID | MainMatchID,
+    args: Omit<CreateRunResultArgs, "id">[]
+  ): Promise<Result.Result<Error, void>> {
+    const matchResults: MatchResults = args.map((m) => {
       return {
         teamID: m.teamID as TeamID,
         points: m.points,
-        goalTimeSeconds: m.goalTimeSeconds ? m.goalTimeSeconds : Infinity,
+        goalTimeSeconds: m.goalTimeSeconds ?? Infinity,
         finishState: m.finishState.toUpperCase() as FinishState,
       };
-    }) as MatchResults;
-    const res = await this.createRunResult.handle(matchResults);
+    });
+    const res = await this.createResult.handle(
+      matchType,
+      matchID,
+      matchResults
+    );
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
-    const unwrapped = Result.unwrap(res);
-    return Result.ok(
-      unwrapped.map((m) => {
-        return {
-          id: m.getId(),
-          teamID: m.getTeamId(),
-          points: m.getPoints(),
-          goalTimeSeconds: m.getGoalTimeSeconds(),
-          isGoal: m.isGoal(),
-          isFinite: m.isFinished(),
-        };
-      })
-    );
+    return Result.ok(undefined);
   }
 }

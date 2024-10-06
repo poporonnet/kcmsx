@@ -13,10 +13,11 @@ const BriefTeamSchema = z
   .optional();
 
 const RunResultSchema = z.object({
-  teamID: z.string().openapi({ example: '45098607' }),
+  id: z.string().openapi({ example: "60980640" }),
+  teamID: z.string().openapi({ example: "45098607" }),
   points: z.number().openapi({ example: 4 }),
   goalTimeSeconds: z.number().nullable().openapi({ example: 30 }),
-  finishState: z.enum(['goal', 'finished']).openapi({ example: 'goal' }),
+  finishState: z.enum(["goal", "finished"]).openapi({ example: "goal" }),
 });
 
 const PreSchema = z.object({
@@ -114,7 +115,7 @@ export const PostMatchRunResultParamsSchema = z.object({
   matchID: z.string().openapi({ example: '320984' }),
 });
 
-export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).min(1);
+export const PostMatchRunResultRequestSchema = z.array(RunResultSchema.omit({id: true})).max(4).min(1);
 
 export const GetRankingParamsSchema = z.object({
   matchType: MatchTypeSchema,

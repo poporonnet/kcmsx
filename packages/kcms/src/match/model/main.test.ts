@@ -47,7 +47,7 @@ describe('MainMatch', () => {
                 id: String(i) as RunResultID,
                 goalTimeSeconds: i * 10,
                 points: 10 + i,
-                teamId: i % 2 == 0 ? args.teamId1 : args.teamId2,
+                teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
                 finishState: 'FINISHED',
               });
             })
@@ -62,7 +62,7 @@ describe('MainMatch', () => {
               id: String(i) as RunResultID,
               goalTimeSeconds: i * 10,
               points: 10 + i,
-              teamId: i % 2 == 0 ? args.teamId1 : args.teamId2,
+              teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
               finishState: 'FINISHED',
             });
           })
@@ -83,7 +83,7 @@ describe('MainMatch', () => {
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         })
       ),
@@ -109,7 +109,7 @@ describe('MainMatch', () => {
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         });
       }),
@@ -134,7 +134,7 @@ describe('MainMatch', () => {
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         });
       }),
@@ -159,7 +159,7 @@ describe('MainMatch', () => {
           id: String(i) as RunResultID,
           goalTimeSeconds: i * 10,
           points: 10 + i,
-          teamId: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
           finishState: 'FINISHED',
         });
       }),

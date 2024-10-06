@@ -27,10 +27,10 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
         runResults: data.runResult.map((v) =>
           RunResult.new({
             id: v.id as RunResultID,
-            teamId: v.teamID as TeamID,
+            teamID: v.teamID as TeamID,
             points: v.points,
             goalTimeSeconds: v.goalTimeSeconds,
-            finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
+            finishState: v.finishState === 0 ? "GOAL" : "FINISHED",
           })
         ),
       })
