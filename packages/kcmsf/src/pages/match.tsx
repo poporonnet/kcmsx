@@ -184,9 +184,11 @@ export const Match = () => {
         <MatchSubmit
           matchInfo={matchInfo}
           available={
-            (matchJudge.leftTeam.goalTimeSeconds != null &&
-              matchJudge.rightTeam.goalTimeSeconds != null) ||
-            timerState === "Finished"
+            ((matchJudge.leftTeam.goalTimeSeconds != null ||
+              matchJudge.leftTeam.point.state.finish) &&
+              (matchJudge.rightTeam.goalTimeSeconds != null ||
+                matchJudge.rightTeam.point.state.finish)) ||
+            timerState === "finished"
           }
           result={{
             left: {
