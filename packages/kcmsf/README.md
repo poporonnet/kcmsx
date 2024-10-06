@@ -44,10 +44,10 @@ pnpm build
 ### 登録できるCSVファイルの例
 
 | teamName | member1 | member2 | robotType | department | clubName        |
-| -------- | ------- | ------- |-----------|------------|-----------------|
+| -------- | ------- | ------- | --------- | ---------- | --------------- |
 | チーム1  | Suzune  | Suzu    | leg       | open       |                 |
-| チーム2  | tufusa  |         | leg       | open       | poporon network | 
-| チーム3  | laminne | Master  | wheel     | elementary |                 | 
+| チーム2  | tufusa  |         | leg       | open       | poporon network |
+| チーム3  | laminne | Master  | wheel     | elementary |                 |
 
 #### CSVの例
 
