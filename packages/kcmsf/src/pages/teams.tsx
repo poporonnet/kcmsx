@@ -64,7 +64,7 @@ export const Teams = () => {
     []
   );
 
-  const filterData: FilterData = useMemo(() => {
+  const filterData = useMemo<FilterData>((): FilterData => {
     if (!teams) return {};
 
     const clubNames = [
@@ -84,7 +84,7 @@ export const Teams = () => {
       { value: "leg", label: "歩行型" },
       { value: "wheel", label: "車輪型" },
     ]; // TODO: ラベルをconfigで設定する
-    const category = config.departments.map(({ type, name }) => ({
+    const departmentType = config.departments.map(({ type, name }) => ({
       value: type,
       label: name,
     }));
@@ -96,7 +96,7 @@ export const Teams = () => {
     return {
       clubName,
       robotType,
-      category,
+      departmentType,
       isEntered,
     };
   }, [teams]);
