@@ -23,6 +23,9 @@ const RunResultSchema = z.object({
 const PreSchema = z.object({
   id: z.string().openapi({ example: '320984' }),
   matchCode: z.string().openapi({ example: '1-3' }),
+  departmentType: z
+    .enum(pick(config.departments, 'type'))
+    .openapi({ example: config.departments[0].type }),
   leftTeam: BriefTeamSchema,
   rightTeam: BriefTeamSchema,
   runResults: z.array(RunResultSchema).max(2),
@@ -31,6 +34,9 @@ const PreSchema = z.object({
 const MainSchema = z.object({
   id: z.string().openapi({ example: '70983405' }),
   matchCode: z.string(),
+  departmentType: z
+    .enum(pick(config.departments, 'type'))
+    .openapi({ example: config.departments[0].type }),
   team1: BriefTeamSchema,
   team2: BriefTeamSchema,
   winnerId: z.string().openapi({ example: '45098607' }),
