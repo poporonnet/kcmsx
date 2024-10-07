@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { DerivedDepartmentConfig } from "../types/departmentConfig";
 import { DerivedCourseConfig, DerivedMatchConfig } from "../types/matchConfig";
 import { DerivedPremiseState } from "../types/premise";
+import { DerivedRobotConfig } from "../types/robotConfig";
 import { DerivedPointState, DerivedRuleBaseVariant } from "../types/rule";
 import { DerivedSponsorConfig, SponsorClass } from "../types/sponsorConfig";
 import { createConfig } from "./createConfig";
@@ -13,7 +14,7 @@ describe("正しい設定を生成できる", () => {
     const config = createConfig(
       {
         contestName: "かにロボコン",
-        robotTypes: ["wheel"],
+        robots: [{ type: "wheel", name: "車輪型" }],
         departments: [
           { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],
@@ -35,12 +36,15 @@ describe("正しい設定を生成できる", () => {
           },
         ],
         sponsors: [],
-      } as const,
+      },
       {}
     );
 
     expect(config.contestName).toBe("かにロボコン");
-    expect(config.robotTypes).toEqual(["wheel"]);
+
+    expect(config.robots).toHaveLength(1);
+    expect(config.robots[0].type).toBe("wheel");
+    expect(config.robots[0].name).toBe("車輪型");
 
     expect(config.departments).toHaveLength(1);
     expect(config.departments[0].type).toBe("elementary");
@@ -61,24 +65,34 @@ describe("正しい設定を生成できる", () => {
     expect(config.rules[0].changeable).toBeUndefined();
     expect(config.rules[0].scorable).toBeUndefined();
 
+    expect(config.sponsors).toHaveLength(0);
+
+    expect(config.robotTypes).toEqual(["wheel"]);
+    expect(config.robot.wheel.name).toBe("車輪型");
+
+    expect(config.departmentTypes).toEqual(["elementary"]);
     expect(config.department.elementary.name).toBe("小学生部門");
     expect(config.department.elementary.robotTypes).toEqual(["wheel"]);
 
+    expect(config.matchTypes).toEqual(["pre"]);
     expect(config.match.pre.name).toBe("予選");
     expect(config.match.pre.limitSeconds).toBe(180);
+    expect(config.match.pre.course.elementary).toBe(3);
   });
 
   it("複数項目の設定を生成できる", () => {
-    type RobotTypes = [string, ...string[]];
+    type Robot = DerivedRobotConfig<string, string>;
+    type Robots = [Robot, ...Robot[]];
+    type RobotTypes = [Robot["type"], ...Robot["type"][]];
     type Department = DerivedDepartmentConfig<string, string, RobotTypes>;
     type Departments = [Department, ...Department[]];
     type Match = DerivedMatchConfig<
       string,
       string,
       number,
-      string[],
+      Robots,
       Departments,
-      DerivedCourseConfig<string[], Departments> & { __department0: 0 } // ValidCourseConfigsを通過させるため
+      DerivedCourseConfig<Robots, Departments> & { __department0: 0 } // ValidCourseConfigsを通過させるため
     >;
     type Matches = [Match, ...Match[]];
     type Sponsor = DerivedSponsorConfig<string, SponsorClass, string>;
@@ -88,12 +102,15 @@ describe("正しい設定を生成できる", () => {
 
     const range = [...new Array(10)].map((_, i) => i);
 
-    const robotTypes = range.map((i) => `robot${i}`) as RobotTypes;
+    const robots = range.map((i) => ({
+      type: `robot${i}`,
+      name: `ロボット${i}`,
+    })) as Robots;
     const departments = range.map(
       (i): Department => ({
         type: `department${i}`,
         name: `部門${i}`,
-        robotTypes: robotTypes.slice(0, i + 1) as RobotTypes,
+        robotTypes: robots.slice(0, i + 1).map((r) => r.type) as RobotTypes,
       })
     ) as Departments;
     const matches = range.map(
@@ -136,7 +153,7 @@ describe("正しい設定を生成できる", () => {
     const config = createConfig(
       {
         contestName: "かにロボコン",
-        robotTypes,
+        robots: robots,
         departments,
         matches,
         rules,
@@ -145,11 +162,17 @@ describe("正しい設定を生成できる", () => {
       {}
     );
 
-    expect(config.robotTypes).toEqual(robotTypes);
+    expect(config.robots).toEqual(robots);
     expect(config.departments).toEqual(departments);
     expect(config.matches).toEqual(matches);
     expect(config.rules).toEqual(rules);
     expect(config.sponsors).toEqual(sponsors);
+    expect(config.robotTypes).toEqual(robots.map((r) => r.type));
+    expect(config.departmentTypes).toEqual(departments.map((d) => d.type));
+    expect(config.matchTypes).toEqual(matches.map((m) => m.type));
+    range.map((i) =>
+      expect(config.robot).toHaveProperty([`robot${i}`, "name"], `ロボット${i}`)
+    );
     range.map((i) =>
       expect(config.department).toHaveProperty(
         [`department${i}`, "name"],
@@ -164,6 +187,7 @@ describe("正しい設定を生成できる", () => {
   it("conditionが正しく設定できる", () => {
     type PremiseState = DerivedPremiseState<
       "pre",
+      "wheel",
       "elementary",
       DerivedPointState<{
         name: "goal";
@@ -179,12 +203,12 @@ describe("正しい設定を生成できる", () => {
     const scorable = (state: PremiseState) =>
       state.matchState[state.side].getGoalTimeSeconds() != undefined;
     const changeable = (state: PremiseState) =>
-      !!state.matchInfo?.teams[state.side].isMultiWalk;
+      state.matchInfo?.teams[state.side].robotType == "wheel";
 
     const config = createConfig(
       {
         contestName: "かにロボコン",
-        robotTypes: ["wheel"],
+        robots: [{ type: "wheel", name: "車輪型" }],
         departments: [
           { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],

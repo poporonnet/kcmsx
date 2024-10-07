@@ -12,6 +12,11 @@ import {
   MatchConfig,
 } from "../types/matchConfig";
 import {
+  DerivedRobot,
+  DerivedRobotConfig,
+  RobotConfig,
+} from "../types/robotConfig";
+import {
   DerivedRuleBaseVariant,
   RuleBaseList,
   RuleType,
@@ -20,14 +25,20 @@ import {
 } from "../types/rule";
 import { DerivedRuleList } from "../types/ruleList";
 import { DerivedSponsorConfig, SponsorClass } from "../types/sponsorConfig";
+import { pick } from "./pick";
 
 export const createConfig = <
   ContestName extends string,
   RobotType extends string,
-  RobotTypes extends [RobotType, ...RobotType[]],
+  RobotName extends string,
+  Robot extends DerivedRobotConfig<RobotType, RobotName>,
+  Robots extends [Robot, ...Robot[]],
   DepartmentType extends string,
   DepartmentName extends string,
-  DepartmentRobotTypes extends [RobotTypes[number], ...RobotTypes[number][]],
+  DepartmentRobotTypes extends [
+    Robots[number]["type"],
+    ...Robots[number]["type"][],
+  ],
   Department extends DerivedDepartmentConfig<
     DepartmentType,
     DepartmentName,
@@ -37,12 +48,12 @@ export const createConfig = <
   MatchType extends string,
   MatchName extends string,
   MatchLimitSeconds extends number,
-  MatchCourse extends DerivedCourseConfig<RobotTypes, Departments>,
+  MatchCourse extends DerivedCourseConfig<Robots, Departments>,
   Match extends DerivedMatchConfig<
     MatchType,
     MatchName,
     MatchLimitSeconds,
-    RobotTypes,
+    Robots,
     Departments,
     MatchCourse
   >,
@@ -67,16 +78,11 @@ export const createConfig = <
     SponsorLogo
   >,
   Sponsors extends [] | [Sponsor, ...Sponsor[]],
-  Conditions extends ConditionsConfig<
-    RobotTypes,
-    RuleBases,
-    Matches,
-    Departments
-  >,
+  Conditions extends ConditionsConfig<Robots, RuleBases, Matches, Departments>,
 >(
   baseConfig: BaseConfig<
     ContestName,
-    RobotTypes,
+    Robots,
     Departments,
     Matches,
     RuleBaseType,
@@ -84,30 +90,30 @@ export const createConfig = <
     RuleBases,
     Sponsors
   >,
-  conditions: ConditionsConfig<RobotTypes, RuleBases, Matches, Departments>
+  conditions: ConditionsConfig<Robots, RuleBases, Matches, Departments>
 ): Readonly<
   Config<
     ContestName,
-    RobotTypes,
+    Robots,
     Departments,
     Matches,
     RuleBaseType,
     RuleBaseInitial,
-    DerivedRuleList<RuleBases, RobotTypes, Matches, Departments, Conditions>,
+    DerivedRuleList<RuleBases, Robots, Matches, Departments, Conditions>,
     Sponsors
   >
 > => ({
   contestName: baseConfig.contestName,
-  robotTypes: baseConfig.robotTypes,
+  robots: baseConfig.robots,
   departments: baseConfig.departments,
   matches: baseConfig.matches,
   rules: baseConfig.rules.map<
     DerivedRuleList<
       RuleBaseList,
-      RobotTypes,
+      Robots,
       Matches,
       Departments,
-      ConditionsConfig<RobotTypes, RuleBaseList, Matches, Departments>
+      ConditionsConfig<Robots, RuleBaseList, Matches, Departments>
     >[number]
   >((ruleBase) => {
     const name: RuleBases[number]["name"] = ruleBase.name;
@@ -120,14 +126,22 @@ export const createConfig = <
   }) as ValidRuleList<
     RuleBaseType,
     RuleBaseInitial,
-    DerivedRuleList<RuleBases, RobotTypes, Matches, Departments, Conditions>
+    DerivedRuleList<RuleBases, Robots, Matches, Departments, Conditions>
   >,
   sponsors: baseConfig.sponsors,
+  robotTypes: pick(baseConfig.robots, "type"),
+  robot: Object.fromEntries(
+    baseConfig.robots.map<[Robots[number]["type"], Omit<RobotConfig, "type">]>(
+      ({ type, name }) => [type, { name }]
+    )
+  ) as DerivedRobot<Robots>,
+  departmentTypes: pick(baseConfig.departments, "type"),
   department: Object.fromEntries(
     baseConfig.departments.map<
-      [Departments[number]["type"], Omit<DepartmentConfig<RobotTypes>, "type">]
+      [Departments[number]["type"], Omit<DepartmentConfig<Robots>, "type">]
     >(({ type, name, robotTypes }) => [type, { name, robotTypes }])
-  ) as DerivedDepartment<RobotTypes, Departments>,
+  ) as DerivedDepartment<Robots, Departments>,
+  matchTypes: pick(baseConfig.matches, "type"),
   match: Object.fromEntries(
     baseConfig.matches.map<
       [Matches[number]["type"], Omit<MatchConfig, "type">]

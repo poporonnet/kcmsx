@@ -1,18 +1,20 @@
 import { DepartmentConfig } from "./departmentConfig";
 import { MatchConfig } from "./matchConfig";
+import { RobotConfig } from "./robotConfig";
 import { DerivedPointState, RuleBaseList, RuleCondition } from "./rule";
 
 /**
  * @description すべてのルールに対する{@link RuleCondition}の設定オブジェクトの型
  */
 export type ConditionsConfig<
-  RobotTypes extends string[],
+  Robots extends RobotConfig[],
   RuleBases extends RuleBaseList,
   Matches extends MatchConfig[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Departments extends DepartmentConfig<Robots>[],
 > = {
   [K in RuleBases[number]["name"]]?: RuleCondition<
     Matches[number]["type"],
+    Robots[number]["type"],
     Departments[number]["type"],
     DerivedPointState<RuleBases[number]>
   >;
