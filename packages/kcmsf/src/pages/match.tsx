@@ -88,8 +88,8 @@ export const Match = () => {
       setMatchInfo(matchInfo);
       setMatchJudge(
         new Judge(
-          { multiWalk: !isExhibition && matchInfo?.teams.left.isMultiWalk },
-          { multiWalk: !isExhibition && matchInfo?.teams.right.isMultiWalk },
+          { multiWalk: !isExhibition && matchInfo?.teams.left.robotType == "leg" },
+          { multiWalk: !isExhibition && matchInfo?.teams.right.robotType == "leg" },
           { matchInfo },
           { matchInfo }
         )
