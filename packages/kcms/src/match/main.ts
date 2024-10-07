@@ -26,7 +26,7 @@ const mainMatchRepository = isProduction
   : new DummyMainMatchRepository();
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
-const createRunResult: CreateRunResultService = new CreateRunResultService(
+const createRunResult = new CreateRunResultService(
   idGenerator,
   preMatchRepository,
   mainMatchRepository
