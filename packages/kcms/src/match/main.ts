@@ -14,6 +14,7 @@ import { MainMatchID } from './model/main';
 import { PreMatchID } from './model/pre';
 import { CreateRunResultArgs, FinishState } from './model/runResult';
 import { PostMatchRunResultRoute } from './routing';
+import { CreateRunResultService } from './service/createRunResult';
 
 export const matchHandler = new OpenAPIHono();
 const isProduction = process.env.NODE_ENV === 'production';
@@ -24,7 +25,14 @@ const mainMatchRepository = isProduction
   ? new PrismaMainMatchRepository(prismaClient)
   : new DummyMainMatchRepository();
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
-export const controller = new Controller(idGenerator, preMatchRepository, mainMatchRepository);
+
+const createRunResult: CreateRunResultService = new CreateRunResultService(
+  idGenerator,
+  preMatchRepository,
+  mainMatchRepository
+);
+
+export const controller = new Controller(createRunResult);
 matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
   const { matchType, matchID } = c.req.param();

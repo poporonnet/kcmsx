@@ -18,8 +18,9 @@ export class CreateRunResultService {
 
   /**
    *  試合の走行結果を複数送信します
-   * @param matchResults
-   * @param input {@link CreateRunResultArgs}
+   * @param matchType {@link MatchType}
+   * @param matchID {@link matchID}
+   * @param matchResults {@link CreateRunResultArgs}
    */
   async handle(
     matchType: MatchType,
@@ -48,15 +49,22 @@ export class CreateRunResultService {
         return Result.err(new Error('Match not found'));
       }
       const match = Option.unwrap(matchRes);
-      match.appendRunResults(runResults);
+      try {
+        match.appendRunResults(runResults);
+      } catch (e) {
+        return Result.err(e as Error);
+      }
     } else {
       const matchRes = await this.mainMatchRepository.findByID(matchID as MainMatchID);
       if (Option.isNone(matchRes)) {
         return Result.err(new Error('Match not found'));
       }
       const match = Option.unwrap(matchRes);
-      if (runResults.length !== 2 && runResults.length !== 4) Result.err(new Error('違うよ'));
-      match.appendRunResults(runResults);
+      try {
+        match.appendRunResults(runResults);
+      } catch (e) {
+        return Result.err(e as Error);
+      }
     }
     return Result.ok(runResults);
   }
