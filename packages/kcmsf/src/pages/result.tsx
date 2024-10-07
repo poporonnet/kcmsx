@@ -63,7 +63,7 @@ export const Result = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data)
+        console.log(data);
         if (data.length === 0 || data === undefined) return;
         setMainMatchData(data.main);
         setPreMatchData(data.pre);
@@ -81,10 +81,7 @@ export const Result = () => {
       />
       <Flex direction="column" gap={20}>
         <Title order={3}>{department}</Title>
-        <MainResultTable
-          departmentType={department}
-          matches={mainMatchData}
-        />
+        <MainResultTable departmentType={department} matches={mainMatchData} />
         <PreResultTable departmentType={department} matches={preMatchData} />
       </Flex>
     </>
@@ -122,12 +119,16 @@ const PreResult = (
   }
   return (
     <>
-      <Table.Td className="td">{match.leftTeam ? match.leftTeam.teamName : undefined}</Table.Td>
+      <Table.Td className="td">
+        {match.leftTeam ? match.leftTeam.teamName : undefined}
+      </Table.Td>
       <Table.Td className="td">{leftPoint}</Table.Td>
       <Table.Td className="td">
         {leftGoalSeconds ? leftGoalSeconds : "リタイア"}
       </Table.Td>
-      <Table.Td className="td">{match.rightTeam ? match.rightTeam.teamName: undefined}</Table.Td>
+      <Table.Td className="td">
+        {match.rightTeam ? match.rightTeam.teamName : undefined}
+      </Table.Td>
       <Table.Td className="td">{rightPoint}</Table.Td>
       <Table.Td className="td">
         {rightGoalSeconds ? rightGoalSeconds : "リタイア"}
@@ -174,7 +175,10 @@ const PreResultTable = (props: {
   );
 };
 
-const MainResult = (departmentType: DepartmentType | undefined, match: MainMatch) => {
+const MainResult = (
+  departmentType: DepartmentType | undefined,
+  match: MainMatch
+) => {
   const [winner, setWinner] = useState<string>("");
   const [loser, setLoser] = useState<string>("");
   const [points, setPoints] = useState<number[]>([]);
