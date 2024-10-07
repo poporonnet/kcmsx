@@ -51,7 +51,7 @@ export const config = createConfig(
         name: "multiWalk",
         label: "歩行型",
         type: "single",
-        initial: false,
+        initial: true, // conditionsの`scorable`で制御する
         point: (done: boolean) => (done ? 2 : 0),
       },
       {
@@ -116,7 +116,13 @@ export const config = createConfig(
   },
   {
     multiWalk: {
-      visible: () => false,
+      visible: (state) => !state.matchInfo, // エキシビションモードでのみ表示
+      changeable: (state) =>
+        !state.matchInfo && // エキシビションモードでのみマニュアル変更可能
+        !state.matchState[state.side].getPointState().finish,
+      scorable: (state) =>
+        !state.matchInfo || // エキシビションモードでは通常通り加算可能
+        state.matchInfo.teams[state.side].robotType == "leg", // 通常の試合では歩行型のときのみ加算可能
     },
     leaveBase: {
       changeable: (state) =>
