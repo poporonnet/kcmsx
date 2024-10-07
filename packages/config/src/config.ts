@@ -116,6 +116,10 @@ export const config = createConfig(
   },
   {
     multiWalk: {
+      visible: (state) => !state.matchInfo, // エキシビションモードでのみ表示
+      changeable: (state) =>
+        !state.matchInfo && // エキシビションモードでのみマニュアル変更可能
+        !state.matchState[state.side].getPointState().finish,
       scorable: (state) =>
         !state.matchInfo || // エキシビションモードでは通常通り加算可能
         state.matchInfo.teams[state.side].robotType == "leg", // 通常の試合では歩行型のときのみ加算可能
