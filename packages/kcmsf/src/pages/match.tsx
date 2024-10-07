@@ -74,22 +74,28 @@ export const Match = () => {
           left: {
             id: leftTeam.id,
             teamName: leftTeam.name,
-            isMultiWalk: leftTeam.robotType === "leg" ? true : false, // TODO: 内部でもrobotTypeを使うようにする
-            category: leftTeam.departmentType,
+            robotType: leftTeam.robotType,
+            departmentType: leftTeam.departmentType,
           },
           right: {
             id: rightTeam.id,
             teamName: rightTeam.name,
-            isMultiWalk: rightTeam.robotType === "leg" ? true : false, // TODO: 内部でもrobotTypeを使うようにする
-            category: rightTeam.departmentType,
+            robotType: rightTeam.robotType,
+            departmentType: rightTeam.departmentType,
           },
         },
       };
       setMatchInfo(matchInfo);
       setMatchJudge(
         new Judge(
-          { multiWalk: !isExhibition && matchInfo?.teams.left.isMultiWalk },
-          { multiWalk: !isExhibition && matchInfo?.teams.right.isMultiWalk },
+          {
+            multiWalk:
+              !isExhibition && matchInfo?.teams.left.robotType == "leg",
+          },
+          {
+            multiWalk:
+              !isExhibition && matchInfo?.teams.right.robotType == "leg",
+          },
           { matchInfo },
           { matchInfo }
         )

@@ -187,6 +187,7 @@ describe("正しい設定を生成できる", () => {
   it("conditionが正しく設定できる", () => {
     type PremiseState = DerivedPremiseState<
       "pre",
+      "wheel",
       "elementary",
       DerivedPointState<{
         name: "goal";
@@ -202,7 +203,7 @@ describe("正しい設定を生成できる", () => {
     const scorable = (state: PremiseState) =>
       state.matchState[state.side].getGoalTimeSeconds() != undefined;
     const changeable = (state: PremiseState) =>
-      !!state.matchInfo?.teams[state.side].isMultiWalk;
+      state.matchInfo?.teams[state.side].robotType == "wheel";
 
     const config = createConfig(
       {
