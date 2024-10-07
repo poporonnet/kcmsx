@@ -17,7 +17,7 @@ export class CreateRunResultService {
   ) {}
 
   /**
-   *  試合の走行結果を複数送信します
+   *  試合の走行結果を追加します
    * @param matchResults
    * @param input {@link CreateRunResultArgs}
    */
