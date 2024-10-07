@@ -14,6 +14,7 @@ export type ConditionsConfig<
 > = {
   [K in RuleBases[number]["name"]]?: RuleCondition<
     Matches[number]["type"],
+    Robots[number]["type"],
     Departments[number]["type"],
     DerivedPointState<RuleBases[number]>
   >;
