@@ -38,14 +38,7 @@ export const Match = () => {
   const isExhibition = !id || !matchType;
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
   const [matchJudge, setMatchJudge] = useState<Judge | undefined>(
-    isExhibition
-      ? new Judge(
-          { multiWalk: false },
-          { multiWalk: false },
-          { matchInfo },
-          { matchInfo }
-        )
-      : undefined
+    isExhibition ? new Judge({}, {}, { matchInfo }, { matchInfo }) : undefined
   );
   useEffect(() => {
     if (isExhibition) return;
@@ -86,20 +79,7 @@ export const Match = () => {
         },
       };
       setMatchInfo(matchInfo);
-      setMatchJudge(
-        new Judge(
-          {
-            multiWalk:
-              !isExhibition && matchInfo?.teams.left.robotType == "leg",
-          },
-          {
-            multiWalk:
-              !isExhibition && matchInfo?.teams.right.robotType == "leg",
-          },
-          { matchInfo },
-          { matchInfo }
-        )
-      );
+      setMatchJudge(new Judge({}, {}, { matchInfo }, { matchInfo }));
     };
     fetchMatchInfo();
   }, [id, isExhibition, matchType]);
