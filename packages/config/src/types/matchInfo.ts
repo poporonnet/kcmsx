@@ -13,11 +13,12 @@ export type Against<S extends Side> = Side extends S ? Side : Exclude<Side, S>;
  */
 export type DerivedMatchInfo<
   MatchType extends string,
+  RobotType extends string,
   DepartmentType extends string,
 > = {
   id: string;
   teams: {
-    [S in Side]: DerivedTeamInfo<DepartmentType>;
+    [S in Side]: DerivedTeamInfo<RobotType, DepartmentType>;
   };
   matchType: MatchType;
 };
@@ -25,9 +26,12 @@ export type DerivedMatchInfo<
 /**
  * @description リテラル型から導出されるチーム情報の型
  */
-export type DerivedTeamInfo<DepartmentType> = {
+export type DerivedTeamInfo<
+  RobotType extends string,
+  DepartmentType extends string,
+> = {
   id: string;
   teamName: string;
-  isMultiWalk: boolean;
-  category: DepartmentType;
+  robotType: RobotType;
+  departmentType: DepartmentType;
 };

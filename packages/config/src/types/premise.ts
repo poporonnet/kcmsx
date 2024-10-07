@@ -5,9 +5,10 @@ import { DerivedMatchInfo, Side } from "./matchInfo";
  */
 export type DerivedPremiseState<
   MatchType extends string,
+  RobotType extends string,
   DepartmentType extends string,
   PointState extends Record<string, unknown>,
-> = DerivedStaticPremiseState<MatchType, DepartmentType> &
+> = DerivedStaticPremiseState<MatchType, RobotType, DepartmentType> &
   DerivedDynamicPremiseState<PointState>;
 
 /**
@@ -15,9 +16,10 @@ export type DerivedPremiseState<
  */
 export type DerivedStaticPremiseState<
   MatchType extends string,
+  RobotType extends string,
   DepartmentType extends string,
 > = {
-  matchInfo?: DerivedMatchInfo<MatchType, DepartmentType>;
+  matchInfo?: DerivedMatchInfo<MatchType, RobotType, DepartmentType>;
   side: Side;
 };
 

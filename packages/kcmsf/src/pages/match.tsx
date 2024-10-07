@@ -74,14 +74,14 @@ export const Match = () => {
           left: {
             id: leftTeam.id,
             teamName: leftTeam.name,
-            isMultiWalk: leftTeam.robotType === "leg" ? true : false, // TODO: 内部でもrobotTypeを使うようにする
-            category: leftTeam.departmentType,
+            robotType: leftTeam.robotType,
+            departmentType: leftTeam.departmentType,
           },
           right: {
             id: rightTeam.id,
             teamName: rightTeam.name,
-            isMultiWalk: rightTeam.robotType === "leg" ? true : false, // TODO: 内部でもrobotTypeを使うようにする
-            category: rightTeam.departmentType,
+            robotType: rightTeam.robotType,
+            departmentType: rightTeam.departmentType,
           },
         },
       };

@@ -1,5 +1,5 @@
 import { DerivedPremiseState } from "../premise";
-import { DepartmentType, MatchType } from "./config";
+import { DepartmentType, MatchType, RobotType } from "./config";
 import { PointState } from "./rule";
 
 /**
@@ -7,6 +7,7 @@ import { PointState } from "./rule";
  */
 export type PremiseState = DerivedPremiseState<
   MatchType,
+  RobotType,
   DepartmentType,
   PointState
 >;
