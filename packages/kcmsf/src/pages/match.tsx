@@ -26,13 +26,22 @@ type GetTeamResponse = {
   departmentType: DepartmentType;
   isEntered: boolean;
 };
-type GetMatchResponse = {
+
+type GetMatchResponseBase = {
   id: string;
   matchCode: string;
-  leftTeam: { id: string; teamName: string };
-  rightTeam: { id: string; teamName: string };
   // TODO: RunResultの扱い
 };
+type GetPreMatchResponse = GetMatchResponseBase & {
+  leftTeam: { id: string; teamName: string };
+  rightTeam: { id: string; teamName: string };
+};
+type GetMainMatchResponse = GetMatchResponseBase & {
+  team1: { id: string; teamName: string };
+  team2: { id: string; teamName: string };
+};
+type GetMatchResponse = GetPreMatchResponse | GetMainMatchResponse;
+
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
   const isExhibition = !id || !matchType;
@@ -48,14 +57,23 @@ export const Match = () => {
         { method: "GET" }
       );
       const match = (await res.json()) as GetMatchResponse;
+
+      const leftTeamID =
+        matchType === "main"
+          ? (match as GetMainMatchResponse).team1.id
+          : (match as GetPreMatchResponse).leftTeam.id;
       const leftRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${match.leftTeam.id}`,
+        `${import.meta.env.VITE_API_URL}/team/${leftTeamID}`,
         { method: "GET" }
       );
       const leftTeam = (await leftRes.json()) as GetTeamResponse;
 
+      const rightTeamID =
+        matchType === "main"
+          ? (match as GetMainMatchResponse).team2.id
+          : (match as GetPreMatchResponse).rightTeam.id;
       const rightRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${match.rightTeam.id}`,
+        `${import.meta.env.VITE_API_URL}/team/${rightTeamID}`,
         { method: "GET" }
       );
       const rightTeam = (await rightRes.json()) as GetTeamResponse;
