@@ -41,7 +41,7 @@ export class Controller {
     });
     const res = await this.createResult.handle(matchType, matchID, matchResults);
     if (Result.isErr(res)) {
-      return Result.err(res[1]);
+      return res;
     }
     return Result.ok(undefined);
   }
