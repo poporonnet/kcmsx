@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { DeleteTeamService } from './delete.js';
-import { Option,Result } from '@mikuroxina/mini-fn';
+import { Option, Result } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry';
 import { TeamID } from '../models/team';
 

@@ -9,7 +9,7 @@ export class DeleteTeamService {
     this.repository = repository;
   }
 
-  async handle(teamID: TeamID): Promise<Result.Result<Error,void>> {
+  async handle(teamID: TeamID): Promise<Result.Result<Error, void>> {
     const res = await this.repository.findByID(teamID);
     if (Option.isNone(res)) {
       return Result.err(new Error('Team not found'));
