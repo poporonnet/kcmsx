@@ -1,7 +1,7 @@
 import { Controller } from './controller.js';
 import { DummyRepository } from './adaptor/repository/dummyRepository';
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { GetTeamRoute, GetTeamsRoute, PostTeamsRoute } from './routing';
+import { DeleteTeamRoute, GetTeamRoute, GetTeamsRoute, PostTeamsRoute } from './routing';
 import { Result } from '@mikuroxina/mini-fn';
 import { errorToCode } from './adaptor/errors';
 import { PrismaTeamRepository } from './adaptor/repository/prismaRepository';
@@ -49,4 +49,15 @@ teamHandler.openapi(GetTeamRoute, async (c) => {
   }
   const team = Result.unwrap(res);
   return c.json(team, 200);
+});
+/**
+ * 指定されたIDのチームを削除する (DELETE /team/{teamID})
+ */
+teamHandler.openapi(DeleteTeamRoute, async (c) => {
+  const teamID = c.req.param('teamID');
+  const res = await controller.delete(teamID as TeamID);
+  if (Result.isErr(res)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(res)) }, 400);
+  }
+  return new Response(null, { status: 204 });
 });
