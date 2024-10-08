@@ -35,7 +35,7 @@ const createRunResult = new CreateRunResultService(
 export const controller = new Controller(createRunResult);
 matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
-  const { matchType, matchID } = c.req.param();
+  const { matchType, matchID } = c.req.valid("param");
   const request: Omit<CreateRunResultArgs, 'id'>[] = req.map((r) => ({
     ...r,
     teamID: r.teamID as TeamID,
