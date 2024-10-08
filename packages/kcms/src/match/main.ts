@@ -1,6 +1,5 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
-import { MatchType } from 'config';
 import { prismaClient } from '../adaptor';
 import { SnowflakeIDGenerator } from '../id/main';
 import { errorToCode } from '../team/adaptor/errors';
@@ -12,9 +11,10 @@ import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
 import { Controller } from './controller';
 import { MainMatchID } from './model/main';
 import { PreMatchID } from './model/pre';
-import { CreateRunResultArgs, FinishState } from './model/runResult';
+import { CreateRunResultArgs } from './model/runResult';
 import { PostMatchRunResultRoute } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
+import { finishStateConversion } from './utility/finishStateConversion';
 
 export const matchHandler = new OpenAPIHono();
 const isProduction = process.env.NODE_ENV === 'production';
@@ -35,15 +35,15 @@ const createRunResult = new CreateRunResultService(
 export const controller = new Controller(createRunResult);
 matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
-  const { matchType, matchID } = c.req.valid("param");
+  const { matchType, matchID } = c.req.valid('param');
   const request: Omit<CreateRunResultArgs, 'id'>[] = req.map((r) => ({
-    ...r,
+    points: r.points,
     teamID: r.teamID as TeamID,
     goalTimeSeconds: r.goalTimeSeconds ?? Infinity,
-    finishState: r.finishState.toUpperCase() as FinishState,
+    finishState: finishStateConversion(r.finishState),
   }));
   const res = await controller.createRunResult(
-    matchType as MatchType,
+    matchType,
     matchID as PreMatchID | MainMatchID,
     request
   );

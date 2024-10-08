@@ -1,11 +1,9 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { MatchType } from 'config';
-import { TeamID } from '../team/models/team';
 import { MainMatchID } from './model/main';
 import { PreMatchID } from './model/pre';
-import { CreateRunResultArgs, FinishState } from './model/runResult';
+import { CreateRunResultArgs } from './model/runResult';
 import { CreateRunResultService } from './service/createRunResult';
-
 export class Controller {
   constructor(private readonly createResult: CreateRunResultService) {}
   async createRunResult(
@@ -14,11 +12,14 @@ export class Controller {
     args: Omit<CreateRunResultArgs, 'id'>[]
   ): Promise<Result.Result<Error, void>> {
     const matchResults: Omit<CreateRunResultArgs, 'id'>[] = args.map((m) => {
+      if (m.finishState === 'FINISHED' && m.goalTimeSeconds) {
+        Result.err(args);
+      }
       return {
-        teamID: m.teamID as TeamID,
+        teamID: m.teamID,
         points: m.points,
-        goalTimeSeconds: m.finishState === 'FINISHED' ? m.goalTimeSeconds : Infinity,
-        finishState: m.finishState.toUpperCase() as FinishState,
+        goalTimeSeconds: m.goalTimeSeconds ?? Infinity,
+        finishState: m.finishState,
       };
     });
     const res = await this.createResult.handle(matchType, matchID, matchResults);

@@ -108,7 +108,7 @@ describe('PreMatch', () => {
             id: String(i) as RunResultID,
             goalTimeSeconds: i * 10,
             points: 10 + i,
-            teamID: i % 2 == 0 ? args.teamId1 : ('999' as TeamID),
+            teamID: '999' as TeamID,
             finishState: 'FINISHED',
           });
         })
