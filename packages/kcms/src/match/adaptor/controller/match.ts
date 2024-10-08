@@ -13,9 +13,9 @@ export class MatchController {
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
-    const matchRes = await this.getMatchService.findAll();
-    if (Result.isErr(matchRes)) return matchRes;
-    const match = Result.unwrap(matchRes);
+    const matchesRes = await this.getMatchService.findAll();
+    if (Result.isErr(matchesRes)) return matchesRes;
+    const match = Result.unwrap(matchesRes);
 
     const teamsRes = await this.fetchTeamService.findAll();
     if (Result.isErr(teamsRes)) return teamsRes;
