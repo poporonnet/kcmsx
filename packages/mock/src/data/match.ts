@@ -4,6 +4,7 @@ import { teams } from "./team";
 export interface PreMatch {
   id: string;
   matchCode: `${number}-${number}`;
+  departmentType: (typeof teams)[number]["departmentType"];
   leftTeam:
     | {
         id: (typeof teams)[number]["id"];
@@ -22,6 +23,7 @@ export interface PreMatch {
 export interface MainMatch {
   id: string;
   matchCode: `${number}-${number}`;
+  departmentType: (typeof teams)[number]["departmentType"];
   team1:
     | {
         id: (typeof teams)[number]["id"];
@@ -47,6 +49,7 @@ export const preMatches: PreMatch[] = [
   {
     id: "6582553",
     matchCode: "1-1",
+    departmentType: "elementary",
     leftTeam: {
       id: "1392387",
       teamName: "かに1",
@@ -74,6 +77,7 @@ export const preMatches: PreMatch[] = [
   {
     id: "1583452",
     matchCode: "3-1",
+    departmentType: "elementary",
     leftTeam: {
       id: "4578932",
       teamName: "かに3",
@@ -95,6 +99,37 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
+    departmentType: "elementary",
+    team1: {
+      id: "1392387",
+      teamName: "かに1",
+    },
+    team2: {
+      id: "7549586",
+      teamName: "かに2",
+    },
+    winnerID: "1392387",
+    runResults: [
+      {
+        id: "4279861",
+        teamID: "1392387",
+        points: 5,
+        goalTimeSeconds: 150,
+        finishState: "finished",
+      },
+      {
+        id: "987326732",
+        teamID: "7549586",
+        points: 4,
+        goalTimeSeconds: 130,
+        finishState: "finished",
+      },
+    ],
+  },
+  {
+    id: "943629",
+    matchCode: "2-1",
+    departmentType: "open",
     team1: {
       id: "1392387",
       teamName: "かに1",
