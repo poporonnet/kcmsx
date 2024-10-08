@@ -1,8 +1,8 @@
 import { TeamRepository } from './models/repository.js';
 import { CreateTeamService } from './service/createTeam';
-import { Option, Result } from '@mikuroxina/mini-fn';
+import { Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from './service/get.js';
-import { DeleteEntryService } from './service/delete.js';
+import { DeleteTeamService } from './service/delete.js';
 import { SnowflakeIDGenerator } from '../id/main.js';
 import {
   GetTeamsResponseSchema,
@@ -10,11 +10,12 @@ import {
   PostTeamsResponseSchema,
 } from './adaptor/validator/team';
 import { z } from '@hono/zod-openapi';
+import { TeamID } from './models/team.js';
 
 export class Controller {
   private readonly createTeam: CreateTeamService;
   private readonly findEntry: FetchTeamService;
-  private readonly deleteService: DeleteEntryService;
+  private readonly deleteService: DeleteTeamService;
 
   constructor(repository: TeamRepository) {
     this.createTeam = new CreateTeamService(
@@ -22,7 +23,7 @@ export class Controller {
       new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
     );
     this.findEntry = new FetchTeamService(repository);
-    this.deleteService = new DeleteEntryService(repository);
+    this.deleteService = new DeleteTeamService(repository);
   }
 
   async create(
@@ -83,12 +84,12 @@ export class Controller {
     });
   }
 
-  async delete(id: string): Promise<Option.Option<Error>> {
+  async delete(id: TeamID): Promise<Result.Result<Error, void>> {
     const res = await this.deleteService.handle(id);
-    if (Option.isSome(res)) {
-      return Option.some(res[1]);
+    if (Result.isErr(res)) {
+      return Result.err(res[1]);
     }
 
-    return Option.none();
+    return Result.ok(undefined);
   }
 }
