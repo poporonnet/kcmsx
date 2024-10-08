@@ -43,7 +43,6 @@ export class MatchController {
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-          // departmentType: getTeamDepartmentType(v.getTeamId1(), v.getTeamId2()),
           departmentType: v.getDepartmentType(),
           leftTeam: getTeam(v.getTeamId1()),
           rightTeam: getTeam(v.getTeamId2()),
