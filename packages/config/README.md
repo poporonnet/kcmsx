@@ -4,7 +4,7 @@
   - [createConfig(baseConfig, conditions)](#createconfigbaseconfig-conditions)
   - [baseConfig](#baseconfig)
     - [baseConfig.contestName](#baseconfigcontestname)
-    - [baseConfig.robotTypes](#baseconfigrobottypes)
+    - [baseConfig.robots](#baseconfigrobots)
     - [baseConfig.departments](#baseconfigdepartments)
     - [baseConfig.matches](#baseconfigmatches)
     - [baseConfig.rules](#baseconfigrules)
@@ -32,7 +32,7 @@ import { createConfig } from "./utility/createConfig";
 export const config = createConfig(
   {
     contestName: "",
-    robotTypes: [],
+    robots: [],
     departments: [],
     matches: [],
     rules: [],
@@ -52,7 +52,7 @@ export const config = createConfig(
 - 型: `BaseConfig`
 
 主要なほとんどの設定を含むオブジェクトです。
-`contestName`, `robotTypes`, `departments`, `matches`, `rules`, `sponsors`プロパティが必要です。
+`contestName`, `robots`, `departments`, `matches`, `rules`, `sponsors`プロパティが必要です。
 以下でプロパティの詳細について説明しています。
 
 ### baseConfig.contestName
@@ -70,18 +70,35 @@ contestName: "かにロボコン",
 
 </details>
 
-### baseConfig.robotTypes
+### baseConfig.robots
 
-- 型: `string[]`
+- 型: `RobotConfig[]`
 
 ロボットの種別です。車輪型もしくは歩行型、といった種別を定義します。
 1つ以上の種別が必要です。
+以下で、配列の要素である`RobotConfig`のプロパティについて説明しています。
+
+- `type`
+  - 型: `string`
+  - ロボット種別の種別名です。主にプログラム中で使われます。他のロボット種別と重複させることはできません。
+- `name`
+  - 型: `string`
+  - ロボット種別の表示名です。主にフロントエンドでの表示に使われます。
 
 <details open>
 <summary>例: 車輪型と歩行型の2種別の場合</summary>
 
 ```ts
-robotTypes: ["wheel", "leg"],
+robots: [
+  {
+    type: "wheel",
+    name: "車輪型",
+  },
+  {
+    type: "leg",
+    name: "歩行型",
+  },
+],
 ```
 
 </details>
@@ -102,7 +119,7 @@ robotTypes: ["wheel", "leg"],
   - 部門の表示名です。主にフロントエンドでの表示に使われます。
 - `robotTypes`
   - 型: `string[]`
-  - この部門にエントリーできるロボットの種別のリストです。`baseConfig.robotTypes`に指定した値以外を記述することはできません。
+  - この部門にエントリーできるロボットの種別のリストです。`baseConfig.robots`の`type`に指定した値以外を記述することはできません。
 
 <details open>
 <summary>例: 小学生部門とオープン部門の2種別の場合</summary>

@@ -10,6 +10,10 @@ import {
   PostMatchRunResultRequestSchema,
   PostMatchRunResultParamsSchema,
   GetMatchRunResultParamsSchema,
+  GetRankingParamsSchema,
+  GetRankingResponseSchema,
+  PostMatchGenerateParamsSchema,
+  PostMatchGenerateResponseSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -70,7 +74,7 @@ export const GetMatchIdRoute = createRoute({
           schema: GetMatchIdResponseSchema,
         },
       },
-      description: 'Retrieve all matches by match type',
+      description: 'Retrieve a match by matchID',
     },
     400: {
       content: {
@@ -106,6 +110,31 @@ export const GetMatchRunResultRoute = createRoute({
     },
   },
 });
+
+export const GetMatchGenerateRoute = createRoute({
+  method: 'post',
+  path: '/match/{matchType}/{departmentType}/generate',
+  request: { params: PostMatchGenerateParamsSchema },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: PostMatchGenerateResponseSchema,
+        },
+      },
+      description: 'Generate match table',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
 export const PostMatchRunResultRoute = createRoute({
   method: 'post',
   path: '/match/{matchType}/{matchID}/run_result',
@@ -120,6 +149,30 @@ export const PostMatchRunResultRoute = createRoute({
   responses: {
     200: {
       description: 'Post run result',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetRankingRoute = createRoute({
+  method: 'get',
+  path: '/contest/{matchType}/{departmentType}/ranking',
+  request: { params: GetRankingParamsSchema },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetRankingResponseSchema,
+        },
+      },
+      description: 'Get Ranking',
     },
     400: {
       content: {

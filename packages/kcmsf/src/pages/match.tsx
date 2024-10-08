@@ -15,36 +15,39 @@ import { useForceReload } from "../hooks/useForceReload";
 import { Judge } from "../utils/match/judge";
 import { expiryTimestamp, parseSeconds } from "../utils/time";
 
-type TimerState = "Initial" | "Started" | "Finished";
-type TeamFetchResponse = {
+type TimerState = "initial" | "counting" | "finished";
+type GetTeamResponse = {
   id: string;
   name: string;
   entryCode: string;
   members: string[];
   clubName: string;
   robotType: RobotType;
-  category: DepartmentType;
+  departmentType: DepartmentType;
   isEntered: boolean;
 };
-type TeamFetchResponseData = {
+
+type GetMatchResponseBase = {
   id: string;
-  matchType: MatchType;
-  left: { id: string; teamName: string };
-  right: { id: string; teamName: string };
+  matchCode: string;
+  // TODO: RunResultの扱い
 };
+type GetPreMatchResponse = GetMatchResponseBase & {
+  leftTeam: { id: string; teamName: string };
+  rightTeam: { id: string; teamName: string };
+};
+type GetMainMatchResponse = GetMatchResponseBase & {
+  team1: { id: string; teamName: string };
+  team2: { id: string; teamName: string };
+};
+type GetMatchResponse = GetPreMatchResponse | GetMainMatchResponse;
+
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
   const isExhibition = !id || !matchType;
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
   const [matchJudge, setMatchJudge] = useState<Judge | undefined>(
-    isExhibition
-      ? new Judge(
-          { multiWalk: false },
-          { multiWalk: false },
-          { matchInfo },
-          { matchInfo }
-        )
-      : undefined
+    isExhibition ? new Judge({}, {}, { matchInfo }, { matchInfo }) : undefined
   );
   useEffect(() => {
     if (isExhibition) return;
@@ -53,62 +56,64 @@ export const Match = () => {
         `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
         { method: "GET" }
       );
-      const data = (await res.json()) as TeamFetchResponseData;
-      const leftRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${data.left.id}`,
-        { method: "GET" }
-      );
-      const leftData = (await leftRes.json()) as TeamFetchResponse;
+      const match = (await res.json()) as GetMatchResponse;
 
-      const rightRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${data.right.id}`,
+      const leftTeamID =
+        matchType === "main"
+          ? (match as GetMainMatchResponse).team1.id
+          : (match as GetPreMatchResponse).leftTeam.id;
+      const leftRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/team/${leftTeamID}`,
         { method: "GET" }
       );
-      const rightData = (await rightRes.json()) as TeamFetchResponse;
+      const leftTeam = (await leftRes.json()) as GetTeamResponse;
+
+      const rightTeamID =
+        matchType === "main"
+          ? (match as GetMainMatchResponse).team2.id
+          : (match as GetPreMatchResponse).rightTeam.id;
+      const rightRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/team/${rightTeamID}`,
+        { method: "GET" }
+      );
+      const rightTeam = (await rightRes.json()) as GetTeamResponse;
 
       const matchInfo: MatchInfo = {
-        id: data.id,
-        matchType: data.matchType,
+        id: match.id,
+        matchType,
         teams: {
           left: {
-            id: leftData.id,
-            teamName: leftData.name,
-            isMultiWalk: leftData.robotType === "leg" ? true : false,
-            category: leftData.category,
+            id: leftTeam.id,
+            teamName: leftTeam.name,
+            robotType: leftTeam.robotType,
+            departmentType: leftTeam.departmentType,
           },
           right: {
-            id: rightData.id,
-            teamName: rightData.name,
-            isMultiWalk: rightData.robotType === "leg" ? true : false,
-            category: rightData.category,
+            id: rightTeam.id,
+            teamName: rightTeam.name,
+            robotType: rightTeam.robotType,
+            departmentType: rightTeam.departmentType,
           },
         },
       };
       setMatchInfo(matchInfo);
-      setMatchJudge(
-        new Judge(
-          { multiWalk: !isExhibition && matchInfo?.teams.left.isMultiWalk },
-          { multiWalk: !isExhibition && matchInfo?.teams.right.isMultiWalk },
-          { matchInfo },
-          { matchInfo }
-        )
-      );
+      setMatchJudge(new Judge({}, {}, { matchInfo }, { matchInfo }));
     };
     fetchMatchInfo();
-  }, []);
+  }, [id, isExhibition, matchType]);
   const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
-  const [timerState, setTimerState] = useState<TimerState>("Initial");
+  const [timerState, setTimerState] = useState<TimerState>("initial");
   const { start, pause, resume, isRunning, totalSeconds } = useTimer({
     expiryTimestamp: expiryTimestamp(matchTimeSec),
     autoStart: false,
-    onExpire: () => setTimerState("Finished"),
+    onExpire: () => setTimerState("finished"),
   });
   const forceReload = useForceReload();
 
   const onClickTimer = () => {
-    if (timerState == "Initial") {
+    if (timerState == "initial") {
       start();
-      setTimerState("Started");
+      setTimerState("counting");
       return;
     }
 
@@ -126,7 +131,7 @@ export const Match = () => {
         h="auto"
         pb="sm"
         variant="filled"
-        color={timerState == "Finished" ? "pink" : isRunning ? "teal" : "gray"}
+        color={timerState == "finished" ? "pink" : isRunning ? "teal" : "gray"}
         onClick={onClickTimer}
       >
         <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
@@ -184,9 +189,11 @@ export const Match = () => {
         <MatchSubmit
           matchInfo={matchInfo}
           available={
-            (matchJudge.leftTeam.goalTimeSeconds != null &&
-              matchJudge.rightTeam.goalTimeSeconds != null) ||
-            timerState === "Finished"
+            ((matchJudge.leftTeam.goalTimeSeconds != null ||
+              matchJudge.leftTeam.point.state.finish) &&
+              (matchJudge.rightTeam.goalTimeSeconds != null ||
+                matchJudge.rightTeam.point.state.finish)) ||
+            timerState === "finished"
           }
           result={{
             left: {

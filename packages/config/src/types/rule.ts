@@ -137,17 +137,18 @@ export type DerivedRuleBaseVariant<
  */
 export type RuleCondition<
   MatchType extends string = string,
+  RobotType extends string = string,
   DepartmentType extends string = string,
   PointState extends Record<string, unknown> = Record<string, unknown>,
 > = Readonly<{
   visible?: (
-    state: DerivedPremiseState<MatchType, DepartmentType, PointState>
+    state: DerivedPremiseState<MatchType, RobotType, DepartmentType, PointState>
   ) => boolean;
   changeable?: (
-    state: DerivedPremiseState<MatchType, DepartmentType, PointState>
+    state: DerivedPremiseState<MatchType, RobotType, DepartmentType, PointState>
   ) => boolean;
   scorable?: (
-    state: DerivedPremiseState<MatchType, DepartmentType, PointState>
+    state: DerivedPremiseState<MatchType, RobotType, DepartmentType, PointState>
   ) => boolean;
 }>;
 

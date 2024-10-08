@@ -1,10 +1,21 @@
 import {
   DepartmentConfig,
   DerivedDepartment,
+  DerivedDepartmentTypes,
   ValidDepartmentConfigs,
 } from "./departmentConfig";
-import { DerivedMatch, MatchConfig, ValidMatchConfigs } from "./matchConfig";
-import { ValidRobotTypes } from "./robotConfig";
+import {
+  DerivedMatch,
+  DerivedMatchTypes,
+  MatchConfig,
+  ValidMatchConfigs,
+} from "./matchConfig";
+import {
+  DerivedRobot,
+  DerivedRobotTypes,
+  RobotConfig,
+  ValidRobotConfigs,
+} from "./robotConfig";
 import {
   DerivedRuleBaseVariant,
   RuleList,
@@ -19,8 +30,8 @@ import { SponsorConfig, ValidSponsorConfigs } from "./sponsorConfig";
  */
 export type BaseConfig<
   ContestName extends string,
-  RobotTypes extends string[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
   Matches extends MatchConfig[],
   RuleBaseType extends RuleType,
   RuleBaseInitial extends StateType[RuleBaseType],
@@ -28,8 +39,8 @@ export type BaseConfig<
   Sponsors extends SponsorConfig[],
 > = {
   contestName: ContestName;
-  robotTypes: ValidRobotTypes<RobotTypes>;
-  departments: ValidDepartmentConfigs<RobotTypes, Departments>;
+  robots: ValidRobotConfigs<Robots>;
+  departments: ValidDepartmentConfigs<Robots, Departments>;
   matches: ValidMatchConfigs<Matches>;
   rules: ValidRuleList<RuleBaseType, RuleBaseInitial, RuleBases>;
   sponsors: ValidSponsorConfigs<Sponsors>;
@@ -40,8 +51,8 @@ export type BaseConfig<
  */
 export type Config<
   ContestName extends string,
-  RobotTypes extends string[],
-  Departments extends DepartmentConfig<RobotTypes>[],
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
   Matches extends MatchConfig[],
   Type extends RuleType,
   Initial extends StateType[Type],
@@ -49,11 +60,18 @@ export type Config<
   Sponsors extends SponsorConfig[],
 > = {
   contestName: ContestName;
-  robotTypes: ValidRobotTypes<RobotTypes>;
-  departments: ValidDepartmentConfigs<RobotTypes, Departments>;
+  robots: ValidRobotConfigs<Robots>;
+  departments: ValidDepartmentConfigs<Robots, Departments>;
   matches: ValidMatchConfigs<Matches>;
   rules: ValidRuleList<Type, Initial, Rules>;
   sponsors: ValidSponsorConfigs<Sponsors>;
-  department: DerivedDepartment<RobotTypes, Departments>;
+  robotTypes: DerivedRobotTypes<ValidRobotConfigs<Robots>>;
+  robot: DerivedRobot<Robots>;
+  departmentTypes: DerivedDepartmentTypes<
+    Robots,
+    ValidDepartmentConfigs<Robots, Departments>
+  >;
+  department: DerivedDepartment<Robots, Departments>;
+  matchTypes: DerivedMatchTypes<ValidMatchConfigs<Matches>>;
   match: DerivedMatch<Matches>;
 };
