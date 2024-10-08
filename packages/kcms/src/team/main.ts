@@ -56,8 +56,8 @@ teamHandler.openapi(GetTeamRoute, async (c) => {
 teamHandler.openapi(DeleteTeamRoute, async (c) => {
   const teamID = c.req.param('teamID');
   const res = await controller.delete(teamID as TeamID);
-  if(Result.isErr(res)){
-    return c.json({description: errorToCode(Result.unwrapErr(res))},400);
+  if (Result.isErr(res)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(res)) }, 400);
   }
-  return new Response(null,{status: 204});
+  return new Response(null, { status: 204 });
 });
