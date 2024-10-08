@@ -1,5 +1,6 @@
 import { TeamRepository } from '../models/repository.js';
-import { Option } from '@mikuroxina/mini-fn';
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { TeamID } from '../models/team';
 
 export class DeleteTeamService {
   private readonly repository: TeamRepository;
@@ -8,11 +9,15 @@ export class DeleteTeamService {
     this.repository = repository;
   }
 
-  async handle(id: string): Promise<Option.Option<Error>> {
-    const res = await this.repository.delete(id);
-    if (Option.isSome(res)) {
-      return Option.some(res[1]);
+  async handle(teamID: TeamID): Promise<Result.Result<Error,void>> {
+    const res = await this.repository.findByID(teamID);
+    if (Option.isNone(res)) {
+      return Result.err(new Error('Team not found'));
     }
-    return Option.none();
+    const deleteTeamRes = await this.repository.delete(teamID);
+    if (Option.isSome(deleteTeamRes)) {
+      return Result.err(Option.unwrap(deleteTeamRes));
+    }
+    return Result.ok(undefined);
   }
 }
