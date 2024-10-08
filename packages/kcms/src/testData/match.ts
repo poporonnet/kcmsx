@@ -2,7 +2,7 @@ import { TeamID } from '../team/models/team.js';
 import { RunResult, RunResultID } from '../match/model/runResult.js';
 import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっとデータ数を増やす
 import { MainMatch, MainMatchID } from '../match/model/main.js';
-// 試合結果更新ようのテストデータ
+// 試合結果更新用のテストデータ
 export const testCreateRunResultPreData = [
   PreMatch.new({
     id: '1' as PreMatchID,
