@@ -50,10 +50,10 @@ export const controller = new Controller(createRunResultService);
 const matchController = new MatchController(getMatchService, fetchTeamService);
 
 // Handlers
-export const matchHandler = new OpenAPIHono();
+export const matchHandlers = new OpenAPIHono();
 
 // Get match route
-matchHandler.openapi(GetMatchRoute, async (c) => {
+matchHandlers.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
@@ -62,7 +62,7 @@ matchHandler.openapi(GetMatchRoute, async (c) => {
 });
 
 // Post match run result route
-matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
+matchHandlers.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
   const { matchType, matchID } = c.req.valid('param');
   const request: Omit<CreateRunResultArgs, 'id'>[] = req.map((r) => ({
