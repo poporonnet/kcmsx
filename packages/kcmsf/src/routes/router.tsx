@@ -22,7 +22,7 @@ export const router = createBrowserRouter(
           element: <Teams />,
         },
         {
-          path: "entry",
+          path: "register",
           children: [
             {
               index: true,
