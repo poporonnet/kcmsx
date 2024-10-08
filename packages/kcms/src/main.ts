@@ -6,11 +6,13 @@ MIT License.
 import { Hono } from 'hono';
 import { teamHandler } from './team/main.js';
 import { cors } from 'hono/cors';
+import { matchHandlers } from './match/main';
 
 const app = new Hono();
 
 app.use('*', cors());
 app.route('/', teamHandler);
+app.route('/', matchHandlers);
 
 // ToDo: config packageのTS読み込み問題により、一時的にBunで直接TSを実行する形に変更した
 export default {
