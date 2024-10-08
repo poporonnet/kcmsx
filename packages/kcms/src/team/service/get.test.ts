@@ -3,6 +3,7 @@ import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { FetchTeamService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
 import { TestEntryData } from '../../testData/entry.js';
+import { TeamID } from '../models/team';
 
 describe('getEntryService', () => {
   const repository = new DummyRepository();
@@ -41,7 +42,7 @@ describe('getEntryService', () => {
   });
 
   it('存在しないときはエラーを返す', async () => {
-    const actual = await service.findByID('0');
+    const actual = await service.findByID('0' as TeamID);
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('Not found'));
 
