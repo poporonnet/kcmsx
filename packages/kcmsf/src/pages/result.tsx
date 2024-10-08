@@ -1,5 +1,5 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
-import { DepartmentType, config, pick } from "config";
+import { DepartmentType, config } from "config";
 import { useEffect, useState } from "react";
 
 type PreMatch = {
@@ -14,7 +14,7 @@ type PreMatch = {
     id: string;
     teamName: string;
   };
-  runResult: [
+  runResults: [
     {
       id: string;
       teamID: string;
@@ -38,7 +38,7 @@ type MainMatch = {
     teamName: string;
   };
   winnerID: string;
-  runResult: [
+  runResults: [
     {
       id: string;
       teamID: string;
@@ -52,9 +52,8 @@ type MainMatch = {
 export const Result = () => {
   const [preMatchData, setPreMatchData] = useState<PreMatch[]>([]);
   const [mainMatchData, setMainMatchData] = useState<MainMatch[]>([]);
-  //const [matchType, setMatchType] = useState<MatchType>("pre");
-  const [department, setDepartment] = useState<string | null>(
-    config.departments[0].name
+  const [department, setDepartment] = useState<DepartmentType | null>(
+    config.departments[0].type
   );
 
   useEffect(() => {
@@ -70,75 +69,39 @@ export const Result = () => {
       });
   }, []);
 
+  const teamData: { [key: string]: string } = {};
+  mainMatchData.forEach((element) => {
+    if (element.team1) teamData[element.team1.id] = element.team1.teamName;
+    if (element.team2) teamData[element.team2.id] = element.team2.teamName;
+  });
+
   return (
     <>
       <Select
         label="部門"
-        data={pick(config.departments, "name")}
+        data={config.departments.map((element) => ({
+          value: element.type,
+          label: element.name,
+        }))}
         value={department}
         defaultValue={config.departments[0].type}
-        onChange={setDepartment}
+        onChange={(value) => value && setDepartment(value as DepartmentType)}
       />
       <Flex direction="column" gap={20}>
         <Title order={3}>{department}</Title>
-        <MainResultTable departmentType={department} matches={mainMatchData} />
+        <MainResultTable
+          departmentType={department}
+          matches={mainMatchData}
+          teamData={teamData}
+        />
         <PreResultTable departmentType={department} matches={preMatchData} />
       </Flex>
     </>
   );
 };
 
-const departmentNameToType = (
-  departmentName: string | null
-): DepartmentType | undefined => {
-  const department = config.departments.find(
-    (element) => departmentName === element.name
-  );
-  return department ? department.type : undefined;
-};
-
-const PreResult = (
-  departmentType: DepartmentType | undefined,
-  match: PreMatch
-) => {
-  const [leftPoint, setLeftPoint] = useState<number>(0);
-  const [rightPoint, setRightPoint] = useState<number>(0);
-  const [leftGoalSeconds, setLeftGoalSeconds] = useState<number | null>(null);
-  const [rightGoalSeconds, setRightGoalSeconds] = useState<number | null>(null);
-  if (departmentType === match.departmentType) {
-    match.runResult.map((data) => {
-      if (data.id === match.leftTeam.id) {
-        setLeftPoint(data.points);
-        setLeftGoalSeconds(data.goalTimeSeconds);
-      }
-      if (data.id === match.rightTeam.id) {
-        setRightPoint(data.points);
-        setRightGoalSeconds(data.goalTimeSeconds);
-      }
-    });
-  }
-  return (
-    <>
-      <Table.Td className="td">
-        {match.leftTeam ? match.leftTeam.teamName : undefined}
-      </Table.Td>
-      <Table.Td className="td">{leftPoint}</Table.Td>
-      <Table.Td className="td">
-        {leftGoalSeconds ? leftGoalSeconds : "リタイア"}
-      </Table.Td>
-      <Table.Td className="td">
-        {match.rightTeam ? match.rightTeam.teamName : undefined}
-      </Table.Td>
-      <Table.Td className="td">{rightPoint}</Table.Td>
-      <Table.Td className="td">
-        {rightGoalSeconds ? rightGoalSeconds : "リタイア"}
-      </Table.Td>
-    </>
-  );
-};
-
 const PreResultTable = (props: {
-  departmentType: string | null;
+  departmentType: DepartmentType | null;
   matches: PreMatch[];
 }) => {
   if (props.matches.length === 0) {
@@ -164,58 +127,65 @@ const PreResultTable = (props: {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {props.matches.map((element) => (
-            <Table.Tr key={element.id}>
-              {PreResult(departmentNameToType(props.departmentType), element)}
-            </Table.Tr>
-          ))}
+          {props.matches.map((element) => {
+            if (element.departmentType === props.departmentType)
+              return (
+                <Table.Tr key={element.id}>
+                  <Table.Td className="td">
+                    {element.leftTeam ? element.leftTeam.teamName : ""}
+                  </Table.Td>
+                  <Table.Td className="td">
+                    {element.leftTeam
+                      ? element.runResults.map((result) =>
+                          result.teamID === element.leftTeam.id
+                            ? result.points
+                            : ""
+                        )
+                      : ""}
+                  </Table.Td>
+                  <Table.Td className="td">
+                    {element.leftTeam
+                      ? element.runResults.map((result) =>
+                          result.teamID === element.leftTeam.id
+                            ? (result.goalTimeSeconds ?? "リタイア")
+                            : ""
+                        )
+                      : ""}
+                  </Table.Td>
+                  <Table.Td className="td">
+                    {element.rightTeam ? element.rightTeam.teamName : ""}
+                  </Table.Td>
+                  <Table.Td className="td">
+                    {element.rightTeam
+                      ? element.runResults.map((result) =>
+                          result.teamID === element.rightTeam.id
+                            ? result.points
+                            : ""
+                        )
+                      : ""}
+                  </Table.Td>
+                  <Table.Td className="td">
+                    {element.rightTeam
+                      ? element.runResults.map((result) =>
+                          result.teamID === element.rightTeam.id
+                            ? (result.goalTimeSeconds ?? "リタイア")
+                            : ""
+                        )
+                      : ""}
+                  </Table.Td>
+                </Table.Tr>
+              );
+          })}
         </Table.Tbody>
       </Table>
     </div>
   );
 };
 
-const MainResult = (
-  departmentType: DepartmentType | undefined,
-  match: MainMatch
-) => {
-  const [winner, setWinner] = useState<string>("");
-  const [loser, setLoser] = useState<string>("");
-  const [points, setPoints] = useState<number[]>([]);
-  if (departmentType === match.departmentType) {
-    if (match.winnerID === match.team1.id) {
-      setWinner(match.team1.teamName);
-      setLoser(match.team2.teamName);
-    } else {
-      setWinner(match.team2.teamName);
-      setLoser(match.team1.teamName);
-    }
-    match.runResult.map((data) => {
-      if (data.teamID === match.winnerID) {
-        setPoints(
-          points.map((point, index) => (index === 0 ? data.points : point))
-        );
-      } else {
-        setPoints(
-          points.map((point, index) => (index === 1 ? data.points : point))
-        );
-      }
-    });
-  }
-  return (
-    <>
-      <Table.Td className="td">{winner}</Table.Td>
-      <Table.Td className="td">
-        {points[0]}-{points[1]}
-      </Table.Td>
-      <Table.Td className="td">{loser}</Table.Td>
-    </>
-  );
-};
-
 const MainResultTable = (props: {
-  departmentType: string | null;
+  departmentType: DepartmentType | null;
   matches: MainMatch[];
+  teamData: { [key: string]: string };
 }) => {
   if (props.matches.length === 0) {
     return (
@@ -237,11 +207,40 @@ const MainResultTable = (props: {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {props.matches.map((element) => (
-            <Table.Tr key={element.id}>
-              {MainResult(departmentNameToType(props.departmentType), element)}
-            </Table.Tr>
-          ))}
+          {props.matches.map((element) => {
+            if (element.departmentType === props.departmentType)
+              return (
+                <>
+                  <Table.Tr key={element.id}>
+                    <Table.Td className="td">
+                      {props.teamData[element.winnerID]}
+                    </Table.Td>
+                    <Table.Td className="td">
+                      {element.runResults
+                        .map((result) =>
+                          result.teamID === element.winnerID ? result.points : 0
+                        )
+                        .reduce((sum, point) => sum + point, 0)}
+                      -
+                      {element.runResults
+                        .map((result) =>
+                          result.teamID !== element.winnerID ? result.points : 0
+                        )
+                        .reduce((sum, point) => sum + point, 0)}
+                    </Table.Td>
+                    <Table.Td className="td">
+                      {
+                        props.teamData[
+                          element.team1.id === element.winnerID
+                            ? element.team2 ? element.team2.id : ""
+                            : element.team1.id
+                        ]
+                      }
+                    </Table.Td>
+                  </Table.Tr>
+                </>
+              );
+          })}
         </Table.Tbody>
       </Table>
     </div>
