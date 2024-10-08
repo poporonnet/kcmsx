@@ -1,14 +1,16 @@
 import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
-import { GetMatchResponseSchema, PreSchema } from '../validator/match';
+import { GetMatchResponseSchema, PostMatchGenerateResponseSchema, PreSchema } from "../validator/match";
 import { Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from '../../../team/service/get';
 import { TeamID } from '../../../team/models/team';
+import { GeneratePreMatchService } from "../../service/generatePre";
 
 export class MatchController {
   constructor(
     private readonly getMatchService: GetMatchService,
-    private readonly fetchTeamService: FetchTeamService
+    private readonly fetchTeamService: FetchTeamService,
+    private readonly generatePreMatchService: GeneratePreMatchService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -58,5 +60,23 @@ export class MatchController {
       // ToDo: 本戦試合を取得できるようにする
       main: [],
     });
+  }
+  async generateMatch(matchType: "pre" , departmentType: DepartmentType): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateResponseSchema>> {
+    // ToDo: 本戦試合を生成できるようにする
+
+    const res = await this.generatePreMatchService.handle(departmentType);
+    if (Result.isErr(res)) return res;
+    const matches = Result.unwrap(res);
+
+    return Result.ok(
+      matches.map(v => {
+        return {
+          id: v.getId(),
+          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          departmentType: ,
+          runResults: []
+        }
+      }));
+
   }
 }
