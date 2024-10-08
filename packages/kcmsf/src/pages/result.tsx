@@ -232,7 +232,9 @@ const MainResultTable = (props: {
                       {
                         props.teamData[
                           element.team1.id === element.winnerID
-                            ? element.team2 ? element.team2.id : ""
+                            ? element.team2
+                              ? element.team2.id
+                              : ""
                             : element.team1.id
                         ]
                       }
