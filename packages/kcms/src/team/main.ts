@@ -18,7 +18,7 @@ export const controller = new Controller(
  * すべてのチームを返す (GET /team)
  */
 teamHandler.openapi(GetTeamsRoute, async (c) => {
-  const res = await controller.get();
+  const res = await controller.getAll();
   if (Result.isErr(res)) {
     return c.json({ description: errorToCode(res[1]) }, 400);
   }
@@ -43,7 +43,7 @@ teamHandler.openapi(PostTeamsRoute, async (c) => {
  */
 teamHandler.openapi(GetTeamRoute, async (c) => {
   const teamID = c.req.param('teamID');
-  const res = await controller.getOne(teamID as TeamID);
+  const res = await controller.getByID(teamID as TeamID);
   if(Result.isErr(res)) {
     return c.json({ description: errorToCode(res[1]) }, 400);
   }

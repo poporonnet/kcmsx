@@ -62,7 +62,7 @@ export class Controller {
     );
   }
 
-  async get(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
+  async getAll(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
     const res = await this.findTeam.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
@@ -84,7 +84,7 @@ export class Controller {
       }),
     });
   }
-  async getOne(id: TeamID): Promise<Result.Result<Error, z.infer<typeof GetTeamResponseSchema>>> {
+  async getByID(id: TeamID): Promise<Result.Result<Error, z.infer<typeof GetTeamResponseSchema>>> {
     const res = await this.findTeam.findByID(id);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
