@@ -14,16 +14,16 @@ import { TeamID } from './models/team.js';
 
 export class Controller {
   private readonly createTeam: CreateTeamService;
-  private readonly findEntry: FetchTeamService;
-  private readonly deleteService: DeleteTeamService;
+  private readonly findTeam: FetchTeamService;
+  private readonly deleteTeam: DeleteTeamService;
 
   constructor(repository: TeamRepository) {
     this.createTeam = new CreateTeamService(
       repository,
       new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()))
     );
-    this.findEntry = new FetchTeamService(repository);
-    this.deleteService = new DeleteTeamService(repository);
+    this.findTeam = new FetchTeamService(repository);
+    this.deleteTeam = new DeleteTeamService(repository);
   }
 
   async create(
@@ -62,7 +62,7 @@ export class Controller {
   }
 
   async get(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
-    const res = await this.findEntry.findAll();
+    const res = await this.findTeam.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
@@ -85,7 +85,7 @@ export class Controller {
   }
 
   async delete(id: TeamID): Promise<Result.Result<Error, void>> {
-    const res = await this.deleteService.handle(id);
+    const res = await this.deleteTeam.handle(id);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
