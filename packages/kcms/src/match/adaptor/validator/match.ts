@@ -20,7 +20,7 @@ const RunResultSchema = z.object({
   finishState: z.enum(['goal', 'finished']).openapi({ example: 'goal' }),
 });
 
-const PreSchema = z.object({
+export const PreSchema = z.object({
   id: z.string().openapi({ example: '320984' }),
   matchCode: z.string().openapi({ example: '1-3' }),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),

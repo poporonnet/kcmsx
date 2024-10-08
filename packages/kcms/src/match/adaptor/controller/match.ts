@@ -1,6 +1,6 @@
 import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
-import { GetMatchResponseSchema } from '../validator/match';
+import { GetMatchResponseSchema, PreSchema } from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType } from 'config';
 import { FetchTeamService } from '../../../team/service/get';
@@ -12,10 +12,10 @@ export class MatchController {
     private readonly fetchTeamService: FetchTeamService
   ) {}
 
-  async getAllMatch(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
-    const res = await this.getMatchService.findAll();
-    if (Result.isErr(res)) return res;
-    const match = Result.unwrap(res);
+  async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
+    const matchRes = await this.getMatchService.findAll();
+    if (Result.isErr(matchRes)) return matchRes;
+    const match = Result.unwrap(matchRes);
 
     const teamsRes = await this.fetchTeamService.findAll();
     if (Result.isErr(teamsRes)) return teamsRes;
@@ -28,16 +28,16 @@ export class MatchController {
      *       試合に参加するチーム情報を取得する
      */
     return Result.ok({
-      pre: match.pre.map((v) => {
+      pre: match.pre.map((v): z.infer<typeof PreSchema> => {
         const getTeam = (
           teamID: TeamID | undefined
         ): { id: string; teamName: string } | undefined => {
           if (!teamID) return undefined;
-          const getTeam = teamMap.get(teamID);
-          if (!getTeam) return undefined;
+          const team = teamMap.get(teamID);
+          if (!team) return undefined;
           return {
-            id: getTeam.getId(),
-            teamName: getTeam.getTeamName(),
+            id: team.getId(),
+            teamName: team.getTeamName(),
           };
         };
         const getTeamDepartmentType = (
@@ -62,7 +62,7 @@ export class MatchController {
             teamID: v.getTeamId(),
             points: v.getPoints(),
             goalTimeSeconds: v.getGoalTimeSeconds(),
-            finishState: v.isGoal() ? ('goal' as const) : ('finished' as const),
+            finishState: v.isGoal() ? 'goal' : 'finished',
           })),
         };
       }),

@@ -30,7 +30,7 @@ const matchController = new MatchController(getMatchService, fetchTeamService);
 export const matchHandlers = new OpenAPIHono();
 
 matchHandlers.openapi(GetMatchRoute, async (c) => {
-  const res = await matchController.getAllMatch();
+  const res = await matchController.getAll();
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
   }
