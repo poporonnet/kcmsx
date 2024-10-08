@@ -44,7 +44,7 @@ teamHandler.openapi(PostTeamsRoute, async (c) => {
 teamHandler.openapi(GetTeamRoute, async (c) => {
   const teamID = c.req.param('teamID');
   const res = await controller.getByID(teamID as TeamID);
-  if(Result.isErr(res)) {
+  if (Result.isErr(res)) {
     return c.json({ description: errorToCode(res[1]) }, 400);
   }
   const team = Result.unwrap(res);
