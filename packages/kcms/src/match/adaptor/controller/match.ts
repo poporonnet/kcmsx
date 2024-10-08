@@ -45,10 +45,7 @@ export class MatchController {
           right: TeamID | undefined
         ): DepartmentType => {
           if (!left && !right) throw new Error('Both teamID is undefined');
-          if (!left) {
-            return teamMap.get(right!)!.getDepartmentType();
-          }
-          return teamMap.get(left)!.getDepartmentType();
+          return teamMap.get(left || right!)!.getDepartmentType();
         };
 
         return {
