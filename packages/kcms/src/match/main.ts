@@ -13,6 +13,10 @@ import { GetMatchRoute, PostMatchGenerateRoute } from './routing';
 import { Result } from '@mikuroxina/mini-fn';
 import { GeneratePreMatchService } from './service/generatePre';
 import { SnowflakeIDGenerator } from '../id/main';
+import { GetMatchIdRoute, GetMatchRoute } from './routing';
+import { PreMatchID } from './model/pre';
+import { MainMatchID } from './model/main';
+
 
 const isProduction = process.env.NODE_ENV === 'production';
 const preMatchRepository = isProduction
@@ -59,4 +63,16 @@ matchHandlers.openapi(PostMatchGenerateRoute, async (c) => {
   }
 
   return c.json(res[1], 200);
+});
+                      
+matchHandlers.openapi(GetMatchIdRoute, async (c) => {
+  const { matchType, matchID } = c.req.valid('param');
+
+  const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+
+  return c.json(Result.unwrap(res), 200);
 });
