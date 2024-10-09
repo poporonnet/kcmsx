@@ -9,14 +9,12 @@ import { FetchTeamService } from '../team/service/get';
 import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
 import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { GetMatchRoute, PostMatchGenerateRoute } from './routing';
+import { GetMatchIdRoute, GetMatchRoute, PostMatchGenerateRoute } from './routing';
 import { Result } from '@mikuroxina/mini-fn';
 import { GeneratePreMatchService } from './service/generatePre';
 import { SnowflakeIDGenerator } from '../id/main';
-import { GetMatchIdRoute, GetMatchRoute } from './routing';
 import { PreMatchID } from './model/pre';
 import { MainMatchID } from './model/main';
-
 
 const isProduction = process.env.NODE_ENV === 'production';
 const preMatchRepository = isProduction
@@ -64,7 +62,7 @@ matchHandlers.openapi(PostMatchGenerateRoute, async (c) => {
 
   return c.json(res[1], 200);
 });
-                      
+
 matchHandlers.openapi(GetMatchIdRoute, async (c) => {
   const { matchType, matchID } = c.req.valid('param');
 

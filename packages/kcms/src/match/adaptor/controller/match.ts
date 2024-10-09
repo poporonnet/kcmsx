@@ -3,6 +3,7 @@ import { z } from '@hono/zod-openapi';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
+  PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
 } from '../validator/match';
@@ -12,7 +13,6 @@ import { TeamID } from '../../../team/models/team';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { DepartmentType, MatchType } from 'config';
 import { MainMatchID } from '../../model/main';
-import { MatchType } from 'config';
 import { PreMatch, PreMatchID } from '../../model/pre';
 
 export class MatchController {
@@ -96,6 +96,7 @@ export class MatchController {
         };
       })
     );
+  }
 
   async getMatchByID<T extends MatchType>(
     matchType: T,
