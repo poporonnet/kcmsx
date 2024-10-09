@@ -27,6 +27,8 @@ model Team {
   mainRightTeams MainMatch[] @relation("main_right_team")
   preLeftTeams   PreMatch[]  @relation("pre_left_team")
   preRightTeams  PreMatch[]  @relation("pre_right_team")
+
+  @@map("team")
 }
 
 model MainMatch {
@@ -46,9 +48,10 @@ model MainMatch {
 }
 
 model PreMatch {
-  id          String @id
-  courseIndex Int    @map("course_index")
-  matchIndex  Int    @map("match_index")
+  id             String @id
+  departmentType String @map("department_type")
+  courseIndex    Int    @map("course_index")
+  matchIndex     Int    @map("match_index")
 
   leftTeamID  String? @map("left_team_id")
   leftTeam    Team?   @relation("pre_left_team", fields: [leftTeamID], references: [id])
