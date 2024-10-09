@@ -12,7 +12,7 @@ const BriefTeamSchema = z
   })
   .optional();
 
-const RunResultSchema = z.object({
+export const RunResultSchema = z.object({
   id: z.string().openapi({ example: '60980640' }),
   teamID: z.string().openapi({ example: '45098607' }),
   points: z.number().openapi({ example: 4 }),
