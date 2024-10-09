@@ -2,7 +2,6 @@ import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
 import { GetMatchResponseSchema, PreSchema } from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
-import { DepartmentType } from 'config';
 import { FetchTeamService } from '../../../team/service/get';
 import { TeamID } from '../../../team/models/team';
 
@@ -40,18 +39,11 @@ export class MatchController {
             teamName: team.getTeamName(),
           };
         };
-        const getTeamDepartmentType = (
-          left: TeamID | undefined,
-          right: TeamID | undefined
-        ): DepartmentType => {
-          if (!left && !right) throw new Error('Both teamID is undefined');
-          return teamMap.get(left || right!)!.getDepartmentType();
-        };
 
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-          departmentType: getTeamDepartmentType(v.getTeamId1(), v.getTeamId2()),
+          departmentType: v.getDepartmentType(),
           leftTeam: getTeam(v.getTeamId1()),
           rightTeam: getTeam(v.getTeamId2()),
           runResults: v.getRunResults().map((v) => ({

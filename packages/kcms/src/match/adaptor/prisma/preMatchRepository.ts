@@ -4,6 +4,7 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 import type { Prisma, PrismaClient } from '@prisma/client';
 import { TeamID } from '../../../team/models/team';
 import { RunResult, RunResultID } from '../../model/runResult';
+import { DepartmentType } from 'config';
 
 export class PrismaPreMatchRepository implements PreMatchRepository {
   constructor(private readonly client: PrismaClient) {}
@@ -22,6 +23,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
         id: data.id as PreMatchID,
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
+        departmentType: data.departmentType as DepartmentType,
         teamId1: (data.leftTeamID as TeamID) ?? undefined,
         teamId2: (data.rightTeamID as TeamID) ?? undefined,
         runResults: data.runResult.map((v) =>
@@ -44,6 +46,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
           id: match.getId(),
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
+          departmentType: match.getDepartmentType(),
           leftTeamID: match.getTeamId1(),
           rightTeamID: match.getTeamId2(),
         },
@@ -62,6 +65,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
             id: v.getId(),
             courseIndex: v.getCourseIndex(),
             matchIndex: v.getMatchIndex(),
+            departmentType: v.getDepartmentType(),
             leftTeamID: v.getTeamId1(),
             rightTeamID: v.getTeamId2(),
           };
