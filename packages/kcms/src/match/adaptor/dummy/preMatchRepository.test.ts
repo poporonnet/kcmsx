@@ -5,6 +5,7 @@ import { RunResult, RunResultID } from '../../model/runResult.js';
 import { TeamID } from '../../../team/models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { DummyPreMatchRepository } from './preMatchRepository.js';
+import { config } from 'config';
 
 describe('DummyPreMatchRepository', () => {
   const repository = new DummyPreMatchRepository();
@@ -20,6 +21,7 @@ describe('DummyPreMatchRepository', () => {
       matchIndex: 91,
       teamId1: '91' as TeamID,
       teamId2: '92' as TeamID,
+      departmentType: config.departments[0].type,
       runResults: [
         RunResult.new({
           id: '90' as RunResultID,
@@ -54,6 +56,7 @@ describe('DummyPreMatchRepository', () => {
       matchIndex: 1,
       teamId1: '1' as TeamID,
       teamId2: '2' as TeamID,
+      departmentType: config.departments[0].type,
       runResults: [
         RunResult.new({
           id: '10' as RunResultID,
