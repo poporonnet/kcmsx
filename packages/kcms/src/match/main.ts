@@ -19,7 +19,7 @@ import { PreMatchID } from './model/pre';
 import { CreateRunResultArgs } from './model/runResult';
 import { PostMatchRunResultRoute, GetMatchRoute } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
-import { finishStateConversion } from './utility/finishStateConversion';
+import { toUpperCase } from './utility/uppercase';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -65,11 +65,12 @@ matchHandlers.openapi(GetMatchRoute, async (c) => {
 matchHandlers.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
   const { matchType, matchID } = c.req.valid('param');
+
   const request: Omit<CreateRunResultArgs, 'id'>[] = req.map((r) => ({
     points: r.points,
     teamID: r.teamID as TeamID,
     goalTimeSeconds: r.goalTimeSeconds ?? Infinity,
-    finishState: finishStateConversion(r.finishState),
+    finishState: toUpperCase(r.finishState),
   }));
   const res = await controller.createRunResult(
     matchType,

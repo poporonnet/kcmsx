@@ -12,14 +12,12 @@ export class Controller {
     args: Omit<CreateRunResultArgs, 'id'>[]
   ): Promise<Result.Result<Error, void>> {
     const matchResults: Omit<CreateRunResultArgs, 'id'>[] = args.map((m) => {
-      if (m.finishState === 'FINISHED' && m.goalTimeSeconds) {
+      // Finishedの場合、goalTimeSecondsはInfinityでなくてはならない
+      if (m.finishState === 'FINISHED' && m.goalTimeSeconds !== Infinity) {
         Result.err(args);
       }
       return {
-        teamID: m.teamID,
-        points: m.points,
-        goalTimeSeconds: m.goalTimeSeconds ?? Infinity,
-        finishState: m.finishState,
+        ...m,
       };
     });
     const res = await this.createResult.handle(matchType, matchID, matchResults);
