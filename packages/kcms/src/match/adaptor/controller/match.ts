@@ -3,20 +3,23 @@ import { z } from '@hono/zod-openapi';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
+  PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
 } from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from '../../../team/service/get';
 import { TeamID } from '../../../team/models/team';
+import { GeneratePreMatchService } from '../../service/generatePre';
+import { DepartmentType, MatchType } from 'config';
 import { MainMatchID } from '../../model/main';
-import { MatchType } from 'config';
 import { PreMatch, PreMatchID } from '../../model/pre';
 
 export class MatchController {
   constructor(
     private readonly getMatchService: GetMatchService,
-    private readonly fetchTeamService: FetchTeamService
+    private readonly fetchTeamService: FetchTeamService,
+    private readonly generatePreMatchService: GeneratePreMatchService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -66,6 +69,33 @@ export class MatchController {
       // ToDo: 本戦試合を取得できるようにする
       main: [],
     });
+  }
+
+  async generateMatch(
+    matchType: MatchType,
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateResponseSchema>>> {
+    // ToDo: 本戦試合を生成できるようにする
+    if (matchType === 'main') {
+      return Result.err(new Error('Not implemented'));
+    }
+
+    const res = await this.generatePreMatchService.handle(departmentType);
+    if (Result.isErr(res)) return res;
+    const matches = Result.unwrap(res);
+
+    return Result.ok(
+      matches.map((v) => {
+        return {
+          id: v.getId(),
+          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          departmentType: v.getDepartmentType(),
+          leftTeamID: v.getTeamId1(),
+          rightTeamID: v.getTeamId2(),
+          runResults: [],
+        };
+      })
+    );
   }
 
   async getMatchByID<T extends MatchType>(
