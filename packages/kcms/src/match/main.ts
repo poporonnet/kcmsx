@@ -20,6 +20,9 @@ import { CreateRunResultArgs } from './model/runResult';
 import { PostMatchRunResultRoute, GetMatchRoute } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { upcase } from './utility/uppercase';
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { GetMatchIdRoute, GetMatchRoute } from './routing';
+import { Result } from '@mikuroxina/mini-fn';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -61,6 +64,7 @@ matchHandlers.openapi(GetMatchRoute, async (c) => {
   return c.json(res[1], 200);
 });
 
+
 // Post match run result route
 matchHandlers.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
@@ -81,4 +85,16 @@ matchHandlers.openapi(PostMatchRunResultRoute, async (c) => {
     return c.json({ description: errorToCode(res[1]) }, 400);
   }
   return c.json(200);
+
+matchHandlers.openapi(GetMatchIdRoute, async (c) => {
+  const { matchType, matchID } = c.req.valid('param');
+
+  const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+
+  return c.json(Result.unwrap(res), 200);
+
 });
