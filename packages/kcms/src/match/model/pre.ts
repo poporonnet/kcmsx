@@ -89,8 +89,9 @@ export class PreMatch {
       throw new Error('RunResult length must be 1 or 2');
     }
     if (
-      runResults.some((result) => result.getTeamId() !== this.teamId1) ||
-      (this.teamId2 && runResults.some((result) => result.getTeamId() !== this.teamId2))
+      !runResults.every(
+        (result) => result.getTeamId() === this.teamId1 || result.getTeamId() === this.teamId2
+      )
     ) {
       throw new Error('RunResult teamId must be teamId1 or teamId2');
     }

@@ -11,7 +11,7 @@ export type RunResultID = SnowflakeID<RunResult>;
 export type FinishState = 'GOAL' | 'FINISHED';
 export interface CreateRunResultArgs {
   id: RunResultID;
-  teamId: TeamID;
+  teamID: TeamID;
   points: number;
   goalTimeSeconds: number;
   finishState: FinishState;
@@ -26,13 +26,13 @@ export class RunResult {
 
   private constructor(args: {
     id: RunResultID;
-    teamId: TeamID;
+    teamID: TeamID;
     points: number;
     goalTimeSeconds: number;
     finishState: FinishState;
   }) {
     this.id = args.id;
-    this.teamId = args.teamId;
+    this.teamId = args.teamID;
     this.points = args.points;
     this.goalTimeSeconds = args.goalTimeSeconds;
     this.finishState = args.finishState;

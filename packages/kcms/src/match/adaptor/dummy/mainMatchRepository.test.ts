@@ -24,14 +24,14 @@ describe('DummyMainMatchRepository', () => {
       runResults: [
         RunResult.new({
           id: '90' as RunResultID,
-          teamId: '91' as TeamID,
+          teamID: '91' as TeamID,
           points: 12,
           goalTimeSeconds: 60,
           finishState: 'FINISHED',
         }),
         RunResult.new({
           id: '91' as RunResultID,
-          teamId: '92' as TeamID,
+          teamID: '92' as TeamID,
           points: 10,
           goalTimeSeconds: 64,
           finishState: 'FINISHED',
@@ -59,14 +59,14 @@ describe('DummyMainMatchRepository', () => {
       runResults: [
         RunResult.new({
           id: '10' as RunResultID,
-          teamId: '1' as TeamID,
+          teamID: '1' as TeamID,
           points: 12,
           goalTimeSeconds: 60,
           finishState: 'FINISHED',
         }),
         RunResult.new({
           id: '11' as RunResultID,
-          teamId: '2' as TeamID,
+          teamID: '2' as TeamID,
           points: 10,
           goalTimeSeconds: 64,
           finishState: 'FINISHED',
