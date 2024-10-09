@@ -1,8 +1,8 @@
 import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
-import { GetMatchResponseSchema, PreSchema } from '../validator/match';
+import { GetMatchResponseSchema, GetMatchTypeResponseSchema, PreSchema } from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
-import { DepartmentType } from 'config';
+import { DepartmentType, MatchType } from 'config';
 import { FetchTeamService } from '../../../team/service/get';
 import { TeamID } from '../../../team/models/team';
 
@@ -66,5 +66,44 @@ export class MatchController {
       // ToDo: 本戦試合を取得できるようにする
       main: [],
     });
+  }
+  async getMatchesByType(
+    type: MatchType
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
+    if (type === 'pre') {
+      const matches = await this.getMatchService.findAllPreMatch();
+      if (Result.isErr(matches)) return matches;
+      const unwrapped = Result.unwrap(matches);
+
+      return Result.ok(
+        unwrapped.map((v): z.infer<typeof PreSchema> => {
+          return {
+            id: v.getId(),
+            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            departmentType: v.getDepartmentType(),
+            leftTeam: {
+              id: v.getTeamId1() as TeamID,
+              teamName: '',
+            },
+            rightTeam: {
+              id: v.getTeamId2() as TeamID,
+              teamName: '',
+            },
+            runResults: v.getRunResults().map((v) => ({
+              id: v.getId(),
+              teamID: v.getTeamId(),
+              points: v.getPoints(),
+              goalTimeSeconds: v.getGoalTimeSeconds(),
+              finishState: v.isGoal() ? 'goal' : 'finished',
+            })),
+          };
+        })
+      );
+    } else {
+      const matches = await this.getMatchService.findAllMainMatch();
+      if (Result.isErr(matches)) return matches;
+      const unwrapped = Result.unwrap(matches);
+    }
+    return Result.err(new Error('Non existent match type'));
   }
 }

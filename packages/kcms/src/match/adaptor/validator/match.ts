@@ -29,7 +29,7 @@ export const PreSchema = z.object({
   runResults: z.array(RunResultSchema).max(2),
 });
 
-const MainSchema = z.object({
+export const MainSchema = z.object({
   id: z.string().openapi({ example: '70983405' }),
   matchCode: z.string(),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
