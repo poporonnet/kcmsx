@@ -9,7 +9,7 @@ import { Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from '../../../team/service/get';
 import { TeamID } from '../../../team/models/team';
 import { GeneratePreMatchService } from '../../service/generatePre';
-import { DepartmentType } from 'config';
+import { DepartmentType, MatchType } from 'config';
 
 export class MatchController {
   constructor(
@@ -68,7 +68,7 @@ export class MatchController {
   }
 
   async generateMatch(
-    matchType: 'pre' | 'main',
+    matchType: MatchType,
     departmentType: DepartmentType
   ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateResponseSchema>>> {
     // ToDo: 本戦試合を生成できるようにする
@@ -88,13 +88,7 @@ export class MatchController {
           departmentType: v.getDepartmentType(),
           leftTeamID: v.getTeamId1(),
           rightTeamID: v.getTeamId2(),
-          runResults: [] as {
-            id: string;
-            teamID: string;
-            points: number;
-            goalTimeSeconds: number | null;
-            finishState: 'goal' | 'finished';
-          }[],
+          runResults: [],
         };
       })
     );
