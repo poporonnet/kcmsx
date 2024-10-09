@@ -29,9 +29,9 @@ const getMatchService = new GetMatchService(preMatchRepository, mainMatchReposit
 const fetchTeamService = new FetchTeamService(teamRepository);
 const matchController = new MatchController(getMatchService, fetchTeamService);
 
-export const matchHandlers = new OpenAPIHono();
+export const matchHandler = new OpenAPIHono();
 
-matchHandlers.openapi(GetMatchRoute, async (c) => {
+matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
@@ -40,7 +40,7 @@ matchHandlers.openapi(GetMatchRoute, async (c) => {
   return c.json(res[1], 200);
 });
 
-matchHandlers.openapi(GetMatchIdRoute, async (c) => {
+matchHandler.openapi(GetMatchIdRoute, async (c) => {
   const { matchType, matchID } = c.req.valid('param');
 
   const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
