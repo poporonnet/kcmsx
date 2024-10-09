@@ -10,6 +10,7 @@ export const testCreateRunResultPreData = [
     id: '1' as PreMatchID,
     courseIndex: 0,
     matchIndex: 1,
+    departmentType: config.departments[0].type,
     teamId1: '1' as TeamID,
     teamId2: '2' as TeamID,
     runResults: [],
@@ -18,6 +19,7 @@ export const testCreateRunResultPreData = [
     id: '2' as PreMatchID,
     courseIndex: 0,
     matchIndex: 2,
+    departmentType: config.departments[0].type,
     teamId1: '2' as TeamID,
     teamId2: '1' as TeamID,
     runResults: [],
@@ -26,6 +28,7 @@ export const testCreateRunResultPreData = [
     id: '3' as PreMatchID,
     courseIndex: 0,
     matchIndex: 3,
+    departmentType: config.departments[0].type,
     teamId1: '3' as TeamID,
     teamId2: '4' as TeamID,
     runResults: [],
@@ -281,7 +284,6 @@ export const testRankingPreMatchData = [
     ],
   }),
 ];
-
 export const testRankingMainMatchData = [
   // ToDo: L/Rを入れるとL/Rを入れ替えたデータも作れるようにしたい
   MainMatch.new({
