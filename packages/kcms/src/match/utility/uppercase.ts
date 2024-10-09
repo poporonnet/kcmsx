@@ -1,3 +1,1 @@
-export const toUpperCase = <T extends string>(str: T): Uppercase<T> => {
-  return str.toUpperCase() as Uppercase<T>;
-};
+export const upcase = <T extends string>(str: T): Uppercase<T> => str.toUpperCase() as Uppercase<T>;
