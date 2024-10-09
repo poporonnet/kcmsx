@@ -5,6 +5,7 @@ import { FetchTeamService } from './service/get.js';
 import { DeleteTeamService } from './service/delete.js';
 import { SnowflakeIDGenerator } from '../id/main.js';
 import {
+  GetTeamResponseSchema,
   GetTeamsResponseSchema,
   PostTeamsRequestSchema,
   PostTeamsResponseSchema,
@@ -61,7 +62,7 @@ export class Controller {
     );
   }
 
-  async get(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
+  async getAll(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
     const res = await this.findTeam.findAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
@@ -81,6 +82,24 @@ export class Controller {
           isEntered: v.getIsEntered(),
         };
       }),
+    });
+  }
+  async getByID(id: TeamID): Promise<Result.Result<Error, z.infer<typeof GetTeamResponseSchema>>> {
+    const res = await this.findTeam.findByID(id);
+    if (Result.isErr(res)) {
+      return Result.err(res[1]);
+    }
+    const team = Result.unwrap(res);
+
+    return Result.ok({
+      id: team.getId(),
+      name: team.getTeamName(),
+      members: team.getMembers() as [string, ...string[]],
+      clubName: team.getClubName() ?? '',
+      entryCode: '',
+      robotType: team.getRobotType(),
+      departmentType: team.getDepartmentType(),
+      isEntered: team.getIsEntered(),
     });
   }
 
