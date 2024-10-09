@@ -98,12 +98,10 @@ export const PostMatchGenerateResponseSchema = z.array(
     PreSchema.omit({
       rightTeam: true,
       leftTeam: true,
-    })
-      .extend({
-        leftTeamID: z.string().optional().openapi({ example: '45098607' }),
-        rightTeamID: z.string().optional().openapi({ example: '2230392' }),
-      })
-      .array(),
+    }).extend({
+      leftTeamID: z.string().optional().openapi({ example: '45098607' }),
+      rightTeamID: z.string().optional().openapi({ example: '2230392' }),
+    }),
     MainSchema.omit({
       team1: true,
       team2: true,

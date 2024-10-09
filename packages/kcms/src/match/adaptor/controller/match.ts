@@ -1,10 +1,15 @@
 import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
-import { GetMatchResponseSchema, PostMatchGenerateResponseSchema, PreSchema } from "../validator/match";
+import {
+  GetMatchResponseSchema,
+  PostMatchGenerateResponseSchema,
+  PreSchema,
+} from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
 import { FetchTeamService } from '../../../team/service/get';
 import { TeamID } from '../../../team/models/team';
-import { GeneratePreMatchService } from "../../service/generatePre";
+import { GeneratePreMatchService } from '../../service/generatePre';
+import { DepartmentType } from 'config';
 
 export class MatchController {
   constructor(
@@ -61,22 +66,37 @@ export class MatchController {
       main: [],
     });
   }
-  async generateMatch(matchType: "pre" , departmentType: DepartmentType): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateResponseSchema>> {
+
+  async generateMatch(
+    matchType: 'pre' | 'main',
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateResponseSchema>>> {
     // ToDo: 本戦試合を生成できるようにする
+    if (matchType === 'main') {
+      return Result.err(new Error('Not implemented'));
+    }
 
     const res = await this.generatePreMatchService.handle(departmentType);
     if (Result.isErr(res)) return res;
     const matches = Result.unwrap(res);
 
     return Result.ok(
-      matches.map(v => {
+      matches.map((v) => {
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-          departmentType: ,
-          runResults: []
-        }
-      }));
-
+          departmentType: v.getDepartmentType(),
+          leftTeamID: v.getTeamId1(),
+          rightTeamID: v.getTeamId2(),
+          runResults: [] as {
+            id: string;
+            teamID: string;
+            points: number;
+            goalTimeSeconds: number | null;
+            finishState: 'goal' | 'finished';
+          }[],
+        };
+      })
+    );
   }
 }
