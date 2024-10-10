@@ -143,13 +143,13 @@ export class MatchController {
     }
   }
 
-  async getMatchByType<T extends MatchType>(
-    matchType: T
+  async getMatchByType(
+    matchType: MatchType
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
     if (matchType === 'pre') {
-      const matcheRes = await this.getMatchService.findAllPreMatch();
-      if (Result.isErr(matcheRes)) return Result.err(new Error('Failed to get matches'));
-      const matches = Result.unwrap(matcheRes);
+      const matchRes = await this.getMatchService.findAllPreMatch();
+      if (Result.isErr(matchRes)) return matchRes;
+      const matches = Result.unwrap(matchRes);
       const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
       const teamsMap = new Map<TeamID, Team>();
       for (const teamID of teamIDs) {
@@ -196,9 +196,9 @@ export class MatchController {
         })
       );
     } else {
-      const matcheRes = await this.getMatchService.findAllMainMatch();
-      if (Result.isErr(matcheRes)) return Result.err(new Error('Failed to get matches'));
-      const matches = Result.unwrap(matcheRes);
+      const matchRes = await this.getMatchService.findAllMainMatch();
+      if (Result.isErr(matchRes)) return matchRes;
+      const matches = Result.unwrap(matchRes);
       const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
       const teamsMap = new Map<TeamID, Team>();
       for (const teamID of teamIDs) {
