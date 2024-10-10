@@ -1,20 +1,18 @@
-import { DepartmentType, MatchType, TeamInfo } from "config";
+import { TeamInfo } from "config";
 
 export type Match = {
   id: string;
-  courseIndex: number;
-  category: DepartmentType;
-  right: TeamInfo;
-  left: TeamInfo;
-  matchType: MatchType;
-  results?: {
-    left: TeamResult;
-    right: TeamResult;
-  };
+  matchCode: `${string}-${string}`;
+  // category: DepartmentType;
+  rightTeam?: TeamInfo;
+  leftTeam?: TeamInfo;
+  runResults: TeamResult[];
 };
 
 type TeamResult = {
+  id: string;
   teamID: string;
   points: number;
-  time: number;
+  goalTimeSeconds: number | null;
+  finishState: "finished" | "goal";
 };

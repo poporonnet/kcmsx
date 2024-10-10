@@ -16,32 +16,39 @@ type APIPostRunResults = {
   finishState: "goal" | "finished";
 }[];
 
-export const MatchSubmit = (props: {
+export const MatchSubmit = ({
+  matchInfo,
+  available,
+  result,
+}: {
   matchInfo: MatchInfo;
   available: boolean;
   result: {
-    left: Omit<TeamResult, "id">;
-    right: Omit<TeamResult, "id">;
+    left?: Omit<TeamResult, "id">;
+    right?: Omit<TeamResult, "id">;
   };
 }) => {
   const submit = async () => {
-    const runResults: APIPostRunResults = [
-      {
-        teamID: props.matchInfo.teams.left.id,
-        points: props.result.left.points,
-        goalTimeSeconds: props.result.left.time ?? null,
-        finishState: props.result.left.time != null ? "goal" : "finished",
-      },
-      {
-        teamID: props.matchInfo.teams.right.id,
-        points: props.result.right.points,
-        goalTimeSeconds: props.result.right.time ?? null,
-        finishState: props.result.right.time != null ? "goal" : "finished",
-      },
-    ];
+    const runResults: APIPostRunResults = [];
+    if (matchInfo.teams.left && result.left) {
+      runResults.push({
+        teamID: matchInfo.teams.left.id,
+        points: result.left.points,
+        goalTimeSeconds: result.left.time ?? null,
+        finishState: result.left.time != null ? "goal" : "finished",
+      });
+    }
+    if (matchInfo.teams.right && result.right) {
+      runResults.push({
+        teamID: matchInfo.teams.right.id,
+        points: result.right.points,
+        goalTimeSeconds: result.right.time ?? null,
+        finishState: result.right.time != null ? "goal" : "finished",
+      });
+    }
 
-    const result = await fetch(
-      `${import.meta.env.VITE_API_URL}/match/${props.matchInfo.matchType}/${props.matchInfo.id}/run_result`,
+    const res = await fetch(
+      `${import.meta.env.VITE_API_URL}/match/${matchInfo.matchType}/${matchInfo.id}/run_result`,
       {
         method: "post",
         body: JSON.stringify(runResults),
@@ -52,7 +59,7 @@ export const MatchSubmit = (props: {
     ).catch(() => undefined);
 
     notifications.show(
-      result?.ok
+      res?.ok
         ? {
             title: "送信成功",
             message: "結果が正常に送信されました",
@@ -73,7 +80,7 @@ export const MatchSubmit = (props: {
       px="xl"
       py="sm"
       color="teal"
-      disabled={!props.available}
+      disabled={!available}
       onClick={submit}
     >
       <Flex gap="xs">

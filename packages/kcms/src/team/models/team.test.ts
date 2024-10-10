@@ -1,3 +1,4 @@
+import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { Team, TeamID } from './team.js';
 
@@ -7,7 +8,7 @@ describe('正しくインスタンスを生成できる', () => {
       id: '123' as TeamID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
-      departmentType: 'open',
+      departmentType: config.departments[0].type,
       robotType: 'leg',
       isEntered: true,
     });
@@ -16,7 +17,7 @@ describe('正しくインスタンスを生成できる', () => {
     expect(actual.getTeamName()).toBe('チーム1');
     expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
     expect(actual.getRobotType()).toBe('leg');
-    expect(actual.getDepartmentType()).toBe('open');
+    expect(actual.getDepartmentType()).toBe(config.departments[0].type);
   });
 
   it('正しくインスタンスを生成できる - クラブを含む場合', () => {
@@ -24,7 +25,7 @@ describe('正しくインスタンスを生成できる', () => {
       id: '123' as TeamID,
       teamName: 'チーム1',
       members: ['山田太郎', 'テスト大介'],
-      departmentType: 'open',
+      departmentType: config.departments[0].type,
       robotType: 'leg',
       isEntered: true,
       clubName: 'テストクラブ',
@@ -34,7 +35,7 @@ describe('正しくインスタンスを生成できる', () => {
     expect(actual.getTeamName()).toBe('チーム1');
     expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
     expect(actual.getRobotType()).toBe('leg');
-    expect(actual.getDepartmentType()).toBe('open');
+    expect(actual.getDepartmentType()).toBe(config.departments[0].type);
     expect(actual.getClubName()).toBe('テストクラブ');
   });
 
@@ -43,7 +44,7 @@ describe('正しくインスタンスを生成できる', () => {
       id: '1' as TeamID,
       teamName: 'team1',
       members: ['山田太郎', 'テスト大介'],
-      departmentType: 'open',
+      departmentType: config.departments[0].type,
       robotType: 'leg',
     });
 
@@ -57,7 +58,7 @@ describe('正しくインスタンスを生成できる', () => {
       id: '1' as TeamID,
       teamName: 'team1',
       members: ['山田太郎', 'テスト大介'],
-      departmentType: 'open',
+      departmentType: config.departments[0].type,
       robotType: 'leg',
     });
 

@@ -10,6 +10,7 @@ interface Props {
   rule: Rule;
   onChange: (value: Parameters<Rule["point"]>[0]) => void;
   children: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const PointControl = (props: Props) => (
@@ -25,6 +26,7 @@ export const PointControl = (props: Props) => (
           props.onChange(active);
         }}
         disabled={
+          props.disabled ||
           !(props.rule.changeable?.(props.team.point.premiseState) ?? true)
         }
       >
@@ -43,6 +45,7 @@ export const PointControl = (props: Props) => (
           props.onChange(count);
         }}
         disabled={
+          props.disabled ||
           !(props.rule.changeable?.(props.team.point.premiseState) ?? true)
         }
       >
