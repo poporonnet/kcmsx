@@ -1,8 +1,8 @@
-import { TeamID } from '../team/models/team.js';
-import { RunResult, RunResultID } from '../match/model/runResult.js';
-import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっとデータ数を増やす
-import { MainMatch, MainMatchID } from '../match/model/main.js';
 import { config } from 'config';
+import { MainMatch, MainMatchID } from '../match/model/main.js';
+import { PreMatch, PreMatchID } from '../match/model/pre.js'; // ToDo: もっとデータ数を増やす
+import { RunResult, RunResultID } from '../match/model/runResult.js';
+import { TeamID } from '../team/models/team.js';
 
 // ランキング生成用の試合データ
 // Openは予選がないので、予選の試合データはない
