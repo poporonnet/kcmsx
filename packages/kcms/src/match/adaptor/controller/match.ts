@@ -1,10 +1,16 @@
 import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
-import { GetMatchResponseSchema, GetMatchTypeResponseSchema, PreSchema } from '../validator/match';
+import {
+  GetMatchResponseSchema,
+  GetMatchTypeResponseSchema,
+  MainSchema,
+  PreSchema,
+  RunResultSchema,
+} from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
-import { DepartmentType, MatchType } from 'config';
+import { MatchType } from 'config';
 import { FetchTeamService } from '../../../team/service/get';
-import { TeamID } from '../../../team/models/team';
+import { Team, TeamID } from '../../../team/models/team';
 
 export class MatchController {
   constructor(
@@ -40,18 +46,11 @@ export class MatchController {
             teamName: team.getTeamName(),
           };
         };
-        const getTeamDepartmentType = (
-          left: TeamID | undefined,
-          right: TeamID | undefined
-        ): DepartmentType => {
-          if (!left && !right) throw new Error('Both teamID is undefined');
-          return teamMap.get(left || right!)!.getDepartmentType();
-        };
 
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-          departmentType: getTeamDepartmentType(v.getTeamId1(), v.getTeamId2()),
+          departmentType: v.getDepartmentType(),
           leftTeam: getTeam(v.getTeamId1()),
           rightTeam: getTeam(v.getTeamId2()),
           runResults: v.getRunResults().map((v) => ({
@@ -71,38 +70,107 @@ export class MatchController {
     type: MatchType
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
     if (type === 'pre') {
-      const matches = await this.getMatchService.findAllPreMatch();
-      if (Result.isErr(matches)) return matches;
-      const unwrapped = Result.unwrap(matches);
+      const matcheRes = await this.getMatchService.findAllPreMatch();
+      if (Result.isErr(matcheRes)) return Result.err(new Error('Failed to get matches'));
+      const matches = Result.unwrap(matcheRes);
+      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
+      const teamsMap = new Map<TeamID, Team>();
 
+      for (const teamID of teamIDs) {
+        const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
+        if (Result.isErr(teamRes)) return Result.err(new Error('Failed to get teams'));
+        const team = Result.unwrap(teamRes);
+        teamsMap.set(team.getId(), team);
+      }
       return Result.ok(
-        unwrapped.map((v): z.infer<typeof PreSchema> => {
+        matches.map((v): z.infer<typeof PreSchema> => {
+          const leftTeamName = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
+          const rightTeamName = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
           return {
             id: v.getId(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
             departmentType: v.getDepartmentType(),
-            leftTeam: {
-              id: v.getTeamId1() as TeamID,
-              teamName: '',
-            },
-            rightTeam: {
-              id: v.getTeamId2() as TeamID,
-              teamName: '',
-            },
-            runResults: v.getRunResults().map((v) => ({
-              id: v.getId(),
-              teamID: v.getTeamId(),
-              points: v.getPoints(),
-              goalTimeSeconds: v.getGoalTimeSeconds(),
-              finishState: v.isGoal() ? 'goal' : 'finished',
-            })),
+            leftTeam:
+              v.getTeamId1() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId1()!,
+                    teamName: leftTeamName,
+                  },
+
+            rightTeam:
+              v.getTeamId2() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId2()!,
+                    teamName: rightTeamName,
+                  },
+            runResults:
+              v.getRunResults() == undefined
+                ? []
+                : v.getRunResults().map(
+                    (v): z.infer<typeof RunResultSchema> => ({
+                      id: v.getId(),
+                      teamID: v.getTeamId(),
+                      points: v.getPoints(),
+                      goalTimeSeconds: v.getGoalTimeSeconds(),
+                      finishState: v.isGoal() ? 'goal' : 'finished',
+                    })
+                  ),
           };
         })
       );
     } else {
-      const matches = await this.getMatchService.findAllMainMatch();
-      if (Result.isErr(matches)) return matches;
-      const unwrapped = Result.unwrap(matches);
+      const matcheRes = await this.getMatchService.findAllMainMatch();
+      if (Result.isErr(matcheRes)) return Result.err(new Error('Failed to get matches'));
+      const matches = Result.unwrap(matcheRes);
+      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
+      const teamsMap = new Map<TeamID, Team>();
+      for (const teamID of teamIDs) {
+        const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
+        if (Result.isErr(teamRes)) return Result.err(new Error('Failed to get teams'));
+        const team = Result.unwrap(teamRes);
+        teamsMap.set(team.getId(), team);
+      }
+      return Result.ok(
+        matches.map((v): z.infer<typeof MainSchema> => {
+          const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
+          const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
+          return {
+            id: v.getId(),
+            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
+            team1:
+              v.getTeamId1() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId1()!,
+                    teamName: team1Name,
+                  },
+
+            team2:
+              v.getTeamId2() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId2()!,
+                    teamName: team2Name,
+                  },
+            winnerID: v.getWinnerId() ?? '',
+            runResults:
+              v.getRunResults() == undefined
+                ? []
+                : v.getRunResults().map(
+                    (v): z.infer<typeof RunResultSchema> => ({
+                      id: v.getId(),
+                      teamID: v.getTeamId(),
+                      points: v.getPoints(),
+                      goalTimeSeconds: v.getGoalTimeSeconds(),
+                      finishState: v.isGoal() ? 'goal' : 'finished',
+                    })
+                  ),
+          };
+        })
+      );
     }
     return Result.err(new Error('Non existent match type'));
   }
