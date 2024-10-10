@@ -51,15 +51,15 @@ export class MainMatch {
     return this.matchIndex;
   }
 
-  getTeamId1(): string | undefined {
+  getTeamId1(): TeamID | undefined {
     return this.teamId1;
   }
 
-  getTeamId2(): string | undefined {
+  getTeamId2(): TeamID | undefined {
     return this.teamId2;
   }
 
-  getWinnerId(): string | undefined {
+  getWinnerId(): TeamID | undefined {
     return this.winnerId;
   }
 
