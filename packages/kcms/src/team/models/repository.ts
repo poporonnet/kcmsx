@@ -1,5 +1,5 @@
-import { Team } from './team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { Team } from './team.js';
 
 /**
  * チームを管理するRepository

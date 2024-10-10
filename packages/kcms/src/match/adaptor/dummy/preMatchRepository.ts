@@ -1,6 +1,6 @@
-import { PreMatchRepository } from '../../model/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { PreMatch, PreMatchID } from '../../model/pre.js';
+import { PreMatchRepository } from '../../model/repository.js';
 
 export class DummyPreMatchRepository implements PreMatchRepository {
   private data: PreMatch[];

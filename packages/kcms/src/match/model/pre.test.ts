@@ -1,8 +1,8 @@
-import { describe, expect, it } from 'vitest';
-import { PreMatch, PreMatchID } from './pre.js';
-import { TeamID } from '../../team/models/team.js';
-import { RunResult, RunResultID } from './runResult.js';
 import { config } from 'config';
+import { describe, expect, it } from 'vitest';
+import { TeamID } from '../../team/models/team.js';
+import { PreMatch, PreMatchID } from './pre.js';
+import { RunResult, RunResultID } from './runResult.js';
 
 describe('PreMatch', () => {
   it('正しく初期化できる', () => {

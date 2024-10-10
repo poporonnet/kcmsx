@@ -1,8 +1,8 @@
-import { MainMatchRepository } from '../../model/repository';
-import { MainMatch, MainMatchID } from '../../model/main';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import type { Prisma, PrismaClient } from '@prisma/client';
 import { TeamID } from '../../../team/models/team';
+import { MainMatch, MainMatchID } from '../../model/main';
+import { MainMatchRepository } from '../../model/repository';
 import { RunResult, RunResultID } from '../../model/runResult';
 
 export class PrismaMainMatchRepository implements MainMatchRepository {
