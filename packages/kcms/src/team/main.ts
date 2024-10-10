@@ -1,6 +1,5 @@
-import { TeamController } from './adaptor/controller/controller';
-import { DummyRepository } from './adaptor/repository/dummyRepository';
 import { OpenAPIHono } from '@hono/zod-openapi';
+
 import {
   DeleteTeamRoute,
   GetTeamRoute,
@@ -8,16 +7,20 @@ import {
   PostEntryTeamRoute,
   PostTeamsRoute,
 } from './routing';
+
 import { Result } from '@mikuroxina/mini-fn';
-import { errorToCode } from './adaptor/errors';
-import { PrismaTeamRepository } from './adaptor/repository/prismaRepository';
 import { prismaClient } from '../adaptor';
+import { TeamController } from './adaptor/controller/controller';
+import { errorToCode } from './adaptor/errors';
+import { DummyRepository } from './adaptor/repository/dummyRepository';
+import { PrismaTeamRepository } from './adaptor/repository/prismaRepository';
 import { TeamID } from './models/team.js';
-import { FetchTeamService } from './service/get';
-import { DeleteTeamService } from './service/delete';
-import { CreateTeamService } from './service/createTeam';
+
 import { SnowflakeIDGenerator } from '../id/main';
+import { CreateTeamService } from './service/createTeam';
+import { DeleteTeamService } from './service/delete';
 import { EntryService } from './service/entry';
+import { FetchTeamService } from './service/get';
 
 export const teamHandler = new OpenAPIHono();
 const isProduction = process.env.NODE_ENV === 'production';

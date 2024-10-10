@@ -1,13 +1,13 @@
-import { describe, expect, it } from 'vitest';
-import { GeneratePreMatchService } from './generatePre';
-import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
-import { testTeamData } from '../../testData/entry';
-import { FetchTeamService } from '../../team/service/get';
-import { SnowflakeIDGenerator } from '../../id/main';
-import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
 import { Result } from '@mikuroxina/mini-fn';
-import { TeamID } from '../../team/models/team';
 import { config } from 'config';
+import { describe, expect, it } from 'vitest';
+import { SnowflakeIDGenerator } from '../../id/main';
+import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
+import { TeamID } from '../../team/models/team';
+import { FetchTeamService } from '../../team/service/get';
+import { testTeamData } from '../../testData/entry';
+import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
+import { GeneratePreMatchService } from './generatePre';
 
 describe('GeneratePreMatchService', () => {
   const teamRepository = new DummyRepository([...testTeamData.values()]);

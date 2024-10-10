@@ -107,6 +107,9 @@ importers:
       prettier:
         specifier: ^3.1.0
         version: 3.3.3
+      prettier-plugin-organize-imports:
+        specifier: ^4.0.0
+        version: 4.1.0(prettier@3.3.3)(typescript@5.6.2)
       prisma:
         specifier: ^5.20.0
         version: 5.20.0
@@ -4125,7 +4128,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.2(@types/node@22.7.4)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
+      vitest: 2.1.2(@types/node@20.16.10)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
     transitivePeerDependencies:
       - supports-color
 
@@ -4180,7 +4183,7 @@ snapshots:
       sirv: 2.0.4
       tinyglobby: 0.2.9
       tinyrainbow: 1.2.0
-      vitest: 2.1.2(@types/node@22.7.4)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
+      vitest: 2.1.2(@types/node@20.16.10)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
 
   '@vitest/utils@2.1.2':
     dependencies:
@@ -4564,7 +4567,7 @@ snapshots:
       eslint: 9.12.0
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.8.0(@typescript-eslint/parser@8.8.0(eslint@9.12.0)(typescript@5.6.2))(eslint@9.12.0)(typescript@5.6.2)
-      vitest: 2.1.2(@types/node@22.7.4)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
+      vitest: 2.1.2(@types/node@20.16.10)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
     transitivePeerDependencies:
       - supports-color
       - typescript

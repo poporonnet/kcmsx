@@ -1,5 +1,5 @@
-import { SnowflakeID } from '../../id/main.js';
 import { DepartmentType, RobotType } from 'config';
+import { SnowflakeID } from '../../id/main.js';
 
 export type TeamID = SnowflakeID<Team>;
 
