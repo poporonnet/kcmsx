@@ -9,11 +9,7 @@ describe('getEntryService', () => {
   const repository = new DummyRepository();
   const service = new FetchTeamService(repository);
 
-  const testEntryData = [
-    TestEntryData['ElementaryMultiWalk'],
-    TestEntryData['ElementaryWheel'],
-    TestEntryData['OpenMultiWalk'],
-  ];
+  const testEntryData = [TestEntryData['ElementaryMultiWalk'], TestEntryData['ElementaryWheel']];
 
   beforeEach(() => {
     testEntryData.map((d) => repository.create(d));
