@@ -12,7 +12,7 @@ const BriefTeamSchema = z
   })
   .optional();
 
-const RunResultSchema = z.object({
+export const RunResultSchema = z.object({
   id: z.string().openapi({ example: '60980640' }),
   teamID: z.string().openapi({ example: '45098607' }),
   points: z.number().openapi({ example: 4 }),
@@ -20,7 +20,7 @@ const RunResultSchema = z.object({
   finishState: z.enum(['goal', 'finished']).openapi({ example: 'goal' }),
 });
 
-const PreSchema = z.object({
+export const PreSchema = z.object({
   id: z.string().openapi({ example: '320984' }),
   matchCode: z.string().openapi({ example: '1-3' }),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
@@ -105,10 +105,12 @@ export const PostMatchGenerateResponseSchema = z.array(
     MainSchema.omit({
       team1: true,
       team2: true,
-    }).extend({
-      team1ID: z.string().optional().openapi({ example: '45098607' }),
-      team2ID: z.string().optional().openapi({ example: '2230392' }),
-    }),
+    })
+      .extend({
+        team1ID: z.string().optional().openapi({ example: '45098607' }),
+        team2ID: z.string().optional().openapi({ example: '2230392' }),
+      })
+      .array(),
   ])
 );
 

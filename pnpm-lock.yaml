@@ -51,10 +51,10 @@ importers:
         version: 1.13.1(hono@4.6.3)
       '@hono/zod-openapi':
         specifier: ^0.16.0
-        version: 0.16.3(hono@4.6.3)(zod@3.23.8)
+        version: 0.16.4(hono@4.6.3)(zod@3.23.8)
       '@hono/zod-validator':
-        specifier: ^0.3.0
-        version: 0.3.0(hono@4.6.3)(zod@3.23.8)
+        specifier: ^0.4.0
+        version: 0.4.1(hono@4.6.3)(zod@3.23.8)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
         version: 6.6.0
@@ -107,6 +107,9 @@ importers:
       prettier:
         specifier: ^3.1.0
         version: 3.3.3
+      prettier-plugin-organize-imports:
+        specifier: ^4.0.0
+        version: 4.1.0(prettier@3.3.3)(typescript@5.6.2)
       prisma:
         specifier: ^5.20.0
         version: 5.20.0
@@ -241,8 +244,8 @@ importers:
   packages/mock:
     dependencies:
       '@hono/zod-validator':
-        specifier: ^0.3.0
-        version: 0.3.0(hono@4.6.3)(zod@3.23.8)
+        specifier: ^0.4.0
+        version: 0.4.1(hono@4.6.3)(zod@3.23.8)
       config:
         specifier: workspace:^
         version: link:../config
@@ -1062,8 +1065,8 @@ packages:
     peerDependencies:
       hono: ^4
 
-  '@hono/zod-openapi@0.16.3':
-    resolution: {integrity: sha512-I5gaFkVM2gaAVw41YBjdZ4peDjf8cQvHZVurOkN5l9Qx1lUZCaqqqZHZpdGhSfAPvu2FVlhRd4xSSqrmbnzH4Q==}
+  '@hono/zod-openapi@0.16.4':
+    resolution: {integrity: sha512-mnF6GthBaKex0D5PsY/4lYNtkaGJNE38bjeUI//EUqq7Ee4TNm2su35IUiFH4HcmJp5fWYMLyOJOpjnkClzEGw==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       hono: '>=4.3.6'
@@ -1071,6 +1074,12 @@ packages:
 
   '@hono/zod-validator@0.3.0':
     resolution: {integrity: sha512-7XcTk3yYyk6ldrO/VuqsroE7stvDZxHJQcpATRAyha8rUxJNBPV3+6waDrARfgEqxOVlzIadm3/6sE/dPseXgQ==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.19.1
+
+  '@hono/zod-validator@0.4.1':
+    resolution: {integrity: sha512-I8LyfeJfvVmC5hPjZ2Iij7RjexlgSBT7QJudZ4JvNPLxn0JQ3sqclz2zydlwISAnw21D2n4LQ0nfZdoiv9fQQA==}
     peerDependencies:
       hono: '>=3.9.0'
       zod: ^3.19.1
@@ -3622,7 +3631,7 @@ snapshots:
     dependencies:
       hono: 4.6.3
 
-  '@hono/zod-openapi@0.16.3(hono@4.6.3)(zod@3.23.8)':
+  '@hono/zod-openapi@0.16.4(hono@4.6.3)(zod@3.23.8)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.23.8)
       '@hono/zod-validator': 0.3.0(hono@4.6.3)(zod@3.23.8)
@@ -3630,6 +3639,11 @@ snapshots:
       zod: 3.23.8
 
   '@hono/zod-validator@0.3.0(hono@4.6.3)(zod@3.23.8)':
+    dependencies:
+      hono: 4.6.3
+      zod: 3.23.8
+
+  '@hono/zod-validator@0.4.1(hono@4.6.3)(zod@3.23.8)':
     dependencies:
       hono: 4.6.3
       zod: 3.23.8
@@ -4114,7 +4128,7 @@ snapshots:
       std-env: 3.7.0
       test-exclude: 7.0.1
       tinyrainbow: 1.2.0
-      vitest: 2.1.2(@types/node@22.7.4)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
+      vitest: 2.1.2(@types/node@20.16.10)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
     transitivePeerDependencies:
       - supports-color
 
@@ -4169,7 +4183,7 @@ snapshots:
       sirv: 2.0.4
       tinyglobby: 0.2.9
       tinyrainbow: 1.2.0
-      vitest: 2.1.2(@types/node@22.7.4)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
+      vitest: 2.1.2(@types/node@20.16.10)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
 
   '@vitest/utils@2.1.2':
     dependencies:
@@ -4553,7 +4567,7 @@ snapshots:
       eslint: 9.12.0
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.8.0(@typescript-eslint/parser@8.8.0(eslint@9.12.0)(typescript@5.6.2))(eslint@9.12.0)(typescript@5.6.2)
-      vitest: 2.1.2(@types/node@22.7.4)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
+      vitest: 2.1.2(@types/node@20.16.10)(@vitest/ui@2.1.2)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.47))
     transitivePeerDependencies:
       - supports-color
       - typescript

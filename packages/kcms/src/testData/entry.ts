@@ -1,5 +1,5 @@
-import { Team, TeamID } from '../team/models/team.js';
 import { DepartmentType } from 'config';
+import { Team, TeamID } from '../team/models/team.js';
 
 export const TestEntryData = {
   ElementaryMultiWalk: Team.new({
@@ -16,21 +16,6 @@ export const TestEntryData = {
     robotType: 'wheel',
     departmentType: 'elementary',
   }),
-  // Openで車輪型は存在しない
-  OpenMultiWalk: Team.new({
-    id: '3' as TeamID,
-    teamName: 'TestTeam3',
-    members: ['TestTaro3'],
-    robotType: 'leg',
-    departmentType: 'open',
-  }),
-  OpenMultiWalk2: Team.new({
-    id: '4' as TeamID,
-    teamName: 'TestTeam4',
-    members: ['TestTaro4'],
-    robotType: 'leg',
-    departmentType: 'open',
-  }),
   // 1の重複
   ElementaryMultiWalkExists: Team.new({
     id: '1' as TeamID,
@@ -46,14 +31,6 @@ export const TestEntryData = {
     members: ['TestTaro2'],
     robotType: 'wheel',
     departmentType: 'elementary',
-  }),
-  // 3の重複
-  OpenMultiWalkExists: Team.new({
-    id: '3' as TeamID,
-    teamName: 'TestTeam3',
-    members: ['TestTaro3'],
-    robotType: 'leg',
-    departmentType: 'open',
   }),
   NotEntered: Team.reconstruct({
     id: '6' as TeamID,

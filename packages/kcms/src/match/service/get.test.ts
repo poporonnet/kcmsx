@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
-import { GetMatchService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { testRankingPreMatchData } from '../../testData/match.js';
+import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository.js';
 import { PreMatchID } from '../model/pre.js';
-import { testRankingPreMatchData } from '../../testData/match.js';
+import { GetMatchService } from './get.js';
 
 describe('GetMatchService', () => {
   const mainMatchRepository = new DummyMainMatchRepository();

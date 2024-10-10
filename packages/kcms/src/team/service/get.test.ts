@@ -1,18 +1,15 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/repository/dummyRepository';
-import { FetchTeamService } from './get.js';
 import { Result } from '@mikuroxina/mini-fn';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { TestEntryData } from '../../testData/entry.js';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
+import { TeamID } from '../models/team';
+import { FetchTeamService } from './get.js';
 
 describe('getEntryService', () => {
   const repository = new DummyRepository();
   const service = new FetchTeamService(repository);
 
-  const testEntryData = [
-    TestEntryData['ElementaryMultiWalk'],
-    TestEntryData['ElementaryWheel'],
-    TestEntryData['OpenMultiWalk'],
-  ];
+  const testEntryData = [TestEntryData['ElementaryMultiWalk'], TestEntryData['ElementaryWheel']];
 
   beforeEach(() => {
     testEntryData.map((d) => repository.create(d));
@@ -41,7 +38,7 @@ describe('getEntryService', () => {
   });
 
   it('存在しないときはエラーを返す', async () => {
-    const actual = await service.findByID('0');
+    const actual = await service.findByID('0' as TeamID);
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('Not found'));
 

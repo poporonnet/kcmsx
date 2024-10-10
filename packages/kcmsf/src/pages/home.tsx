@@ -5,9 +5,9 @@ export const Home = () => {
       <h1>Home</h1>
       <Link to="/team">参加者一覧</Link>
       <br />
-      <Link to="/entry">参加者登録</Link>
+      <Link to="/register">参加者登録</Link>
       <br />
-      <Link to="/entry/bulk">参加者一括登録</Link>
+      <Link to="/register/bulk">参加者一括登録</Link>
       <br />
       <Link to="/matchlist">試合表</Link>
       <br />

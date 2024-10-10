@@ -1,6 +1,6 @@
-import { TeamRepository } from '../models/repository.js';
-import { Team } from '../models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { TeamRepository } from '../models/repository.js';
+import { Team, TeamID } from '../models/team.js';
 
 export class FetchTeamService {
   private readonly repository: TeamRepository;
@@ -13,7 +13,7 @@ export class FetchTeamService {
     return await this.repository.findAll();
   }
 
-  async findByID(id: string): Promise<Result.Result<Error, Team>> {
+  async findByID(id: TeamID): Promise<Result.Result<Error, Team>> {
     const res = await this.repository.findByID(id);
     if (Option.isNone(res)) {
       return Result.err(new Error('Not found'));

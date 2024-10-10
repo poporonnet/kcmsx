@@ -1,6 +1,7 @@
+import { config } from 'config';
 import { describe, expect, it } from 'vitest';
-import { PreMatch, PreMatchID } from './pre.js';
 import { TeamID } from '../../team/models/team.js';
+import { PreMatch, PreMatchID } from './pre.js';
 import { RunResult, RunResultID } from './runResult.js';
 
 describe('PreMatch', () => {
@@ -9,6 +10,7 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departments[0].type,
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [],
@@ -28,6 +30,7 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departments[0].type,
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) =>
@@ -50,6 +53,7 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departments[0].type,
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [],
@@ -95,6 +99,7 @@ describe('PreMatch', () => {
       id: '1' as PreMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departments[0].type,
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [],

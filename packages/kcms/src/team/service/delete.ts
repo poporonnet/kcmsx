@@ -1,5 +1,5 @@
-import { TeamRepository } from '../models/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { TeamRepository } from '../models/repository.js';
 import { TeamID } from '../models/team';
 
 export class DeleteTeamService {

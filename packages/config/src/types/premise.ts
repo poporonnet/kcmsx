@@ -30,7 +30,7 @@ type DerivedDynamicPremiseState<
   PointState extends Record<string, unknown> = Record<string, unknown>,
 > = {
   matchState: {
-    [S in Side]: {
+    [S in Side]?: {
       getPointState: () => PointState;
       getGoalTimeSeconds: () => number | undefined;
     };

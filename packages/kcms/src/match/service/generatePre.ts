@@ -1,9 +1,9 @@
 import { Result } from '@mikuroxina/mini-fn';
-import { PreMatch } from '../model/pre';
 import { config, DepartmentType } from 'config';
-import { FetchTeamService } from '../../team/service/get';
-import { Team } from '../../team/models/team';
 import { SnowflakeIDGenerator } from '../../id/main';
+import { Team } from '../../team/models/team';
+import { FetchTeamService } from '../../team/service/get';
+import { PreMatch } from '../model/pre';
 import { PreMatchRepository } from '../model/repository';
 
 export class GeneratePreMatchService {
@@ -39,6 +39,7 @@ export class GeneratePreMatchService {
           // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
           courseIndex: courseIndex + 1,
           matchIndex: matchIndex + 1,
+          departmentType: (pair[0] || pair[1]!).getDepartmentType(),
           teamId1: pair[0]?.getId(),
           teamId2: pair[1]?.getId(),
           runResults: [],
