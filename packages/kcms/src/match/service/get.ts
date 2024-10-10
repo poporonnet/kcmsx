@@ -1,7 +1,7 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { MainMatchRepository, PreMatchRepository } from '../model/repository.js';
-import { PreMatch, PreMatchID } from '../model/pre.js';
 import { MainMatch, MainMatchID } from '../model/main.js';
+import { PreMatch, PreMatchID } from '../model/pre.js';
+import { MainMatchRepository, PreMatchRepository } from '../model/repository.js';
 
 // ToDo: 試合の走行結果の取得を実装する (別Serviceにしても良いかもしれない)
 export class GetMatchService {

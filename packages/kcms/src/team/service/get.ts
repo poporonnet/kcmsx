@@ -1,6 +1,6 @@
+import { Option, Result } from '@mikuroxina/mini-fn';
 import { TeamRepository } from '../models/repository.js';
 import { Team, TeamID } from '../models/team.js';
-import { Option, Result } from '@mikuroxina/mini-fn';
 
 export class FetchTeamService {
   private readonly repository: TeamRepository;

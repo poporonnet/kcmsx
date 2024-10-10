@@ -1,6 +1,6 @@
-import { expect, it, describe } from 'vitest';
-import { SnowflakeIDGenerator } from './main.js';
 import { Result } from '@mikuroxina/mini-fn';
+import { describe, expect, it } from 'vitest';
+import { SnowflakeIDGenerator } from './main.js';
 
 describe('SnowflakeIDGenerator', () => {
   it('正しいIDを生成できる', () => {

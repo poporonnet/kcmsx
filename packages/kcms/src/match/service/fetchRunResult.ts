@@ -1,9 +1,9 @@
+import { Option, Result } from '@mikuroxina/mini-fn';
 import { MatchType } from 'config';
-import { RunResult } from '../model/runResult';
 import { MainMatchID } from '../model/main';
 import { PreMatchID } from '../model/pre';
-import { Option, Result } from '@mikuroxina/mini-fn';
 import { MainMatchRepository, PreMatchRepository } from '../model/repository';
+import { RunResult } from '../model/runResult';
 
 export class FetchRunResultService {
   constructor(
