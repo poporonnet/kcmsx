@@ -9,15 +9,15 @@ import { MatchController } from './adaptor/controller/match';
 import { DummyMainMatchRepository } from './adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from './adaptor/dummy/preMatchRepository';
 import { PrismaMainMatchRepository } from './adaptor/prisma/mainMatchRepository';
+import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
+import { MainMatchID } from './model/main';
+import { PreMatchID } from './model/pre';
 import {
   GetMatchIdRoute,
   GetMatchRoute,
   GetMatchTypeRoute,
   PostMatchGenerateRoute,
 } from './routing';
-import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
-import { MainMatchID } from './model/main';
-import { PreMatchID } from './model/pre';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GetMatchService } from './service/get';
 
