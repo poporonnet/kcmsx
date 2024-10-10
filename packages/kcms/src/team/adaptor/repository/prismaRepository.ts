@@ -1,8 +1,8 @@
-import { TeamRepository } from '../../models/repository';
-import { Team, TeamID } from '../../models/team';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { DepartmentType, RobotType } from 'config';
+import { TeamRepository } from '../../models/repository';
+import { Team, TeamID } from '../../models/team';
 
 export class PrismaTeamRepository implements TeamRepository {
   constructor(private readonly client: PrismaClient) {}

@@ -1,20 +1,20 @@
-import { MatchController } from './adaptor/controller/match';
-import { GetMatchService } from './service/get';
-import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
+import { OpenAPIHono } from '@hono/zod-openapi';
+import { Result } from '@mikuroxina/mini-fn';
 import { prismaClient } from '../adaptor';
+import { SnowflakeIDGenerator } from '../id/main';
+import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
+import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
+import { FetchTeamService } from '../team/service/get';
+import { MatchController } from './adaptor/controller/match';
+import { DummyMainMatchRepository } from './adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from './adaptor/dummy/preMatchRepository';
 import { PrismaMainMatchRepository } from './adaptor/prisma/mainMatchRepository';
-import { DummyMainMatchRepository } from './adaptor/dummy/mainMatchRepository';
-import { FetchTeamService } from '../team/service/get';
-import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
-import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
-import { OpenAPIHono } from '@hono/zod-openapi';
-import { GetMatchIdRoute, GetMatchRoute, PostMatchGenerateRoute } from './routing';
-import { Result } from '@mikuroxina/mini-fn';
-import { GeneratePreMatchService } from './service/generatePre';
-import { SnowflakeIDGenerator } from '../id/main';
-import { PreMatchID } from './model/pre';
+import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
 import { MainMatchID } from './model/main';
+import { PreMatchID } from './model/pre';
+import { GetMatchIdRoute, GetMatchRoute, PostMatchGenerateRoute } from './routing';
+import { GeneratePreMatchService } from './service/generatePre';
+import { GetMatchService } from './service/get';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const preMatchRepository = isProduction
@@ -41,9 +41,9 @@ const matchController = new MatchController(
   generatePreMatchService
 );
 
-export const matchHandlers = new OpenAPIHono();
+export const matchHandler = new OpenAPIHono();
 
-matchHandlers.openapi(GetMatchRoute, async (c) => {
+matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
@@ -52,7 +52,7 @@ matchHandlers.openapi(GetMatchRoute, async (c) => {
   return c.json(res[1], 200);
 });
 
-matchHandlers.openapi(PostMatchGenerateRoute, async (c) => {
+matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
   const { matchType, departmentType } = c.req.valid('param');
 
   const res = await matchController.generateMatch(matchType, departmentType);
@@ -63,7 +63,7 @@ matchHandlers.openapi(PostMatchGenerateRoute, async (c) => {
   return c.json(res[1], 200);
 });
 
-matchHandlers.openapi(GetMatchIdRoute, async (c) => {
+matchHandler.openapi(GetMatchIdRoute, async (c) => {
   const { matchType, matchID } = c.req.valid('param');
 
   const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);

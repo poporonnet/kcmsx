@@ -1,8 +1,8 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { describe, expect, it } from 'vitest';
 import { DummyRepository } from '../adaptor/repository/dummyRepository';
-import { Result } from '@mikuroxina/mini-fn';
-import { FetchTeamService } from './fetchTeam';
 import { Team, TeamID } from '../models/team';
+import { FetchTeamService } from './fetchTeam';
 
 describe('FetchTeamService', () => {
   const teamData = Team.new({

@@ -1,5 +1,5 @@
-import { Team, TeamID } from '../team/models/team.js';
 import { DepartmentType } from 'config';
+import { Team, TeamID } from '../team/models/team.js';
 
 export const TestEntryData = {
   ElementaryMultiWalk: Team.new({

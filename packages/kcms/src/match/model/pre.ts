@@ -1,7 +1,7 @@
-import { SnowflakeID } from '../../id/main.js';
-import { RunResult } from './runResult.js';
-import { TeamID } from '../../team/models/team.js';
 import { DepartmentType } from 'config';
+import { SnowflakeID } from '../../id/main.js';
+import { TeamID } from '../../team/models/team.js';
+import { RunResult } from './runResult.js';
 
 /** @description 予選試合ID
  * @example "20983209840"

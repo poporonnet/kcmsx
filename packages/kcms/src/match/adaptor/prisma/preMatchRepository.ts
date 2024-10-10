@@ -1,10 +1,10 @@
-import { PreMatchRepository } from '../../model/repository';
-import { PreMatch, PreMatchID } from '../../model/pre';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import type { Prisma, PrismaClient } from '@prisma/client';
-import { TeamID } from '../../../team/models/team';
-import { RunResult, RunResultID } from '../../model/runResult';
 import { DepartmentType } from 'config';
+import { TeamID } from '../../../team/models/team';
+import { PreMatch, PreMatchID } from '../../model/pre';
+import { PreMatchRepository } from '../../model/repository';
+import { RunResult, RunResultID } from '../../model/runResult';
 
 export class PrismaPreMatchRepository implements PreMatchRepository {
   constructor(private readonly client: PrismaClient) {}
