@@ -154,7 +154,7 @@ export class MatchController {
       const teamsMap = new Map<TeamID, Team>();
       for (const teamID of teamIDs) {
         const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
-        if (Result.isErr(teamRes)) return Result.err(new Error('Failed to get teams'));
+        if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
         teamsMap.set(team.getId(), team);
       }
@@ -203,7 +203,7 @@ export class MatchController {
       const teamsMap = new Map<TeamID, Team>();
       for (const teamID of teamIDs) {
         const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
-        if (Result.isErr(teamRes)) return Result.err(new Error('Failed to get teams'));
+        if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
         teamsMap.set(team.getId(), team);
       }
