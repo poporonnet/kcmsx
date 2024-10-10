@@ -84,7 +84,7 @@ matchHandler.openapi(GetMatchTypeRoute, async (c) => {
   const { matchType } = c.req.valid('param');
 
   const res = await matchController.getMatchByType(matchType);
-  if(Result.isErr(res)) {
+  if (Result.isErr(res)) {
     const error = Result.unwrapErr(res);
     return c.json({ description: error.message }, 400);
   }
