@@ -30,14 +30,12 @@ export const MatchList = () => {
       const data = (await res.json()) as undefined | Match[];
 
       if (!data) {
-        console.error(data);
         setError(true);
         setLoading(false);
         return;
       }
 
       if (data.length === 0) {
-        console.error(data);
         setError(false);
         setLoading(false);
         console.log("No data");
@@ -56,8 +54,7 @@ export const MatchList = () => {
       }
 
       setLoading(false);
-    } catch (e) {
-      console.error(e);
+    } catch {
       setError(true);
     }
 
