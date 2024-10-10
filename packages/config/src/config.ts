@@ -80,11 +80,19 @@ export const config = createConfig(
         label: "ゴール",
         type: "single",
         initial: false,
-        point: (done: boolean) => (done ? 1 : 0),
+        point: () => 0,
       },
       {
         name: "bringBall",
         label: "どじょうの数",
+        type: "countable",
+        initial: 0,
+        point: (count: number) => count,
+        validate: (value: number) => 0 <= value && value <= 3,
+      },
+      {
+        name: "bringRareBall",
+        label: "激レアどじょうの数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,
@@ -148,6 +156,14 @@ export const config = createConfig(
     bringBall: {
       changeable: (state) =>
         !state.matchState[state.side].getPointState().finish,
+    },
+    bringRareBall: {
+      visible: (state) =>
+        !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアどじょうを表示しない
+      changeable: (state) =>
+        !state.matchState[state.side].getPointState().finish,
+      scorable: (state) =>
+        !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアどじょうに得点を与えない
     },
     finish: {
       changeable: (state) => !state.matchState[state.side].getPointState().goal,
