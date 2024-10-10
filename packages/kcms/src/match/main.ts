@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
+import { apiReference } from '@scalar/hono-api-reference';
 import { prismaClient } from '../adaptor';
 import { SnowflakeIDGenerator } from '../id/main';
 import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
@@ -90,3 +91,20 @@ matchHandler.openapi(GetMatchTypeRoute, async (c) => {
   }
   return c.json(Result.unwrap(res), 200);
 });
+
+matchHandler.doc('/openapi/match.json', {
+  openapi: '3.0.0',
+  info: {
+    version: '1.0.0',
+    title: 'Match API',
+  },
+});
+
+matchHandler.get(
+  '/reference/match',
+  apiReference({
+    spec: {
+      url: '/openapi/match.json',
+    },
+  })
+);
