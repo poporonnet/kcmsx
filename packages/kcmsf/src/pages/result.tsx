@@ -88,6 +88,11 @@ export const Result = () => {
     if (element.team2) teamData.set(element.team2.id, element.team2.teamName);
   });
 
+  const departmentData = new Map<string, string>();
+  config.departments.forEach((element) => {
+    departmentData.set(element.type, element.name);
+  });
+
   return (
     <>
       <Select
@@ -101,7 +106,7 @@ export const Result = () => {
         onChange={(value) => value && setDepartment(value as DepartmentType)}
       />
       <Flex direction="column" gap={20}>
-        <Title order={3}>{department}</Title>
+        <Title order={3}>{departmentData.get(department)}</Title>
         <MainResultTable
           departmentType={department}
           matches={mainMatchData}
@@ -109,6 +114,51 @@ export const Result = () => {
         />
         <PreResultTable departmentType={department} matches={preMatchData} />
       </Flex>
+    </>
+  );
+};
+
+const PreResultColum = (props: { match: PreMatch }) => {
+  return (
+    <>
+      <Table.Td className="td">
+        {props.match.leftTeam ? props.match.leftTeam.teamName : ""}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.match.leftTeam
+          ? props.match.runResults.map((result) =>
+              result.teamID === props.match.leftTeam.id ? result.points : ""
+            )
+          : ""}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.match.leftTeam
+          ? props.match.runResults.map((result) =>
+              result.teamID === props.match.leftTeam.id
+                ? (result.goalTimeSeconds ?? "リタイア")
+                : ""
+            )
+          : ""}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.match.rightTeam ? props.match.rightTeam.teamName : ""}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.match.rightTeam
+          ? props.match.runResults.map((result) =>
+              result.teamID === props.match.rightTeam.id ? result.points : ""
+            )
+          : ""}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.match.rightTeam
+          ? props.match.runResults.map((result) =>
+              result.teamID === props.match.rightTeam.id
+                ? (result.goalTimeSeconds ?? "リタイア")
+                : ""
+            )
+          : ""}
+      </Table.Td>
     </>
   );
 };
@@ -140,57 +190,49 @@ const PreResultTable = (props: {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {props.matches.map((element) => {
-            return (
-              <Table.Tr key={element.id}>
-                <Table.Td className="td">
-                  {element.leftTeam ? element.leftTeam.teamName : ""}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.leftTeam
-                    ? element.runResults.map((result) =>
-                        result.teamID === element.leftTeam.id
-                          ? result.points
-                          : ""
-                      )
-                    : ""}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.leftTeam
-                    ? element.runResults.map((result) =>
-                        result.teamID === element.leftTeam.id
-                          ? (result.goalTimeSeconds ?? "リタイア")
-                          : ""
-                      )
-                    : ""}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.rightTeam ? element.rightTeam.teamName : ""}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.rightTeam
-                    ? element.runResults.map((result) =>
-                        result.teamID === element.rightTeam.id
-                          ? result.points
-                          : ""
-                      )
-                    : ""}
-                </Table.Td>
-                <Table.Td className="td">
-                  {element.rightTeam
-                    ? element.runResults.map((result) =>
-                        result.teamID === element.rightTeam.id
-                          ? (result.goalTimeSeconds ?? "リタイア")
-                          : ""
-                      )
-                    : ""}
-                </Table.Td>
-              </Table.Tr>
-            );
-          })}
+          {props.matches.map((element) => (
+            <Table.Tr key={element.id}>
+              <PreResultColum match={element} />
+            </Table.Tr>
+          ))}
         </Table.Tbody>
       </Table>
     </div>
+  );
+};
+
+const MainMatchColum = (props: {
+  match: MainMatch;
+  teamData: Map<string, string>;
+}) => {
+  return (
+    <>
+      <Table.Td className="td">
+        {props.teamData.get(props.match.winnerID)}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.match.runResults
+          .map((result) =>
+            result.teamID === props.match.winnerID ? result.points : 0
+          )
+          .reduce((sum, point) => sum + point, 0)}
+        -
+        {props.match.runResults
+          .map((result) =>
+            result.teamID !== props.match.winnerID ? result.points : 0
+          )
+          .reduce((sum, point) => sum + point, 0)}
+      </Table.Td>
+      <Table.Td className="td">
+        {props.teamData.get(
+          props.match.team1.id === props.match.winnerID
+            ? props.match.team2
+              ? props.match.team2.id
+              : ""
+            : props.match.team1.id
+        )}
+      </Table.Td>
+    </>
   );
 };
 
@@ -219,39 +261,11 @@ const MainResultTable = (props: {
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
-          {props.matches.map((element) => {
-            return (
-              <>
-                <Table.Tr key={element.id}>
-                  <Table.Td className="td">
-                    {props.teamData.get(element.winnerID)}
-                  </Table.Td>
-                  <Table.Td className="td">
-                    {element.runResults
-                      .map((result) =>
-                        result.teamID === element.winnerID ? result.points : 0
-                      )
-                      .reduce((sum, point) => sum + point, 0)}
-                    -
-                    {element.runResults
-                      .map((result) =>
-                        result.teamID !== element.winnerID ? result.points : 0
-                      )
-                      .reduce((sum, point) => sum + point, 0)}
-                  </Table.Td>
-                  <Table.Td className="td">
-                    {props.teamData.get(
-                      element.team1.id === element.winnerID
-                        ? element.team2
-                          ? element.team2.id
-                          : ""
-                        : element.team1.id
-                    )}
-                  </Table.Td>
-                </Table.Tr>
-              </>
-            );
-          })}
+          {props.matches.map((element) => (
+            <Table.Tr key={element.id}>
+              <MainMatchColum match={element} teamData={props.teamData} />
+            </Table.Tr>
+          ))}
         </Table.Tbody>
       </Table>
     </div>
