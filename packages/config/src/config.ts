@@ -40,13 +40,13 @@ export const config = createConfig(
       },
     ],
     rules: [
-      {
-        name: "multiWalk",
-        label: "歩行型",
-        type: "single",
-        initial: false, // conditionsの"scorable"で制御する
-        point: (done: boolean) => (done ? 2 : 0),
-      },
+      // {
+      //   name: "multiWalk",
+      //   label: "歩行型",
+      //   type: "single",
+      //   initial: true, // conditionsの"scorable"で制御する
+      //   point: (done: boolean) => (done ? 2 : 0),
+      // },
       {
         name: "leaveBase",
         label: "水草エリアを出た",
