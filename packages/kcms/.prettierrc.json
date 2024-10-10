@@ -12,5 +12,6 @@
   "requirePragma": false,
   "insertPragma": false,
   "endOfLine": "lf",
-  "embeddedLanguageFormatting": "auto"
+  "embeddedLanguageFormatting": "auto",
+  "plugins": ["prettier-plugin-organize-imports"]
 }

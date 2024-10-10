@@ -1,5 +1,5 @@
-import { TeamRepository } from '../../models/repository';
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { TeamRepository } from '../../models/repository';
 import { Team, TeamID } from '../../models/team';
 
 export class DummyRepository implements TeamRepository {

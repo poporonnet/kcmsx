@@ -1,11 +1,11 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { Option, Result } from '@mikuroxina/mini-fn';
+import { config } from 'config';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { TeamID } from '../../../team/models/team.js';
 import { testRankingPreMatchData } from '../../../testData/match.js';
 import { PreMatch, PreMatchID } from '../../model/pre.js';
 import { RunResult, RunResultID } from '../../model/runResult.js';
-import { TeamID } from '../../../team/models/team.js';
-import { Option, Result } from '@mikuroxina/mini-fn';
 import { DummyPreMatchRepository } from './preMatchRepository.js';
-import { config } from 'config';
 
 describe('DummyPreMatchRepository', () => {
   const repository = new DummyPreMatchRepository();

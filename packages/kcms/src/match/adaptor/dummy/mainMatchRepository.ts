@@ -1,6 +1,6 @@
-import { MainMatchRepository } from '../../model/repository.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { MainMatch, MainMatchID } from '../../model/main.js';
+import { MainMatchRepository } from '../../model/repository.js';
 
 export class DummyMainMatchRepository implements MainMatchRepository {
   private data: MainMatch[];
