@@ -1,11 +1,11 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { describe, expect, it } from 'vitest';
-import { FetchRunResultService } from './fetchRunResult';
+import { testRankingMainMatchData, testRankingPreMatchData } from '../../testData/match';
 import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
-import { testRankingMainMatchData, testRankingPreMatchData } from '../../testData/match';
 import { MainMatchID } from '../model/main';
 import { PreMatchID } from '../model/pre';
-import { Result } from '@mikuroxina/mini-fn';
+import { FetchRunResultService } from './fetchRunResult';
 
 describe('FetchRunResultService', () => {
   const dummyMainMatchRepository = new DummyMainMatchRepository(testRankingMainMatchData);

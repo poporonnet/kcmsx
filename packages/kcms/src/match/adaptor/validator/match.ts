@@ -12,7 +12,7 @@ const BriefTeamSchema = z
   })
   .optional();
 
-const RunResultSchema = z.object({
+export const RunResultSchema = z.object({
   id: z.string().openapi({ example: '60980640' }),
   teamID: z.string().openapi({ example: '45098607' }),
   points: z.number().openapi({ example: 4 }),
@@ -105,10 +105,12 @@ export const PostMatchGenerateResponseSchema = z.array(
     MainSchema.omit({
       team1: true,
       team2: true,
-    }).extend({
-      team1ID: z.string().optional().openapi({ example: '45098607' }),
-      team2ID: z.string().optional().openapi({ example: '2230392' }),
-    }),
+    })
+      .extend({
+        team1ID: z.string().optional().openapi({ example: '45098607' }),
+        team2ID: z.string().optional().openapi({ example: '2230392' }),
+      })
+      .array(),
   ])
 );
 

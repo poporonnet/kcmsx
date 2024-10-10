@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { MainMatch, MainMatchID } from './main.js';
 import { TeamID } from '../../team/models/team.js';
+import { MainMatch, MainMatchID } from './main.js';
 import { RunResult, RunResultID } from './runResult.js';
 
 describe('MainMatch', () => {

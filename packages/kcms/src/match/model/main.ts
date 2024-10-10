@@ -1,6 +1,6 @@
 import { SnowflakeID } from '../../id/main.js';
-import { RunResult } from './runResult.js';
 import { TeamID } from '../../team/models/team.js';
+import { RunResult } from './runResult.js';
 
 export type MainMatchID = SnowflakeID<MainMatch>;
 export interface CreateMainMatchArgs {
