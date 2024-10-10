@@ -142,11 +142,12 @@ export class MatchController {
       return Result.err(new Error('Not implemented'));
     }
   }
+
   async getMatchByType<T extends MatchType>(
     matchType: T
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
     if (matchType === 'pre') {
-      const matcheRes = await this.getMatchService.findAllMainMatch();
+      const matcheRes = await this.getMatchService.findAllPreMatch();
       if (Result.isErr(matcheRes)) return Result.err(new Error('Failed to get matches'));
       const matches = Result.unwrap(matcheRes);
       const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
@@ -158,28 +159,27 @@ export class MatchController {
         teamsMap.set(team.getId(), team);
       }
       return Result.ok(
-        matches.map((v): z.infer<typeof MainSchema> => {
+        matches.map((v): z.infer<typeof PreSchema> => {
           const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
           const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
           return {
             id: v.getId(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
             departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
-            team1:
+            leftTeam:
               v.getTeamId1() == undefined
                 ? undefined
                 : {
                     id: v.getTeamId1()!,
                     teamName: team1Name,
                   },
-            team2:
+            rightTeam:
               v.getTeamId2() == undefined
                 ? undefined
                 : {
                     id: v.getTeamId2()!,
                     teamName: team2Name,
                   },
-            winnerId: v.getWinnerId() ?? '',
             runResults:
               v.getRunResults() == undefined
                 ? []
