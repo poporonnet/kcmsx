@@ -201,9 +201,9 @@ describe("正しい設定を生成できる", () => {
     const visible = (state: PremiseState) =>
       state.matchInfo?.matchType == "pre";
     const scorable = (state: PremiseState) =>
-      state.matchState[state.side].getGoalTimeSeconds() != undefined;
+      state.matchState[state.side]?.getGoalTimeSeconds() != undefined;
     const changeable = (state: PremiseState) =>
-      state.matchInfo?.teams[state.side].robotType == "wheel";
+      state.matchInfo?.teams[state.side]?.robotType == "wheel";
 
     const config = createConfig(
       {
