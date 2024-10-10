@@ -61,6 +61,9 @@ importers:
       '@prisma/client':
         specifier: 5.20.0
         version: 5.20.0(prisma@5.20.0)
+      '@scalar/hono-api-reference':
+        specifier: ^0.5.152
+        version: 0.5.152(hono@4.6.3)
       config:
         specifier: workspace:^
         version: link:../config
@@ -1301,6 +1304,20 @@ packages:
     cpu: [x64]
     os: [win32]
 
+  '@scalar/hono-api-reference@0.5.152':
+    resolution: {integrity: sha512-mSRpicEjr3q3ulXHV9fpPKgq+Mju0/A9jyB4NvvZ9GitunTm6P4urr/RKzgESDTqYK3zK/VGahZWeQFLi6PSKQ==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      hono: ^4.0.0
+
+  '@scalar/openapi-types@0.1.1':
+    resolution: {integrity: sha512-NMy3QNk6ytcCoPUGJH0t4NNr36OWXgZhA3ormr3TvhX1NDgoF95wFyodGVH8xiHeUyn2/FxtETm8UBLbB5xEmg==}
+    engines: {node: '>=18'}
+
+  '@scalar/types@0.0.13':
+    resolution: {integrity: sha512-4baCQ3uXTQsT/da5X3+yO34VEu057Jjw0SJFkaaFmXTqHXVZM+SaDHSyTvT6tyKvgDpPpn6iD22uiFCdldEzRQ==}
+    engines: {node: '>=18'}
+
   '@swc/core-darwin-arm64@1.7.26':
     resolution: {integrity: sha512-FF3CRYTg6a7ZVW4yT9mesxoVVZTrcSWtmZhxKCYJX9brH4CS/7PRPjAKNk6kzWgWuRoglP7hkjQcd6EpMcZEAw==}
     engines: {node: '>=10'}
@@ -1535,6 +1552,9 @@ packages:
   '@typescript-eslint/visitor-keys@8.8.0':
     resolution: {integrity: sha512-8mq51Lx6Hpmd7HnA2fcHQo3YgfX1qbccxQOgZcb4tvasu//zXRaA1j5ZRFeCw/VRAdFi4mRM9DnZw0Nu0Q2d1g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@unhead/schema@1.11.7':
+    resolution: {integrity: sha512-j9uN7T63aUXrZ6yx2CfjVT7xZHjn0PZO7TPMaWqMFjneIH/NONKvDVCMEqDlXeqdSIERIYtk/xTHgCUMer5eyw==}
 
   '@vitejs/plugin-react-swc@3.7.1':
     resolution: {integrity: sha512-vgWOY0i1EROUK0Ctg1hwhtC3SdcDjZcdit4Ups4aPkDcB1jYhmo+RMYWY87cmXMhvtD5uf8lV89j2w16vkdSVg==}
@@ -2119,6 +2139,9 @@ packages:
   hono@4.6.3:
     resolution: {integrity: sha512-0LeEuBNFeSHGqZ9sNVVgZjB1V5fmhkBSB0hZrpqStSMLOWgfLy0dHOvrjbJh0H2khsjet6rbHfWTHY0kpYThKQ==}
     engines: {node: '>=16.9.0'}
+
+  hookable@5.5.3:
+    resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
 
   html-encoding-sniffer@4.0.0:
     resolution: {integrity: sha512-Y22oTqIU4uuPgEemfz7NDJz6OeKf12Lsu+QC+s3BVpda64lTiMYCyGwg5ki4vFxkMwQdeZDl2adZoqUgdFuTgQ==}
@@ -3087,6 +3110,9 @@ packages:
   youch@3.3.4:
     resolution: {integrity: sha512-UeVBXie8cA35DS6+nBkls68xaBBXCye0CNznrhszZjTbRVnJKQuNsyLKBTTL4ln1o1rh2PKtv35twV7irj5SEg==}
 
+  zhead@2.2.4:
+    resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
+
   zod@3.23.8:
     resolution: {integrity: sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g==}
 
@@ -3833,6 +3859,18 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.22.5':
     optional: true
 
+  '@scalar/hono-api-reference@0.5.152(hono@4.6.3)':
+    dependencies:
+      '@scalar/types': 0.0.13
+      hono: 4.6.3
+
+  '@scalar/openapi-types@0.1.1': {}
+
+  '@scalar/types@0.0.13':
+    dependencies:
+      '@scalar/openapi-types': 0.1.1
+      '@unhead/schema': 1.11.7
+
   '@swc/core-darwin-arm64@1.7.26':
     optional: true
 
@@ -4095,6 +4133,11 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 8.8.0
       eslint-visitor-keys: 3.4.3
+
+  '@unhead/schema@1.11.7':
+    dependencies:
+      hookable: 5.5.3
+      zhead: 2.2.4
 
   '@vitejs/plugin-react-swc@3.7.1(vite@5.4.8(@types/node@22.7.4)(sugarss@4.0.1(postcss@8.4.47)))':
     dependencies:
@@ -4773,6 +4816,8 @@ snapshots:
       function-bind: 1.1.2
 
   hono@4.6.3: {}
+
+  hookable@5.5.3: {}
 
   html-encoding-sniffer@4.0.0:
     dependencies:
@@ -5755,5 +5800,7 @@ snapshots:
       cookie: 0.7.2
       mustache: 4.2.0
       stacktracey: 2.1.8
+
+  zhead@2.2.4: {}
 
   zod@3.23.8: {}

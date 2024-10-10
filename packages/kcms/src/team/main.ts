@@ -17,6 +17,7 @@ import { DummyRepository } from './adaptor/repository/dummyRepository';
 import { PrismaTeamRepository } from './adaptor/repository/prismaRepository';
 import { TeamID } from './models/team.js';
 
+import { apiReference } from '@scalar/hono-api-reference';
 import { SnowflakeIDGenerator } from '../id/main';
 import { CreateTeamService } from './service/createTeam';
 import { DeleteTeamService } from './service/delete';
@@ -116,3 +117,20 @@ teamHandler.openapi(DeleteEntryTeamRoute, async (c) => {
   }
   return new Response(null, { status: 204 });
 });
+
+teamHandler.doc('/openapi/team.json', {
+  openapi: '3.0.0',
+  info: {
+    version: '1.0.0',
+    title: 'Team API',
+  },
+});
+
+teamHandler.get(
+  '/reference/team',
+  apiReference({
+    spec: {
+      url: '/openapi/team.json',
+    },
+  })
+);
