@@ -9,6 +9,7 @@ export const PointControls = (props: {
   team: Team;
   onChange: () => void;
   onGoal: (done: boolean) => void;
+  disabled?: boolean;
 }) => {
   return (
     <Flex direction="column" gap="xs">
@@ -27,6 +28,7 @@ export const PointControls = (props: {
                   props.onGoal(value);
               }}
               key={`${props.team.point.premiseState.side}-${rule.name}`}
+              disabled={props.disabled}
             >
               {rule.label}
               {rule.name === "goal" && props.team.goalTimeSeconds != null

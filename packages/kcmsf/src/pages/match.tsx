@@ -32,15 +32,23 @@ type GetMatchResponseBase = {
   matchCode: string;
   // TODO: RunResultの扱い
 };
+
+type BriefTeam = { id: string; teamName: string };
+
 type GetPreMatchResponse = GetMatchResponseBase & {
-  leftTeam: { id: string; teamName: string };
-  rightTeam: { id: string; teamName: string };
+  leftTeam?: BriefTeam;
+  rightTeam?: BriefTeam;
 };
+
 type GetMainMatchResponse = GetMatchResponseBase & {
-  team1: { id: string; teamName: string };
-  team2: { id: string; teamName: string };
+  team1: BriefTeam;
+  team2: BriefTeam;
 };
 type GetMatchResponse = GetPreMatchResponse | GetMainMatchResponse;
+
+type DiscriminatedGetMatchResponse =
+  | (GetPreMatchResponse & { matchType: "pre" })
+  | (GetMainMatchResponse & { matchType: "main" });
 
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
@@ -51,54 +59,69 @@ export const Match = () => {
   );
   useEffect(() => {
     if (isExhibition) return;
+
+    const isMainMatch = (
+      matchType: MatchType,
+      _matchResponse: GetPreMatchResponse | GetMainMatchResponse
+    ): _matchResponse is GetMainMatchResponse => matchType === "main";
+
+    const getTeam = async (teamID: string): Promise<GetTeamResponse> => {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/team/${teamID}`,
+        { method: "GET" }
+      );
+      return await res.json();
+    };
+
     const fetchMatchInfo = async () => {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
         { method: "GET" }
       );
-      const match = (await res.json()) as GetMatchResponse;
+      if (!res.ok) return;
+
+      const matchData = (await res.json()) as GetMatchResponse;
+      const match: DiscriminatedGetMatchResponse = isMainMatch(
+        matchType,
+        matchData
+      )
+        ? { ...matchData, matchType: "main" }
+        : { ...matchData, matchType: "pre" };
 
       const leftTeamID =
-        matchType === "main"
-          ? (match as GetMainMatchResponse).team1.id
-          : (match as GetPreMatchResponse).leftTeam.id;
-      const leftRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${leftTeamID}`,
-        { method: "GET" }
-      );
-      const leftTeam = (await leftRes.json()) as GetTeamResponse;
+        match.matchType == "main" ? match.team1.id : match.leftTeam?.id;
+      const leftTeam = leftTeamID ? await getTeam(leftTeamID) : undefined;
 
       const rightTeamID =
-        matchType === "main"
-          ? (match as GetMainMatchResponse).team2.id
-          : (match as GetPreMatchResponse).rightTeam.id;
-      const rightRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${rightTeamID}`,
-        { method: "GET" }
-      );
-      const rightTeam = (await rightRes.json()) as GetTeamResponse;
+        match.matchType == "main" ? match.team2.id : match.rightTeam?.id;
+      const rightTeam = rightTeamID ? await getTeam(rightTeamID) : undefined;
 
       const matchInfo: MatchInfo = {
-        id: match.id,
+        id: matchData.id,
         matchType,
         teams: {
-          left: {
-            id: leftTeam.id,
-            teamName: leftTeam.name,
-            robotType: leftTeam.robotType,
-            departmentType: leftTeam.departmentType,
-          },
-          right: {
-            id: rightTeam.id,
-            teamName: rightTeam.name,
-            robotType: rightTeam.robotType,
-            departmentType: rightTeam.departmentType,
-          },
+          left: leftTeam
+            ? {
+                id: leftTeam.id,
+                teamName: leftTeam.name,
+                robotType: leftTeam.robotType,
+                departmentType: leftTeam.departmentType,
+              }
+            : undefined,
+          right: rightTeam
+            ? {
+                id: rightTeam.id,
+                teamName: rightTeam.name,
+                robotType: rightTeam.robotType,
+                departmentType: rightTeam.departmentType,
+              }
+            : undefined,
         },
       };
       setMatchInfo(matchInfo);
       setMatchJudge(new Judge({}, {}, { matchInfo }, { matchInfo }));
     };
+
     fetchMatchInfo();
   }, [id, isExhibition, matchType]);
   const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
@@ -140,21 +163,21 @@ export const Match = () => {
         <Flex align="center" justify="center">
           {!isExhibition && matchInfo && (
             <Text pl="md" size="2rem" c="blue" style={{ flex: 1 }}>
-              {matchInfo.teams.left.teamName}
+              {matchInfo.teams.left?.teamName}
             </Text>
           )}
           <Flex pb="sm" gap="sm">
             <Text size="4rem" c="blue">
-              {matchJudge && matchJudge.leftTeam.point.point()}
+              {matchInfo?.teams.left ? matchJudge?.leftTeam.point.point() : 0}
             </Text>
             <Text size="4rem">-</Text>
             <Text size="4rem" c="red">
-              {matchJudge && matchJudge.rightTeam.point.point()}
+              {matchInfo?.teams.right ? matchJudge?.rightTeam.point.point() : 0}
             </Text>
           </Flex>
           {!isExhibition && matchInfo && (
             <Text pr="md" size="2rem" c="red" style={{ flex: 1 }}>
-              {matchInfo.teams.right.teamName}
+              {matchInfo.teams.right?.teamName}
             </Text>
           )}
         </Flex>
@@ -171,6 +194,7 @@ export const Match = () => {
                 done ? matchTimeSec - totalSeconds : undefined
               )
             }
+            disabled={!matchInfo?.teams.left}
           />
           <Divider orientation="vertical" />
           <PointControls
@@ -182,6 +206,7 @@ export const Match = () => {
                 done ? matchTimeSec - totalSeconds : undefined
               )
             }
+            disabled={!matchInfo?.teams.right}
           />
         </Flex>
       )}
@@ -189,18 +214,20 @@ export const Match = () => {
         <MatchSubmit
           matchInfo={matchInfo}
           available={
-            ((matchJudge.leftTeam.goalTimeSeconds != null ||
+            timerState == "finished" ||
+            ((!matchInfo.teams.left ||
+              matchJudge.leftTeam.goalTimeSeconds != null ||
               matchJudge.leftTeam.point.state.finish) &&
-              (matchJudge.rightTeam.goalTimeSeconds != null ||
-                matchJudge.rightTeam.point.state.finish)) ||
-            timerState === "finished"
+              (!matchInfo.teams.right ||
+                matchJudge.rightTeam.goalTimeSeconds != null ||
+                matchJudge.rightTeam.point.state.finish))
           }
           result={{
-            left: {
+            left: matchInfo.teams.left && {
               points: matchJudge.leftTeam.point.point(),
               time: matchJudge.leftTeam.goalTimeSeconds ?? matchTimeSec,
             },
-            right: {
+            right: matchInfo.teams.right && {
               points: matchJudge.rightTeam.point.point(),
               time: matchJudge.rightTeam.goalTimeSeconds ?? matchTimeSec,
             },

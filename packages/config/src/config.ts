@@ -120,40 +120,40 @@ export const config = createConfig(
     //   visible: (state) => !state.matchInfo, // エキシビションモードでのみ表示
     //   changeable: (state) =>
     //     !state.matchInfo && // エキシビションモードでのみマニュアル変更可能
-    //     !state.matchState[state.side].getPointState().finish,
+    //     !state.matchState[state.side]?.getPointState().finish,
     //   scorable: (state) =>
     //     !state.matchInfo || // エキシビションモードでは通常通り加算可能
-    //     state.matchInfo.teams[state.side].robotType == "leg", // 通常の試合では歩行型のときのみ加算可能
+    //     state.matchInfo.teams[state.side]?.robotType == "leg", // 通常の試合では歩行型のときのみ加算可能
     // },
     leaveBase: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
     },
     overMiddle: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
     },
     enterDestination: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
     },
     placeBall: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
     },
     returnBase: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
     },
     goal: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
       scorable: (state) => {
         if (state.matchInfo?.matchType !== "main") return false; // 本戦以外では先ゴールに得点を与えない
 
-        const selfTime = state.matchState[state.side].getGoalTimeSeconds(); // 自分のゴールタイム
+        const selfTime = state.matchState[state.side]?.getGoalTimeSeconds(); // 自分のゴールタイム
         const otherTime =
-          state.matchState[against(state.side)].getGoalTimeSeconds();
+          state.matchState[against(state.side)]?.getGoalTimeSeconds();
 
         if (selfTime == null) return false; // 自分がゴールしていないなら先ゴールでない
         if (otherTime == null) return true; // 自分がゴールしていて、相手がゴールしていないなら先ゴール
@@ -162,18 +162,19 @@ export const config = createConfig(
     },
     bringBall: {
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
     },
     bringRareBall: {
       visible: (state) =>
         !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアどじょうを表示しない
       changeable: (state) =>
-        !state.matchState[state.side].getPointState().finish,
+        !state.matchState[state.side]?.getPointState().finish,
       scorable: (state) =>
         !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアどじょうに得点を与えない
     },
     finish: {
-      changeable: (state) => !state.matchState[state.side].getPointState().goal,
+      changeable: (state) =>
+        !state.matchState[state.side]?.getPointState().goal,
     },
   }
 );
