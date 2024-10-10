@@ -113,9 +113,9 @@ export class TeamController {
     }
     return Result.ok(undefined);
   }
-  async cancel(id:TeamID):Promise<Result.Result<Error,void>>{
+  async cancel(id: TeamID): Promise<Result.Result<Error, void>> {
     const res = await this.entry.cancel(id);
-    if(Result.isErr(res)){
+    if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
     return Result.ok(undefined);

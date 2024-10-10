@@ -108,11 +108,11 @@ teamHandler.openapi(PostEntryTeamRoute, async (c) => {
 /**
  * エントリーを解除する (DELETE /team/{teamID}/entry)
  */
-teamHandler.openapi(DeleteEntryTeamRoute,async (c) => {
+teamHandler.openapi(DeleteEntryTeamRoute, async (c) => {
   const { teamID } = c.req.valid('param');
   const res = await controller.cancel(teamID as TeamID);
   if (Result.isErr(res)) {
     return c.json({ description: errorToCode(Result.unwrapErr(res)) }, 400);
   }
   return new Response(null, { status: 204 });
-})
+});
