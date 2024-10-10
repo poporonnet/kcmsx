@@ -18,7 +18,7 @@ export type DerivedMatchInfo<
 > = {
   id: string;
   teams: {
-    [S in Side]: DerivedTeamInfo<RobotType, DepartmentType>;
+    [S in Side]?: DerivedTeamInfo<RobotType, DepartmentType>;
   };
   matchType: MatchType;
 };
