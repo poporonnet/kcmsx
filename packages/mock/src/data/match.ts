@@ -24,18 +24,14 @@ export interface MainMatch {
   id: string;
   matchCode: `${number}-${number}`;
   departmentType: (typeof teams)[number]["departmentType"];
-  team1:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
-  team2:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
+  team1: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
+  team2: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
   winnerID: (typeof teams)[number]["id"];
   runResults: RunResult[];
 }
@@ -62,14 +58,14 @@ export const preMatches: PreMatch[] = [
       {
         id: "3548129",
         teamID: "1392387",
-        points: 4,
-        goalTimeSeconds: 130,
+        points: 5,
         finishState: "finished",
       },
       {
         id: "13847917",
         teamID: "7549586",
         points: 4,
+        goalTimeSeconds: 130,
         finishState: "goal",
       },
     ],
@@ -88,7 +84,6 @@ export const preMatches: PreMatch[] = [
         id: "983156",
         teamID: "4578932",
         points: 8,
-        goalTimeSeconds: 120,
         finishState: "finished",
       },
     ],
@@ -115,14 +110,27 @@ export const mainMatches: MainMatch[] = [
         teamID: "1392387",
         points: 5,
         goalTimeSeconds: 150,
-        finishState: "finished",
+        finishState: "goal",
       },
       {
         id: "987326732",
         teamID: "7549586",
         points: 4,
         goalTimeSeconds: 130,
+        finishState: "goal",
+      },
+      {
+        id: "68963290",
+        teamID: "7549586",
+        points: 6,
         finishState: "finished",
+      },
+      {
+        id: "5640890",
+        teamID: "1392387",
+        points: 5,
+        goalTimeSeconds: 120,
+        finishState: "goal",
       },
     ],
   },
@@ -132,7 +140,7 @@ export const mainMatches: MainMatch[] = [
     departmentType: "open",
     team1: {
       id: "1392387",
-      teamName: "かに1",
+      teamName: "かに3",
     },
     team2: {
       id: "7549586",
@@ -145,14 +153,26 @@ export const mainMatches: MainMatch[] = [
         teamID: "1392387",
         points: 5,
         goalTimeSeconds: 150,
+        finishState: "goal",
+      },
+      {
+        id: "987326732",
+        teamID: "1392387",
+        points: 4,
         finishState: "finished",
       },
       {
         id: "987326732",
         teamID: "7549586",
-        points: 4,
-        goalTimeSeconds: 130,
+        points: 3,
         finishState: "finished",
+      },
+      {
+        id: "4279861",
+        teamID: "7549586",
+        points: 5,
+        goalTimeSeconds: 150,
+        finishState: "goal",
       },
     ],
   },
