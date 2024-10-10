@@ -1,26 +1,20 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type PreMatch = {
   id: string;
   matchCode: string;
   departmentType: DepartmentType;
-  leftTeam: {
+  leftTeam?: {
     id: string;
     teamName: string;
   };
-  rightTeam: {
+  rightTeam?: {
     id: string;
     teamName: string;
   };
-  runResults: {
-    id: string;
-    teamID: string;
-    points: number;
-    goalTimeSeconds?: number;
-    finishState: "goal" | "finished";
-  }[];
+  runResults: MatchResults;
 };
 
 type MainMatch = {
@@ -36,14 +30,16 @@ type MainMatch = {
     teamName: string;
   };
   winnerID: string;
-  runResults: {
-    id: string;
-    teamID: string;
-    points: number;
-    goalTimeSeconds?: number;
-    finishState: "goal" | "finished";
-  }[];
+  runResults: MatchResults;
 };
+
+type MatchResults = {
+  id: string;
+  teamID: string;
+  points: number;
+  goalTimeSeconds?: number;
+  finishState: "goal" | "finished";
+}[];
 
 export const Result = () => {
   const [preMatchData, setPreMatchData] = useState<PreMatch[]>([]);
@@ -62,36 +58,24 @@ export const Result = () => {
         | { pre: PreMatch[]; main: MainMatch[] }
         | undefined;
 
-      console.log(matchResponse);
-
-      setPreMatchData(
-        matchResponse
-          ? matchResponse.pre.filter(
-              (match) => match.departmentType === department
-            )
-          : []
-      );
-      setMainMatchData(
-        matchResponse
-          ? matchResponse.main.filter(
-              (match) => match.departmentType === department
-            )
-          : []
-      );
+      setPreMatchData(matchResponse ? matchResponse.pre : []);
+      setMainMatchData(matchResponse ? matchResponse.main : []);
     };
     getMatches();
-  }, [department]);
+  }, []);
 
-  const teamData = new Map<string, string>();
-  mainMatchData?.forEach((element) => {
-    if (element.team1) teamData.set(element.team1.id, element.team1.teamName);
-    if (element.team2) teamData.set(element.team2.id, element.team2.teamName);
-  });
-
-  const departmentData = new Map<string, string>();
-  config.departments.forEach((element) => {
-    departmentData.set(element.type, element.name);
-  });
+  const teamNames = new Map<string, string>();
+  useMemo(
+    () =>
+      mainMatchData.forEach((element) => {
+        if (element.team1)
+          teamNames.set(element.team1.id, element.team1.teamName);
+        if (element.team2)
+          teamNames.set(element.team2.id, element.team2.teamName);
+        console.log("useMemo");
+      }),
+    [{ mainMatchData, teamNames }]
+  );
 
   return (
     <>
@@ -106,67 +90,92 @@ export const Result = () => {
         onChange={(value) => value && setDepartment(value as DepartmentType)}
       />
       <Flex direction="column" gap={20}>
-        <Title order={3}>{departmentData.get(department)}</Title>
+        <Title order={3}>{config.department[department].name}</Title>
         <MainResultTable
-          departmentType={department}
-          matches={mainMatchData}
-          teamData={teamData}
+          matches={mainMatchData.filter(
+            (match) => match.departmentType === department
+          )}
+          teamData={teamNames}
         />
-        <PreResultTable departmentType={department} matches={preMatchData} />
+        <PreResultTable
+          matches={preMatchData.filter(
+            (match) => match.departmentType === department
+          )}
+        />
       </Flex>
     </>
   );
 };
 
-const PreResultColum = (props: { match: PreMatch }) => {
+const MainResultTable = (props: {
+  matches: MainMatch[];
+  teamData: Map<string, string>;
+}) => {
+  if (props.matches.length === 0) {
+    return (
+      <div>
+        <Title order={3}>{"本戦"}</Title>
+        <p>結果がありません</p>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Title order={3}>{"本戦"}</Title>
+      <Table striped withTableBorder miw="40rem">
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>勝ち</Table.Th>
+            <Table.Th>得点</Table.Th>
+            <Table.Th>負け</Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {props.matches.map((element) => (
+            <Table.Tr key={element.id}>
+              <MainMatchColum match={element} teamData={props.teamData} />
+            </Table.Tr>
+          ))}
+        </Table.Tbody>
+      </Table>
+    </div>
+  );
+};
+
+const MainMatchColum = (props: {
+  match: MainMatch;
+  teamData: Map<string, string>;
+}) => {
   return (
     <>
       <Table.Td className="td">
-        {props.match.leftTeam ? props.match.leftTeam.teamName : ""}
+        {props.teamData.get(props.match.winnerID)}
       </Table.Td>
       <Table.Td className="td">
-        {props.match.leftTeam
-          ? props.match.runResults.map((result) =>
-              result.teamID === props.match.leftTeam.id ? result.points : ""
-            )
-          : ""}
+        {props.match.runResults
+          .map((result) =>
+            result.teamID === props.match.winnerID ? result.points : 0
+          )
+          .reduce((sum, point) => sum + point, 0)}
+        -
+        {props.match.runResults
+          .map((result) =>
+            result.teamID !== props.match.winnerID ? result.points : 0
+          )
+          .reduce((sum, point) => sum + point, 0)}
       </Table.Td>
       <Table.Td className="td">
-        {props.match.leftTeam
-          ? props.match.runResults.map((result) =>
-              result.teamID === props.match.leftTeam.id
-                ? (result.goalTimeSeconds ?? "リタイア")
-                : ""
-            )
-          : ""}
-      </Table.Td>
-      <Table.Td className="td">
-        {props.match.rightTeam ? props.match.rightTeam.teamName : ""}
-      </Table.Td>
-      <Table.Td className="td">
-        {props.match.rightTeam
-          ? props.match.runResults.map((result) =>
-              result.teamID === props.match.rightTeam.id ? result.points : ""
-            )
-          : ""}
-      </Table.Td>
-      <Table.Td className="td">
-        {props.match.rightTeam
-          ? props.match.runResults.map((result) =>
-              result.teamID === props.match.rightTeam.id
-                ? (result.goalTimeSeconds ?? "リタイア")
-                : ""
-            )
-          : ""}
+        {props.teamData.get(
+          props.match.team1?.id === props.match.winnerID
+            ? (props.match.team2?.id ?? "")
+            : (props.match.team1?.id ?? "")
+        )}
       </Table.Td>
     </>
   );
 };
 
-const PreResultTable = (props: {
-  departmentType: DepartmentType | null;
-  matches: PreMatch[] | [];
-}) => {
+const PreResultTable = (props: { matches: PreMatch[] }) => {
   if (props.matches.length === 0) {
     return (
       <div>
@@ -201,73 +210,29 @@ const PreResultTable = (props: {
   );
 };
 
-const MainMatchColum = (props: {
-  match: MainMatch;
-  teamData: Map<string, string>;
-}) => {
+const PreResultColum = (props: { match: PreMatch }) => {
+  const leftResult = props.match.runResults.find(
+    (result) => result.teamID === props.match.leftTeam?.id
+  );
+  const rightResult = props.match.runResults.find(
+    (result) => result.teamID === props.match.rightTeam?.id
+  );
   return (
     <>
+      <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
+      <Table.Td className="td">{leftResult?.points}</Table.Td>
       <Table.Td className="td">
-        {props.teamData.get(props.match.winnerID)}
+        {props.match.leftTeam
+          ? (leftResult?.goalTimeSeconds ?? "リタイア")
+          : ""}
       </Table.Td>
+      <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
+      <Table.Td className="td">{rightResult?.points}</Table.Td>
       <Table.Td className="td">
-        {props.match.runResults
-          .map((result) =>
-            result.teamID === props.match.winnerID ? result.points : 0
-          )
-          .reduce((sum, point) => sum + point, 0)}
-        -
-        {props.match.runResults
-          .map((result) =>
-            result.teamID !== props.match.winnerID ? result.points : 0
-          )
-          .reduce((sum, point) => sum + point, 0)}
-      </Table.Td>
-      <Table.Td className="td">
-        {props.teamData.get(
-          props.match.team1.id === props.match.winnerID
-            ? props.match.team2
-              ? props.match.team2.id
-              : ""
-            : props.match.team1.id
-        )}
+        {props.match.rightTeam
+          ? (rightResult?.goalTimeSeconds ?? "リタイア")
+          : ""}
       </Table.Td>
     </>
-  );
-};
-
-const MainResultTable = (props: {
-  departmentType: DepartmentType | null;
-  matches: MainMatch[] | [];
-  teamData: Map<string, string>;
-}) => {
-  if (props.matches.length === 0) {
-    return (
-      <div>
-        <Title order={3}>{"本戦"}</Title>
-        <p>結果がありません</p>
-      </div>
-    );
-  }
-  return (
-    <div>
-      <Title order={3}>{"本戦"}</Title>
-      <Table striped withTableBorder miw="40rem">
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>勝ち</Table.Th>
-            <Table.Th>得点</Table.Th>
-            <Table.Th>負け</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {props.matches.map((element) => (
-            <Table.Tr key={element.id}>
-              <MainMatchColum match={element} teamData={props.teamData} />
-            </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
-    </div>
   );
 };

@@ -24,18 +24,14 @@ export interface MainMatch {
   id: string;
   matchCode: `${number}-${number}`;
   departmentType: (typeof teams)[number]["departmentType"];
-  team1:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
-  team2:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
+  team1: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
+  team2: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
   winnerID: (typeof teams)[number]["id"];
   runResults: RunResult[];
 }
@@ -144,9 +140,12 @@ export const mainMatches: MainMatch[] = [
     departmentType: "open",
     team1: {
       id: "1392387",
-      teamName: "かに1",
+      teamName: "かに3",
     },
-    team2: undefined,
+    team2: {
+      id: "7549586",
+      teamName: "かに2",
+    },
     winnerID: "1392387",
     runResults: [
       {
@@ -161,6 +160,19 @@ export const mainMatches: MainMatch[] = [
         teamID: "1392387",
         points: 4,
         finishState: "finished",
+      },
+      {
+        id: "987326732",
+        teamID: "7549586",
+        points: 3,
+        finishState: "finished",
+      },
+      {
+        id: "4279861",
+        teamID: "7549586",
+        points: 5,
+        goalTimeSeconds: 150,
+        finishState: "goal",
       },
     ],
   },
