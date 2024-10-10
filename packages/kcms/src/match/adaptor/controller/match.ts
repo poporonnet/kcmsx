@@ -8,7 +8,7 @@ import {
   RunResultSchema,
 } from '../validator/match';
 import { Result } from '@mikuroxina/mini-fn';
-import { MatchType } from 'config';
+import { DepartmentType, MatchType } from 'config';
 import { FetchTeamService } from '../../../team/service/get';
 import { Team, TeamID } from '../../../team/models/team';
 
@@ -121,57 +121,7 @@ export class MatchController {
         })
       );
     } else {
-      const matcheRes = await this.getMatchService.findAllMainMatch();
-      if (Result.isErr(matcheRes)) return Result.err(new Error('Failed to get matches'));
-      const matches = Result.unwrap(matcheRes);
-      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
-      const teamsMap = new Map<TeamID, Team>();
-      for (const teamID of teamIDs) {
-        const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
-        if (Result.isErr(teamRes)) return Result.err(new Error('Failed to get teams'));
-        const team = Result.unwrap(teamRes);
-        teamsMap.set(team.getId(), team);
-      }
-      return Result.ok(
-        matches.map((v): z.infer<typeof MainSchema> => {
-          const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
-          const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
-          return {
-            id: v.getId(),
-            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-            departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
-            team1:
-              v.getTeamId1() == undefined
-                ? undefined
-                : {
-                    id: v.getTeamId1()!,
-                    teamName: team1Name,
-                  },
-
-            team2:
-              v.getTeamId2() == undefined
-                ? undefined
-                : {
-                    id: v.getTeamId2()!,
-                    teamName: team2Name,
-                  },
-            winnerID: v.getWinnerId() ?? '',
-            runResults:
-              v.getRunResults() == undefined
-                ? []
-                : v.getRunResults().map(
-                    (v): z.infer<typeof RunResultSchema> => ({
-                      id: v.getId(),
-                      teamID: v.getTeamId(),
-                      points: v.getPoints(),
-                      goalTimeSeconds: v.getGoalTimeSeconds(),
-                      finishState: v.isGoal() ? 'goal' : 'finished',
-                    })
-                  ),
-          };
-        })
-      );
+      return Result.err(new Error('Not implemented'));
     }
-    return Result.err(new Error('Non existent match type'));
   }
 }
