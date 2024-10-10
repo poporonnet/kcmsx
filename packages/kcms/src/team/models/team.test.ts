@@ -1,6 +1,6 @@
+import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { Team, TeamID } from './team.js';
-import { config } from 'config';
 
 describe('正しくインスタンスを生成できる', () => {
   it('正しくインスタンスを生成できる', () => {
