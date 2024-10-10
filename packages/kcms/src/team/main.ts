@@ -1,6 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 
 import {
+  DeleteEntryTeamRoute,
   DeleteTeamRoute,
   GetTeamRoute,
   GetTeamsRoute,
@@ -104,6 +105,17 @@ teamHandler.openapi(PostEntryTeamRoute, async (c) => {
   }
 
   return new Response(null, { status: 200 });
+});
+/**
+ * エントリーを解除する (DELETE /team/{teamID}/entry)
+ */
+teamHandler.openapi(DeleteEntryTeamRoute, async (c) => {
+  const { teamID } = c.req.valid('param');
+  const res = await controller.cancel(teamID as TeamID);
+  if (Result.isErr(res)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(res)) }, 400);
+  }
+  return new Response(null, { status: 204 });
 });
 
 teamHandler.doc('/openapi/team.json', {
