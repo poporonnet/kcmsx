@@ -111,7 +111,7 @@ export const GetMatchRunResultRoute = createRoute({
   },
 });
 
-export const GetMatchGenerateRoute = createRoute({
+export const PostMatchGenerateRoute = createRoute({
   method: 'post',
   path: '/match/{matchType}/{departmentType}/generate',
   request: { params: PostMatchGenerateParamsSchema },

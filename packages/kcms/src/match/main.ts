@@ -9,8 +9,10 @@ import { FetchTeamService } from '../team/service/get';
 import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
 import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
 import { OpenAPIHono } from '@hono/zod-openapi';
-import { GetMatchIdRoute, GetMatchRoute } from './routing';
+import { GetMatchIdRoute, GetMatchRoute, PostMatchGenerateRoute } from './routing';
 import { Result } from '@mikuroxina/mini-fn';
+import { GeneratePreMatchService } from './service/generatePre';
+import { SnowflakeIDGenerator } from '../id/main';
 import { PreMatchID } from './model/pre';
 import { MainMatchID } from './model/main';
 
@@ -27,12 +29,33 @@ const teamRepository = isProduction
 
 const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
-const matchController = new MatchController(getMatchService, fetchTeamService);
+const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
+const generatePreMatchService = new GeneratePreMatchService(
+  fetchTeamService,
+  idGenerator,
+  preMatchRepository
+);
+const matchController = new MatchController(
+  getMatchService,
+  fetchTeamService,
+  generatePreMatchService
+);
 
 export const matchHandler = new OpenAPIHono();
 
 matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();
+  if (Result.isErr(res)) {
+    return c.json({ description: res[1].message }, 400);
+  }
+
+  return c.json(res[1], 200);
+});
+
+matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
+  const { matchType, departmentType } = c.req.valid('param');
+
+  const res = await matchController.generateMatch(matchType, departmentType);
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
   }
