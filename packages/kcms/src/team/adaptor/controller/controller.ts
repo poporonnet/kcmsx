@@ -109,7 +109,14 @@ export class TeamController {
   async enter(id: TeamID): Promise<Result.Result<Error, void>> {
     const res = await this.entry.enter(id);
     if (Result.isErr(res)) {
-      return Result.err(res[1]);
+      return res;
+    }
+    return Result.ok(undefined);
+  }
+  async cancel(id: TeamID): Promise<Result.Result<Error, void>> {
+    const res = await this.entry.cancel(id);
+    if (Result.isErr(res)) {
+      return res;
     }
     return Result.ok(undefined);
   }
