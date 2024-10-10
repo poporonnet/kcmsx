@@ -39,6 +39,7 @@ export class GeneratePreMatchService {
           // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
           courseIndex: courseIndex + 1,
           matchIndex: matchIndex + 1,
+          departmentType: (pair[0] || pair[1]!).getDepartmentType(),
           teamId1: pair[0]?.getId(),
           teamId2: pair[1]?.getId(),
           runResults: [],

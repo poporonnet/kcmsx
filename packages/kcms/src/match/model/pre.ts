@@ -1,6 +1,7 @@
 import { SnowflakeID } from '../../id/main.js';
 import { RunResult } from './runResult.js';
 import { TeamID } from '../../team/models/team.js';
+import { DepartmentType } from 'config';
 
 /** @description 予選試合ID
  * @example "20983209840"
@@ -14,6 +15,8 @@ export interface CreatePreMatchArgs {
   courseIndex: number;
   /** @description 試合番号(1始まり) */
   matchIndex: number;
+  /** @description 部門 */
+  departmentType: DepartmentType;
   /** @description チーム1のID 左を走るチーム */
   teamId1?: TeamID;
   /** @description チーム2のID 右を走るチーム */
@@ -29,6 +32,7 @@ export class PreMatch {
   private readonly id: PreMatchID;
   private readonly courseIndex: number;
   private readonly matchIndex: number;
+  private readonly departmentType: DepartmentType;
   private readonly teamId1?: TeamID;
   private readonly teamId2?: TeamID;
   private runResults: RunResult[];
@@ -40,6 +44,7 @@ export class PreMatch {
     this.teamId1 = args.teamId1;
     this.teamId2 = args.teamId2;
     this.runResults = args.runResults;
+    this.departmentType = args.departmentType;
   }
 
   public static new(args: CreatePreMatchArgs) {
@@ -68,6 +73,10 @@ export class PreMatch {
 
   getRunResults(): RunResult[] {
     return this.runResults;
+  }
+
+  getDepartmentType(): DepartmentType {
+    return this.departmentType;
   }
 
   /**
