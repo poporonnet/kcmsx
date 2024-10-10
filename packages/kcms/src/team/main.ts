@@ -1,16 +1,16 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
 import { prismaClient } from '../adaptor';
+import { TeamController } from './adaptor/controller/controller';
 import { errorToCode } from './adaptor/errors';
 import { DummyRepository } from './adaptor/repository/dummyRepository';
 import { PrismaTeamRepository } from './adaptor/repository/prismaRepository';
-import { Controller } from './controller.js';
 import { TeamID } from './models/team.js';
 import { DeleteTeamRoute, GetTeamRoute, GetTeamsRoute, PostTeamsRoute } from './routing';
 
 export const teamHandler = new OpenAPIHono();
 const isProduction = process.env.NODE_ENV === 'production';
-export const controller = new Controller(
+export const controller = new TeamController(
   isProduction ? new PrismaTeamRepository(prismaClient) : new DummyRepository()
 );
 
