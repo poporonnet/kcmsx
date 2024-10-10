@@ -12,7 +12,12 @@ import { PrismaMainMatchRepository } from './adaptor/prisma/mainMatchRepository'
 import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
 import { MainMatchID } from './model/main';
 import { PreMatchID } from './model/pre';
-import { GetMatchIdRoute, GetMatchRoute, PostMatchGenerateRoute } from './routing';
+import {
+  GetMatchIdRoute,
+  GetMatchRoute,
+  GetMatchTypeRoute,
+  PostMatchGenerateRoute,
+} from './routing';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GetMatchService } from './service/get';
 
@@ -72,5 +77,16 @@ matchHandler.openapi(GetMatchIdRoute, async (c) => {
     return c.json({ description: error.message }, 400);
   }
 
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.openapi(GetMatchTypeRoute, async (c) => {
+  const { matchType } = c.req.valid('param');
+
+  const res = await matchController.getMatchByType(matchType);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
   return c.json(Result.unwrap(res), 200);
 });
