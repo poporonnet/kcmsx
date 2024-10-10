@@ -1,19 +1,19 @@
-import { TeamRepository } from './models/repository.js';
-import { CreateTeamService } from './service/createTeam';
+import { TeamRepository } from '../../models/repository';
+import { CreateTeamService } from '../../service/createTeam';
 import { Result } from '@mikuroxina/mini-fn';
-import { FetchTeamService } from './service/get.js';
-import { DeleteTeamService } from './service/delete.js';
-import { SnowflakeIDGenerator } from '../id/main.js';
+import { FetchTeamService } from '../../service/get';
+import { DeleteTeamService } from '../../service/delete';
+import { SnowflakeIDGenerator } from '../../../id/main';
 import {
   GetTeamResponseSchema,
   GetTeamsResponseSchema,
   PostTeamsRequestSchema,
   PostTeamsResponseSchema,
-} from './adaptor/validator/team';
+} from '../validator/team';
 import { z } from '@hono/zod-openapi';
-import { TeamID } from './models/team.js';
+import { TeamID } from '../../models/team';
 
-export class Controller {
+export class TeamController {
   private readonly createTeam: CreateTeamService;
   private readonly findTeam: FetchTeamService;
   private readonly deleteTeam: DeleteTeamService;
