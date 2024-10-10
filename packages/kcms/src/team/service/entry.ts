@@ -1,6 +1,6 @@
+import { Option, Result } from '@mikuroxina/mini-fn';
 import { TeamRepository } from '../models/repository';
 import { Team, TeamID } from '../models/team';
-import { Option, Result } from '@mikuroxina/mini-fn';
 
 /**
  * 当日参加を行うService

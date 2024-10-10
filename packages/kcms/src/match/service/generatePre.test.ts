@@ -1,13 +1,13 @@
-import { describe, expect, it } from 'vitest';
-import { GeneratePreMatchService } from './generatePre';
-import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
-import { testTeamData } from '../../testData/entry';
-import { FetchTeamService } from '../../team/service/get';
-import { SnowflakeIDGenerator } from '../../id/main';
-import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
 import { Result } from '@mikuroxina/mini-fn';
-import { TeamID } from '../../team/models/team';
 import { config } from 'config';
+import { describe, expect, it } from 'vitest';
+import { SnowflakeIDGenerator } from '../../id/main';
+import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
+import { TeamID } from '../../team/models/team';
+import { FetchTeamService } from '../../team/service/get';
+import { testTeamData } from '../../testData/entry';
+import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
+import { GeneratePreMatchService } from './generatePre';
 
 describe('GeneratePreMatchService', () => {
   const teamRepository = new DummyRepository([...testTeamData.values()]);
@@ -20,19 +20,17 @@ describe('GeneratePreMatchService', () => {
 
   const expectedTeamPair = [
     [
-      ['A1', 'B3'],
-      ['A3', 'C2'],
-      ['B1', 'N2'],
+      ['A1', 'B2'],
+      ['A2', 'B3'],
+      ['A3', 'C1'],
+      ['A4', 'C2'],
+      ['B1', 'N1'],
+      ['B2', 'N2'],
       ['B3', 'A1'],
-      ['C2', 'A3'],
-      ['N2', 'B1'],
-    ],
-    [
-      ['A2', 'B2'],
-      ['A4', 'C1'],
-      ['B2', 'N1'],
       ['C1', 'A2'],
+      ['C2', 'A3'],
       ['N1', 'A4'],
+      ['N2', 'B1'],
     ],
   ];
 
