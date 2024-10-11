@@ -2,13 +2,13 @@ import { Result } from '@mikuroxina/mini-fn';
 import { describe, expect, it } from 'vitest';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
-import { CreateRunResultService } from './createRunResult';
-import { CreateRunResultArgs } from '../model/runResult';
+import { testCreateRunResultMainData, testCreateRunResultPreData } from '../../testData/match';
 import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
-import { testCreateRunResultMainData, testCreateRunResultPreData } from '../../testData/match';
-import { PreMatchID } from '../model/pre';
 import { MainMatchID } from '../model/main';
+import { PreMatchID } from '../model/pre';
+import { CreateRunResultArgs } from '../model/runResult';
+import { CreateRunResultService } from './createRunResult';
 describe('CreateRunResult', () => {
   const id = '264543141888004096';
   const dummyPreMatchRepository = new DummyPreMatchRepository(testCreateRunResultPreData);

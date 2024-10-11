@@ -1,6 +1,6 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { PreMatch, PreMatchID } from './pre.js';
 import { MainMatch, MainMatchID } from './main.js';
+import { PreMatch, PreMatchID } from './pre.js';
 
 export interface PreMatchRepository {
   /**

@@ -1,22 +1,27 @@
-import { GetMatchService } from '../../service/get';
 import { z } from '@hono/zod-openapi';
+import { Result } from '@mikuroxina/mini-fn';
+import { DepartmentType, MatchType } from 'config';
+import { Team, TeamID } from '../../../team/models/team';
+import { FetchTeamService } from '../../../team/service/get';
+import { MainMatchID } from '../../model/main';
+import { PreMatch, PreMatchID } from '../../model/pre';
+import { GeneratePreMatchService } from '../../service/generatePre';
+import { GetMatchService } from '../../service/get';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
+  GetMatchTypeResponseSchema,
+  MainSchema,
+  PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
 } from '../validator/match';
-import { Result } from '@mikuroxina/mini-fn';
-import { FetchTeamService } from '../../../team/service/get';
-import { TeamID } from '../../../team/models/team';
-import { MainMatchID } from '../../model/main';
-import { MatchType } from 'config';
-import { PreMatch, PreMatchID } from '../../model/pre';
 
 export class MatchController {
   constructor(
     private readonly getMatchService: GetMatchService,
-    private readonly fetchTeamService: FetchTeamService
+    private readonly fetchTeamService: FetchTeamService,
+    private readonly generatePreMatchService: GeneratePreMatchService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -68,6 +73,33 @@ export class MatchController {
     });
   }
 
+  async generateMatch(
+    matchType: MatchType,
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateResponseSchema>>> {
+    // ToDo: 本戦試合を生成できるようにする
+    if (matchType === 'main') {
+      return Result.err(new Error('Not implemented'));
+    }
+
+    const res = await this.generatePreMatchService.handle(departmentType);
+    if (Result.isErr(res)) return res;
+    const matches = Result.unwrap(res);
+
+    return Result.ok(
+      matches.map((v) => {
+        return {
+          id: v.getId(),
+          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          departmentType: v.getDepartmentType(),
+          leftTeamID: v.getTeamId1(),
+          rightTeamID: v.getTeamId2(),
+          runResults: [],
+        };
+      })
+    );
+  }
+
   async getMatchByID<T extends MatchType>(
     matchType: T,
     id: T extends 'pre' ? PreMatchID : MainMatchID
@@ -108,6 +140,111 @@ export class MatchController {
       });
     } else {
       return Result.err(new Error('Not implemented'));
+    }
+  }
+
+  async getMatchByType(
+    matchType: MatchType
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
+    if (matchType === 'pre') {
+      const matchRes = await this.getMatchService.findAllPreMatch();
+      if (Result.isErr(matchRes)) return matchRes;
+      const matches = Result.unwrap(matchRes);
+      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
+      const teamsMap = new Map<TeamID, Team>();
+      for (const teamID of teamIDs) {
+        const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
+        if (Result.isErr(teamRes)) return teamRes;
+        const team = Result.unwrap(teamRes);
+        teamsMap.set(team.getId(), team);
+      }
+      return Result.ok(
+        matches.map((v): z.infer<typeof PreSchema> => {
+          const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
+          const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
+          return {
+            id: v.getId(),
+            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
+            leftTeam:
+              v.getTeamId1() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId1()!,
+                    teamName: team1Name,
+                  },
+            rightTeam:
+              v.getTeamId2() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId2()!,
+                    teamName: team2Name,
+                  },
+            runResults:
+              v.getRunResults() == undefined
+                ? []
+                : v.getRunResults().map(
+                    (v): z.infer<typeof RunResultSchema> => ({
+                      id: v.getId(),
+                      teamID: v.getTeamId(),
+                      points: v.getPoints(),
+                      goalTimeSeconds: v.getGoalTimeSeconds(),
+                      finishState: v.isGoal() ? 'goal' : 'finished',
+                    })
+                  ),
+          };
+        })
+      );
+    } else {
+      const matchRes = await this.getMatchService.findAllMainMatch();
+      if (Result.isErr(matchRes)) return matchRes;
+      const matches = Result.unwrap(matchRes);
+      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
+      const teamsMap = new Map<TeamID, Team>();
+      for (const teamID of teamIDs) {
+        const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
+        if (Result.isErr(teamRes)) return teamRes;
+        const team = Result.unwrap(teamRes);
+        teamsMap.set(team.getId(), team);
+      }
+      return Result.ok(
+        matches.map((v): z.infer<typeof MainSchema> => {
+          const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
+          const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
+          return {
+            id: v.getId(),
+            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
+            team1:
+              v.getTeamId1() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId1()!,
+                    teamName: team1Name,
+                  },
+            team2:
+              v.getTeamId2() == undefined
+                ? undefined
+                : {
+                    id: v.getTeamId2()!,
+                    teamName: team2Name,
+                  },
+            winnerId: v.getWinnerId() ?? '',
+            runResults:
+              v.getRunResults() == undefined
+                ? []
+                : v.getRunResults().map(
+                    (v): z.infer<typeof RunResultSchema> => ({
+                      id: v.getId(),
+                      teamID: v.getTeamId(),
+                      points: v.getPoints(),
+                      goalTimeSeconds: v.getGoalTimeSeconds(),
+                      finishState: v.isGoal() ? 'goal' : 'finished',
+                    })
+                  ),
+          };
+        })
+      );
     }
   }
 }

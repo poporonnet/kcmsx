@@ -1,6 +1,6 @@
 import { SnowflakeID } from '../../id/main.js';
-import { RunResult } from './runResult.js';
 import { TeamID } from '../../team/models/team.js';
+import { RunResult } from './runResult.js';
 
 export type MainMatchID = SnowflakeID<MainMatch>;
 export interface CreateMainMatchArgs {
@@ -51,15 +51,15 @@ export class MainMatch {
     return this.matchIndex;
   }
 
-  getTeamId1(): string | undefined {
+  getTeamId1(): TeamID | undefined {
     return this.teamId1;
   }
 
-  getTeamId2(): string | undefined {
+  getTeamId2(): TeamID | undefined {
     return this.teamId2;
   }
 
-  getWinnerId(): string | undefined {
+  getWinnerId(): TeamID | undefined {
     return this.winnerId;
   }
 

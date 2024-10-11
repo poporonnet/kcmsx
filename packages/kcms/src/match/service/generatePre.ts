@@ -1,9 +1,9 @@
 import { Result } from '@mikuroxina/mini-fn';
-import { PreMatch } from '../model/pre';
 import { config, DepartmentType } from 'config';
-import { FetchTeamService } from '../../team/service/get';
-import { Team } from '../../team/models/team';
 import { SnowflakeIDGenerator } from '../../id/main';
+import { Team } from '../../team/models/team';
+import { FetchTeamService } from '../../team/service/get';
+import { PreMatch } from '../model/pre';
 import { PreMatchRepository } from '../model/repository';
 
 export class GeneratePreMatchService {

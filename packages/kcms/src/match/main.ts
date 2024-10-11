@@ -1,24 +1,32 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
+import { apiReference } from '@scalar/hono-api-reference';
 import { prismaClient } from '../adaptor';
 import { SnowflakeIDGenerator } from '../id/main';
 import { errorToCode } from '../team/adaptor/errors';
+import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
+import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
 import { TeamID } from '../team/models/team';
+import { FetchTeamService } from '../team/service/get';
+import { MatchController } from './adaptor/controller/match';
 import { DummyMainMatchRepository } from './adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from './adaptor/dummy/preMatchRepository';
 import { PrismaMainMatchRepository } from './adaptor/prisma/mainMatchRepository';
 import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
 import { Controller } from './controller';
-import { MatchController } from './adaptor/controller/match';
-import { GetMatchService } from './service/get';
-import { FetchTeamService } from '../team/service/get';
-import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
-import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
 import { MainMatchID } from './model/main';
 import { PreMatchID } from './model/pre';
 import { CreateRunResultArgs } from './model/runResult';
-import { PostMatchRunResultRoute, GetMatchRoute, GetMatchIdRoute } from './routing';
+import {
+  GetMatchIdRoute,
+  GetMatchRoute,
+  GetMatchTypeRoute,
+  PostMatchGenerateRoute,
+  PostMatchRunResultRoute,
+} from './routing';
 import { CreateRunResultService } from './service/createRunResult';
+import { GeneratePreMatchService } from './service/generatePre';
+import { GetMatchService } from './service/get';
 import { upcase } from './utility/uppercase';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -36,7 +44,6 @@ const teamRepository = isProduction
 
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
-// Services
 const createRunResultService = new CreateRunResultService(
   idGenerator,
   preMatchRepository,
@@ -45,15 +52,22 @@ const createRunResultService = new CreateRunResultService(
 const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
 
-// Controllers
 export const controller = new Controller(createRunResultService);
-const matchController = new MatchController(getMatchService, fetchTeamService);
 
-// Handlers
-export const matchHandlers = new OpenAPIHono();
+const generatePreMatchService = new GeneratePreMatchService(
+  fetchTeamService,
+  idGenerator,
+  preMatchRepository
+);
+const matchController = new MatchController(
+  getMatchService,
+  fetchTeamService,
+  generatePreMatchService
+);
 
-// Get match route
-matchHandlers.openapi(GetMatchRoute, async (c) => {
+export const matchHandler = new OpenAPIHono();
+
+matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
@@ -62,7 +76,7 @@ matchHandlers.openapi(GetMatchRoute, async (c) => {
 });
 
 // Post match run result route
-matchHandlers.openapi(PostMatchRunResultRoute, async (c) => {
+matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
   const req = c.req.valid('json');
   const { matchType, matchID } = c.req.valid('param');
 
@@ -82,7 +96,8 @@ matchHandlers.openapi(PostMatchRunResultRoute, async (c) => {
   }
   return c.json(200);
 });
-matchHandlers.openapi(GetMatchIdRoute, async (c) => {
+
+matchHandler.openapi(GetMatchIdRoute, async (c) => {
   const { matchType, matchID } = c.req.valid('param');
 
   const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
@@ -93,3 +108,54 @@ matchHandlers.openapi(GetMatchIdRoute, async (c) => {
 
   return c.json(Result.unwrap(res), 200);
 });
+
+matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
+  const { matchType, departmentType } = c.req.valid('param');
+
+  const res = await matchController.generateMatch(matchType, departmentType);
+  if (Result.isErr(res)) {
+    return c.json({ description: res[1].message }, 400);
+  }
+
+  return c.json(res[1], 200);
+});
+
+matchHandler.openapi(GetMatchIdRoute, async (c) => {
+  const { matchType, matchID } = c.req.valid('param');
+
+  const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.openapi(GetMatchTypeRoute, async (c) => {
+  const { matchType } = c.req.valid('param');
+
+  const res = await matchController.getMatchByType(matchType);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.doc('/openapi/match.json', {
+  openapi: '3.0.0',
+  info: {
+    version: '1.0.0',
+    title: 'Match API',
+  },
+});
+
+matchHandler.get(
+  '/reference/match',
+  apiReference({
+    spec: {
+      url: '/openapi/match.json',
+    },
+  })
+);

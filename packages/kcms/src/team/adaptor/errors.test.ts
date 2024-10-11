@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 describe('正しくエラーコードに変換できる', () => {
   const errorToCode = (error: Error) => {

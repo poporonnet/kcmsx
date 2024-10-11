@@ -1,10 +1,10 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { afterEach, describe, expect, it } from 'vitest';
+import { SnowflakeIDGenerator } from '../../id/main.js';
+import { TestEntryData } from '../../testData/entry.js';
 import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { Team, TeamID } from '../models/team.js';
-import { Result } from '@mikuroxina/mini-fn';
 import { CreateTeamService } from './createTeam';
-import { TestEntryData } from '../../testData/entry.js';
-import { SnowflakeIDGenerator } from '../../id/main.js';
 
 describe('CreateTeamService', () => {
   const repository = new DummyRepository();

@@ -1,7 +1,7 @@
-import { TeamRepository } from '../models/repository.js';
-import { Team, TeamCreateArgs } from '../models/team.js';
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { SnowflakeIDGenerator } from '../../id/main.js';
+import { TeamRepository } from '../models/repository.js';
+import { Team, TeamCreateArgs } from '../models/team.js';
 
 export class CreateTeamService {
   private readonly repository: TeamRepository;
