@@ -217,22 +217,32 @@ const PreResultColum = (props: { match: PreMatch }) => {
       ),
     [props.match]
   );
+  const leftGoalTimeSeconds = useMemo(() => {
+    if (!leftResult) {
+      return "";
+    } else {
+      if (leftResult.goalTimeSeconds)
+        return parseSeconds(leftResult.goalTimeSeconds);
+      return "フィニッシュ";
+    }
+  }, [leftResult]);
+  const rightGoalTimeSeconds = useMemo(() => {
+    if (!rightResult) {
+      return "";
+    } else {
+      if (rightResult.goalTimeSeconds)
+        return parseSeconds(rightResult.goalTimeSeconds);
+      return "フィニッシュ";
+    }
+  }, [leftResult]);
   return (
     <>
       <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
       <Table.Td className="td">{leftResult?.points}</Table.Td>
-      <Table.Td className="td">
-        {leftResult?.finishState === "goal"
-          ? (parseSeconds(leftResult.goalTimeSeconds) ?? "")
-          : "フィニッシュ"}
-      </Table.Td>
+      <Table.Td className="td">{leftGoalTimeSeconds}</Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
-      <Table.Td className="td">
-        {rightResult?.finishState === "goal"
-          ? (parseSeconds(rightResult.goalTimeSeconds) ?? "")
-          : "フィニッシュ"}
-      </Table.Td>
+      <Table.Td className="td">{rightGoalTimeSeconds}</Table.Td>
     </>
   );
 };
