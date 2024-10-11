@@ -117,9 +117,6 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
           preMatchId: match.getId(),
         },
       });
-      if (!runResults) {
-        throw new Error('RunResult not found');
-      }
       if (runResults.length === 0) {
         await this.client.runResult.createMany({
           data: match.getRunResults().map((v) => {
