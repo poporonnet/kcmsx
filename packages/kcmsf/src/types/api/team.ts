@@ -16,4 +16,3 @@ export type PostTeamsRequest = CreateTeamArgs[];
  * `GET /team/{teamID}`のレスポンス
  */
 export type GetTeamResponse = Team;
-
