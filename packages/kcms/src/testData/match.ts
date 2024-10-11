@@ -7,9 +7,11 @@ import { TeamID } from '../team/models/team.js';
 // ランキング生成用の試合データ
 // Openは予選がないので、予選の試合データはない
 /*
-   チームID:  1    2    3    4    5    6    7    8   9
-   得点:    12,  10,   9,   7,   5,   4,   4,   2   1
-   時間:    60,  64,  70,  74,  80,  90, 100, 180 200
+   チームID:  1    2    3    4    5    6    7   8    9   10  11
+   得点:    12,  10,   9,   7,   5,   4,   4,   1    1  n/a n/a
+   時間:    60,  64,  70,  74,  80, 100,  90, 100, 100  n/a n/a
+
+   10,11は試合が始まっていない
 */
 export const testRankingPreMatchData = [
   PreMatch.new({
@@ -129,7 +131,7 @@ export const testRankingPreMatchData = [
         id: '19' as RunResultID,
         teamId: '6' as TeamID,
         points: 4,
-        goalTimeSeconds: 90,
+        goalTimeSeconds: 100,
         finishState: 'GOAL',
       }),
     ],
@@ -171,14 +173,14 @@ export const testRankingPreMatchData = [
         id: '22' as RunResultID,
         teamId: '7' as TeamID,
         points: 4,
-        goalTimeSeconds: 100,
+        goalTimeSeconds: 90,
         finishState: 'GOAL',
       }),
       RunResult.new({
         id: '23' as RunResultID,
         teamId: '8' as TeamID,
-        points: 2,
-        goalTimeSeconds: 180,
+        points: 1,
+        goalTimeSeconds: 100,
         finishState: 'GOAL',
       }),
     ],
@@ -220,7 +222,7 @@ export const testRankingPreMatchData = [
         id: '26' as RunResultID,
         teamId: '9' as TeamID,
         points: 1,
-        goalTimeSeconds: 200,
+        goalTimeSeconds: 100,
         finishState: 'GOAL',
       }),
     ],
@@ -237,10 +239,29 @@ export const testRankingPreMatchData = [
         id: '27' as RunResultID,
         teamId: '9' as TeamID,
         points: 0,
-        goalTimeSeconds: Infinity,
-        finishState: 'FINISHED',
+        goalTimeSeconds: 100,
+        finishState: 'GOAL',
       }),
     ],
+  }),
+
+  PreMatch.new({
+    id: '108' as PreMatchID,
+    courseIndex: 0,
+    matchIndex: 11,
+    departmentType: config.departments[0].type,
+    teamId1: '10' as TeamID,
+    teamId2: '11' as TeamID,
+    runResults: [],
+  }),
+  PreMatch.new({
+    id: '109' as PreMatchID,
+    courseIndex: 0,
+    matchIndex: 12,
+    departmentType: config.departments[0].type,
+    teamId1: '11' as TeamID,
+    teamId2: '10' as TeamID,
+    runResults: [],
   }),
 ];
 

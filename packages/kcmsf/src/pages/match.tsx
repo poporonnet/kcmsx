@@ -197,7 +197,7 @@ export const Match = () => {
                 done ? matchTimeSec - totalSeconds : undefined
               )
             }
-            disabled={!matchInfo?.teams.left}
+            disabled={!isExhibition && !matchInfo?.teams.left}
           />
           <Divider orientation="vertical" />
           <PointControls
@@ -209,7 +209,7 @@ export const Match = () => {
                 done ? matchTimeSec - totalSeconds : undefined
               )
             }
-            disabled={!matchInfo?.teams.right}
+            disabled={!isExhibition && !matchInfo?.teams.right}
           />
         </Flex>
       )}
