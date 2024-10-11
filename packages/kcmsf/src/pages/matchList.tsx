@@ -78,6 +78,7 @@ export const MatchList = () => {
           <Table highlightOnHover>
             <Table.Thead>
               <Table.Tr>
+                <Table.Th>試合番号</Table.Th>
                 <Table.Th>コート番号</Table.Th>
                 <Table.Th>左コート</Table.Th>
                 <Table.Th>右コート</Table.Th>
@@ -92,6 +93,11 @@ export const MatchList = () => {
                 return (
                   (select === "all" || courseIndex === select) && (
                     <Table.Tr key={match.id}>
+                      <Table.Td>
+                      <Center miw={50}>
+                          <Text fw={700}>{match.matchCode}</Text>
+                        </Center>
+                      </Table.Td>
                       <Table.Td>
                         <Center miw={50}>
                           <Text fw={700}>{courseIndex}</Text>
