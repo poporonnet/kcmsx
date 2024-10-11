@@ -93,10 +93,16 @@ export class GenerateRankingService {
       const prevPoints = rankingData[i - 1]?.points ?? -1;
       /** 前回のゴールタイム */
       const prevGoalTime = rankingData[i - 1]?.goalTimeSeconds ?? Infinity;
-      let rank = rankingData[i - 1]?.rank ?? 0;
+      const rank = rankingData[i - 1]?.rank ?? 0;
 
       if (!(v[1].points === prevPoints && v[1].goalTimeSeconds === prevGoalTime)) {
-        rank++;
+        rankingData.push({
+          rank: rank + 1,
+          teamID: v[0],
+          points: v[1].points,
+          goalTimeSeconds: v[1].goalTimeSeconds,
+        });
+        continue;
       }
 
       rankingData.push({
