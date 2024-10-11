@@ -112,15 +112,15 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
 
   async update(match: PreMatch): Promise<Result.Result<Error, void>> {
     try {
-      const m = await this.client.runResult.findMany({
+      const runResult = await this.client.runResult.findMany({
         where: {
           preMatchId: match.getId(),
         },
       });
-      if (!m) {
+      if (!runResult) {
         throw new Error('RunResult not found');
       }
-      if (m.length === 0) {
+      if (runResult.length === 0) {
         await this.client.runResult.createMany({
           data: match.getRunResults().map((v) => {
             return {
