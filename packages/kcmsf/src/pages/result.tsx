@@ -154,16 +154,12 @@ const MainMatchColum = (props: {
       </Table.Td>
       <Table.Td className="td">
         {props.match.runResults
-          .map((result) =>
-            result.teamID === props.match.winnerID ? result.points : 0
-          )
-          .reduce((sum, result) => sum + result, 0)}
+          .filter((result) => result.teamID === props.match.winnerID)
+          .reduce((sum, result) => sum + result.points, 0)}
         -
         {props.match.runResults
-          .map((result) =>
-            result.teamID !== props.match.winnerID ? result.points : 0
-          )
-          .reduce((sum, result) => sum + result, 0)}
+          .filter((result) => result.teamID !== props.match.winnerID)
+          .reduce((sum, result) => sum + result.points, 0)}
       </Table.Td>
       <Table.Td className="td">{props.teamData.get(loserID)}</Table.Td>
     </>
