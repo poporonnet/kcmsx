@@ -119,7 +119,10 @@ export const PostMatchRunResultParamsSchema = z.object({
   matchID: z.string().openapi({ example: '320984' }),
 });
 
-export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).min(1);
+export const PostMatchRunResultRequestSchema = z
+  .array(RunResultSchema.omit({ id: true }))
+  .max(4)
+  .min(1);
 
 export const GetRankingParamsSchema = z.object({
   matchType: MatchTypeSchema,
