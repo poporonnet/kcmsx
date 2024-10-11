@@ -1,3 +1,4 @@
+import { config } from "config";
 import { RunResult } from "./runResult";
 import { teams } from "./team";
 
@@ -41,7 +42,7 @@ export const preMatches: PreMatch[] = [
   {
     id: "6582553",
     matchCode: "1-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     leftTeam: {
       id: "1392387",
       teamName: "かに1",
@@ -69,7 +70,7 @@ export const preMatches: PreMatch[] = [
   {
     id: "1583452",
     matchCode: "3-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     leftTeam: {
       id: "4578932",
       teamName: "かに3",

@@ -1,4 +1,4 @@
-import { DepartmentType, RobotType } from "config";
+import { config, DepartmentType, RobotType } from "config";
 
 export interface Team {
   id: string;
@@ -18,8 +18,8 @@ export const teams = [
     entryCode: "1",
     members: ["メンバー1", "メンバー2"],
     clubName: "RubyClub",
-    robotType: "wheel",
-    departmentType: "elementary",
+    robotType: config.robotTypes[0],
+    departmentType: config.departmentTypes[0],
     isEntered: true,
   },
   {
@@ -28,8 +28,8 @@ export const teams = [
     entryCode: "2",
     members: ["メンバー3"],
     clubName: "RubyClub",
-    robotType: "wheel",
-    departmentType: "elementary",
+    robotType: config.robotTypes[0],
+    departmentType: config.departmentTypes[0],
     isEntered: false,
   },
   {
@@ -38,8 +38,8 @@ export const teams = [
     entryCode: "3",
     members: ["メンバー4"],
     clubName: "",
-    robotType: "leg",
-    departmentType: "elementary",
+    robotType: config.robotTypes[0],
+    departmentType: config.departmentTypes[0],
     isEntered: true,
   },
 ] as const satisfies Team[];
