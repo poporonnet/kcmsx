@@ -220,8 +220,8 @@ export const testRankingPreMatchData = [
       RunResult.new({
         id: '23' as RunResultID,
         teamID: '8' as TeamID,
-        points: 2,
-        goalTimeSeconds: 180,
+        points: 1,
+        goalTimeSeconds: 100,
         finishState: 'GOAL',
       }),
     ],
