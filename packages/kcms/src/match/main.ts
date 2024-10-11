@@ -21,11 +21,13 @@ import {
   GetMatchIdRoute,
   GetMatchRoute,
   GetMatchTypeRoute,
+  GetRankingRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { GeneratePreMatchService } from './service/generatePre';
+import { GenerateRankingService } from './service/generateRanking';
 import { GetMatchService } from './service/get';
 import { upcase } from './utility/upcase';
 
@@ -59,10 +61,12 @@ const generatePreMatchService = new GeneratePreMatchService(
   idGenerator,
   preMatchRepository
 );
+const generateRankingService = new GenerateRankingService(preMatchRepository);
 const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
-  generatePreMatchService
+  generatePreMatchService,
+  generateRankingService
 );
 
 export const matchHandler = new OpenAPIHono();
@@ -136,6 +140,17 @@ matchHandler.openapi(GetMatchTypeRoute, async (c) => {
   const { matchType } = c.req.valid('param');
 
   const res = await matchController.getMatchByType(matchType);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.openapi(GetRankingRoute, async (c) => {
+  const { matchType, departmentType } = c.req.valid('param');
+
+  const res = await matchController.getRanking(matchType, departmentType);
   if (Result.isErr(res)) {
     const error = Result.unwrapErr(res);
     return c.json({ description: error.message }, 400);

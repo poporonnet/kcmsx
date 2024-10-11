@@ -126,7 +126,7 @@ export const PostMatchRunResultRequestSchema = z
 
 export const GetRankingParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  DepartmentType: DepartmentTypeSchema,
+  departmentType: DepartmentTypeSchema,
 });
 
 export const GetRankingResponseSchema = z.array(
