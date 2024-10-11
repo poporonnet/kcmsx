@@ -1,11 +1,13 @@
+import { DepartmentType, RobotType } from "config";
+
 export interface Team {
   id: string;
   name: string;
   entryCode: string;
   members: string[];
   clubName: string;
-  robotType: string;
-  departmentType: string;
+  robotType: RobotType;
+  departmentType: DepartmentType;
   isEntered: boolean;
 }
 
@@ -37,7 +39,7 @@ export const teams = [
     members: ["メンバー4"],
     clubName: "",
     robotType: "leg",
-    departmentType: "open",
+    departmentType: "elementary",
     isEntered: true,
   },
 ] as const satisfies Team[];

@@ -5,18 +5,14 @@ export interface PreMatch {
   id: string;
   matchCode: `${number}-${number}`;
   departmentType: (typeof teams)[number]["departmentType"];
-  leftTeam:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
-  rightTeam:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
+  leftTeam?: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
+  rightTeam?: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
   runResults: RunResult[];
 }
 
@@ -24,18 +20,14 @@ export interface MainMatch {
   id: string;
   matchCode: `${number}-${number}`;
   departmentType: (typeof teams)[number]["departmentType"];
-  team1:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
-  team2:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
+  team1: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
+  team2: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
   winnerID: (typeof teams)[number]["id"];
   runResults: RunResult[];
 }
@@ -129,7 +121,7 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    departmentType: "open",
+    departmentType: "elementary",
     team1: {
       id: "1392387",
       teamName: "かに1",
