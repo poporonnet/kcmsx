@@ -57,6 +57,7 @@ export const Match = () => {
   const [matchJudge, setMatchJudge] = useState<Judge | undefined>(
     isExhibition ? new Judge({}, {}, { matchInfo }, { matchInfo }) : undefined
   );
+  const [matchCode, setMatchCode] = useState<string>();
   useEffect(() => {
     if (isExhibition) return;
 
@@ -120,6 +121,7 @@ export const Match = () => {
       };
       setMatchInfo(matchInfo);
       setMatchJudge(new Judge({}, {}, { matchInfo }, { matchInfo }));
+      setMatchCode(matchData.matchCode);
     };
 
     fetchMatchInfo();
@@ -149,6 +151,7 @@ export const Match = () => {
 
   return (
     <Flex h="100%" direction="column" gap="md" align="center" justify="center">
+      <Text size="2rem">{matchCode}</Text>
       <Button
         w="100%"
         h="auto"
