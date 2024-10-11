@@ -222,14 +222,14 @@ const PreResultColum = (props: { match: PreMatch }) => {
       <Table.Td className="td">{leftResult?.points}</Table.Td>
       <Table.Td className="td">
         {props.match.leftTeam
-          ? (leftResult.goalTimeSeconds ?? "フィニッシュ")
+          ? (leftResult?.goalTimeSeconds ?? "フィニッシュ")
           : ""}
       </Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
       <Table.Td className="td">
         {props.match.rightTeam
-          ? (rightResult.goalTimeSeconds ?? "フィニッシュ")
+          ? (rightResult?.goalTimeSeconds ?? "フィニッシュ")
           : ""}
       </Table.Td>
     </>
