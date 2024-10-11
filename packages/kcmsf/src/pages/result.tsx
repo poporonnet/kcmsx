@@ -1,6 +1,7 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
 import { useEffect, useMemo, useState } from "react";
+import { parseSeconds } from "../utils/time";
 
 type PreMatch = {
   id: string;
@@ -221,16 +222,16 @@ const PreResultColum = (props: { match: PreMatch }) => {
       <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
       <Table.Td className="td">{leftResult?.points}</Table.Td>
       <Table.Td className="td">
-        {props.match.leftTeam
-          ? (leftResult?.goalTimeSeconds ?? "フィニッシュ")
-          : ""}
+        {leftResult?.finishState === "goal"
+          ? (parseSeconds(leftResult.goalTimeSeconds) ?? "")
+          : "フィニッシュ"}
       </Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
       <Table.Td className="td">
-        {props.match.rightTeam
-          ? (rightResult?.goalTimeSeconds ?? "フィニッシュ")
-          : ""}
+        {rightResult?.finishState === "goal"
+          ? (parseSeconds(rightResult.goalTimeSeconds) ?? "")
+          : "フィニッシュ"}
       </Table.Td>
     </>
   );
