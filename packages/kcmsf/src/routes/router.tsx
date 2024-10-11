@@ -2,12 +2,12 @@ import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
+import { Ranking } from "../pages/ranking.tsx";
 import { Register } from "../pages/register.tsx";
 import { RegisterBulk } from "../pages/registerBulk.tsx";
 import { Result } from "../pages/result.tsx";
 import { Teams } from "../pages/teams.tsx";
 import { Layout } from "./layout.tsx";
-import { Ranking } from "../pages/ranking.tsx";
 
 export const router = createBrowserRouter(
   [
@@ -55,7 +55,7 @@ export const router = createBrowserRouter(
         {
           path: "ranking",
           element: <Ranking />,
-        }
+        },
       ],
     },
   ],
