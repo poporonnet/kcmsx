@@ -49,18 +49,16 @@ describe('PreMatch', () => {
   });
 
   it('走行結果は0,1,2個になる', () => {
-    const args = {
-      id: '1' as PreMatchID,
-      courseIndex: 1,
-      matchIndex: 1,
-      departmentType: config.departments[0].type,
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
-      runResults: [],
-    };
-
     for (let i = 1; i < 100; i++) {
-      const preMatch = PreMatch.new(args);
+      const preMatch = PreMatch.new({
+        id: '1' as PreMatchID,
+        courseIndex: 1,
+        matchIndex: 1,
+        departmentType: config.departments[0].type,
+        teamId1: '2' as TeamID,
+        teamId2: '3' as TeamID,
+        runResults: [],
+      });
       // 1,2以外は足せない
       if (i == 1 || i == 2) {
         expect(() => {
@@ -70,7 +68,7 @@ describe('PreMatch', () => {
                 id: String(i) as RunResultID,
                 goalTimeSeconds: i * 10,
                 points: 10 + i,
-                teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
+                teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
                 finishState: 'FINISHED',
               });
             })
@@ -85,7 +83,7 @@ describe('PreMatch', () => {
               id: String(i) as RunResultID,
               goalTimeSeconds: i * 10,
               points: 10 + i,
-              teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
+              teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
               finishState: 'FINISHED',
             });
           })

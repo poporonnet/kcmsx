@@ -95,6 +95,6 @@ export class PreMatch {
     ) {
       throw new Error('RunResult teamId must be teamId1 or teamId2');
     }
-    this.runResults.concat(runResults);
+    this.runResults.push(...runResults);
   }
 }

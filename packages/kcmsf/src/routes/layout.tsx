@@ -12,6 +12,6 @@ export const Layout = () => (
     <AppShell.Main>
       <Outlet />
     </AppShell.Main>
-    <AppShell.Footer>kcms &copy; Poporon Network 2023</AppShell.Footer>
+    <AppShell.Footer>kcms &copy; 2023-2024 Poporon Network</AppShell.Footer>
   </AppShell>
 );
