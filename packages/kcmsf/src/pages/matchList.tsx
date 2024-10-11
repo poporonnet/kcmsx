@@ -94,7 +94,7 @@ export const MatchList = () => {
                   (select === "all" || courseIndex === select) && (
                     <Table.Tr key={match.id}>
                       <Table.Td>
-                      <Center miw={50}>
+                        <Center miw={50}>
                           <Text fw={700}>{match.matchCode}</Text>
                         </Center>
                       </Table.Td>
