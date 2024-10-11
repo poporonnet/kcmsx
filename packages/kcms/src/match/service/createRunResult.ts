@@ -42,7 +42,6 @@ export class CreateRunResultService {
       });
       runResults.push(result);
     }
-
     if (matchType === 'pre') {
       const matchRes = await this.preMatchRepository.findByID(matchID as PreMatchID);
       if (Option.isNone(matchRes)) {
@@ -51,6 +50,7 @@ export class CreateRunResultService {
       const match = Option.unwrap(matchRes);
       try {
         match.appendRunResults(runResults);
+        await this.preMatchRepository.update(match);
       } catch (e) {
         return Result.err(e as Error);
       }
@@ -62,6 +62,7 @@ export class CreateRunResultService {
       const match = Option.unwrap(matchRes);
       try {
         match.appendRunResults(runResults);
+        await this.mainMatchRepository.update(match);
       } catch (e) {
         return Result.err(e as Error);
       }
