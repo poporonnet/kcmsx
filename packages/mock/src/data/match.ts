@@ -1,3 +1,4 @@
+import { config } from "config";
 import { RunResult } from "./runResult";
 import { teams } from "./team";
 
@@ -5,18 +6,14 @@ export interface PreMatch {
   id: string;
   matchCode: `${number}-${number}`;
   departmentType: (typeof teams)[number]["departmentType"];
-  leftTeam:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
-  rightTeam:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
+  leftTeam?: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
+  rightTeam?: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
   runResults: RunResult[];
 }
 
@@ -24,18 +21,14 @@ export interface MainMatch {
   id: string;
   matchCode: `${number}-${number}`;
   departmentType: (typeof teams)[number]["departmentType"];
-  team1:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
-  team2:
-    | {
-        id: (typeof teams)[number]["id"];
-        teamName: (typeof teams)[number]["name"];
-      }
-    | undefined;
+  team1: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
+  team2: {
+    id: (typeof teams)[number]["id"];
+    teamName: (typeof teams)[number]["name"];
+  };
   winnerID: (typeof teams)[number]["id"];
   runResults: RunResult[];
 }
@@ -49,7 +42,7 @@ export const preMatches: PreMatch[] = [
   {
     id: "6582553",
     matchCode: "1-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     leftTeam: {
       id: "1392387",
       teamName: "かに1",
@@ -77,7 +70,7 @@ export const preMatches: PreMatch[] = [
   {
     id: "1583452",
     matchCode: "3-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     leftTeam: {
       id: "4578932",
       teamName: "かに3",
@@ -99,7 +92,7 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     team1: {
       id: "1392387",
       teamName: "かに1",
@@ -129,7 +122,7 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    departmentType: "open",
+    departmentType: config.departmentTypes[0],
     team1: {
       id: "1392387",
       teamName: "かに1",
