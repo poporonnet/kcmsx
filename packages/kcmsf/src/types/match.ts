@@ -1,9 +1,8 @@
 import { RunResult } from "./runResult";
-import { Team } from "./team";
 
 /**
  * idとチーム名を持つチーム情報
- * @todo {@link Team}とチーム名のプロパティ名が異なる (`name` - `teamName`)
+ * @todo Teamとチーム名のプロパティ名が異なる (`name` - `teamName`)
  */
 type BriefTeam = {
   id: string;
@@ -44,7 +43,7 @@ export type Match = PreMatch | MainMatch;
 
 /**
  * チーム情報をidのみ持つ予選のマッチ
- * @description `POST /match/{matchType}/{departmentType}/generate​`のみで使われる
+ * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortPreMatch = MatchBase & {
   leftTeamID?: string;
@@ -53,7 +52,7 @@ export type ShortPreMatch = MatchBase & {
 
 /**
  * チーム情報をidのみ持つ本戦のマッチ
- * @description `POST /match/{matchType}/{departmentType}/generate​`のみで使われる
+ * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortMainMatch = MatchBase & {
   team1ID: string;
@@ -62,6 +61,6 @@ export type ShortMainMatch = MatchBase & {
 
 /**
  * チーム情報をidのみ持つマッチ
- * @description `POST /match/{matchType}/{departmentType}/generate​`のみで使われる
+ * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortMatch = ShortPreMatch | ShortMainMatch;
