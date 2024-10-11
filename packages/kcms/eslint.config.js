@@ -44,4 +44,11 @@ export default [
       'vitest/require-top-level-describe': ['error'],
     },
   },
+  {
+    settings: {
+      vitest: {
+        typecheck: true,
+      },
+    }
+  }
 ];

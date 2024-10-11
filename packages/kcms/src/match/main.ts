@@ -27,7 +27,7 @@ import {
 import { CreateRunResultService } from './service/createRunResult';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GetMatchService } from './service/get';
-import { upcase } from './utility/uppercase';
+import { upcase } from './utility/upcase';
 
 const isProduction = process.env.NODE_ENV === 'production';
 

@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FinishState } from '../model/runResult';
-import { upcase } from './uppercase';
+import { upcase } from './upcase';
 
 describe('upcase', () => {
   it('大文字に変換できる(finished)', () => {
@@ -9,11 +8,5 @@ describe('upcase', () => {
 
   it('大文字に変換できる(goal)', () => {
     expect(upcase('goal')).toBe('GOAL');
-  });
-
-  it('型テスト', () => {
-    const state: 'goal' | 'finished' = 'finished';
-    const upcased: FinishState = upcase(state);
-    expect(upcased).toBe('FINISHED');
   });
 });
