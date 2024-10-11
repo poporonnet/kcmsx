@@ -15,7 +15,8 @@ import {
   RobotType,
 } from "config";
 import { useEffect, useState } from "react";
-import { Entry } from "../types/entry";
+import { PostTeamsRequest } from "../types/api/team";
+import { CreateTeamArgs } from "../types/team";
 
 const errorMessages = {
   shortTeamName: "チーム名が短すぎます",
@@ -110,15 +111,15 @@ export const RegisterBulk = () => {
 
   const sendData = async () => {
     if (!csvData) return;
-    const data: Entry[] = csvData.map((row) => {
-      return {
+    const data: PostTeamsRequest = csvData.map(
+      (row): CreateTeamArgs => ({
         name: row[0],
         members: [row[1], row[2]],
         robotType: row[3] as RobotType,
         departmentType: row[4] as DepartmentType,
         clubName: row[5],
-      };
-    });
+      })
+    );
     const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",
       headers: {
