@@ -112,34 +112,69 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
 
   async update(match: PreMatch): Promise<Result.Result<Error, void>> {
     try {
-      await this.client.preMatch.update({
+      const m = await this.client.runResult.findMany({
         where: {
-          id: match.getId(),
-        },
-        data: {
-          courseIndex: match.getCourseIndex(),
-          matchIndex: match.getMatchIndex(),
-          leftTeamID: match.getTeamId1(),
-          rightTeamID: match.getTeamId2(),
-          runResult: {
-            updateMany: match.getRunResults().map((v) => {
-              return {
-                where: {
-                  id: v.getId(),
-                },
-                data: {
-                  id: v.getId(),
-                  teamID: v.getTeamId(),
-                  points: v.getPoints(),
-                  goalTimeSeconds: v.getGoalTimeSeconds(),
-                  // NOTE: GOAL: 0 , FINISHED: 1
-                  finishState: v.isGoal() ? 0 : 1,
-                },
-              };
-            }),
-          },
+          preMatchId: match.getId(),
         },
       });
+      if (!m) {
+        throw new Error('RunResult not found');
+      }
+      if (m.length === 0) {
+        await this.client.runResult.createMany({
+          data: match.getRunResults().map((v) => {
+            return {
+              id: v.getId(),
+              teamID: v.getTeamId(),
+              points: v.getPoints(),
+              goalTimeSeconds: v.getGoalTimeSeconds(),
+              preMatchId: match.getId(),
+              // NOTE: GOAL: 0 , FINISHED: 1
+              finishState: v.isGoal() ? 0 : 1,
+            };
+          }),
+        });
+        await this.client.preMatch.update({
+          where: {
+            id: match.getId(),
+          },
+          data: {
+            courseIndex: match.getCourseIndex(),
+            matchIndex: match.getMatchIndex(),
+            leftTeamID: match.getTeamId1(),
+            rightTeamID: match.getTeamId2(),
+          },
+        });
+      } else {
+        await this.client.preMatch.update({
+          where: {
+            id: match.getId(),
+          },
+          data: {
+            courseIndex: match.getCourseIndex(),
+            matchIndex: match.getMatchIndex(),
+            leftTeamID: match.getTeamId1(),
+            rightTeamID: match.getTeamId2(),
+            runResult: {
+              updateMany: match.getRunResults().map((v) => {
+                return {
+                  where: {
+                    id: v.getId(),
+                  },
+                  data: {
+                    id: v.getId(),
+                    teamID: v.getTeamId(),
+                    points: v.getPoints(),
+                    goalTimeSeconds: v.getGoalTimeSeconds(),
+                    // NOTE: GOAL: 0 , FINISHED: 1
+                    finishState: v.isGoal() ? 0 : 1,
+                  },
+                };
+              }),
+            },
+          },
+        });
+      }
       return Result.ok(undefined);
     } catch (e) {
       return Result.err(e as Error);
