@@ -11,12 +11,9 @@ describe('GenerateRankingService', () => {
 
   it('部門ごとのランキングが正しく生成できる', async () => {
     const res = await service.generatePreMatchRanking('elementary');
-    console.log(res[1]);
     expect(Result.isErr(res)).toBe(false);
     expect(Result.unwrap(res)).toHaveLength(11);
   });
-
-  it.todo('予選が終了していなくてもランキングを生成できる');
 
   it('予選: 同じ順位の場合、ゴールタイムでソートする', async () => {
     const expected = [
@@ -29,8 +26,8 @@ describe('GenerateRankingService', () => {
       { rank: 7, teamID: '6' as TeamID, points: 4, goalTimeSeconds: 100 },
       { rank: 8, teamID: '8' as TeamID, points: 1, goalTimeSeconds: 100 },
       { rank: 8, teamID: '9' as TeamID, points: 1, goalTimeSeconds: 100 },
-      { rank: 9, teamID: '10' as TeamID, points: 0, goalTimeSeconds: 0 },
-      { rank: 9, teamID: '11' as TeamID, points: 0, goalTimeSeconds: 0 },
+      { rank: 9, teamID: '10' as TeamID, points: 0, goalTimeSeconds: Infinity },
+      { rank: 9, teamID: '11' as TeamID, points: 0, goalTimeSeconds: Infinity },
     ];
 
     const res = await service.generatePreMatchRanking('elementary');
