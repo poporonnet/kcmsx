@@ -123,7 +123,7 @@ export const PostMatchRunResultRequestSchema = z.array(RunResultSchema).max(4).m
 
 export const GetRankingParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  DepartmentType: DepartmentTypeSchema,
+  departmentType: DepartmentTypeSchema,
 });
 
 export const GetRankingResponseSchema = z.array(
