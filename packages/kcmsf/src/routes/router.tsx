@@ -4,6 +4,7 @@ import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
 import { Register } from "../pages/register.tsx";
 import { RegisterBulk } from "../pages/registerBulk.tsx";
+import { Result } from "../pages/result.tsx";
 import { Teams } from "../pages/teams.tsx";
 import { Layout } from "./layout.tsx";
 
@@ -45,6 +46,10 @@ export const router = createBrowserRouter(
         {
           path: "matchlist",
           element: <MatchList />,
+        },
+        {
+          path: "result",
+          element: <Result />,
         },
       ],
     },
