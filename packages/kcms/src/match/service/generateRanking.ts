@@ -86,15 +86,14 @@ export class GenerateRankingService {
         : b[1].points - a[1].points
     );
 
-    /** 順位 */
-    let rank = 0;
     const rankingData: RankingDatum[] = [];
     // NOTE: Mapをfor..ofで回すと[key,value]しか取れないので一回展開して[index,value]にしている
     for (const [i, v] of [...sortedTeams.entries()]) {
       /** 前回の点数 */
-      const prevPoints = rankingData[i - 1]?.points ?? 0;
+      const prevPoints = rankingData[i - 1]?.points ?? -1;
       /** 前回のゴールタイム */
       const prevGoalTime = rankingData[i - 1]?.goalTimeSeconds ?? Infinity;
+      let rank = rankingData[i - 1]?.rank ?? 0;
 
       if (!(v[1].points === prevPoints && v[1].goalTimeSeconds === prevGoalTime)) {
         rank++;
