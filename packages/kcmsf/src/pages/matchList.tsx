@@ -11,10 +11,10 @@ import { IconRefresh } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { CourseSelector } from "../components/courseSelector";
 import { MatchStatusButton } from "../components/matchStatus";
-import { Match } from "../types/match";
+import { Match, PreMatch } from "../types/match";
 
 export const MatchList = () => {
-  const [preMatches, setPreMatches] = useState<Match[]>([]);
+  const [preMatches, setPreMatches] = useState<PreMatch[]>([]);
   const [courses, setCourses] = useState<number[]>([]);
   const [select, setSelect] = useState<number | "all">("all");
   const [loading, setLoading] = useState<boolean>(false);
@@ -27,7 +27,7 @@ export const MatchList = () => {
         method: "GET",
       });
 
-      const data = (await res.json()) as undefined | Match[];
+      const data = (await res.json()) as PreMatch[] | undefined;
 
       if (!data) {
         setError(true);
