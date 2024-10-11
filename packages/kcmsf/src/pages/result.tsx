@@ -64,18 +64,16 @@ export const Result = () => {
     getMatches();
   }, []);
 
-  const teamNames = new Map<string, string>();
-  useMemo(
-    () =>
-      mainMatchData.forEach((element) => {
-        if (element.team1)
-          teamNames.set(element.team1.id, element.team1.teamName);
-        if (element.team2)
-          teamNames.set(element.team2.id, element.team2.teamName);
-        console.log("useMemo");
-      }),
-    [{ mainMatchData, teamNames }]
-  );
+  const teamNames: Map<string, string> = useMemo(() => {
+    const teamNames = new Map<string, string>();
+    mainMatchData.forEach((element) => {
+      if (element.team1)
+        teamNames.set(element.team1.id, element.team1.teamName);
+      if (element.team2)
+        teamNames.set(element.team2.id, element.team2.teamName);
+    });
+    return teamNames;
+  }, [mainMatchData]);
 
   return (
     <>
@@ -92,14 +90,22 @@ export const Result = () => {
       <Flex direction="column" gap={20}>
         <Title order={3}>{config.department[department].name}</Title>
         <MainResultTable
-          matches={mainMatchData.filter(
-            (match) => match.departmentType === department
+          matches={useMemo(
+            () =>
+              mainMatchData.filter(
+                (match) => match.departmentType === department
+              ),
+            [mainMatchData]
           )}
-          teamData={teamNames}
+          teamNames={teamNames}
         />
         <PreResultTable
-          matches={preMatchData.filter(
-            (match) => match.departmentType === department
+          matches={useMemo(
+            () =>
+              preMatchData.filter(
+                (match) => match.departmentType === department
+              ),
+            [preMatchData]
           )}
         />
       </Flex>
@@ -109,7 +115,7 @@ export const Result = () => {
 
 const MainResultTable = (props: {
   matches: MainMatch[];
-  teamData: Map<string, string>;
+  teamNames: Map<string, string>;
 }) => {
   if (props.matches.length === 0) {
     return (
@@ -125,15 +131,15 @@ const MainResultTable = (props: {
       <Table striped withTableBorder miw="40rem">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>勝ち</Table.Th>
-            <Table.Th>得点</Table.Th>
-            <Table.Th>負け</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>勝ち</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>負け</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {props.matches.map((element) => (
             <Table.Tr key={element.id}>
-              <MainMatchColum match={element} teamData={props.teamData} />
+              <MainMatchColum match={element} teamData={props.teamNames} />
             </Table.Tr>
           ))}
         </Table.Tbody>
@@ -146,6 +152,10 @@ const MainMatchColum = (props: {
   match: MainMatch;
   teamData: Map<string, string>;
 }) => {
+  const loserID =
+    props.match.winnerID === props.match.team1.id
+      ? props.match.team2.id
+      : props.match.team1.id;
   return (
     <>
       <Table.Td className="td">
@@ -156,21 +166,15 @@ const MainMatchColum = (props: {
           .map((result) =>
             result.teamID === props.match.winnerID ? result.points : 0
           )
-          .reduce((sum, point) => sum + point, 0)}
+          .reduce((sum, result) => sum + result, 0)}
         -
         {props.match.runResults
           .map((result) =>
             result.teamID !== props.match.winnerID ? result.points : 0
           )
-          .reduce((sum, point) => sum + point, 0)}
+          .reduce((sum, result) => sum + result, 0)}
       </Table.Td>
-      <Table.Td className="td">
-        {props.teamData.get(
-          props.match.team1?.id === props.match.winnerID
-            ? (props.match.team2?.id ?? "")
-            : (props.match.team1?.id ?? "")
-        )}
-      </Table.Td>
+      <Table.Td className="td">{props.teamData.get(loserID)}</Table.Td>
     </>
   );
 };
@@ -190,12 +194,12 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
       <Table striped withTableBorder miw="40rem">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>左チーム</Table.Th>
-            <Table.Th>得点</Table.Th>
-            <Table.Th>時間</Table.Th>
-            <Table.Th>右チーム</Table.Th>
-            <Table.Th>得点</Table.Th>
-            <Table.Th>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>左チーム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -211,11 +215,19 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
 };
 
 const PreResultColum = (props: { match: PreMatch }) => {
-  const leftResult = props.match.runResults.find(
-    (result) => result.teamID === props.match.leftTeam?.id
+  const leftResult = useMemo(
+    () =>
+      props.match.runResults.find(
+        (result) => result.teamID === props.match.leftTeam?.id
+      ),
+    [props.match]
   );
-  const rightResult = props.match.runResults.find(
-    (result) => result.teamID === props.match.rightTeam?.id
+  const rightResult = useMemo(
+    () =>
+      props.match.runResults.find(
+        (result) => result.teamID === props.match.rightTeam?.id
+      ),
+    [props.match]
   );
   return (
     <>
