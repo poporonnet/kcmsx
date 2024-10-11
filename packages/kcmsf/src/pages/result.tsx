@@ -65,15 +65,23 @@ export const Result = () => {
   }, []);
 
   const teamNames: Map<string, string> = useMemo(() => {
-    const teamNames = new Map<string, string>();
+    const team = new Map<string, string>();
     mainMatchData.forEach((element) => {
-      if (element.team1)
-        teamNames.set(element.team1.id, element.team1.teamName);
-      if (element.team2)
-        teamNames.set(element.team2.id, element.team2.teamName);
+      if (element.team1) team.set(element.team1.id, element.team1.teamName);
+      if (element.team2) team.set(element.team2.id, element.team2.teamName);
     });
-    return teamNames;
+    return team;
   }, [mainMatchData]);
+
+  const preMatches = useMemo(
+    () => mainMatchData.filter((match) => match.departmentType === department),
+    [mainMatchData]
+  );
+
+  const mainMatches = useMemo(
+    () => preMatchData.filter((match) => match.departmentType === department),
+    [preMatchData]
+  );
 
   return (
     <>
@@ -89,25 +97,8 @@ export const Result = () => {
       />
       <Flex direction="column" gap={20}>
         <Title order={3}>{config.department[department].name}</Title>
-        <MainResultTable
-          matches={useMemo(
-            () =>
-              mainMatchData.filter(
-                (match) => match.departmentType === department
-              ),
-            [mainMatchData]
-          )}
-          teamNames={teamNames}
-        />
-        <PreResultTable
-          matches={useMemo(
-            () =>
-              preMatchData.filter(
-                (match) => match.departmentType === department
-              ),
-            [preMatchData]
-          )}
-        />
+        <MainResultTable matches={preMatches} teamNames={teamNames} />
+        <PreResultTable matches={mainMatches} />
       </Flex>
     </>
   );
@@ -235,14 +226,14 @@ const PreResultColum = (props: { match: PreMatch }) => {
       <Table.Td className="td">{leftResult?.points}</Table.Td>
       <Table.Td className="td">
         {props.match.leftTeam
-          ? (leftResult?.goalTimeSeconds ?? "リタイア")
+          ? (leftResult.goalTimeSeconds ?? "フィニッシュ")
           : ""}
       </Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
       <Table.Td className="td">
         {props.match.rightTeam
-          ? (rightResult?.goalTimeSeconds ?? "リタイア")
+          ? (rightResult.goalTimeSeconds ?? "フィニッシュ")
           : ""}
       </Table.Td>
     </>
