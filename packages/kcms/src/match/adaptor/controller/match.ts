@@ -6,11 +6,13 @@ import { FetchTeamService } from '../../../team/service/get';
 import { MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { GeneratePreMatchService } from '../../service/generatePre';
+import { GenerateRankingService } from '../../service/generateRanking';
 import { GetMatchService } from '../../service/get';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
   GetMatchTypeResponseSchema,
+  GetRankingResponseSchema,
   MainSchema,
   PostMatchGenerateResponseSchema,
   PreSchema,
@@ -21,7 +23,8 @@ export class MatchController {
   constructor(
     private readonly getMatchService: GetMatchService,
     private readonly fetchTeamService: FetchTeamService,
-    private readonly generatePreMatchService: GeneratePreMatchService
+    private readonly generatePreMatchService: GeneratePreMatchService,
+    private readonly generateRankingService: GenerateRankingService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -246,5 +249,33 @@ export class MatchController {
         })
       );
     }
+  }
+
+  async getRanking(
+    matchType: MatchType,
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, z.infer<typeof GetRankingResponseSchema>>> {
+    if (matchType !== 'pre') {
+      return Result.err(new Error('Not implemented'));
+    }
+
+    const rankingRes = await this.generateRankingService.generatePreMatchRanking(departmentType);
+    if (Result.isErr(rankingRes)) return rankingRes;
+    const ranking = Result.unwrap(rankingRes);
+
+    // NOTE: 一つずつ取得しても良いが、エラーの扱いが煩雑になるので簡単化のために*一時的に*全て取得するようにした
+    const teamsRes = await this.fetchTeamService.findAll();
+    if (Result.isErr(teamsRes)) return teamsRes;
+    const teamsMap = new Map<TeamID, Team>(Result.unwrap(teamsRes).map((v) => [v.getId(), v]));
+
+    return Result.ok(
+      ranking.map((v) => ({
+        rank: v.rank,
+        teamID: v.teamID,
+        teamName: teamsMap.get(v.teamID)!.getTeamName(),
+        points: v.points,
+        goalTimeSeconds: v.goalTimeSeconds,
+      }))
+    );
   }
 }
