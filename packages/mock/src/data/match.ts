@@ -92,7 +92,7 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     team1: {
       id: "1392387",
       teamName: "かに1",
@@ -122,7 +122,7 @@ export const mainMatches: MainMatch[] = [
   {
     id: "943629",
     matchCode: "2-1",
-    departmentType: "elementary",
+    departmentType: config.departmentTypes[0],
     team1: {
       id: "1392387",
       teamName: "かに1",
