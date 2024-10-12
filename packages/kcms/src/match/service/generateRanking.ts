@@ -2,6 +2,7 @@ import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType } from 'config';
 import { TeamID } from '../../team/models/team';
 import { PreMatchRepository } from '../model/repository';
+import { RunResult } from '../model/runResult';
 
 export interface RankingDatum {
   rank: number;
@@ -25,62 +26,33 @@ export class GenerateRankingService {
     );
 
     // 各チームごとに走行結果を集める
-    const teamResults = new Map<TeamID, { points: number; goalTimeSeconds: number }>();
-    for (const v of departmentMatches) {
-      // チーム1の結果
-      const team1 = v.getTeamId1();
-      // 存在しないなら何もしない
-      if (team1 !== undefined) {
-        const team1Result = v.getRunResults().filter((v) => v.getTeamId() === team1);
-        // 試合が始まっていないなら
-        if (team1Result.length === 0) {
-          teamResults.set(team1, {
-            points: 0,
-            goalTimeSeconds: Infinity,
-          });
-        } else if (teamResults.has(team1)) {
-          const prev = teamResults.get(team1)!;
-          // 1つの予選試合には1回ずつしか結果がないので、0個めを取る
-          teamResults.set(team1, {
-            points: prev.points + team1Result[0].getPoints(),
-            // NOTE: 早い方を採用する
-            goalTimeSeconds: Math.min(prev.goalTimeSeconds, team1Result[0].getGoalTimeSeconds()),
-          });
-        } else {
-          teamResults.set(team1, {
-            points: team1Result[0].getPoints(),
-            goalTimeSeconds: team1Result[0].getGoalTimeSeconds(),
-          });
-        }
-      }
+    const teamRunResults = new Map<TeamID, RunResult[]>();
+    const addRunResults = (teamID: TeamID | undefined, runResultSource: RunResult[]) => {
+      if (!teamID) return;
 
-      // チーム2の結果
-      const team2 = v.getTeamId2();
-      // 存在しないなら何もしない
-      if (team2 !== undefined) {
-        const team2Result = v.getRunResults().filter((v) => v.getTeamId() === team2);
-        if (team2Result.length === 0) {
-          teamResults.set(team2, {
-            points: 0,
-            goalTimeSeconds: Infinity,
-          });
-        } else if (teamResults.has(team2)) {
-          const prev = teamResults.get(team2)!;
-          teamResults.set(team2, {
-            // 1つの予選試合には1回ずつしか結果がないので、0個めを取る
-            points: prev.points + team2Result[0].getPoints(),
-            goalTimeSeconds: Math.min(prev.goalTimeSeconds, team2Result[0].getGoalTimeSeconds()),
-          });
-        } else {
-          teamResults.set(team2, {
-            points: team2Result[0].getPoints(),
-            goalTimeSeconds: team2Result[0].getGoalTimeSeconds(),
-          });
-        }
-      }
-    }
+      const runResults = runResultSource.filter((result) => result.getTeamId() === teamID);
+      const prev = teamRunResults.get(teamID) ?? [];
+      teamRunResults.set(teamID, [...prev, ...runResults]);
+    };
+    departmentMatches.forEach((match) => {
+      const runResults = match.getRunResults();
+      addRunResults(match.getTeamId1(), runResults);
+      addRunResults(match.getTeamId2(), runResults);
+    });
+
+    // 各チームごとに結果を集計する
+    const teamResults = [...teamRunResults.entries()].map(
+      ([teamID, runResults]): [TeamID, { points: number; goalTimeSeconds: number }] => [
+        teamID,
+        {
+          points: runResults.reduce((sum, result) => sum + result.getPoints(), 0),
+          goalTimeSeconds: Math.min(...runResults.map((result) => result.getGoalTimeSeconds())),
+        },
+      ]
+    );
+
     // 点数でソート (ゴールタイム: 早い順(asc)、ポイント: 大きい順(desc))
-    const sortedTeams = [...teamResults.entries()].sort((a, b) =>
+    const sortedTeams = teamResults.sort((a, b) =>
       a[1].points === b[1].points
         ? a[1].goalTimeSeconds - b[1].goalTimeSeconds
         : b[1].points - a[1].points
@@ -88,7 +60,7 @@ export class GenerateRankingService {
 
     const rankingData: RankingDatum[] = [];
     // NOTE: Mapをfor..ofで回すと[key,value]しか取れないので一回展開して[index,value]にしている
-    for (const [i, v] of [...sortedTeams.entries()]) {
+    for (const [i, v] of sortedTeams.entries()) {
       /** 前回の点数 */
       const prevPoints = rankingData[i - 1]?.points ?? -1;
       /** 前回のゴールタイム */
