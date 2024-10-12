@@ -54,8 +54,8 @@ export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
   const isExhibition = !id || !matchType;
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
-  const [matchJudge, setMatchJudge] = useState<Judge | undefined>(
-    isExhibition ? new Judge({}, {}, { matchInfo }, { matchInfo }) : undefined
+  const [matchJudge, setMatchJudge] = useState<Judge>(
+    new Judge({}, {}, { matchInfo }, { matchInfo })
   );
   const [matchCode, setMatchCode] = useState<string>();
   useEffect(() => {
@@ -171,11 +171,15 @@ export const Match = () => {
           )}
           <Flex pb="sm" gap="sm">
             <Text size="4rem" c="blue">
-              {matchInfo?.teams.left ? matchJudge?.leftTeam.point.point() : 0}
+              {isExhibition || matchInfo?.teams.left
+                ? matchJudge.leftTeam.point.point()
+                : 0}
             </Text>
             <Text size="4rem">-</Text>
             <Text size="4rem" c="red">
-              {matchInfo?.teams.right ? matchJudge?.rightTeam.point.point() : 0}
+              {isExhibition || matchInfo?.teams.right
+                ? matchJudge.rightTeam.point.point()
+                : 0}
             </Text>
           </Flex>
           {!isExhibition && matchInfo && (
@@ -228,11 +232,11 @@ export const Match = () => {
           result={{
             left: matchInfo.teams.left && {
               points: matchJudge.leftTeam.point.point(),
-              time: matchJudge.leftTeam.goalTimeSeconds ?? matchTimeSec,
+              time: matchJudge.leftTeam.goalTimeSeconds,
             },
             right: matchInfo.teams.right && {
               points: matchJudge.rightTeam.point.point(),
-              time: matchJudge.rightTeam.goalTimeSeconds ?? matchTimeSec,
+              time: matchJudge.rightTeam.goalTimeSeconds,
             },
           }}
         />

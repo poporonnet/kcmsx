@@ -53,6 +53,7 @@ export const testCreateRunResultMainData = [
    時間:    60,  64,  70,  74,  80, 100,  90, 100, 100  n/a n/a
 
    10,11は試合が始まっていない
+   7,8は左右入れ替えの片方のみ行われている
 */
 export const testRankingPreMatchData = [
   PreMatch.new({
@@ -233,22 +234,7 @@ export const testRankingPreMatchData = [
     departmentType: config.departments[0].type,
     teamId1: '8' as TeamID,
     teamId2: '7' as TeamID,
-    runResults: [
-      RunResult.new({
-        id: '24' as RunResultID,
-        teamID: '7' as TeamID,
-        points: 0,
-        goalTimeSeconds: Infinity,
-        finishState: 'FINISHED',
-      }),
-      RunResult.new({
-        id: '25' as RunResultID,
-        teamID: '8' as TeamID,
-        points: 0,
-        goalTimeSeconds: Infinity,
-        finishState: 'FINISHED',
-      }),
-    ],
+    runResults: [],
   }),
 
   PreMatch.new({
