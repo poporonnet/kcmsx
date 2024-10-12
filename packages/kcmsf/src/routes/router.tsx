@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
+import { Ranking } from "../pages/ranking.tsx";
 import { Register } from "../pages/register.tsx";
 import { RegisterBulk } from "../pages/registerBulk.tsx";
 import { Result } from "../pages/result.tsx";
@@ -50,6 +51,10 @@ export const router = createBrowserRouter(
         {
           path: "result",
           element: <Result />,
+        },
+        {
+          path: "ranking",
+          element: <Ranking />,
         },
       ],
     },
