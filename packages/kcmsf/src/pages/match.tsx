@@ -232,11 +232,11 @@ export const Match = () => {
           result={{
             left: matchInfo.teams.left && {
               points: matchJudge.leftTeam.point.point(),
-              time: matchJudge.leftTeam.goalTimeSeconds ?? matchTimeSec,
+              time: matchJudge.leftTeam.goalTimeSeconds,
             },
             right: matchInfo.teams.right && {
               points: matchJudge.rightTeam.point.point(),
-              time: matchJudge.rightTeam.goalTimeSeconds ?? matchTimeSec,
+              time: matchJudge.rightTeam.goalTimeSeconds,
             },
           }}
         />
