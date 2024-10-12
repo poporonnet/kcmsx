@@ -73,7 +73,7 @@ export const Ranking = () => {
               </Table.Td>
               <Table.Td>{record.points}</Table.Td>
               <Table.Td>
-                {record.goalTimeSeconds
+                {record.goalTimeSeconds != null
                   ? parseSeconds(record.goalTimeSeconds)
                   : "-"}
               </Table.Td>
