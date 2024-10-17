@@ -301,7 +301,7 @@ const TeamTable = ({
     </Table.Thead>
     <Table.Tbody>
       {teams.map((team) => (
-        <TeamColumn
+        <TeamRow
           team={team}
           enterable={enterable}
           entry={() => entry(team.id, !team.isEntered)}
@@ -362,7 +362,7 @@ const TeamHeader = ({
   </Table.Th>
 );
 
-const TeamColumn = ({
+const TeamRow = ({
   team,
   enterable,
   entry,
