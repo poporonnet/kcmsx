@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Center,
   Code,
   Group,
   Paper,
@@ -45,13 +44,13 @@ const notifyError = (error: keyof typeof errorMessages) => {
   });
 };
 
-const sampleColumnsDiscription = {
-  チーム名: "重複はできません.1文字以上.",
-  メンバー1: "3文字以上.",
-  メンバー2: "1人の場合は空欄.3文字以上(0文字を除く)",
-  ロボットの種別: config.robotTypes.join("または"),
-  部門: config.departmentTypes.join("または"),
-  クラブ名: "所属していなければ空欄.",
+const csvDescription = {
+  name: "1文字以上。重複できない。",
+  member1: "3文字以上。",
+  member2: "3文字以上。1人の場合は空欄。",
+  robotType: config.robotTypes.join("または"),
+  departmentType: config.departmentTypes.join("または"),
+  clubName: "所属していなければ空欄。",
 };
 
 export const RegisterBulk = () => {
@@ -250,7 +249,7 @@ export const RegisterBulk = () => {
         </Paper>
       )}
       <Paper p="xl" mt={16}>
-        <Title order={3}>参考</Title>
+        <Title order={3}>CSVの形式</Title>
         <DiscriptionColumns />
         <RegisterBulkSample />
       </Paper>
@@ -298,29 +297,21 @@ const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
 
 const DiscriptionColumns = () => {
   return (
-    <Table mb={10}>
+    <Table mb={10} striped withTableBorder horizontalSpacing="md">
       <Table.Thead>
         <Table.Tr>
-          <Table.Th>
-            <Center>カラム名</Center>
-          </Table.Th>
-          <Table.Th>
-            <Center>制約</Center>
-          </Table.Th>
+          <Table.Th ta="center">カラム名</Table.Th>
+          <Table.Th ta="center">制約</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
-        {Object.entries(sampleColumnsDiscription).map(([key, value]) => (
+        {Object.entries(csvDescription).map(([key, value]) => (
           <Table.Tr key={key}>
-            <Table.Td>
-              <Center>
-                <Text>{key}</Text>
-              </Center>
+            <Table.Td ta="center">
+              <Text>{key}</Text>
             </Table.Td>
-            <Table.Td>
-              <Center>
-                <Text>{value}</Text>
-              </Center>
+            <Table.Td ta="left">
+              <Text>{value}</Text>
             </Table.Td>
           </Table.Tr>
         ))}
