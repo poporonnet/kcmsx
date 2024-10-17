@@ -5,7 +5,6 @@ import { GetMatchesResponse } from "../types/api/match";
 import { MainMatch, PreMatch } from "../types/match";
 import { parseSeconds } from "../utils/time";
 
-
 export const Result = () => {
   const [preMatchData, setPreMatchData] = useState<PreMatch[]>([]);
   const [mainMatchData, setMainMatchData] = useState<MainMatch[]>([]);
