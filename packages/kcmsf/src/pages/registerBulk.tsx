@@ -46,8 +46,8 @@ const notifyError = (error: keyof typeof errorMessages) => {
 };
 
 const sampleColumnsDiscription = {
-  チーム名: "重複はできません.必ず1文字以上.",
-  メンバー1: "必ず3文字以上.",
+  チーム名: "重複はできません.1文字以上.",
+  メンバー1: "3文字以上.",
   メンバー2: "1人の場合は空欄.3文字以上(0文字を除く)",
   ロボットの種別: config.robotTypes.join("または"),
   部門: config.departmentTypes.join("または"),
