@@ -250,7 +250,7 @@ export const RegisterBulk = () => {
       )}
       <Paper p="xl" mt={16}>
         <Title order={3}>CSVの形式</Title>
-        <DiscriptionColumns />
+        <DescriptionTable />
         <RegisterBulkSample />
       </Paper>
     </>
@@ -295,7 +295,7 @@ const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
   );
 };
 
-const DiscriptionColumns = () => {
+const DescriptionTable = () => {
   return (
     <Table mb={10} striped withTableBorder horizontalSpacing="md">
       <Table.Thead>
@@ -324,7 +324,7 @@ const RegisterBulkSample = () => {
   const sampleCsv = `name,member1,member2,robotType,departmentType,clubName 
 はなびらちーむ,さくら,あお,leg,elementary,Rubyクラブ
 優勝するぞ,ちひろ,,${config.robotTypes[0]},elementary,
-ひまわり,ゆうた,ゆうと,wheel,${config.departmentTypes[0]},`;
+ひまわり,ゆうた,ゆうと,leg,${config.departmentTypes[0]},`;
 
   return (
     <>
