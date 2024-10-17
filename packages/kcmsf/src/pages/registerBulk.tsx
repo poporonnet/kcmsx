@@ -1,4 +1,15 @@
-import { Box, Button, Group, rem, Table, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Center,
+  Code,
+  Group,
+  Paper,
+  rem,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import {
@@ -32,6 +43,15 @@ const notifyError = (error: keyof typeof errorMessages) => {
     message: errorMessages[error],
     color: "red",
   });
+};
+
+const sampleColumnsDiscription = {
+  チーム名: "重複はできません.必ず1文字以上.",
+  メンバー1: "必ず3文字以上.",
+  メンバー2: "1人の場合は空欄.3文字以上(0文字を除く)",
+  ロボットの種別: config.robotTypes.join("または"),
+  部門: config.departmentTypes.join("または"),
+  クラブ名: "所属していなければ空欄.",
 };
 
 export const RegisterBulk = () => {
@@ -166,15 +186,13 @@ export const RegisterBulk = () => {
           </Button>
         </>
       ) : (
-        <Box
+        <Paper
           maw={620}
-          style={{
-            boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.05)",
-            borderRadius: rem(15),
-          }}
           mx="auto"
           bd="2px solid gray"
           p={rem(10)}
+          radius="xl"
+          shadow="sm"
         >
           <Dropzone
             onDrop={handleDrop}
@@ -229,8 +247,13 @@ export const RegisterBulk = () => {
               </div>
             </Group>
           </Dropzone>
-        </Box>
+        </Paper>
       )}
+      <Paper p="xl" mt={16}>
+        <Title order={3}>参考</Title>
+        <DiscriptionColumns />
+        <RegisterBulkSample />
+      </Paper>
     </>
   );
 };
@@ -270,5 +293,54 @@ const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
         </Table.Tbody>
       </Table>
     </Box>
+  );
+};
+
+const DiscriptionColumns = () => {
+  return (
+    <Table mb={10}>
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th>
+            <Center>カラム名</Center>
+          </Table.Th>
+          <Table.Th>
+            <Center>制約</Center>
+          </Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        {Object.entries(sampleColumnsDiscription).map(([key, value]) => (
+          <Table.Tr key={key}>
+            <Table.Td>
+              <Center>
+                <Text>{key}</Text>
+              </Center>
+            </Table.Td>
+            <Table.Td>
+              <Center>
+                <Text>{value}</Text>
+              </Center>
+            </Table.Td>
+          </Table.Tr>
+        ))}
+      </Table.Tbody>
+    </Table>
+  );
+};
+
+const RegisterBulkSample = () => {
+  const sampleCsv = `name,member1,member2,robotType,departmentType,clubName 
+はなびらちーむ,さくら,あお,leg,elementary,Rubyクラブ
+優勝するぞ,ちひろ,,${config.robotTypes[0]},elementary,
+ひまわり,ゆうた,ゆうと,wheel,${config.departmentTypes[0]},`;
+
+  return (
+    <>
+      <Title order={3}>CSVの例</Title>
+      <Code block ta={"left"}>
+        {sampleCsv}
+      </Code>
+    </>
   );
 };
