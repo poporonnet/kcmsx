@@ -1,46 +1,9 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
 import { useEffect, useMemo, useState } from "react";
+import { GetMatchesResponse } from "../types/api/match";
+import { MainMatch, PreMatch } from "../types/match";
 import { parseSeconds } from "../utils/time";
-
-type PreMatch = {
-  id: string;
-  matchCode: string;
-  departmentType: DepartmentType;
-  leftTeam?: {
-    id: string;
-    teamName: string;
-  };
-  rightTeam?: {
-    id: string;
-    teamName: string;
-  };
-  runResults: MatchResults;
-};
-
-type MainMatch = {
-  id: string;
-  matchCode: string;
-  departmentType: DepartmentType;
-  team1: {
-    id: string;
-    teamName: string;
-  };
-  team2: {
-    id: string;
-    teamName: string;
-  };
-  winnerID: string;
-  runResults: MatchResults;
-};
-
-type MatchResults = {
-  id: string;
-  teamID: string;
-  points: number;
-  goalTimeSeconds?: number;
-  finishState: "goal" | "finished";
-}[];
 
 export const Result = () => {
   const [preMatchData, setPreMatchData] = useState<PreMatch[]>([]);
@@ -56,7 +19,7 @@ export const Result = () => {
       }).catch(() => undefined);
 
       const matchResponse = (await response?.json()) as
-        | { pre: PreMatch[]; main: MainMatch[] }
+        | GetMatchesResponse
         | undefined;
 
       setPreMatchData(matchResponse ? matchResponse.pre : []);
@@ -145,21 +108,21 @@ const MainMatchColum = (props: {
   teamData: Map<string, string>;
 }) => {
   const loserID =
-    props.match.winnerID === props.match.team1.id
+    props.match.winnerId === props.match.team1.id
       ? props.match.team2.id
       : props.match.team1.id;
   return (
     <>
       <Table.Td className="td">
-        {props.teamData.get(props.match.winnerID)}
+        {props.teamData.get(props.match.winnerId)}
       </Table.Td>
       <Table.Td className="td">
         {props.match.runResults
-          .filter((result) => result.teamID === props.match.winnerID)
+          .filter((result) => result.teamID === props.match.winnerId)
           .reduce((sum, result) => sum + result.points, 0)}
         -
         {props.match.runResults
-          .filter((result) => result.teamID !== props.match.winnerID)
+          .filter((result) => result.teamID !== props.match.winnerId)
           .reduce((sum, result) => sum + result.points, 0)}
       </Table.Td>
       <Table.Td className="td">{props.teamData.get(loserID)}</Table.Td>

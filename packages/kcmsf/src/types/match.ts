@@ -1,3 +1,4 @@
+import { DepartmentType } from "config";
 import { RunResult } from "./runResult";
 
 /**
@@ -15,6 +16,7 @@ type BriefTeam = {
 type MatchBase = {
   id: string;
   matchCode: `${number}-${number}`;
+  departmentType: DepartmentType;
   runResults: RunResult[];
 };
 
