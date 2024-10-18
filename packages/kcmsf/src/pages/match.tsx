@@ -1,12 +1,6 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
 import { IconRotate } from "@tabler/icons-react";
-import {
-  config,
-  DepartmentType,
-  MatchInfo,
-  MatchType,
-  RobotType,
-} from "config";
+import { config, MatchInfo, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -14,43 +8,17 @@ import { useTimer } from "react-timer-hook";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { useForceReload } from "../hooks/useForceReload";
+import { GetMatchResponse } from "../types/api/match";
+import { GetTeamResponse } from "../types/api/team";
+import { MainMatch, PreMatch, Match as TMatch } from "../types/match";
 import { Judge } from "../utils/match/judge";
 import { expiryTimestamp, parseSeconds } from "../utils/time";
 
 type TimerState = "initial" | "counting" | "finished";
-type GetTeamResponse = {
-  id: string;
-  name: string;
-  entryCode: string;
-  members: string[];
-  clubName: string;
-  robotType: RobotType;
-  departmentType: DepartmentType;
-  isEntered: boolean;
-};
 
-type GetMatchResponseBase = {
-  id: string;
-  matchCode: string;
-  // TODO: RunResultの扱い
-};
-
-type BriefTeam = { id: string; teamName: string };
-
-type GetPreMatchResponse = GetMatchResponseBase & {
-  leftTeam?: BriefTeam;
-  rightTeam?: BriefTeam;
-};
-
-type GetMainMatchResponse = GetMatchResponseBase & {
-  team1: BriefTeam;
-  team2: BriefTeam;
-};
-type GetMatchResponse = GetPreMatchResponse | GetMainMatchResponse;
-
-type DiscriminatedGetMatchResponse =
-  | (GetPreMatchResponse & { matchType: "pre" })
-  | (GetMainMatchResponse & { matchType: "main" });
+type DiscriminatedMatch =
+  | (PreMatch & { matchType: "pre" })
+  | (MainMatch & { matchType: "main" });
 
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
@@ -65,8 +33,8 @@ export const Match = () => {
 
     const isMainMatch = (
       matchType: MatchType,
-      _matchResponse: GetPreMatchResponse | GetMainMatchResponse
-    ): _matchResponse is GetMainMatchResponse => matchType === "main";
+      _matchResponse: TMatch
+    ): _matchResponse is MainMatch => matchType === "main";
 
     const getTeam = async (teamID: string): Promise<GetTeamResponse> => {
       const res = await fetch(
@@ -84,10 +52,7 @@ export const Match = () => {
       if (!res.ok) return;
 
       const matchData = (await res.json()) as GetMatchResponse;
-      const match: DiscriminatedGetMatchResponse = isMainMatch(
-        matchType,
-        matchData
-      )
+      const match: DiscriminatedMatch = isMainMatch(matchType, matchData)
         ? { ...matchData, matchType: "main" }
         : { ...matchData, matchType: "pre" };
 

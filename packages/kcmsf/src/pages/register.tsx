@@ -2,14 +2,7 @@ import { Box, Button, Group, SegmentedControl, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, RobotType } from "config";
 import { useState } from "react";
-
-interface CreateTeamRequestBody {
-  name: string;
-  members: string[];
-  clubName: string;
-  robotType: RobotType;
-  departmentType: DepartmentType;
-}
+import { CreateTeamArgs } from "../types/team";
 
 export const Register = () => {
   const [teamName, setTeamName] = useState("");
@@ -26,7 +19,7 @@ export const Register = () => {
     event.preventDefault();
     // メンバーは、オープン部門または小学生部門かつメンバーが1人の場合は配列の要素数を1つにする
     // 2024/1/5 仕様変更に伴いメンバーは入力せずに登録できるようにする
-    const data: CreateTeamRequestBody = {
+    const data: CreateTeamArgs = {
       name: teamName,
       members: member.filter((v) => v !== ""),
       clubName: clubName,
