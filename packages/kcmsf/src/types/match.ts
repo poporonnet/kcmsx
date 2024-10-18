@@ -16,6 +16,7 @@ type BriefTeam = {
 type MatchBase = {
   id: string;
   matchCode: `${number}-${number}`;
+  departmentType: DepartmentType;
   runResults: RunResult[];
   departmentType: DepartmentType;
 };
