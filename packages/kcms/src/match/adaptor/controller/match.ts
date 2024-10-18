@@ -12,6 +12,7 @@ import { GetMatchService } from '../../service/get';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
+  GetMatchRunResultResponseSchema,
   GetMatchTypeResponseSchema,
   GetRankingResponseSchema,
   MainSchema,
@@ -281,13 +282,13 @@ export class MatchController {
     );
   }
 
-  async getRunResult(
+  async getRunResultsByMatchID(
     matchType: MatchType,
     matchID: PreMatchID | MainMatchID
-  ): Promise<Result.Result<Error, z.infer<typeof RunResultSchema>[]>> {
-    const res = await this.fetchRunResultService.handle('pre', matchID as PreMatchID);
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchRunResultResponseSchema>[]>> {
+    const res = await this.fetchRunResultService.handle(matchType, matchID as PreMatchID);
     if (Result.isErr(res)) return res;
-    return Result.ok(
+    return Result.ok([
       Result.unwrap(res).map(
         (v): z.infer<typeof RunResultSchema> => ({
           id: v.getId(),
@@ -297,6 +298,6 @@ export class MatchController {
           finishState: v.isGoal() ? 'goal' : 'finished',
         })
       )
-    );
+    ]);
   }
 }

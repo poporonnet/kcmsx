@@ -103,18 +103,6 @@ matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
   return c.json(200);
 });
 
-// matchHandler.openapi(GetMatchIdRoute, async (c) => {
-//   const { matchType, matchID } = c.req.valid('param');
-
-//   const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
-//   if (Result.isErr(res)) {
-//     const error = Result.unwrapErr(res);
-//     return c.json({ description: error.message }, 400);
-//   }
-
-//   return c.json(Result.unwrap(res), 200);
-// });
-
 matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
   const { matchType, departmentType } = c.req.valid('param');
 
@@ -163,12 +151,15 @@ matchHandler.openapi(GetRankingRoute, async (c) => {
 matchHandler.openapi(GetMatchRunResultRoute, async (c) => {
   const { matchType, matchID } = c.req.valid('param');
 
-  const res = await matchController.getRunResult(matchType, matchID as MainMatchID | PreMatchID);
+  const res = await matchController.getRunResultsByMatchID(
+    matchType,
+    matchID as MainMatchID | PreMatchID
+  );
   if (Result.isErr(res)) {
     const error = Result.unwrapErr(res);
     return c.json({ description: error.message }, 400);
   }
-  return c.json(Result.unwrap(res), 200);
+  return c.json(Result.unwrap(res).flat(), 200);
 });
 
 matchHandler.doc('/openapi/match.json', {
