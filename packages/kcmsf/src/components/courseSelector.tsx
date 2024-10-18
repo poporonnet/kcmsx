@@ -16,6 +16,7 @@ export const CourseSelector = (props: Props) => {
       onChange={(value) =>
         props.selector(value === "全てのコート" ? "all" : Number(value))
       }
+      allowDeselect={false}
     />
   );
 };
