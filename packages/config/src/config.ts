@@ -87,7 +87,7 @@ export const config = createConfig(
         label: "ゴール",
         type: "single",
         initial: false,
-        point: () => 0,
+        point: (done) => (done ? 1 : 0),
       },
       {
         name: "bringBall",
