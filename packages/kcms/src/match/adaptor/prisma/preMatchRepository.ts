@@ -6,6 +6,9 @@ import { PreMatch, PreMatchID } from '../../model/pre';
 import { PreMatchRepository } from '../../model/repository';
 import { RunResult, RunResultID } from '../../model/runResult';
 
+//PrismaではInfinityを扱えないため定義
+const _Infinity = 2147483647;
+
 export class PrismaPreMatchRepository implements PreMatchRepository {
   constructor(private readonly client: PrismaClient) {}
 
@@ -31,7 +34,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
             id: v.id as RunResultID,
             teamID: v.teamID as TeamID,
             points: v.points,
-            goalTimeSeconds: v.goalTimeSeconds,
+            goalTimeSeconds: v.goalTimeSeconds === _Infinity ? Infinity : v.goalTimeSeconds,
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
         ),
@@ -124,7 +127,10 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
               id: v.getId(),
               teamID: v.getTeamId(),
               points: v.getPoints(),
-              goalTimeSeconds: v.getGoalTimeSeconds(),
+              // NOTE: Infinity: 2147483647
+              goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                ? v.getGoalTimeSeconds()
+                : _Infinity,
               preMatchId: match.getId(),
               // NOTE: GOAL: 0 , FINISHED: 1
               finishState: v.isGoal() ? 0 : 1,
@@ -162,7 +168,10 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
                     id: v.getId(),
                     teamID: v.getTeamId(),
                     points: v.getPoints(),
-                    goalTimeSeconds: v.getGoalTimeSeconds(),
+                    // NOTE: Infinity: 2147483647
+                    goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                      ? v.getGoalTimeSeconds()
+                      : _Infinity,
                     // NOTE: GOAL: 0 , FINISHED: 1
                     finishState: v.isGoal() ? 0 : 1,
                   },
