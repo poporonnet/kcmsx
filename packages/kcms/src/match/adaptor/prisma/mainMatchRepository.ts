@@ -5,11 +5,11 @@ import { MainMatch, MainMatchID } from '../../model/main';
 import { MainMatchRepository } from '../../model/repository';
 import { RunResult, RunResultID } from '../../model/runResult';
 
-//PrismaではInfinityを扱えないため定義
-const _Infinity = 2147483647;
-
 export class PrismaMainMatchRepository implements MainMatchRepository {
   constructor(private readonly client: PrismaClient) {}
+
+  //sqliteのIntegerにはInfinityを入れられないため十分に大きい整数に変換する
+  private readonly INT32MAX: number = 2147483647;
 
   private deserialize(
     res: Prisma.PromiseReturnType<
@@ -34,7 +34,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             teamID: v.teamID as TeamID,
             points: v.points,
             // NOTE: Infinity: 2147483647
-            goalTimeSeconds: v.goalTimeSeconds === _Infinity ? Infinity : v.goalTimeSeconds,
+            goalTimeSeconds: v.goalTimeSeconds === this.INT32MAX ? Infinity : v.goalTimeSeconds,
             // NOTE: GOAL: 0 , FINISHED: 1
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
@@ -135,7 +135,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
                   // NOTE: Infinity: 2147483647
                   goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
                     ? v.getGoalTimeSeconds()
-                    : _Infinity,
+                    : this.INT32MAX,
                   // NOTE: GOAL: 0 , FINISHED: 1
                   finishState: v.isGoal() ? 0 : 1,
                 },
