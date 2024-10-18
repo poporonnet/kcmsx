@@ -1,9 +1,9 @@
 import { ActionIcon, Group, MantineColor, Text } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 interface Props {
-  initial: number;
+  value: number;
   color: MantineColor;
   onChange: (count: number) => void;
   validate: (count: number) => boolean;
@@ -12,25 +12,22 @@ interface Props {
 }
 
 export const PointCountable = (props: Props) => {
-  const [count, setCount] = useState(props.initial);
-  const decrementable = props.validate(count - 1);
-  const incrementable = props.validate(count + 1);
-  const { onChange } = props;
+  const { value, onChange } = props;
+  const decrementable = props.validate(value - 1);
+  const incrementable = props.validate(value + 1);
 
   const decrement = useCallback(() => {
     if (!decrementable) return; // これ以上減らせない
 
-    const nextCount = count - 1;
-    setCount(nextCount);
+    const nextCount = value - 1;
     onChange(nextCount);
-  }, [count, decrementable, onChange]);
+  }, [value, decrementable, onChange]);
   const increment = useCallback(() => {
     if (!incrementable) return; // これ以上増やせない
 
-    const nextCount = count + 1;
-    setCount(nextCount);
+    const nextCount = value + 1;
     onChange(nextCount);
-  }, [count, incrementable, onChange]);
+  }, [value, incrementable, onChange]);
 
   return (
     <Group>
@@ -48,7 +45,7 @@ export const PointCountable = (props: Props) => {
         <IconMinus style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
       <Text w="auto" size="xl" style={{ flexGrow: 1 }}>
-        {count}
+        {value}
       </Text>
       <ActionIcon
         size="xl"
