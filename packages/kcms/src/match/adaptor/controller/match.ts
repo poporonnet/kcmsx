@@ -5,12 +5,14 @@ import { Team, TeamID } from '../../../team/models/team';
 import { FetchTeamService } from '../../../team/service/get';
 import { MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
+import { FetchRunResultService } from '../../service/fetchRunResult';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
 import { GetMatchService } from '../../service/get';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
+  GetMatchRunResultResponseSchema,
   GetMatchTypeResponseSchema,
   GetRankingResponseSchema,
   MainSchema,
@@ -25,7 +27,8 @@ export class MatchController {
     private readonly getMatchService: GetMatchService,
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
-    private readonly generateRankingService: GenerateRankingService
+    private readonly generateRankingService: GenerateRankingService,
+    private readonly fetchRunResultService: FetchRunResultService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -281,6 +284,25 @@ export class MatchController {
         points: v.points,
         goalTimeSeconds: v.goalTimeSeconds,
       }))
+    );
+  }
+
+  async getRunResultsByMatchID(
+    matchType: MatchType,
+    matchID: PreMatchID | MainMatchID
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchRunResultResponseSchema>>> {
+    const res = await this.fetchRunResultService.handle(matchType, matchID as PreMatchID);
+    if (Result.isErr(res)) return res;
+    return Result.ok(
+      Result.unwrap(res).map(
+        (v): z.infer<typeof RunResultSchema> => ({
+          id: v.getId(),
+          teamID: v.getTeamId(),
+          points: v.getPoints(),
+          goalTimeSeconds: v.getGoalTimeSeconds(),
+          finishState: v.isGoal() ? 'goal' : 'finished',
+        })
+      )
     );
   }
 }
