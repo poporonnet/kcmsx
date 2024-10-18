@@ -1,4 +1,14 @@
-import { Box, Button, Group, rem, Table, Text } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Code,
+  Group,
+  Paper,
+  rem,
+  Table,
+  Text,
+  Title,
+} from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import {
@@ -32,6 +42,15 @@ const notifyError = (error: keyof typeof errorMessages) => {
     message: errorMessages[error],
     color: "red",
   });
+};
+
+const csvDescription = {
+  name: "1文字以上。重複できない。",
+  member1: "3文字以上。",
+  member2: "3文字以上。1人の場合は空欄。",
+  robotType: config.robotTypes.join("または"),
+  departmentType: config.departmentTypes.join("または"),
+  clubName: "所属していなければ空欄。",
 };
 
 export const RegisterBulk = () => {
@@ -166,15 +185,13 @@ export const RegisterBulk = () => {
           </Button>
         </>
       ) : (
-        <Box
+        <Paper
           maw={620}
-          style={{
-            boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.05)",
-            borderRadius: rem(15),
-          }}
           mx="auto"
           bd="2px solid gray"
           p={rem(10)}
+          radius="xl"
+          shadow="sm"
         >
           <Dropzone
             onDrop={handleDrop}
@@ -229,8 +246,13 @@ export const RegisterBulk = () => {
               </div>
             </Group>
           </Dropzone>
-        </Box>
+        </Paper>
       )}
+      <Paper p="xl" mt={16}>
+        <Title order={3}>CSVの形式</Title>
+        <DescriptionTable />
+        <RegisterBulkSample />
+      </Paper>
     </>
   );
 };
@@ -270,5 +292,46 @@ const EntryTable = (props: { data: string[][]; errors: boolean[][] }) => {
         </Table.Tbody>
       </Table>
     </Box>
+  );
+};
+
+const DescriptionTable = () => {
+  return (
+    <Table mb={10} striped withTableBorder horizontalSpacing="md">
+      <Table.Thead>
+        <Table.Tr>
+          <Table.Th ta="center">カラム名</Table.Th>
+          <Table.Th ta="center">制約</Table.Th>
+        </Table.Tr>
+      </Table.Thead>
+      <Table.Tbody>
+        {Object.entries(csvDescription).map(([key, value]) => (
+          <Table.Tr key={key}>
+            <Table.Td ta="center">
+              <Text>{key}</Text>
+            </Table.Td>
+            <Table.Td ta="left">
+              <Text>{value}</Text>
+            </Table.Td>
+          </Table.Tr>
+        ))}
+      </Table.Tbody>
+    </Table>
+  );
+};
+
+const RegisterBulkSample = () => {
+  const sampleCsv = `name,member1,member2,robotType,departmentType,clubName 
+はなびらちーむ,さくら,あお,leg,elementary,Rubyクラブ
+優勝するぞ,ちひろ,,${config.robotTypes[0]},elementary,
+ひまわり,ゆうた,ゆうと,leg,${config.departmentTypes[0]},`;
+
+  return (
+    <>
+      <Title order={3}>CSVの例</Title>
+      <Code block ta={"left"}>
+        {sampleCsv}
+      </Code>
+    </>
   );
 };
