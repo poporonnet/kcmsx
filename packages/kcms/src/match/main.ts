@@ -20,17 +20,18 @@ import { CreateRunResultArgs } from './model/runResult';
 import {
   GetMatchIdRoute,
   GetMatchRoute,
+  GetMatchRunResultRoute,
   GetMatchTypeRoute,
   GetRankingRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
+import { FetchRunResultService } from './service/fetchRunResult';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
 import { GetMatchService } from './service/get';
 import { upcase } from './utility/upcase';
-
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Repositories
@@ -62,13 +63,14 @@ const generatePreMatchService = new GeneratePreMatchService(
   preMatchRepository
 );
 const generateRankingService = new GenerateRankingService(preMatchRepository);
+const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
 const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
   generatePreMatchService,
-  generateRankingService
+  generateRankingService,
+  fetchRunResultService
 );
-
 export const matchHandler = new OpenAPIHono();
 
 matchHandler.openapi(GetMatchRoute, async (c) => {
@@ -99,18 +101,6 @@ matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
     return c.json({ description: errorToCode(res[1]) }, 400);
   }
   return c.json(200);
-});
-
-matchHandler.openapi(GetMatchIdRoute, async (c) => {
-  const { matchType, matchID } = c.req.valid('param');
-
-  const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);
-  if (Result.isErr(res)) {
-    const error = Result.unwrapErr(res);
-    return c.json({ description: error.message }, 400);
-  }
-
-  return c.json(Result.unwrap(res), 200);
 });
 
 matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
@@ -151,6 +141,20 @@ matchHandler.openapi(GetRankingRoute, async (c) => {
   const { matchType, departmentType } = c.req.valid('param');
 
   const res = await matchController.getRanking(matchType, departmentType);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.openapi(GetMatchRunResultRoute, async (c) => {
+  const { matchType, matchID } = c.req.valid('param');
+
+  const res = await matchController.getRunResultsByMatchID(
+    matchType,
+    matchID as MainMatchID | PreMatchID
+  );
   if (Result.isErr(res)) {
     const error = Result.unwrapErr(res);
     return c.json({ description: error.message }, 400);
