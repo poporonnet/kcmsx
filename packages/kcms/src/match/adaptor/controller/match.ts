@@ -17,6 +17,7 @@ import {
   PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
+  ShortPreSchema,
 } from '../validator/match';
 
 export class MatchController {
@@ -59,6 +60,7 @@ export class MatchController {
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          matchType: 'pre',
           departmentType: v.getDepartmentType(),
           leftTeam: getTeam(v.getTeamId1()),
           rightTeam: getTeam(v.getTeamId2()),
@@ -90,10 +92,11 @@ export class MatchController {
     const matches = Result.unwrap(res);
 
     return Result.ok(
-      matches.map((v) => {
+      matches.map((v): z.infer<typeof ShortPreSchema> => {
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          matchType: 'pre',
           departmentType: v.getDepartmentType(),
           leftTeamID: v.getTeamId1(),
           rightTeamID: v.getTeamId2(),
@@ -125,9 +128,10 @@ export class MatchController {
         };
       };
 
-      return Result.ok({
+      return Result.ok<z.infer<typeof PreSchema>>({
         id: match.getId(),
         matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        matchType: 'pre',
         departmentType: match.getDepartmentType(),
         leftTeam: await getTeam(match.getTeamId1()),
         rightTeam: await getTeam(match.getTeamId2()),
@@ -168,6 +172,7 @@ export class MatchController {
           return {
             id: v.getId(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            matchType: 'pre',
             departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
             leftTeam:
               v.getTeamId1() == undefined
