@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Cat } from "@mikuroxina/mini-fn";
-import { config, RobotType } from "config";
+import { config } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter } from "../components/Filter";
 import { LoaderButton } from "../components/LoaderButton";
