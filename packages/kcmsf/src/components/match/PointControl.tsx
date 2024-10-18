@@ -17,7 +17,7 @@ export const PointControl = (props: Props) => (
   <>
     {props.rule.type === "single" && (
       <PointSingle
-        initial={props.rule.initial}
+        value={props.team.point.state[props.rule.name]}
         color={props.color}
         onChange={(active) => {
           if (props.rule.type !== "single") return; // type narrowing
@@ -35,7 +35,7 @@ export const PointControl = (props: Props) => (
     )}
     {props.rule.type === "countable" && (
       <PointCountable
-        initial={props.rule.initial}
+        value={props.team.point.state[props.rule.name]}
         color={props.color}
         validate={props.rule.validate}
         onChange={(count) => {

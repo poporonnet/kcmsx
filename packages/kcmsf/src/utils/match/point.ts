@@ -26,4 +26,10 @@ export class Point {
       })
       .reduce((sum, point) => (sum += point), 0);
   }
+
+  public reset(): void {
+    config.rules.forEach((rule) => {
+      this._state[rule.name] = rule.initial as never;
+    });
+  }
 }

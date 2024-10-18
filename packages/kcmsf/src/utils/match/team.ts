@@ -37,4 +37,9 @@ export class Team {
         (team._goalTimeSeconds = goalTimeSec),
     ];
   }
+
+  public reset(): void {
+    this._point.reset();
+    this._goalTimeSeconds = undefined;
+  }
 }
