@@ -1,4 +1,4 @@
-import { DepartmentType } from "config";
+import { DepartmentType, MatchType } from "config";
 import { RunResult } from "./runResult";
 
 /**
@@ -21,16 +21,25 @@ type MatchBase = {
 };
 
 /**
+ * マッチの試合種別にかかわる情報
+ */
+type MatchTypeRecord<Type extends MatchType> = {
+  matchType: Type;
+};
+
+/**
  * 予選のマッチ
  */
-export type PreMatch = MatchBase & {
-  leftTeam?: BriefTeam;
-  rightTeam?: BriefTeam;
-};
+export type PreMatch = MatchBase &
+  MatchTypeRecord<"pre"> & {
+    leftTeam?: BriefTeam;
+    rightTeam?: BriefTeam;
+  };
 
 /**
  * 本戦のマッチ
  * @todo `winnerId`のプロパティ名が誤っている (`winnerID`)
+ * @todo MainMatchに`matchType`が存在しない
  */
 export type MainMatch = MatchBase & {
   team1: BriefTeam;
