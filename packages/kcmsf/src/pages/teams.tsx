@@ -80,7 +80,7 @@ export const Teams = () => {
         label: clubName,
       }))
       .concat([{ value: "", label: "(所属なし)" }]);
-    const robotType = config.robots.map(({type, name}) => ({
+    const robotType = config.robots.map(({ type, name }) => ({
       value: type,
       label: name,
     }));
