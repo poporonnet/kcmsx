@@ -18,7 +18,6 @@ type MatchBase = {
   matchCode: `${number}-${number}`;
   departmentType: DepartmentType;
   runResults: RunResult[];
-  departmentType: DepartmentType;
 };
 
 /**
