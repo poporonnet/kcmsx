@@ -159,7 +159,7 @@ matchHandler.openapi(GetMatchRunResultRoute, async (c) => {
     const error = Result.unwrapErr(res);
     return c.json({ description: error.message }, 400);
   }
-  return c.json(Result.unwrap(res).flat(), 200);
+  return c.json(Result.unwrap(res), 200);
 });
 
 matchHandler.doc('/openapi/match.json', {

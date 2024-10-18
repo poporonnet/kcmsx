@@ -285,10 +285,10 @@ export class MatchController {
   async getRunResultsByMatchID(
     matchType: MatchType,
     matchID: PreMatchID | MainMatchID
-  ): Promise<Result.Result<Error, z.infer<typeof GetMatchRunResultResponseSchema>[]>> {
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchRunResultResponseSchema>>> {
     const res = await this.fetchRunResultService.handle(matchType, matchID as PreMatchID);
     if (Result.isErr(res)) return res;
-    return Result.ok([
+    return Result.ok(
       Result.unwrap(res).map(
         (v): z.infer<typeof RunResultSchema> => ({
           id: v.getId(),
@@ -297,7 +297,7 @@ export class MatchController {
           goalTimeSeconds: v.getGoalTimeSeconds(),
           finishState: v.isGoal() ? 'goal' : 'finished',
         })
-      ),
-    ]);
+      )
+    );
   }
 }
