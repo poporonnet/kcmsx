@@ -1,4 +1,5 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
+import { IconRotate } from "@tabler/icons-react";
 import {
   config,
   DepartmentType,
@@ -6,7 +7,8 @@ import {
   MatchType,
   RobotType,
 } from "config";
-import { useEffect, useState } from "react";
+import { Side } from "config/src/types/matchInfo";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useTimer } from "react-timer-hook";
 import { MatchSubmit } from "../components/match/matchSubmit";
@@ -149,9 +151,32 @@ export const Match = () => {
     }
   };
 
+  const resetPointState = useCallback(
+    (side: Side) => {
+      matchJudge.team(side).reset();
+      forceReload();
+    },
+    [matchJudge, forceReload]
+  );
+
   return (
     <Flex h="100%" direction="column" gap="md" align="center" justify="center">
-      <Text size="2rem">{matchCode}</Text>
+      {matchInfo && (
+        <Paper w="100%" p="xs" withBorder>
+          <Flex direction="row" align="center" justify="center">
+            <Text size="2rem" c="blue" flex={1}>
+              {matchInfo?.teams.left?.teamName}
+            </Text>
+            <Flex direction="column" align="center" justify="center" c="dark">
+              {config.match[matchInfo?.matchType].name}
+              <Text size="2rem">#{matchCode}</Text>
+            </Flex>
+            <Text size="2rem" c="red" flex={1}>
+              {matchInfo?.teams.right?.teamName}
+            </Text>
+          </Flex>
+        </Paper>
+      )}
       <Button
         w="100%"
         h="auto"
@@ -164,11 +189,17 @@ export const Match = () => {
       </Button>
       <Paper w="100%" withBorder>
         <Flex align="center" justify="center">
-          {!isExhibition && matchInfo && (
-            <Text pl="md" size="2rem" c="blue" style={{ flex: 1 }}>
-              {matchInfo.teams.left?.teamName}
-            </Text>
-          )}
+          <Button
+            flex={1}
+            variant="transparent"
+            c="blue"
+            leftSection={<IconRotate />}
+            size="xl"
+            fw="normal"
+            onClick={() => resetPointState("left")}
+          >
+            リセット
+          </Button>
           <Flex pb="sm" gap="sm">
             <Text size="4rem" c="blue">
               {isExhibition || matchInfo?.teams.left
@@ -182,11 +213,17 @@ export const Match = () => {
                 : 0}
             </Text>
           </Flex>
-          {!isExhibition && matchInfo && (
-            <Text pr="md" size="2rem" c="red" style={{ flex: 1 }}>
-              {matchInfo.teams.right?.teamName}
-            </Text>
-          )}
+          <Button
+            flex={1}
+            variant="transparent"
+            c="red"
+            leftSection={<IconRotate />}
+            size="xl"
+            fw="normal"
+            onClick={() => resetPointState("right")}
+          >
+            リセット
+          </Button>
         </Flex>
       </Paper>
       <Divider w="100%" />
