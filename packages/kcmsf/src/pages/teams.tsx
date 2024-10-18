@@ -10,26 +10,13 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Cat } from "@mikuroxina/mini-fn";
-import { config, DepartmentType, RobotType } from "config";
+import { config } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter } from "../components/Filter";
 import { LoaderButton } from "../components/LoaderButton";
 import { Order, Sort } from "../components/Sort";
-
-type Team = {
-  id: string;
-  name: string;
-  entryCode: string;
-  members: string[];
-  clubName: string;
-  robotType: RobotType;
-  departmentType: DepartmentType;
-  isEntered: boolean;
-};
-
-type TeamResponse = {
-  teams: Team[];
-};
+import { GetTeamsResponse } from "../types/api/team";
+import { Team } from "../types/team";
 
 type Comparer = {
   [K in keyof Team]?: (a: Team[K], b: Team[K]) => number;
@@ -80,10 +67,10 @@ export const Teams = () => {
         label: clubName,
       }))
       .concat([{ value: "", label: "(所属なし)" }]);
-    const robotType: { value: RobotType; label: string }[] = [
-      { value: "leg", label: "歩行型" },
-      { value: "wheel", label: "車輪型" },
-    ]; // TODO: ラベルをconfigで設定する
+    const robotType = config.robots.map(({ type, name }) => ({
+      value: type,
+      label: name,
+    }));
     const departmentType = config.departments.map(({ type, name }) => ({
       value: type,
       label: name,
@@ -169,7 +156,9 @@ export const Teams = () => {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
         method: "GET",
       }).catch(() => undefined);
-      const teamResponse = (await response?.json()) as TeamResponse | undefined;
+      const teamResponse = (await response?.json()) as
+        | GetTeamsResponse
+        | undefined;
 
       setTeams(
         teamResponse
