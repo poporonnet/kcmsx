@@ -297,7 +297,7 @@ export class MatchController {
           goalTimeSeconds: v.getGoalTimeSeconds(),
           finishState: v.isGoal() ? 'goal' : 'finished',
         })
-      )
+      ),
     ]);
   }
 }
