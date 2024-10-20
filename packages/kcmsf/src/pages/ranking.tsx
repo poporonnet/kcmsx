@@ -78,7 +78,7 @@ export const Ranking = () => {
               <Table.Th ta="center">順位</Table.Th>
               <Table.Th ta="center">チーム名</Table.Th>
               <Table.Th ta="center">合計得点</Table.Th>
-              <Table.Th ta="center">ゴールタイム</Table.Th>
+              <Table.Th ta="center">ベストタイム</Table.Th>
               {matchType == "pre" && <Table.Th ta="center">本戦出場</Table.Th>}
             </Table.Tr>
           </Table.Thead>

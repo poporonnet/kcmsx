@@ -18,7 +18,7 @@
     "@mantine/core": "^7.3.1",
     "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.3.1",
-    "@mantine/notifications": "7.13.2",
+    "@mantine/notifications": "7.13.3",
     "@mikuroxina/mini-fn": "^6.0.0",
     "@tabler/icons-react": "3.17.0",
     "config": "workspace:^",
@@ -56,5 +56,5 @@
     "vite": "^5.0.0",
     "vitest": "^2.0.0"
   },
-  "packageManager": "pnpm@9.12.1"
+  "packageManager": "pnpm@9.12.2"
 }
