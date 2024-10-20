@@ -1,5 +1,9 @@
 import {
+  Checkbox,
+  Divider,
   Flex,
+  List,
+  Paper,
   SegmentedControl,
   Table,
   Text,
@@ -8,6 +12,7 @@ import {
 } from "@mantine/core";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useEffect, useState } from "react";
+import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { useInterval } from "../hooks/useInterval";
 import { GetRankingResponse } from "../types/api/contest";
 import { RankingRecord } from "../types/contest";
@@ -19,6 +24,9 @@ export const Ranking = () => {
     config.departmentTypes[0]
   );
   const [ranking, setRanking] = useState<RankingRecord[]>();
+  const [selectedTeams, setSelectedTeams] = useState<
+    Map<RankingRecord["teamID"], RankingRecord>
+  >(new Map());
 
   const getRanking = useCallback(async () => {
     const res = await fetch(
@@ -48,37 +56,65 @@ export const Ranking = () => {
         setMatchType={setMatchType}
         setDepartmentType={setDepartmentType}
       />
-      <Table
-        striped
-        withTableBorder
-        stickyHeader
-        stickyHeaderOffset={60}
-        horizontalSpacing="lg"
-        style={{ fontSize: "1rem" }}
+      <Flex
+        direction="row"
+        align="stretch"
+        justify="center"
+        gap="md"
+        h="fit-content"
       >
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th ta="center">順位</Table.Th>
-            <Table.Th ta="center">チーム名</Table.Th>
-            <Table.Th ta="center">合計得点</Table.Th>
-            <Table.Th ta="center">ベストタイム</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {ranking?.map((record) => (
-            <Table.Tr key={record.teamID}>
-              <Table.Td>{record.rank}</Table.Td>
-              <Table.Td ta="start">{record.teamName}</Table.Td>
-              <Table.Td>{record.points}</Table.Td>
-              <Table.Td>
-                {record.goalTimeSeconds != null
-                  ? parseSeconds(record.goalTimeSeconds)
-                  : "-"}
-              </Table.Td>
+        <Table
+          striped
+          withTableBorder
+          stickyHeader
+          stickyHeaderOffset={60}
+          horizontalSpacing="lg"
+          highlightOnHover={matchType == "pre"}
+          style={{ fontSize: "1rem" }}
+          flex={1}
+        >
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th ta="center">順位</Table.Th>
+              <Table.Th ta="center">チーム名</Table.Th>
+              <Table.Th ta="center">合計得点</Table.Th>
+              <Table.Th ta="center">ベストタイム</Table.Th>
+              {matchType == "pre" && <Table.Th ta="center">本戦出場</Table.Th>}
             </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
+          </Table.Thead>
+          <Table.Tbody>
+            {ranking?.map((record) => (
+              <RankingRow
+                record={record}
+                selectable
+                selected={selectedTeams.has(record.teamID)}
+                onSelect={() => {
+                  if (selectedTeams.has(record.teamID))
+                    selectedTeams.delete(record.teamID);
+                  else if (selectedTeams.size < 2)
+                    selectedTeams.set(record.teamID, record);
+                  else return;
+
+                  setSelectedTeams(new Map(selectedTeams));
+                }}
+                key={record.teamID}
+              />
+            ))}
+          </Table.Tbody>
+        </Table>
+        {matchType == "pre" && (
+          <GenerateMainMatchCard
+            requiredTeamCount={2}
+            selectedTeams={[...selectedTeams.values()]}
+            generate={async () => {
+              // TODO: 実装され次第実際の処理に置き換える
+              return Promise.reject(
+                new Error("Main match generation is not implemented.")
+              );
+            }}
+          />
+        )}
+      </Flex>
     </Flex>
   );
 };
@@ -137,5 +173,94 @@ const Control = ({
         </Table.Tr>
       </Table.Tbody>
     </Table>
+  );
+};
+
+const RankingRow = ({
+  record,
+  selectable,
+  selected,
+  onSelect,
+}: {
+  record: RankingRecord;
+  selectable?: boolean;
+  selected?: boolean;
+  onSelect?: () => void;
+}) => {
+  const theme = useMantineTheme();
+
+  return (
+    <Table.Tr
+      key={record.teamID}
+      onClick={selectable ? onSelect : undefined}
+      bg={selected ? theme.colors.blue[1] : undefined}
+      style={{
+        cursor: selectable ? "pointer" : "default",
+      }}
+    >
+      <Table.Td>{record.rank}</Table.Td>
+      <Table.Td ta="left">{record.teamName}</Table.Td>
+      <Table.Td>{record.points}</Table.Td>
+      <Table.Td>
+        {record.goalTimeSeconds != null
+          ? parseSeconds(record.goalTimeSeconds)
+          : "-"}
+      </Table.Td>
+      {selectable && (
+        <Table.Td>
+          <Flex justify="center">
+            <Checkbox checked={selected} readOnly />
+          </Flex>
+        </Table.Td>
+      )}
+    </Table.Tr>
+  );
+};
+
+const GenerateMainMatchCard = ({
+  requiredTeamCount,
+  selectedTeams,
+  generate,
+}: {
+  requiredTeamCount: number;
+  selectedTeams: RankingRecord[];
+  generate: () => Promise<void>;
+}) => {
+  const remainingTeamCount = requiredTeamCount - selectedTeams.length;
+
+  return (
+    <Paper withBorder w="15rem" p="md" h="auto">
+      <Flex direction="column" gap="xs" h="100%">
+        <Title order={4}>本戦試合生成</Title>
+        <Divider />
+        現在選択しているチーム:
+        <List withPadding flex={1} ta="left">
+          {selectedTeams.map(({ teamID, teamName }) => (
+            <List.Item key={teamID}>{teamName}</List.Item>
+          ))}
+        </List>
+        {remainingTeamCount > 0 && (
+          <Text c="red">
+            本戦試合の生成にはあと{remainingTeamCount}
+            チームの選択が必要です。
+          </Text>
+        )}
+        <GenerateMatchButton
+          generate={generate}
+          disabled={remainingTeamCount > 0}
+          modalTitle="本戦試合表生成確認"
+          modalDetail={
+            <>
+              以下のチームによる本戦試合を生成します:
+              <List withPadding>
+                {selectedTeams.map(({ teamID, teamName }) => (
+                  <List.Item key={teamID}>{teamName}</List.Item>
+                ))}
+              </List>
+            </>
+          }
+        />
+      </Flex>
+    </Paper>
   );
 };
