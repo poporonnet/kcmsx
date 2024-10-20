@@ -5,18 +5,21 @@ import { Team, TeamID } from '../../../team/models/team';
 import { FetchTeamService } from '../../../team/service/get';
 import { MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
+import { FetchRunResultService } from '../../service/fetchRunResult';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
 import { GetMatchService } from '../../service/get';
 import {
   GetMatchIdResponseSchema,
   GetMatchResponseSchema,
+  GetMatchRunResultResponseSchema,
   GetMatchTypeResponseSchema,
   GetRankingResponseSchema,
   MainSchema,
   PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
+  ShortPreSchema,
 } from '../validator/match';
 
 export class MatchController {
@@ -24,7 +27,8 @@ export class MatchController {
     private readonly getMatchService: GetMatchService,
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
-    private readonly generateRankingService: GenerateRankingService
+    private readonly generateRankingService: GenerateRankingService,
+    private readonly fetchRunResultService: FetchRunResultService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -59,6 +63,7 @@ export class MatchController {
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          matchType: 'pre',
           departmentType: v.getDepartmentType(),
           leftTeam: getTeam(v.getTeamId1()),
           rightTeam: getTeam(v.getTeamId2()),
@@ -90,10 +95,11 @@ export class MatchController {
     const matches = Result.unwrap(res);
 
     return Result.ok(
-      matches.map((v) => {
+      matches.map((v): z.infer<typeof ShortPreSchema> => {
         return {
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          matchType: 'pre',
           departmentType: v.getDepartmentType(),
           leftTeamID: v.getTeamId1(),
           rightTeamID: v.getTeamId2(),
@@ -125,9 +131,10 @@ export class MatchController {
         };
       };
 
-      return Result.ok({
+      return Result.ok<z.infer<typeof PreSchema>>({
         id: match.getId(),
         matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        matchType: 'pre',
         departmentType: match.getDepartmentType(),
         leftTeam: await getTeam(match.getTeamId1()),
         rightTeam: await getTeam(match.getTeamId2()),
@@ -168,6 +175,7 @@ export class MatchController {
           return {
             id: v.getId(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            matchType: 'pre',
             departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
             leftTeam:
               v.getTeamId1() == undefined
@@ -276,6 +284,25 @@ export class MatchController {
         points: v.points,
         goalTimeSeconds: v.goalTimeSeconds,
       }))
+    );
+  }
+
+  async getRunResultsByMatchID(
+    matchType: MatchType,
+    matchID: PreMatchID | MainMatchID
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchRunResultResponseSchema>>> {
+    const res = await this.fetchRunResultService.handle(matchType, matchID as PreMatchID);
+    if (Result.isErr(res)) return res;
+    return Result.ok(
+      Result.unwrap(res).map(
+        (v): z.infer<typeof RunResultSchema> => ({
+          id: v.getId(),
+          teamID: v.getTeamId(),
+          points: v.getPoints(),
+          goalTimeSeconds: v.getGoalTimeSeconds(),
+          finishState: v.isGoal() ? 'goal' : 'finished',
+        })
+      )
     );
   }
 }

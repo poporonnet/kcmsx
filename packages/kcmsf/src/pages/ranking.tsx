@@ -58,19 +58,17 @@ export const Ranking = () => {
       >
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ textAlign: "center" }}>順位</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>チーム名</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>合計得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
+            <Table.Th ta="center">順位</Table.Th>
+            <Table.Th ta="center">チーム名</Table.Th>
+            <Table.Th ta="center">合計得点</Table.Th>
+            <Table.Th ta="center">ベストタイム</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {ranking?.map((record) => (
             <Table.Tr key={record.teamID}>
               <Table.Td>{record.rank}</Table.Td>
-              <Table.Td style={{ textAlign: "start" }}>
-                {record.teamName}
-              </Table.Td>
+              <Table.Td ta="start">{record.teamName}</Table.Td>
               <Table.Td>{record.points}</Table.Td>
               <Table.Td>
                 {record.goalTimeSeconds != null
