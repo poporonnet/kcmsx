@@ -61,7 +61,7 @@ export const Ranking = () => {
             <Table.Th style={{ textAlign: "center" }}>順位</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>チーム名</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>合計得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ベストタイム</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
