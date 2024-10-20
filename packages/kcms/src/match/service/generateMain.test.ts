@@ -16,17 +16,17 @@ describe('GenerateMainMatchService', () => {
     const res = await service.handle('1' as TeamID, '2' as TeamID);
     expect(Result.isOk(res)).toBe(true);
 
-    const team = Result.unwrap(res);
-    expect(team.getTeamId1()).toBe('1');
-    expect(team.getTeamId2()).toBe('2');
+    const match = Result.unwrap(res);
+    expect(match.getTeamId1()).toBe('1');
+    expect(match.getTeamId2()).toBe('2');
   });
 
   it('(安来用) 本戦試合の試合番号は1-1になる', async () => {
     const res = await service.handle('1' as TeamID, '2' as TeamID);
     expect(Result.isOk(res)).toBe(true);
 
-    const team = Result.unwrap(res);
-    expect(team.getMatchIndex()).toBe(1);
-    expect(team.getCourseIndex()).toBe(1);
+    const match = Result.unwrap(res);
+    expect(match.getMatchIndex()).toBe(1);
+    expect(match.getCourseIndex()).toBe(1);
   });
 });
