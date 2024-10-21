@@ -1,4 +1,5 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { config } from 'config';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TeamID } from '../../../team/models/team.js';
 import { testRankingMainMatchData } from '../../../testData/match.js';
@@ -18,6 +19,7 @@ describe('DummyMainMatchRepository', () => {
       id: '900' as MainMatchID,
       courseIndex: 0,
       matchIndex: 91,
+      departmentType: config.departmentTypes[0],
       teamId1: '91' as TeamID,
       teamId2: '92' as TeamID,
       winnerId: '91' as TeamID,
@@ -53,6 +55,7 @@ describe('DummyMainMatchRepository', () => {
       id: '100' as MainMatchID,
       courseIndex: 0,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '1' as TeamID,
       teamId2: '2' as TeamID,
       winnerId: '1' as TeamID,
