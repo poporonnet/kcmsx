@@ -117,7 +117,11 @@ export class MatchController {
     team1ID: string,
     team2ID: string
   ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateManualResponseSchema>>> {
-    const res = await this.generateMainMatchService.handle(team1ID as TeamID, team2ID as TeamID);
+    const res = await this.generateMainMatchService.handle(
+      departmentType,
+      team1ID as TeamID,
+      team2ID as TeamID
+    );
     if (Result.isErr(res)) return res;
 
     const match = Result.unwrap(res);

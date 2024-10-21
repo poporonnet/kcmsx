@@ -1,4 +1,5 @@
 import { Result } from '@mikuroxina/mini-fn';
+import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
@@ -13,7 +14,7 @@ describe('GenerateMainMatchService', () => {
   const service = new GenerateMainMatchService(mainMatchRepository, idGenerator);
 
   it('本戦試合を生成できる', async () => {
-    const res = await service.handle('1' as TeamID, '2' as TeamID);
+    const res = await service.handle(config.departmentTypes[0], '1' as TeamID, '2' as TeamID);
     expect(Result.isOk(res)).toBe(true);
 
     const match = Result.unwrap(res);
@@ -22,7 +23,7 @@ describe('GenerateMainMatchService', () => {
   });
 
   it('(安来用) 本戦試合の試合番号は1-1になる', async () => {
-    const res = await service.handle('1' as TeamID, '2' as TeamID);
+    const res = await service.handle(config.departmentTypes[0], '1' as TeamID, '2' as TeamID);
     expect(Result.isOk(res)).toBe(true);
 
     const match = Result.unwrap(res);
