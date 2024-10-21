@@ -9,7 +9,7 @@ export const LoaderButton = forwardRef<
   const [loading, { open: startLoad, close: finishLoad }] = useDisclosure();
   const onClick = useCallback(async () => {
     startLoad();
-    await load();
+    await load().catch((err) => console.error(err));
     finishLoad();
   }, [load, startLoad, finishLoad]);
 

@@ -8,6 +8,9 @@ import { RunResult, RunResultID } from '../../model/runResult';
 export class PrismaMainMatchRepository implements MainMatchRepository {
   constructor(private readonly client: PrismaClient) {}
 
+  //sqliteのIntegerにはInfinityを入れられないため十分に大きい整数に変換する
+  private readonly INT32MAX: number = 2147483647;
+
   private deserialize(
     res: Prisma.PromiseReturnType<
       typeof this.client.mainMatch.findMany<{ include: { runResult: true } }>
@@ -30,7 +33,8 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             id: v.id as RunResultID,
             teamID: v.teamID as TeamID,
             points: v.points,
-            goalTimeSeconds: v.goalTimeSeconds,
+            // NOTE: Infinity: 2147483647
+            goalTimeSeconds: v.goalTimeSeconds === this.INT32MAX ? Infinity : v.goalTimeSeconds,
             // NOTE: GOAL: 0 , FINISHED: 1
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
@@ -128,7 +132,10 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
                   id: v.getId(),
                   teamID: v.getTeamId(),
                   points: v.getPoints(),
-                  goalTimeSeconds: v.getGoalTimeSeconds(),
+                  // NOTE: Infinity: 2147483647
+                  goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                    ? v.getGoalTimeSeconds()
+                    : this.INT32MAX,
                   // NOTE: GOAL: 0 , FINISHED: 1
                   finishState: v.isGoal() ? 0 : 1,
                 },
