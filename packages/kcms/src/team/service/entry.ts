@@ -21,8 +21,8 @@ export class EntryService {
     const teamRes = await this.teamRepository.findByID(teamID);
     const matchRes = await this.preMatch.findAllPreMatch();
 
-    if (!Result.isErr(matchRes)) {
-      return Result.err(new Error('Cannot enter now'));
+    if (Result.isOk(matchRes) && matchRes.length > 0) {
+      return Result.err(new Error('modify entry'));
     }
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));
@@ -46,8 +46,8 @@ export class EntryService {
     const teamRes = await this.teamRepository.findByID(teamID);
     const matchRes = await this.preMatch.findAllPreMatch();
 
-    if (!Result.isErr(matchRes)) {
-      return Result.err(new Error('Cannot enter now'));
+    if (Result.isOk(matchRes) && matchRes.length > 0) {
+      return Result.err(new Error('modify entry'));
     }
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));
