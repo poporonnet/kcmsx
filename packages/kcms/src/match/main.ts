@@ -120,7 +120,6 @@ matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
 
 /**
  * 本戦試合を手動で生成
- *
  */
 matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
   const { departmentType } = c.req.valid('param');
