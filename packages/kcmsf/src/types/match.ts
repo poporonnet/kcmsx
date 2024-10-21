@@ -68,6 +68,7 @@ export type ShortPreMatch = MatchBase & {
 export type ShortMainMatch = MatchBase & {
   team1ID: string;
   team2ID: string;
+  winnerId: string;
 };
 
 /**
