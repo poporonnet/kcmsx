@@ -10,11 +10,14 @@ import {
   Title,
   useMantineTheme,
 } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { useInterval } from "../hooks/useInterval";
 import { GetRankingResponse } from "../types/api/contest";
+import { GeneratePreMatchManualRequest } from "../types/api/match";
 import { RankingRecord } from "../types/contest";
 import { parseSeconds } from "../utils/time";
 
@@ -27,6 +30,7 @@ export const Ranking = () => {
   const [selectedTeams, setSelectedTeams] = useState<
     Map<RankingRecord["teamID"], RankingRecord>
   >(new Map());
+  const navigate = useNavigate();
 
   const getRanking = useCallback(async () => {
     const res = await fetch(
@@ -40,6 +44,34 @@ export const Ranking = () => {
     const rankingData = (await res.json()) as GetRankingResponse;
     setRanking(rankingData);
   }, [matchType, departmentType]);
+
+  const generateMainMatch = useCallback(
+    async (team1ID: string, team2ID: string) => {
+      const req: GeneratePreMatchManualRequest = {
+        team1ID,
+        team2ID,
+      };
+
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/match/main/${departmentType}/generate/manual`,
+        {
+          method: "POST",
+          body: JSON.stringify(req),
+        }
+      ).catch(() => undefined);
+
+      const isSucceeded = !!res?.ok;
+
+      notifications.show({
+        title: `試合表生成${isSucceeded ? "成功" : "失敗"}`,
+        message: `${config.department[departmentType].name}・${config.match.main.name}の試合表を生成${isSucceeded ? "しました" : "できませんでした"}`,
+        color: isSucceeded ? "green" : "red",
+      });
+
+      if (isSucceeded) navigate("/matchlist");
+    },
+    [departmentType, navigate]
+  );
 
   useEffect(() => {
     getRanking();
@@ -106,12 +138,7 @@ export const Ranking = () => {
           <GenerateMainMatchCard
             requiredTeamCount={2}
             selectedTeams={[...selectedTeams.values()]}
-            generate={async () => {
-              // TODO: 実装され次第実際の処理に置き換える
-              return Promise.reject(
-                new Error("Main match generation is not implemented.")
-              );
-            }}
+            generate={generateMainMatch}
           />
         )}
       </Flex>
@@ -224,7 +251,7 @@ const GenerateMainMatchCard = ({
 }: {
   requiredTeamCount: number;
   selectedTeams: RankingRecord[];
-  generate: () => Promise<void>;
+  generate: (team1ID: string, team2ID: string) => Promise<void>;
 }) => {
   const remainingTeamCount = requiredTeamCount - selectedTeams.length;
 
@@ -246,7 +273,9 @@ const GenerateMainMatchCard = ({
           </Text>
         )}
         <GenerateMatchButton
-          generate={generate}
+          generate={() =>
+            generate(selectedTeams[0].teamID, selectedTeams[1].teamID)
+          }
           disabled={remainingTeamCount > 0}
           modalTitle="本戦試合表生成確認"
           modalDetail={
