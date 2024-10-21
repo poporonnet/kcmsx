@@ -76,3 +76,12 @@ export type ShortMainMatch = MatchBase & {
  * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortMatch = ShortPreMatch | ShortMainMatch;
+
+/**
+ * 本戦のマッチのマニュアル生成に必要な情報
+ * @description `POST /match/main/{departmentType}/generate/manual`のみで使われる
+ */
+export type CreateMainMatchManualArgs = {
+  team1ID: string;
+  team2ID: string;
+};
