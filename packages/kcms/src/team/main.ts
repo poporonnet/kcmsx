@@ -19,6 +19,11 @@ import { TeamID } from './models/team.js';
 
 import { apiReference } from '@scalar/hono-api-reference';
 import { SnowflakeIDGenerator } from '../id/main';
+import { DummyMainMatchRepository } from '../match/adaptor/dummy/mainMatchRepository';
+import { DummyPreMatchRepository } from '../match/adaptor/dummy/preMatchRepository';
+import { PrismaMainMatchRepository } from '../match/adaptor/prisma/mainMatchRepository';
+import { PrismaPreMatchRepository } from '../match/adaptor/prisma/preMatchRepository';
+import { GetMatchService } from '../match/service/get';
 import { CreateTeamService } from './service/createTeam';
 import { DeleteTeamService } from './service/delete';
 import { EntryService } from './service/entry';
@@ -29,12 +34,20 @@ const isProduction = process.env.NODE_ENV === 'production';
 const teamRepository = isProduction
   ? new PrismaTeamRepository(prismaClient)
   : new DummyRepository();
+const preMatchRepository = isProduction
+  ? new PrismaPreMatchRepository(prismaClient)
+  : new DummyPreMatchRepository();
+const mainMatchRepository = isProduction
+  ? new PrismaMainMatchRepository(prismaClient)
+  : new DummyMainMatchRepository();
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
+
+const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
 
 const fetchTeamService = new FetchTeamService(teamRepository);
 const createTeamService = new CreateTeamService(teamRepository, idGenerator);
 const deleteTeamService = new DeleteTeamService(teamRepository);
-const entryService = new EntryService(teamRepository);
+const entryService = new EntryService(teamRepository, getMatchService);
 
 export const controller = new TeamController(
   createTeamService,

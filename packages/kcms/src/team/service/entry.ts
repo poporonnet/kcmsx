@@ -1,4 +1,5 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
+import { GetMatchService } from '../../match/service/get';
 import { TeamRepository } from '../models/repository';
 import { Team, TeamID } from '../models/team';
 
@@ -6,7 +7,10 @@ import { Team, TeamID } from '../models/team';
  * 当日参加を行うService
  */
 export class EntryService {
-  constructor(private readonly teamRepository: TeamRepository) {}
+  constructor(
+    private readonly teamRepository: TeamRepository,
+    private readonly preMatch: GetMatchService
+  ) {}
 
   /**
    * チームの出欠を登録します
@@ -15,6 +19,11 @@ export class EntryService {
    */
   async enter(teamID: TeamID): Promise<Result.Result<Error, Team>> {
     const teamRes = await this.teamRepository.findByID(teamID);
+    const matchRes = await this.preMatch.findAllPreMatch();
+
+    if (Result.isOk(matchRes) && matchRes.length > 0) {
+      return Result.err(new Error('modify entry'));
+    }
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));
     }
@@ -35,6 +44,11 @@ export class EntryService {
    */
   async cancel(teamID: TeamID): Promise<Result.Result<Error, Team>> {
     const teamRes = await this.teamRepository.findByID(teamID);
+    const matchRes = await this.preMatch.findAllPreMatch();
+
+    if (Result.isOk(matchRes) && matchRes.length > 0) {
+      return Result.err(new Error('modify entry'));
+    }
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));
     }
