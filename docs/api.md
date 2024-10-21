@@ -218,6 +218,8 @@
       "id": "70983405",
       // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
       "matchCode": "1-3",
+      // 試合種別 (matchType 設定依存)
+      "matchType": "main",
       // チームのカテゴリ (departmentType 設定依存)
       "departmentType": "elementary",
       // チーム1 (空になる可能性あり 空の場合undefined)

@@ -1,4 +1,5 @@
 import { Result } from '@mikuroxina/mini-fn';
+import { DepartmentType } from 'config';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
 import { MainMatch } from '../model/main';
@@ -10,7 +11,11 @@ export class GenerateMainMatchService {
     private readonly idGenerator: SnowflakeIDGenerator
   ) {}
 
-  async handle(teamID1: TeamID, teamID2: TeamID): Promise<Result.Result<Error, MainMatch>> {
+  async handle(
+    departmentType: DepartmentType,
+    teamID1: TeamID,
+    teamID2: TeamID
+  ): Promise<Result.Result<Error, MainMatch>> {
     const newIDRes = this.idGenerator.generate<MainMatch>();
     if (Result.isErr(newIDRes)) {
       return newIDRes;
@@ -21,6 +26,7 @@ export class GenerateMainMatchService {
       id: newID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType,
       runResults: [],
       teamId1: teamID1,
       teamId2: teamID2,

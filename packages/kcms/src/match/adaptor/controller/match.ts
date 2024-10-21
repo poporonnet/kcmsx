@@ -21,6 +21,7 @@ import {
   PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
+  ShortMainSchema,
   ShortPreSchema,
 } from '../validator/match';
 
@@ -117,14 +118,19 @@ export class MatchController {
     team1ID: string,
     team2ID: string
   ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateManualResponseSchema>>> {
-    const res = await this.generateMainMatchService.handle(team1ID as TeamID, team2ID as TeamID);
+    const res = await this.generateMainMatchService.handle(
+      departmentType,
+      team1ID as TeamID,
+      team2ID as TeamID
+    );
     if (Result.isErr(res)) return res;
 
     const match = Result.unwrap(res);
-    return Result.ok([
+    return Result.ok<z.infer<typeof ShortMainSchema>[]>([
       {
         id: match.getId(),
         matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        matchType: 'main',
         departmentType,
         team1ID: match.getTeamId1(),
         team2ID: match.getTeamId2(),
@@ -250,6 +256,7 @@ export class MatchController {
           return {
             id: v.getId(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            matchType: 'main',
             departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
             team1:
               v.getTeamId1() == undefined
