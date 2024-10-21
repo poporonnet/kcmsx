@@ -1,6 +1,7 @@
-import { Button, Flex, Text } from "@mantine/core";
+import { Button, Flex, Modal, Text } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconSend2 } from "@tabler/icons-react";
+import { IconSend, IconSend2 } from "@tabler/icons-react";
 import { MatchInfo } from "config";
 
 type TeamResult = {
@@ -72,21 +73,50 @@ export const MatchSubmit = ({
           }
     );
   };
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <Button
-      w="auto"
-      h="auto"
-      px="xl"
-      py="sm"
-      color="teal"
-      disabled={!available}
-      onClick={submit}
-    >
-      <Flex gap="xs">
-        <Text size="1.5rem">結果を送信</Text>
-        <IconSend2 />
+    <>
+      <Button
+        w="auto"
+        h="auto"
+        px="xl"
+        py="sm"
+        color="teal"
+        disabled={!available}
+        onClick={open}
+      >
+        <Flex gap="xs">
+          <Text size="1.5rem">結果を送信</Text>
+          <IconSend2 />
+        </Flex>
+      </Button>
+      <MatchSubmitModal opened={opened} close={close} submit={submit} />
+    </>
+  );
+};
+
+const MatchSubmitModal = ({
+  opened,
+  close,
+  submit,
+}: {
+  opened: boolean;
+  close: () => void;
+  submit: () => void;
+}) => {
+  const handleSubmit = () => {
+    submit();
+    close();
+  };
+  return (
+    <Modal opened={opened} onClose={close} title="試合結果送信確認" centered>
+      <Flex direction="column" gap="md">
+        <Text>この試合の結果を送信しますか?</Text>
+        <Button onClick={handleSubmit} leftSection={<IconSend />}>
+          試合結果を送信
+        </Button>
       </Flex>
-    </Button>
+    </Modal>
   );
 };
