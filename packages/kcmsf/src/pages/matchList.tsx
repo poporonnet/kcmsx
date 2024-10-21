@@ -4,24 +4,17 @@ import {
   Flex,
   List,
   Loader,
-  Modal,
-  Paper,
   Table,
   Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import {
-  IconAlertCircle,
-  IconRefresh,
-  IconTablePlus,
-} from "@tabler/icons-react";
+import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CourseSelector } from "../components/courseSelector";
-import { LoaderButton } from "../components/LoaderButton";
+import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { MatchStatusButton } from "../components/matchStatus";
 import { Match, PreMatch } from "../types/match";
 
@@ -41,7 +34,6 @@ export const MatchList = () => {
           ),
     [preMatches, select]
   );
-  const [opened, { open, close }] = useDisclosure(false);
 
   const fetchPre = useCallback(async () => {
     setError(false);
@@ -151,9 +143,6 @@ export const MatchList = () => {
         <>
           <Text>現在試合はありません。</Text>
           <GenerateMatchButton
-            opened={opened}
-            open={open}
-            close={close}
             generate={async () => {
               await Promise.all(
                 config.departmentTypes.map((departmentType) =>
@@ -161,8 +150,21 @@ export const MatchList = () => {
                 )
               );
               fetchPre();
-              close();
             }}
+            modalTitle="予選試合表生成確認"
+            modalDetail={
+              <>
+                以下の試合表を生成します:
+                <List withPadding>
+                  {config.departmentTypes.map((departmentType) => (
+                    <List.Item key={departmentType}>
+                      {config.match.pre.name}&emsp;
+                      {config.department[departmentType].name}
+                    </List.Item>
+                  ))}
+                </List>
+              </>
+            }
           />
         </>
       )}
@@ -203,48 +205,3 @@ const PreMatchRow = ({ match }: { match: PreMatch }) => (
     </Table.Td>
   </Table.Tr>
 );
-
-const GenerateMatchButton = ({
-  opened,
-  open,
-  close,
-  generate,
-}: {
-  opened: boolean;
-  open: () => void;
-  close: () => void;
-  generate: () => Promise<void>;
-}) => {
-  const theme = useMantineTheme();
-
-  return (
-    <>
-      <Modal opened={opened} onClose={close} title="試合表生成確認" centered>
-        <Flex direction="column" gap="md">
-          <Text>以下の試合表を生成します:</Text>
-          <List>
-            {config.departmentTypes.map((departmentType) => (
-              <List.Item>
-                {config.match.pre.name}&emsp;
-                {config.department[departmentType].name}
-              </List.Item>
-            ))}
-          </List>
-
-          <Paper c="red" fw={600} bg={theme.colors.red[0]} p="md" withBorder>
-            <Flex direction="row" align="center" gap="sm">
-              <IconAlertCircle size="3rem" />
-              試合表を生成すると、以降はチーム登録やエントリーを変更できません。
-            </Flex>
-          </Paper>
-          <LoaderButton load={generate} leftSection={<IconTablePlus />}>
-            試合表を生成
-          </LoaderButton>
-        </Flex>
-      </Modal>
-      <Button onClick={open} leftSection={<IconTablePlus />}>
-        試合表を生成
-      </Button>
-    </>
-  );
-};

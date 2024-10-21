@@ -6,6 +6,7 @@ import { FetchTeamService } from '../../../team/service/get';
 import { MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { FetchRunResultService } from '../../service/fetchRunResult';
+import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
 import { GetMatchService } from '../../service/get';
@@ -16,6 +17,7 @@ import {
   GetMatchTypeResponseSchema,
   GetRankingResponseSchema,
   MainSchema,
+  PostMatchGenerateManualResponseSchema,
   PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
@@ -28,7 +30,8 @@ export class MatchController {
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
     private readonly generateRankingService: GenerateRankingService,
-    private readonly fetchRunResultService: FetchRunResultService
+    private readonly fetchRunResultService: FetchRunResultService,
+    private readonly generateMainMatchService: GenerateMainMatchService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -107,6 +110,28 @@ export class MatchController {
         };
       })
     );
+  }
+
+  async generateMatchManual(
+    departmentType: DepartmentType,
+    team1ID: string,
+    team2ID: string
+  ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateManualResponseSchema>>> {
+    const res = await this.generateMainMatchService.handle(team1ID as TeamID, team2ID as TeamID);
+    if (Result.isErr(res)) return res;
+
+    const match = Result.unwrap(res);
+    return Result.ok([
+      {
+        id: match.getId(),
+        matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        departmentType,
+        team1ID: match.getTeamId1(),
+        team2ID: match.getTeamId2(),
+        runResults: [],
+        winnerId: match.getWinnerId() ?? '',
+      },
+    ]);
   }
 
   async getMatchByID<T extends MatchType>(
