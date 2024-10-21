@@ -115,6 +115,15 @@ export const PostMatchGenerateResponseSchema = z.union([
   ShortMainSchema.array(),
 ]);
 
+export const PostMatchGenerateManualParamsSchema = z.object({
+  departmentType: DepartmentTypeSchema,
+});
+export const PostMatchGenerateManualRequestSchema = z.object({
+  team1ID: z.string().openapi({ example: '45098607' }),
+  team2ID: z.string().openapi({ example: '2230392' }),
+});
+export const PostMatchGenerateManualResponseSchema = z.array(ShortMainSchema);
+
 export const PostMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
   matchID: z.string().openapi({ example: '320984' }),

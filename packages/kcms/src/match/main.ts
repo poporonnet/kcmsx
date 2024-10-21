@@ -23,11 +23,13 @@ import {
   GetMatchRunResultRoute,
   GetMatchTypeRoute,
   GetRankingRoute,
+  PostMatchGenerateManualRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchRunResultService } from './service/fetchRunResult';
+import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
 import { GetMatchService } from './service/get';
@@ -64,12 +66,14 @@ const generatePreMatchService = new GeneratePreMatchService(
 );
 const generateRankingService = new GenerateRankingService(preMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
+const generateMainMatchService = new GenerateMainMatchService(mainMatchRepository, idGenerator);
 const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
   generatePreMatchService,
   generateRankingService,
-  fetchRunResultService
+  fetchRunResultService,
+  generateMainMatchService
 );
 export const matchHandler = new OpenAPIHono();
 
@@ -107,6 +111,22 @@ matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
   const { matchType, departmentType } = c.req.valid('param');
 
   const res = await matchController.generateMatch(matchType, departmentType);
+  if (Result.isErr(res)) {
+    return c.json({ description: res[1].message }, 400);
+  }
+
+  return c.json(res[1], 200);
+});
+
+/**
+ * 本戦試合を手動で生成
+ *
+ */
+matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
+  const { departmentType } = c.req.valid('param');
+  const req = c.req.valid('json');
+
+  const res = await matchController.generateMatchManual(departmentType, req.team1ID, req.team2ID);
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
   }

@@ -10,6 +10,9 @@ import {
   GetMatchTypeResponseSchema,
   GetRankingParamsSchema,
   GetRankingResponseSchema,
+  PostMatchGenerateManualParamsSchema,
+  PostMatchGenerateManualRequestSchema,
+  PostMatchGenerateManualResponseSchema,
   PostMatchGenerateParamsSchema,
   PostMatchGenerateResponseSchema,
   PostMatchRunResultParamsSchema,
@@ -120,6 +123,37 @@ export const PostMatchGenerateRoute = createRoute({
       content: {
         'application/json': {
           schema: PostMatchGenerateResponseSchema,
+        },
+      },
+      description: 'Generate match table',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const PostMatchGenerateManualRoute = createRoute({
+  method: 'post',
+  path: '/match/main/{departmentType}/generate/manual',
+  request: {
+    params: PostMatchGenerateManualParamsSchema,
+    body: {
+      content: {
+        'application/json': { schema: PostMatchGenerateManualRequestSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: PostMatchGenerateManualResponseSchema,
         },
       },
       description: 'Generate match table',
