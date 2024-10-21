@@ -1,12 +1,18 @@
 import { Option } from '@mikuroxina/mini-fn';
 import { describe, expect, it } from 'vitest';
+import { DummyMainMatchRepository } from '../../match/adaptor/dummy/mainMatchRepository';
+import { DummyPreMatchRepository } from '../../match/adaptor/dummy/preMatchRepository';
+import { GetMatchService } from '../../match/service/get';
 import { TestEntryData } from '../../testData/entry';
 import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { EntryService } from './entry';
 
 describe('EntryService', () => {
   const teamRepository = new DummyRepository([TestEntryData.NotEntered, TestEntryData.Entered]);
-  const service = new EntryService(teamRepository);
+  const preMatchRepository = new DummyPreMatchRepository();
+  const mainMatchRepository = new DummyMainMatchRepository();
+  const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+  const service = new EntryService(teamRepository, getMatchService);
 
   it('エントリーできる', async () => {
     await service.enter(TestEntryData.NotEntered.getId());
