@@ -1,5 +1,6 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
 import type { Prisma, PrismaClient } from '@prisma/client';
+import { DepartmentType } from 'config';
 import { TeamID } from '../../../team/models/team';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { MainMatchRepository } from '../../model/repository';
@@ -25,6 +26,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         id: data.id as MainMatchID,
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
+        departmentType: data.departmentType as DepartmentType,
         teamId1: (data.leftTeamId as TeamID) ?? undefined,
         teamId2: (data.rightTeamId as TeamID) ?? undefined,
         winnerId: (data.winnerTeamId as TeamID) ?? undefined,
@@ -50,6 +52,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
           id: match.getId(),
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
+          departmentType: match.getDepartmentType(),
           leftTeamId: match.getTeamId1(),
           rightTeamId: match.getTeamId2(),
         },
@@ -69,6 +72,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             id: v.getId(),
             courseIndex: v.getCourseIndex(),
             matchIndex: v.getMatchIndex(),
+            departmentType: v.getDepartmentType(),
             leftTeamId: v.getTeamId1(),
             rightTeamId: v.getTeamId2(),
           };
@@ -119,6 +123,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         data: {
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
+          departmentType: match.getDepartmentType(),
           leftTeamId: match.getTeamId1(),
           rightTeamId: match.getTeamId2(),
           winnerTeamId: match.getWinnerId(),

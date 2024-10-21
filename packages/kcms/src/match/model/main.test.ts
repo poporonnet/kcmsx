@@ -1,14 +1,16 @@
+import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { TeamID } from '../../team/models/team.js';
-import { MainMatch, MainMatchID } from './main.js';
+import { CreateMainMatchArgs, MainMatch, MainMatchID } from './main.js';
 import { RunResult, RunResultID } from './runResult.js';
 
 describe('MainMatch', () => {
   it('正しく初期化できる', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       winnerId: '2' as TeamID,
@@ -30,11 +32,12 @@ describe('MainMatch', () => {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       winnerId: '2' as TeamID,
       runResults: [],
-    };
+    } satisfies CreateMainMatchArgs;
 
     for (let j = 1; j < 100; j++) {
       const mainMatch = MainMatch.new(args);
@@ -72,10 +75,11 @@ describe('MainMatch', () => {
   });
 
   it('勝者を指定できる', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) =>
@@ -97,10 +101,11 @@ describe('MainMatch', () => {
   });
 
   it('勝者が決まっているときは変更できない', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       winnerId: '2' as TeamID,
@@ -123,10 +128,11 @@ describe('MainMatch', () => {
   });
 
   it('試合が終わっていないときは設定できない', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) => {
@@ -148,10 +154,11 @@ describe('MainMatch', () => {
   });
 
   it('勝者はteamId1かteamId2でなければならない', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) => {
