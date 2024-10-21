@@ -9,7 +9,7 @@ import { Team, TeamID } from '../models/team';
 export class EntryService {
   constructor(
     private readonly teamRepository: TeamRepository,
-    private readonly PreMatch: GetMatchService
+    private readonly preMatch: GetMatchService
   ) {}
 
   /**
@@ -19,7 +19,7 @@ export class EntryService {
    */
   async enter(teamID: TeamID): Promise<Result.Result<Error, Team>> {
     const teamRes = await this.teamRepository.findByID(teamID);
-    const matchRes = await this.PreMatch.findAllPreMatch();
+    const matchRes = await this.preMatch.findAllPreMatch();
 
     if (!Result.isErr(matchRes)) {
       return Result.err(new Error('Cannot enter now'));
