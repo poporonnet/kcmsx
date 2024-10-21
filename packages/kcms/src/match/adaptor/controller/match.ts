@@ -21,6 +21,7 @@ import {
   PostMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
+  ShortMainSchema,
   ShortPreSchema,
 } from '../validator/match';
 
@@ -125,10 +126,11 @@ export class MatchController {
     if (Result.isErr(res)) return res;
 
     const match = Result.unwrap(res);
-    return Result.ok([
+    return Result.ok<z.infer<typeof ShortMainSchema>[]>([
       {
         id: match.getId(),
         matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        matchType: 'main',
         departmentType,
         team1ID: match.getTeamId1(),
         team2ID: match.getTeamId2(),
@@ -254,6 +256,7 @@ export class MatchController {
           return {
             id: v.getId(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            matchType: 'main',
             departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
             team1:
               v.getTeamId1() == undefined
