@@ -135,7 +135,7 @@ const MatchSubmitModal = ({
           以下のチームによる{config.match[matchType].name}
           試合の走行結果を送信します:
         </Text>
-        <List>
+        <List withPadding>
           {result.left && <List.Item>{result.left.teamName}</List.Item>}
           {result.right && <List.Item>{result.right.teamName}</List.Item>}
         </List>
