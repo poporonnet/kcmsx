@@ -3,7 +3,7 @@ import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType, MatchType } from 'config';
 import { Team, TeamID } from '../../../team/models/team';
 import { FetchTeamService } from '../../../team/service/get';
-import { MainMatchID } from '../../model/main';
+import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { FetchRunResultService } from '../../service/fetchRunResult';
 import { GenerateMainMatchService } from '../../service/generateMain';
@@ -154,32 +154,34 @@ export class MatchController {
     matchType: T,
     id: T extends 'pre' ? PreMatchID : MainMatchID
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchIdResponseSchema>>> {
-    if (matchType === 'pre') {
-      const res = await this.getMatchService.findById(id);
-      if (Result.isErr(res)) return res;
-      const match = Result.unwrap(res) as PreMatch;
+    const res = await this.getMatchService.findById(id);
+    if (Result.isErr(res)) return res;
+    const match = Result.unwrap(res);
 
-      const getTeam = async (
-        teamID: TeamID | undefined
-      ): Promise<{ id: string; teamName: string } | undefined> => {
-        if (!teamID) return undefined;
-        const teamRes = await this.fetchTeamService.findByID(teamID);
-        if (Result.isErr(teamRes)) return undefined;
-        const team = Result.unwrap(teamRes);
-        return {
-          id: team.getId(),
-          teamName: team.getTeamName(),
-        };
+    const getTeam = async (
+      teamID: TeamID | undefined
+    ): Promise<{ id: string; teamName: string } | undefined> => {
+      if (!teamID) return undefined;
+      const teamRes = await this.fetchTeamService.findByID(teamID);
+      if (Result.isErr(teamRes)) return undefined;
+      const team = Result.unwrap(teamRes);
+      return {
+        id: team.getId(),
+        teamName: team.getTeamName(),
       };
+    };
+
+    if (matchType === 'pre') {
+      const pre = match as PreMatch;
 
       return Result.ok<z.infer<typeof PreSchema>>({
-        id: match.getId(),
-        matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        id: pre.getId(),
+        matchCode: `${pre.getCourseIndex()}-${pre.getMatchIndex()}`,
         matchType: 'pre',
-        departmentType: match.getDepartmentType(),
-        leftTeam: await getTeam(match.getTeamId1()),
-        rightTeam: await getTeam(match.getTeamId2()),
-        runResults: match.getRunResults().map(
+        departmentType: pre.getDepartmentType(),
+        leftTeam: await getTeam(pre.getTeamId1()),
+        rightTeam: await getTeam(pre.getTeamId2()),
+        runResults: pre.getRunResults().map(
           (v): z.infer<typeof RunResultSchema> => ({
             id: v.getId(),
             teamID: v.getTeamId(),
@@ -190,7 +192,26 @@ export class MatchController {
         ),
       });
     } else {
-      return Result.err(new Error('Not implemented'));
+      const main = match as MainMatch;
+
+      return Result.ok<z.infer<typeof MainSchema>>({
+        id: main.getId(),
+        matchCode: `${main.getCourseIndex()}-${main.getMatchIndex()}`,
+        matchType: 'main',
+        departmentType: main.getDepartmentType(),
+        team1: await getTeam(main.getTeamId1()),
+        team2: await getTeam(main.getTeamId2()),
+        winnerId: main.getWinnerId() ?? '',
+        runResults: main.getRunResults().map(
+          (v): z.infer<typeof RunResultSchema> => ({
+            id: v.getId(),
+            teamID: v.getTeamId(),
+            points: v.getPoints(),
+            goalTimeSeconds: v.getGoalTimeSeconds(),
+            finishState: v.isGoal() ? 'goal' : 'finished',
+          })
+        ),
+      });
     }
   }
 
