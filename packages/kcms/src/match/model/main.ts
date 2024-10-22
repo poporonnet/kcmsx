@@ -1,3 +1,4 @@
+import { DepartmentType } from 'config';
 import { SnowflakeID } from '../../id/main.js';
 import { TeamID } from '../../team/models/team.js';
 import { RunResult } from './runResult.js';
@@ -7,6 +8,7 @@ export interface CreateMainMatchArgs {
   id: MainMatchID;
   courseIndex: number;
   matchIndex: number;
+  departmentType: DepartmentType;
   teamId1?: TeamID;
   teamId2?: TeamID;
   winnerId?: TeamID;
@@ -20,6 +22,7 @@ export class MainMatch {
   private readonly id: MainMatchID;
   private readonly courseIndex: number;
   private readonly matchIndex: number;
+  private readonly departmentType: DepartmentType;
   private readonly teamId1?: TeamID;
   private readonly teamId2?: TeamID;
   private winnerId?: TeamID;
@@ -29,6 +32,7 @@ export class MainMatch {
     this.id = args.id;
     this.courseIndex = args.courseIndex;
     this.matchIndex = args.matchIndex;
+    this.departmentType = args.departmentType;
     this.teamId1 = args.teamId1;
     this.teamId2 = args.teamId2;
     this.winnerId = args.winnerId;
@@ -49,6 +53,10 @@ export class MainMatch {
 
   getMatchIndex(): number {
     return this.matchIndex;
+  }
+
+  getDepartmentType(): DepartmentType {
+    return this.departmentType;
   }
 
   getTeamId1(): TeamID | undefined {

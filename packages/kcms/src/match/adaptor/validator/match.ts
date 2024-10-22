@@ -33,6 +33,7 @@ export const PreSchema = z.object({
 export const MainSchema = z.object({
   id: z.string().openapi({ example: '70983405' }),
   matchCode: z.string(),
+  matchType: z.literal('main').openapi({ example: 'main' }),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
   team1: BriefTeamSchema,
   team2: BriefTeamSchema,
