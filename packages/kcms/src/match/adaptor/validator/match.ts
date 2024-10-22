@@ -33,6 +33,7 @@ export const PreSchema = z.object({
 export const MainSchema = z.object({
   id: z.string().openapi({ example: '70983405' }),
   matchCode: z.string(),
+  matchType: z.literal('main').openapi({ example: 'main' }),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
   team1: BriefTeamSchema,
   team2: BriefTeamSchema,
@@ -114,6 +115,15 @@ export const PostMatchGenerateResponseSchema = z.union([
   ShortPreSchema.array(),
   ShortMainSchema.array(),
 ]);
+
+export const PostMatchGenerateManualParamsSchema = z.object({
+  departmentType: DepartmentTypeSchema,
+});
+export const PostMatchGenerateManualRequestSchema = z.object({
+  team1ID: z.string().openapi({ example: '45098607' }),
+  team2ID: z.string().openapi({ example: '2230392' }),
+});
+export const PostMatchGenerateManualResponseSchema = z.array(ShortMainSchema);
 
 export const PostMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
