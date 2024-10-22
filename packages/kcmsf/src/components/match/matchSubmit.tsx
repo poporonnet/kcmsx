@@ -1,13 +1,20 @@
-import { Button, Flex, Modal, Text } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Modal,
+  Paper,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconSend, IconSend2 } from "@tabler/icons-react";
-import { MatchInfo } from "config";
-
+import { IconAlertCircle, IconSend, IconSend2 } from "@tabler/icons-react";
+import type { MatchInfo, MatchType } from "config";
 type TeamResult = {
   id: string;
   points: number;
   time?: number;
+  teamName: string;
 };
 
 type APIPostRunResults = {
@@ -91,7 +98,13 @@ export const MatchSubmit = ({
           <IconSend2 />
         </Flex>
       </Button>
-      <MatchSubmitModal opened={opened} close={close} submit={submit} />
+      <MatchSubmitModal
+        opened={opened}
+        close={close}
+        submit={submit}
+        result={result}
+        matchType={matchInfo.matchType}
+      />
     </>
   );
 };
@@ -100,19 +113,40 @@ const MatchSubmitModal = ({
   opened,
   close,
   submit,
+  result,
+  matchType,
 }: {
   opened: boolean;
   close: () => void;
   submit: () => void;
+  result: {
+    left?: Omit<TeamResult, "id">;
+    right?: Omit<TeamResult, "id">;
+  };
+  matchType: MatchType;
 }) => {
   const handleSubmit = () => {
     submit();
     close();
   };
+  const theme = useMantineTheme();
   return (
     <Modal opened={opened} onClose={close} title="試合結果送信確認" centered>
       <Flex direction="column" gap="md">
-        <Text>この試合の結果を送信しますか?</Text>
+        <Text>
+          以下のチームによる{matchType === "pre" ? "予選" : "本戦"}
+          試合の結果を送信します
+        </Text>
+        <ul>
+          {result.left?.teamName && <li>{result.left?.teamName}</li>}
+          {result.right?.teamName && <li>{result.right?.teamName}</li>}
+        </ul>
+        <Paper c="red" fw={600} bg={theme.colors.red[0]} p="md" withBorder>
+          <Flex direction="row" align="center" gap="sm">
+            <IconAlertCircle size="1rem" />
+            送信後はこの試合の結果を変更することはできません。
+          </Flex>
+        </Paper>
         <Button onClick={handleSubmit} leftSection={<IconSend />}>
           試合結果を送信
         </Button>

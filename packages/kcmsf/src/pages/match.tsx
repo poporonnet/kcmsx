@@ -235,10 +235,12 @@ export const Match = () => {
             left: matchInfo.teams.left && {
               points: matchJudge.leftTeam.point.point(),
               time: matchJudge.leftTeam.goalTimeSeconds,
+              teamName: matchInfo.teams.left.teamName,
             },
             right: matchInfo.teams.right && {
               points: matchJudge.rightTeam.point.point(),
               time: matchJudge.rightTeam.goalTimeSeconds,
+              teamName: matchInfo.teams.right.teamName,
             },
           }}
         />
