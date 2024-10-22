@@ -32,22 +32,24 @@ export const TestEntryData = {
     robotType: 'wheel',
     departmentType: 'elementary',
   }),
-  NotEntered: Team.reconstruct({
-    id: '6' as TeamID,
-    teamName: 'TestTeam6',
-    members: ['TestTaro6'],
-    robotType: 'leg',
-    departmentType: 'elementary',
-    isEntered: false,
-  }),
-  Entered: Team.reconstruct({
-    id: '7' as TeamID,
-    teamName: 'TestTeam7',
-    members: ['TestTaro7'],
-    robotType: 'leg',
-    departmentType: 'elementary',
-    isEntered: true,
-  }),
+  NotEntered: () =>
+    Team.reconstruct({
+      id: '6' as TeamID,
+      teamName: 'TestTeam6',
+      members: ['TestTaro6'],
+      robotType: 'leg',
+      departmentType: 'elementary',
+      isEntered: false,
+    }),
+  Entered: () =>
+    Team.reconstruct({
+      id: '7' as TeamID,
+      teamName: 'TestTeam7',
+      members: ['TestTaro7'],
+      robotType: 'leg',
+      departmentType: 'elementary',
+      isEntered: true,
+    }),
 };
 
 const testDataGenerator = (args: {
