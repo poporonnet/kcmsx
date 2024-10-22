@@ -1,4 +1,5 @@
 import {
+  CreateMainMatchManualArgs,
   MainMatch,
   Match,
   PreMatch,
@@ -19,6 +20,16 @@ export type GetMatchesResponse = {
  * `POST /match/{matchType}/{departmentType}/generate`のレスポンス
  */
 export type GenerateMatchResponse = ShortPreMatch[] | ShortMainMatch[];
+
+/**
+ * `POST /match/pre/{departmentType}/generate/manual`のリクエスト
+ */
+export type GeneratePreMatchManualRequest = CreateMainMatchManualArgs;
+
+/**
+ * `POST /match/main/{departmentType}/generate/manual`のレスポンス
+ */
+export type GenerateMainMatchManualResponse = ShortMainMatch[];
 
 /**
  * `GET /match/{matchType}/{matchID}`のレスポンス
