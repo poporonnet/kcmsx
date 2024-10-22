@@ -46,25 +46,19 @@ export class MatchController {
 
     const teamMap = new Map(teams.map((v) => [v.getId(), v]));
 
-    /**
-     * ToDo: 試合の部門を取得できるようにする
-     *       試合に参加するチーム情報を取得する
-     */
-    return Result.ok({
-      pre: match.pre.map((v): z.infer<typeof PreSchema> => {
-        const getTeam = (
-          teamID: TeamID | undefined
-        ): { id: string; teamName: string } | undefined => {
-          if (!teamID) return undefined;
-          const team = teamMap.get(teamID);
-          if (!team) return undefined;
-          return {
-            id: team.getId(),
-            teamName: team.getTeamName(),
-          };
-        };
+    const getTeam = (teamID: TeamID | undefined): { id: string; teamName: string } | undefined => {
+      if (!teamID) return undefined;
+      const team = teamMap.get(teamID);
+      if (!team) return undefined;
+      return {
+        id: team.getId(),
+        teamName: team.getTeamName(),
+      };
+    };
 
-        return {
+    return Result.ok({
+      pre: match.pre.map(
+        (v): z.infer<typeof PreSchema> => ({
           id: v.getId(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
           matchType: 'pre',
@@ -78,10 +72,26 @@ export class MatchController {
             goalTimeSeconds: v.getGoalTimeSeconds(),
             finishState: v.isGoal() ? 'goal' : 'finished',
           })),
-        };
-      }),
-      // ToDo: 本戦試合を取得できるようにする
-      main: [],
+        })
+      ),
+      main: match.main.map(
+        (v): z.infer<typeof MainSchema> => ({
+          id: v.getId(),
+          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          matchType: 'main',
+          departmentType: v.getDepartmentType(),
+          team1: getTeam(v.getTeamId1()),
+          team2: getTeam(v.getTeamId2()),
+          winnerId: v.getWinnerId() ?? '',
+          runResults: v.getRunResults().map((v) => ({
+            id: v.getId(),
+            teamID: v.getTeamId(),
+            points: v.getPoints(),
+            goalTimeSeconds: v.getGoalTimeSeconds(),
+            finishState: v.isGoal() ? 'goal' : 'finished',
+          })),
+        })
+      ),
     });
   }
 
