@@ -1,6 +1,7 @@
 import {
   Button,
   Flex,
+  List,
   Modal,
   Paper,
   Text,
@@ -9,7 +10,8 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconAlertCircle, IconSend, IconSend2 } from "@tabler/icons-react";
-import type { MatchInfo, MatchType } from "config";
+import { config, type MatchInfo, type MatchType } from "config";
+import { LoaderButton } from "../LoaderButton";
 type TeamResult = {
   id: string;
   points: number;
@@ -118,38 +120,40 @@ const MatchSubmitModal = ({
 }: {
   opened: boolean;
   close: () => void;
-  submit: () => void;
+  submit: () => Promise<void>;
   result: {
     left?: Omit<TeamResult, "id">;
     right?: Omit<TeamResult, "id">;
   };
   matchType: MatchType;
 }) => {
-  const handleSubmit = () => {
-    submit();
-    close();
-  };
   const theme = useMantineTheme();
   return (
-    <Modal opened={opened} onClose={close} title="試合結果送信確認" centered>
+    <Modal opened={opened} onClose={close} title="走行結果送信確認" centered>
       <Flex direction="column" gap="md">
         <Text>
-          以下のチームによる{matchType === "pre" ? "予選" : "本戦"}
-          試合の結果を送信します
+          以下のチームによる{config.match[matchType].name}
+          試合の走行結果を送信します:
         </Text>
-        <ul>
-          {result.left?.teamName && <li>{result.left?.teamName}</li>}
-          {result.right?.teamName && <li>{result.right?.teamName}</li>}
-        </ul>
+        <List>
+          {result.left && <List.Item>{result.left.teamName}</List.Item>}
+          {result.right && <List.Item>{result.right.teamName}</List.Item>}
+        </List>
         <Paper c="red" fw={600} bg={theme.colors.red[0]} p="md" withBorder>
           <Flex direction="row" align="center" gap="sm">
-            <IconAlertCircle size="1rem" />
-            送信後はこの試合の結果を変更することはできません。
+            <IconAlertCircle size="3rem" />
+            走行結果を送信すると、以降は削除したり変更したりすることができません。
           </Flex>
         </Paper>
-        <Button onClick={handleSubmit} leftSection={<IconSend />}>
-          試合結果を送信
-        </Button>
+        <LoaderButton
+          load={async () => {
+            await submit();
+            close();
+          }}
+          leftSection={<IconSend />}
+        >
+          走行結果を送信
+        </LoaderButton>
       </Flex>
     </Modal>
   );
