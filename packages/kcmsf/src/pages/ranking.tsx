@@ -57,6 +57,9 @@ export const Ranking = () => {
         {
           method: "POST",
           body: JSON.stringify(req),
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
       ).catch(() => undefined);
 
