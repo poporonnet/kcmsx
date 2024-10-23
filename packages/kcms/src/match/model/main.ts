@@ -94,6 +94,6 @@ export class MainMatch {
     if (appendedLength !== 4 && appendedLength !== 2) {
       throw new Error('RunResult length must be 2 or 4');
     }
-    this.runResults.concat(results);
+    this.runResults.push(...results);
   }
 }

@@ -116,39 +116,74 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
 
   async update(match: MainMatch): Promise<Result.Result<Error, void>> {
     try {
-      await this.client.mainMatch.update({
-        where: {
-          id: match.getId(),
-        },
-        data: {
-          courseIndex: match.getCourseIndex(),
-          matchIndex: match.getMatchIndex(),
-          departmentType: match.getDepartmentType(),
-          leftTeamId: match.getTeamId1(),
-          rightTeamId: match.getTeamId2(),
-          winnerTeamId: match.getWinnerId(),
-          runResult: {
-            updateMany: match.getRunResults().map((v) => {
-              return {
-                where: {
-                  id: v.getId(),
-                },
-                data: {
-                  id: v.getId(),
-                  teamID: v.getTeamId(),
-                  points: v.getPoints(),
-                  // NOTE: Infinity: 2147483647
-                  goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
-                    ? v.getGoalTimeSeconds()
-                    : this.INT32MAX,
-                  // NOTE: GOAL: 0 , FINISHED: 1
-                  finishState: v.isGoal() ? 0 : 1,
-                },
-              };
-            }),
-          },
-        },
+      const runResults = await this.client.runResult.findMany({
+        where: { mainMatchId: match.getId() },
       });
+      if (runResults.length === 0) {
+        await this.client.runResult.createMany({
+          data: match.getRunResults().map((v) => {
+            return {
+              id: v.getId(),
+              teamID: v.getTeamId(),
+              points: v.getPoints(),
+              // NOTE: Infinity: 2147483647
+              goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                ? v.getGoalTimeSeconds()
+                : this.INT32MAX,
+              mainMatchId: match.getId(),
+              // NOTE: GOAL: 0 , FINISHED: 1
+              finishState: v.isGoal() ? 0 : 1,
+            };
+          }),
+        });
+        await this.client.mainMatch.update({
+          where: {
+            id: match.getId(),
+          },
+          data: {
+            courseIndex: match.getCourseIndex(),
+            matchIndex: match.getMatchIndex(),
+            departmentType: match.getDepartmentType(),
+            leftTeamId: match.getTeamId1(),
+            rightTeamId: match.getTeamId2(),
+            winnerTeamId: match.getWinnerId(),
+          },
+        });
+      } else {
+        await this.client.mainMatch.update({
+          where: {
+            id: match.getId(),
+          },
+          data: {
+            courseIndex: match.getCourseIndex(),
+            matchIndex: match.getMatchIndex(),
+            departmentType: match.getDepartmentType(),
+            leftTeamId: match.getTeamId1(),
+            rightTeamId: match.getTeamId2(),
+            winnerTeamId: match.getWinnerId(),
+            runResult: {
+              updateMany: match.getRunResults().map((v) => {
+                return {
+                  where: {
+                    id: v.getId(),
+                  },
+                  data: {
+                    id: v.getId(),
+                    teamID: v.getTeamId(),
+                    points: v.getPoints(),
+                    // NOTE: Infinity: 2147483647
+                    goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                      ? v.getGoalTimeSeconds()
+                      : this.INT32MAX,
+                    // NOTE: GOAL: 0 , FINISHED: 1
+                    finishState: v.isGoal() ? 0 : 1,
+                  },
+                };
+              }),
+            },
+          },
+        });
+      }
 
       return Result.ok(undefined);
     } catch (e) {
