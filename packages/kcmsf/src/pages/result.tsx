@@ -147,7 +147,7 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
           <Table.Tr>
             <Table.Th style={{ textAlign: "center" }}>左チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
@@ -183,21 +183,26 @@ const PreResultColum = (props: { match: PreMatch }) => {
   const leftGoalTimeSeconds = useMemo(() => {
     if (!leftResult) {
       return "";
-    } else {
-      if (leftResult.goalTimeSeconds)
-        return parseSeconds(leftResult.goalTimeSeconds);
-      return "フィニッシュ";
     }
+    if (leftResult.goalTimeSeconds === 0) {
+      return "0";
+    }
+    if (leftResult.goalTimeSeconds)
+      return parseSeconds(leftResult.goalTimeSeconds);
+    return "フィニッシュ";
   }, [leftResult]);
+
   const rightGoalTimeSeconds = useMemo(() => {
     if (!rightResult) {
       return "";
-    } else {
-      if (rightResult.goalTimeSeconds)
-        return parseSeconds(rightResult.goalTimeSeconds);
-      return "フィニッシュ";
     }
-  }, [leftResult]);
+    if (rightResult.goalTimeSeconds === 0) {
+      return "0";
+    }
+    if (rightResult.goalTimeSeconds)
+      return parseSeconds(rightResult.goalTimeSeconds);
+    return "フィニッシュ";
+  }, [rightResult]);
   return (
     <>
       <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
