@@ -150,7 +150,7 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
             <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
