@@ -28,19 +28,17 @@ describe('MainMatch', () => {
   });
 
   it('走行結果は0 or 2 or 4になる', () => {
-    const args = {
-      id: '1' as MainMatchID,
-      courseIndex: 1,
-      matchIndex: 1,
-      departmentType: config.departmentTypes[0],
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
-      winnerId: '2' as TeamID,
-      runResults: [],
-    } satisfies CreateMainMatchArgs;
-
     for (let j = 1; j < 100; j++) {
-      const mainMatch = MainMatch.new(args);
+      const mainMatch = MainMatch.new({
+        id: '1' as MainMatchID,
+        courseIndex: 1,
+        matchIndex: 1,
+        departmentType: config.departmentTypes[0],
+        teamId1: '2' as TeamID,
+        teamId2: '3' as TeamID,
+        winnerId: '2' as TeamID,
+        runResults: [],
+      });
       // 2か4以外は足せない
       if (j == 2 || j == 4) {
         expect(() => {
@@ -50,12 +48,13 @@ describe('MainMatch', () => {
                 id: String(i) as RunResultID,
                 goalTimeSeconds: i * 10,
                 points: 10 + i,
-                teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
+                teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
                 finishState: 'FINISHED',
               });
             })
           );
         }).not.toThrow(new Error('RunResult length must be 2 or 4'));
+        expect(mainMatch.getRunResults().length).toBe(j);
         continue;
       }
       expect(() => {
@@ -65,12 +64,13 @@ describe('MainMatch', () => {
               id: String(i) as RunResultID,
               goalTimeSeconds: i * 10,
               points: 10 + i,
-              teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
+              teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
               finishState: 'FINISHED',
             });
           })
         );
       }).toThrow(new Error('RunResult length must be 2 or 4'));
+      expect(mainMatch.getRunResults().length).toBe(0);
     }
   });
 
