@@ -1,4 +1,4 @@
-import { DepartmentType } from 'config';
+import { config, DepartmentType } from 'config';
 import { Team, TeamID } from '../team/models/team.js';
 
 export const TestEntryData = {
@@ -37,8 +37,8 @@ export const TestEntryData = {
       id: '6' as TeamID,
       teamName: 'TestTeam6',
       members: ['TestTaro6'],
-      robotType: 'leg',
-      departmentType: 'elementary',
+      robotType: config.robotTypes[0],
+      departmentType: config.departmentTypes[0],
       isEntered: false,
     }),
   Entered: () =>
@@ -46,8 +46,8 @@ export const TestEntryData = {
       id: '7' as TeamID,
       teamName: 'TestTeam7',
       members: ['TestTaro7'],
-      robotType: 'leg',
-      departmentType: 'elementary',
+      robotType: config.robotTypes[0],
+      departmentType: config.departmentTypes[0],
       isEntered: true,
     }),
 };
