@@ -1,7 +1,8 @@
 import { Button, MantineColor, Text } from "@mantine/core";
 import { MatchInfo } from "config";
 import { LinkToMatch } from "./linkToMatch";
-type StatusButtonProps = {
+
+export type StatusButtonProps = {
   id: string;
   status: "now" | "future" | "end";
   matchType: MatchInfo["matchType"];

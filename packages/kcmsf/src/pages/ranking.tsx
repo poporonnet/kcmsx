@@ -73,7 +73,7 @@ export const Ranking = () => {
         color: isSucceeded ? "green" : "red",
       });
 
-      if (isSucceeded) navigate("/matchlist");
+      if (isSucceeded) navigate("/matchlist?match_type=main");
     },
     [departmentType, navigate]
   );
