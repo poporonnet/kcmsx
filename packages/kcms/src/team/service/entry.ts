@@ -12,14 +12,6 @@ export class EntryService {
     private readonly preMatch: GetMatchService
   ) {}
 
-  private async isEntryModifiable(): Promise<Result.Result<Error, void>> {
-    const matchRes = await this.preMatch.findAllPreMatch();
-    if (Result.isOk(matchRes) && Result.unwrap(matchRes).length > 0) {
-      return Result.err(new Error('Cannot modify entry now'));
-    }
-    return Result.ok(undefined);
-  }
-
   /**
    * チームの出欠を登録します
    * @param teamID 出席するチームのID
@@ -69,5 +61,16 @@ export class EntryService {
     }
 
     return Result.ok(team);
+  }
+
+  /**
+   * 試合表が生成されているかを確認する
+   */
+  private async isEntryModifiable(): Promise<Result.Result<Error, void>> {
+    const matchRes = await this.preMatch.findAllPreMatch();
+    if (Result.isOk(matchRes) && Result.unwrap(matchRes).length > 0) {
+      return Result.err(new Error('Cannot modify entry now'));
+    }
+    return Result.ok(undefined);
   }
 }
