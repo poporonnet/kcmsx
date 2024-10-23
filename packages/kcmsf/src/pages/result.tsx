@@ -195,7 +195,7 @@ const PreResultColum = (props: { match: PreMatch }) => {
       <Table.Td className="td">{rightResult?.points}</Table.Td>
       <Table.Td className="td">
         {rightResult
-          ? rightResult.goalTimeSeconds == null
+          ? rightResult.goalTimeSeconds === null
             ? "フィニッシュ"
             : parseSeconds(rightResult.goalTimeSeconds)
           : ""}
