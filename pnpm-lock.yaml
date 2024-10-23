@@ -166,7 +166,7 @@ importers:
         version: 6.27.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react-timer-hook:
         specifier: ^3.0.7
-        version: 3.0.7(react@18.3.1)
+        version: 3.0.8(react@18.3.1)
     devDependencies:
       '@eslint/compat':
         specifier: ^1.1.1
@@ -2649,8 +2649,8 @@ packages:
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
 
-  react-timer-hook@3.0.7:
-    resolution: {integrity: sha512-ATpNcU+PQRxxfNBPVqce2+REtjGAlwmfoNQfcEBMZFxPj0r3GYdKhyPHdStvqrejejEi0QvqaJZjy2lBlFvAsA==}
+  react-timer-hook@3.0.8:
+    resolution: {integrity: sha512-bi2e7DhPBU1MRPU4ZHaVqBmgM9e2HK0ae8O2AIqwqjcPo4/qR7lVGQonOQLAKOZPQCJSYfV8F5aBWzOLXElzqQ==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -5326,7 +5326,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  react-timer-hook@3.0.7(react@18.3.1):
+  react-timer-hook@3.0.8(react@18.3.1):
     dependencies:
       react: 18.3.1
 
