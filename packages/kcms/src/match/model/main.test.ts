@@ -40,7 +40,7 @@ describe('MainMatch', () => {
         runResults: [],
       });
       // 2か4以外は足せない
-      if (j == 2 || j == 4) {
+      if (j == 1 || j == 2 || j == 4) {
         expect(() => {
           mainMatch.appendRunResults(
             [...Array(j)].map((_, i) => {
@@ -71,6 +71,52 @@ describe('MainMatch', () => {
         );
       }).toThrow(new Error('RunResult length must be 2 or 4'));
       expect(mainMatch.getRunResults().length).toBe(0);
+    }
+  });
+
+  it('走行結果を追加できる', () => {
+    for (let i = 1; i <= 2; i++) {
+      const mainMatch = MainMatch.new({
+        id: '1' as MainMatchID,
+        courseIndex: 1,
+        matchIndex: 1,
+        departmentType: config.departmentTypes[0],
+        teamId1: '2' as TeamID,
+        teamId2: '3' as TeamID,
+        winnerId: '2' as TeamID,
+        runResults: [],
+      });
+      for (let j = 1; j < 8; j++) {
+        if (j === 1 || j == 2) {
+          expect(() => {
+            mainMatch.appendRunResults(
+              [...Array(i)].map((_, i) => {
+                return RunResult.new({
+                  id: String(i) as RunResultID,
+                  goalTimeSeconds: i * 10,
+                  points: 10 + i,
+                  teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+                  finishState: 'FINISHED',
+                });
+              })
+            );
+          }).not.toThrow(new Error('RunResult length must be 2 or 4'));
+        } else {
+          expect(() => {
+            mainMatch.appendRunResults(
+              [...Array(i)].map((_, i) => {
+                return RunResult.new({
+                  id: String(i) as RunResultID,
+                  goalTimeSeconds: i * 10,
+                  points: 10 + i,
+                  teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+                  finishState: 'FINISHED',
+                });
+              })
+            );
+          }).toThrow(new Error('RunResult length must be 2 or 4'));
+        }
+      }
     }
   });
 
