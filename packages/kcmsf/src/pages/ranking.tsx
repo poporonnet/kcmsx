@@ -1,12 +1,8 @@
 import {
   Checkbox,
-  Divider,
   Flex,
-  List,
-  Paper,
   Stack,
   Table,
-  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
@@ -15,7 +11,7 @@ import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
-import { GenerateMatchButton } from "../components/GenerateMatchButton";
+import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useInterval } from "../hooks/useInterval";
 import { GetRankingResponse } from "../types/api/contest";
@@ -125,7 +121,7 @@ export const Ranking = () => {
           </Table.Thead>
           <Table.Tbody>
             {ranking?.map((record) => (
-              <RankingRow
+              <RankingColumn
                 record={record}
                 selectable
                 selected={selectedTeams.has(record.teamID)}
@@ -147,6 +143,7 @@ export const Ranking = () => {
           <GenerateMainMatchCard
             requiredTeamCount={2}
             selectedTeams={[...selectedTeams.values()]}
+            departmentType={departmentType}
             generate={generateMainMatch}
           />
         )}
@@ -155,7 +152,7 @@ export const Ranking = () => {
   );
 };
 
-const RankingRow = ({
+const RankingColumn = ({
   record,
   selectable,
   selected,
@@ -193,55 +190,5 @@ const RankingRow = ({
         </Table.Td>
       )}
     </Table.Tr>
-  );
-};
-
-const GenerateMainMatchCard = ({
-  requiredTeamCount,
-  selectedTeams,
-  generate,
-}: {
-  requiredTeamCount: number;
-  selectedTeams: RankingRecord[];
-  generate: (team1ID: string, team2ID: string) => Promise<void>;
-}) => {
-  const remainingTeamCount = requiredTeamCount - selectedTeams.length;
-
-  return (
-    <Paper withBorder w="15rem" p="md" h="auto">
-      <Flex direction="column" gap="xs" h="100%">
-        <Title order={4}>本戦試合生成</Title>
-        <Divider />
-        現在選択しているチーム:
-        <List withPadding flex={1} ta="left">
-          {selectedTeams.map(({ teamID, teamName }) => (
-            <List.Item key={teamID}>{teamName}</List.Item>
-          ))}
-        </List>
-        {remainingTeamCount > 0 && (
-          <Text c="red">
-            本戦試合の生成にはあと{remainingTeamCount}
-            チームの選択が必要です。
-          </Text>
-        )}
-        <GenerateMatchButton
-          generate={() =>
-            generate(selectedTeams[0].teamID, selectedTeams[1].teamID)
-          }
-          disabled={remainingTeamCount > 0}
-          modalTitle="本戦試合表生成確認"
-          modalDetail={
-            <>
-              以下のチームによる本戦試合を生成します:
-              <List withPadding>
-                {selectedTeams.map(({ teamID, teamName }) => (
-                  <List.Item key={teamID}>{teamName}</List.Item>
-                ))}
-              </List>
-            </>
-          }
-        />
-      </Flex>
-    </Paper>
   );
 };
