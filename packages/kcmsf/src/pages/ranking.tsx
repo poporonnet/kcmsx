@@ -1,12 +1,8 @@
 import {
   Checkbox,
-  Divider,
   Flex,
-  List,
-  Paper,
-  SegmentedControl,
+  Stack,
   Table,
-  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
@@ -14,7 +10,9 @@ import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GenerateMatchButton } from "../components/GenerateMatchButton";
+import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
+import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
+import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useInterval } from "../hooks/useInterval";
 import { GetRankingResponse } from "../types/api/contest";
 import { GeneratePreMatchManualRequest } from "../types/api/match";
@@ -71,7 +69,7 @@ export const Ranking = () => {
         color: isSucceeded ? "green" : "red",
       });
 
-      if (isSucceeded) navigate("/matchlist");
+      if (isSucceeded) navigate("/matchlist?match_type=main");
     },
     [departmentType, navigate]
   );
@@ -85,12 +83,16 @@ export const Ranking = () => {
   return (
     <Flex direction="column" align="center" justify="center" gap="md">
       <Title mt="md">ランキング</Title>
-      <Control
-        matchType={matchType}
-        departmentType={departmentType}
-        setMatchType={setMatchType}
-        setDepartmentType={setDepartmentType}
-      />
+      <Stack gap={6} align="flex-end">
+        <MatchSegmentedControl
+          matchType={matchType}
+          setMatchType={setMatchType}
+        />
+        <DepartmentSegmentedControl
+          departmentType={departmentType}
+          setDepartmentType={setDepartmentType}
+        />
+      </Stack>
       <Flex
         direction="row"
         align="stretch"
@@ -119,7 +121,7 @@ export const Ranking = () => {
           </Table.Thead>
           <Table.Tbody>
             {ranking?.map((record) => (
-              <RankingRow
+              <RankingColumn
                 record={record}
                 selectable
                 selected={selectedTeams.has(record.teamID)}
@@ -141,6 +143,7 @@ export const Ranking = () => {
           <GenerateMainMatchCard
             requiredTeamCount={2}
             selectedTeams={[...selectedTeams.values()]}
+            departmentType={departmentType}
             generate={generateMainMatch}
           />
         )}
@@ -149,64 +152,7 @@ export const Ranking = () => {
   );
 };
 
-const Control = ({
-  matchType,
-  departmentType,
-  setMatchType,
-  setDepartmentType,
-}: {
-  matchType: MatchType;
-  departmentType: DepartmentType;
-  setMatchType: (matchType: MatchType) => void;
-  setDepartmentType: (departmentType: DepartmentType) => void;
-}) => {
-  const theme = useMantineTheme();
-
-  return (
-    <Table verticalSpacing={3} withRowBorders={false} w="fit-content">
-      <Table.Tbody>
-        <Table.Tr>
-          <Table.Td>
-            <Text c={theme.colors.dark[4]} ta="right">
-              試合の種別:
-            </Text>
-          </Table.Td>
-          <Table.Td>
-            <SegmentedControl
-              data={config.matches.map((match) => ({
-                label: match.name,
-                value: match.type,
-              }))}
-              value={matchType}
-              onChange={(value) => setMatchType(value as MatchType)}
-              fullWidth
-            />
-          </Table.Td>
-        </Table.Tr>
-        <Table.Tr>
-          <Table.Td>
-            <Text c={theme.colors.dark[4]} ta="right">
-              部門:
-            </Text>
-          </Table.Td>
-          <Table.Td>
-            <SegmentedControl
-              data={config.departments.map((department) => ({
-                label: department.name,
-                value: department.type,
-              }))}
-              value={departmentType}
-              onChange={(value) => setDepartmentType(value as DepartmentType)}
-              fullWidth
-            />
-          </Table.Td>
-        </Table.Tr>
-      </Table.Tbody>
-    </Table>
-  );
-};
-
-const RankingRow = ({
+const RankingColumn = ({
   record,
   selectable,
   selected,
@@ -244,55 +190,5 @@ const RankingRow = ({
         </Table.Td>
       )}
     </Table.Tr>
-  );
-};
-
-const GenerateMainMatchCard = ({
-  requiredTeamCount,
-  selectedTeams,
-  generate,
-}: {
-  requiredTeamCount: number;
-  selectedTeams: RankingRecord[];
-  generate: (team1ID: string, team2ID: string) => Promise<void>;
-}) => {
-  const remainingTeamCount = requiredTeamCount - selectedTeams.length;
-
-  return (
-    <Paper withBorder w="15rem" p="md" h="auto">
-      <Flex direction="column" gap="xs" h="100%">
-        <Title order={4}>本戦試合生成</Title>
-        <Divider />
-        現在選択しているチーム:
-        <List withPadding flex={1} ta="left">
-          {selectedTeams.map(({ teamID, teamName }) => (
-            <List.Item key={teamID}>{teamName}</List.Item>
-          ))}
-        </List>
-        {remainingTeamCount > 0 && (
-          <Text c="red">
-            本戦試合の生成にはあと{remainingTeamCount}
-            チームの選択が必要です。
-          </Text>
-        )}
-        <GenerateMatchButton
-          generate={() =>
-            generate(selectedTeams[0].teamID, selectedTeams[1].teamID)
-          }
-          disabled={remainingTeamCount > 0}
-          modalTitle="本戦試合表生成確認"
-          modalDetail={
-            <>
-              以下のチームによる本戦試合を生成します:
-              <List withPadding>
-                {selectedTeams.map(({ teamID, teamName }) => (
-                  <List.Item key={teamID}>{teamName}</List.Item>
-                ))}
-              </List>
-            </>
-          }
-        />
-      </Flex>
-    </Paper>
   );
 };
