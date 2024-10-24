@@ -64,7 +64,7 @@ const generatePreMatchService = new GeneratePreMatchService(
   idGenerator,
   preMatchRepository
 );
-const generateRankingService = new GenerateRankingService(preMatchRepository);
+const generateRankingService = new GenerateRankingService(preMatchRepository, mainMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
 const generateMainMatchService = new GenerateMainMatchService(mainMatchRepository, idGenerator);
 const matchController = new MatchController(
