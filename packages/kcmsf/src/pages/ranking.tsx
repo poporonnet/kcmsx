@@ -123,7 +123,7 @@ export const Ranking = () => {
             {ranking?.map((record) => (
               <RankingColumn
                 record={record}
-                selectable
+                selectable={matchType == "pre"}
                 selected={selectedTeams.has(record.teamID)}
                 onSelect={() => {
                   if (selectedTeams.has(record.teamID))
