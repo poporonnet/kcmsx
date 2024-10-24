@@ -115,72 +115,68 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
 
   async update(match: PreMatch): Promise<Result.Result<Error, void>> {
     try {
-      const runResults = await this.client.runResult.findMany({
+      const currentRunResults = await this.client.runResult.findMany({
         where: {
           preMatchId: match.getId(),
         },
       });
-      if (runResults.length === 0) {
-        await this.client.runResult.createMany({
-          data: match.getRunResults().map((v) => {
-            return {
-              id: v.getId(),
-              teamID: v.getTeamId(),
-              points: v.getPoints(),
-              // NOTE: Infinity: 2147483647
-              goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
-                ? v.getGoalTimeSeconds()
-                : this.INT32MAX,
-              preMatchId: match.getId(),
-              // NOTE: GOAL: 0 , FINISHED: 1
-              finishState: v.isGoal() ? 0 : 1,
-            };
-          }),
-        });
-        await this.client.preMatch.update({
-          where: {
-            id: match.getId(),
+      const currentRunResultIDs = new Set<string>(currentRunResults.map((v) => v.id));
+
+      // 複数更新と複数作成が同時にできないため、クエリを分ける
+      const updatableRunResults: RunResult[] = []; // 更新するRunResult
+      const newRunResults: RunResult[] = []; // 新規作成するRunResult
+      match.getRunResults().forEach((runResult) => {
+        if (currentRunResultIDs.has(runResult.getId())) {
+          updatableRunResults.push(runResult);
+        } else {
+          newRunResults.push(runResult);
+        }
+      });
+
+      await this.client.runResult.createMany({
+        data: newRunResults.map((v) => ({
+          id: v.getId(),
+          teamID: v.getTeamId(),
+          points: v.getPoints(),
+          // NOTE: Infinity: 2147483647
+          goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+            ? v.getGoalTimeSeconds()
+            : this.INT32MAX,
+          preMatchId: match.getId(),
+          // NOTE: GOAL: 0 , FINISHED: 1
+          finishState: v.isGoal() ? 0 : 1,
+        })),
+      });
+      await this.client.preMatch.update({
+        where: {
+          id: match.getId(),
+        },
+        data: {
+          courseIndex: match.getCourseIndex(),
+          matchIndex: match.getMatchIndex(),
+          departmentType: match.getDepartmentType(),
+          leftTeamID: match.getTeamId1(),
+          rightTeamID: match.getTeamId2(),
+          runResult: {
+            updateMany: updatableRunResults.map((v) => ({
+              where: {
+                id: v.getId(),
+              },
+              data: {
+                id: v.getId(),
+                teamID: v.getTeamId(),
+                points: v.getPoints(),
+                // NOTE: Infinity: 2147483647
+                goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                  ? v.getGoalTimeSeconds()
+                  : this.INT32MAX,
+                // NOTE: GOAL: 0 , FINISHED: 1
+                finishState: v.isGoal() ? 0 : 1,
+              },
+            })),
           },
-          data: {
-            courseIndex: match.getCourseIndex(),
-            matchIndex: match.getMatchIndex(),
-            leftTeamID: match.getTeamId1(),
-            rightTeamID: match.getTeamId2(),
-          },
-        });
-      } else {
-        await this.client.preMatch.update({
-          where: {
-            id: match.getId(),
-          },
-          data: {
-            courseIndex: match.getCourseIndex(),
-            matchIndex: match.getMatchIndex(),
-            leftTeamID: match.getTeamId1(),
-            rightTeamID: match.getTeamId2(),
-            runResult: {
-              updateMany: match.getRunResults().map((v) => {
-                return {
-                  where: {
-                    id: v.getId(),
-                  },
-                  data: {
-                    id: v.getId(),
-                    teamID: v.getTeamId(),
-                    points: v.getPoints(),
-                    // NOTE: Infinity: 2147483647
-                    goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
-                      ? v.getGoalTimeSeconds()
-                      : this.INT32MAX,
-                    // NOTE: GOAL: 0 , FINISHED: 1
-                    finishState: v.isGoal() ? 0 : 1,
-                  },
-                };
-              }),
-            },
-          },
-        });
-      }
+        },
+      });
       return Result.ok(undefined);
     } catch (e) {
       return Result.err(e as Error);
