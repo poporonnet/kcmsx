@@ -3,7 +3,6 @@ import {
   Flex,
   Stack,
   Table,
-  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
