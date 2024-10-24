@@ -147,10 +147,10 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
           <Table.Tr>
             <Table.Th style={{ textAlign: "center" }}>左チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -180,32 +180,26 @@ const PreResultColum = (props: { match: PreMatch }) => {
       ),
     [props.match]
   );
-  const leftGoalTimeSeconds = useMemo(() => {
-    if (!leftResult) {
-      return "";
-    } else {
-      if (leftResult.goalTimeSeconds)
-        return parseSeconds(leftResult.goalTimeSeconds);
-      return "フィニッシュ";
-    }
-  }, [leftResult]);
-  const rightGoalTimeSeconds = useMemo(() => {
-    if (!rightResult) {
-      return "";
-    } else {
-      if (rightResult.goalTimeSeconds)
-        return parseSeconds(rightResult.goalTimeSeconds);
-      return "フィニッシュ";
-    }
-  }, [leftResult]);
   return (
     <>
       <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
       <Table.Td className="td">{leftResult?.points}</Table.Td>
-      <Table.Td className="td">{leftGoalTimeSeconds}</Table.Td>
+      <Table.Td className="td">
+        {leftResult
+          ? leftResult.goalTimeSeconds === null
+            ? "フィニッシュ"
+            : parseSeconds(leftResult.goalTimeSeconds)
+          : ""}
+      </Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
-      <Table.Td className="td">{rightGoalTimeSeconds}</Table.Td>
+      <Table.Td className="td">
+        {rightResult
+          ? rightResult.goalTimeSeconds === null
+            ? "フィニッシュ"
+            : parseSeconds(rightResult.goalTimeSeconds)
+          : ""}
+      </Table.Td>
     </>
   );
 };

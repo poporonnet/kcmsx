@@ -59,6 +59,7 @@ export const preMatches: PreMatch[] = [
         id: "3548129",
         teamID: "1392387",
         points: 5,
+        goalTimeSeconds: null,
         finishState: "finished",
       },
       {
@@ -85,6 +86,7 @@ export const preMatches: PreMatch[] = [
         id: "983156",
         teamID: "4578932",
         points: 8,
+        goalTimeSeconds: null,
         finishState: "finished",
       },
     ],
@@ -125,6 +127,7 @@ export const mainMatches: MainMatch[] = [
         id: "68963290",
         teamID: "7549586",
         points: 6,
+        goalTimeSeconds: null,
         finishState: "finished",
       },
       {
@@ -162,12 +165,14 @@ export const mainMatches: MainMatch[] = [
         id: "987326732",
         teamID: "1392387",
         points: 4,
+        goalTimeSeconds: null,
         finishState: "finished",
       },
       {
         id: "987326732",
         teamID: "7549586",
         points: 3,
+        goalTimeSeconds: null,
         finishState: "finished",
       },
       {
