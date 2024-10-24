@@ -17,7 +17,7 @@ describe('GenerateRankingService', () => {
     expect(Result.unwrap(res)).toHaveLength(11);
   });
 
-  it('(安来用)本戦: 部門ごとのランキングが生成できる', async () => {
+  it('本戦(安来用): 部門ごとのランキングが生成できる', async () => {
     const res = await service.generateMainMatchRanking('elementary');
     expect(Result.isErr(res)).toBe(false);
     expect(Result.unwrap(res)).toHaveLength(2);
