@@ -4,6 +4,7 @@ import {
   Flex,
   List,
   Loader,
+  Stack,
   Table,
   Text,
   Title,
@@ -111,17 +112,8 @@ export const MatchList = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Flex
-      direction="column"
-      justify="center"
-      align="center"
-      gap="md"
-      w="fit-content"
-      mx="auto"
-    >
-      <Title order={1} m="1rem">
-        試合表
-      </Title>
+    <Stack justify="center" align="center" gap="md" w="fit-content">
+      <Title m="1rem">試合表</Title>
       <MatchSegmentedControl
         matchType={matchType}
         setMatchType={setMatchType}
@@ -165,29 +157,30 @@ export const MatchList = () => {
             generate={async () => {
               await Promise.all(
                 config.departmentTypes.map((departmentType) =>
-                  generateMatch("pre", departmentType)
+                  generateMatch(matchType, departmentType)
                 )
               );
               fetchMatches();
             }}
-            modalTitle="予選試合表生成確認"
+            modalTitle={`${config.match[matchType].name}試合表生成確認`}
             modalDetail={
               <>
                 以下の試合表を生成します:
                 <List withPadding>
                   {config.departmentTypes.map((departmentType) => (
                     <List.Item key={departmentType}>
-                      {config.match.pre.name}&emsp;
+                      {config.match[matchType].name}&emsp;
                       {config.department[departmentType].name}
                     </List.Item>
                   ))}
                 </List>
               </>
             }
+            disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
           />
         </>
       )}
-    </Flex>
+    </Stack>
   );
 };
 
