@@ -1,7 +1,7 @@
 import {
   Checkbox,
   Flex,
-  SegmentedControl,
+  Stack,
   Table,
   Text,
   Title,
@@ -11,7 +11,9 @@ import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
+import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useInterval } from "../hooks/useInterval";
 import { GetRankingResponse } from "../types/api/contest";
 import { GeneratePreMatchManualRequest } from "../types/api/match";
@@ -68,7 +70,7 @@ export const Ranking = () => {
         color: isSucceeded ? "green" : "red",
       });
 
-      if (isSucceeded) navigate("/matchlist");
+      if (isSucceeded) navigate("/matchlist?match_type=main");
     },
     [departmentType, navigate]
   );
@@ -82,12 +84,16 @@ export const Ranking = () => {
   return (
     <Flex direction="column" align="center" justify="center" gap="md">
       <Title mt="md">ランキング</Title>
-      <Control
-        matchType={matchType}
-        departmentType={departmentType}
-        setMatchType={setMatchType}
-        setDepartmentType={setDepartmentType}
-      />
+      <Stack gap={6} align="flex-end">
+        <MatchSegmentedControl
+          matchType={matchType}
+          setMatchType={setMatchType}
+        />
+        <DepartmentSegmentedControl
+          departmentType={departmentType}
+          setDepartmentType={setDepartmentType}
+        />
+      </Stack>
       <Flex
         direction="row"
         align="stretch"
@@ -116,7 +122,7 @@ export const Ranking = () => {
           </Table.Thead>
           <Table.Tbody>
             {ranking?.map((record) => (
-              <RankingRow
+              <RankingColumn
                 record={record}
                 selectable
                 selected={selectedTeams.has(record.teamID)}
@@ -147,64 +153,7 @@ export const Ranking = () => {
   );
 };
 
-const Control = ({
-  matchType,
-  departmentType,
-  setMatchType,
-  setDepartmentType,
-}: {
-  matchType: MatchType;
-  departmentType: DepartmentType;
-  setMatchType: (matchType: MatchType) => void;
-  setDepartmentType: (departmentType: DepartmentType) => void;
-}) => {
-  const theme = useMantineTheme();
-
-  return (
-    <Table verticalSpacing={3} withRowBorders={false} w="fit-content">
-      <Table.Tbody>
-        <Table.Tr>
-          <Table.Td>
-            <Text c={theme.colors.dark[4]} ta="right">
-              試合の種別:
-            </Text>
-          </Table.Td>
-          <Table.Td>
-            <SegmentedControl
-              data={config.matches.map((match) => ({
-                label: match.name,
-                value: match.type,
-              }))}
-              value={matchType}
-              onChange={(value) => setMatchType(value as MatchType)}
-              fullWidth
-            />
-          </Table.Td>
-        </Table.Tr>
-        <Table.Tr>
-          <Table.Td>
-            <Text c={theme.colors.dark[4]} ta="right">
-              部門:
-            </Text>
-          </Table.Td>
-          <Table.Td>
-            <SegmentedControl
-              data={config.departments.map((department) => ({
-                label: department.name,
-                value: department.type,
-              }))}
-              value={departmentType}
-              onChange={(value) => setDepartmentType(value as DepartmentType)}
-              fullWidth
-            />
-          </Table.Td>
-        </Table.Tr>
-      </Table.Tbody>
-    </Table>
-  );
-};
-
-const RankingRow = ({
+const RankingColumn = ({
   record,
   selectable,
   selected,
