@@ -122,15 +122,16 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
       const currentRunResultIDs = new Set<string>(currentRunResults.map((v) => v.id));
 
       // 複数更新と複数作成が同時にできないため、クエリを分ける
-      const updatableRunResults: RunResult[] = []; // 更新するRunResult
-      const newRunResults: RunResult[] = []; // 新規作成するRunResult
-      match.getRunResults().forEach((runResult) => {
-        if (currentRunResultIDs.has(runResult.getId())) {
-          updatableRunResults.push(runResult);
-        } else {
-          newRunResults.push(runResult);
-        }
-      });
+      const { updatable: updatableRunResults, new: newRunResults } = match
+        .getRunResults()
+        .reduce<{ updatable: RunResult[]; new: RunResult[] }>(
+          (results, runResult) => {
+            const updateType = currentRunResultIDs.has(runResult.getId()) ? 'updatable' : 'new';
+            results[updateType].push(runResult);
+            return results;
+          },
+          { updatable: [], new: [] }
+        );
 
       await this.client.runResult.createMany({
         data: newRunResults.map((v) => ({
