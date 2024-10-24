@@ -107,13 +107,13 @@ const MainMatchColum = (props: {
   match: MainMatch;
   teamData: Map<string, string>;
 }) => {
-  let loserID = "";
-  if (props.match.winnerId) {
-    loserID =
-      props.match.winnerId === props.match.team1.id
+  console.log(props.match);
+  const loserID =
+    props.match.winnerId !== ""
+      ? props.match.team1.id == props.match.winnerId
         ? props.match.team2.id
-        : props.match.team1.id;
-  }
+        : props.match.team1.id
+      : "";
 
   return (
     <>
