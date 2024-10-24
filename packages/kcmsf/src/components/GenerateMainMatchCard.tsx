@@ -86,7 +86,7 @@ const NotGenerableBody = ({
       overlayProps={{ radius: "sm", blur: 2 }}
     />
     {isError && <Text c="red">データフェッチに失敗しました。</Text>}
-    {matches?.length === 0 && (
+    {matches && matches.length > 0 && (
       <Text c="dark">本戦試合が既に存在しています。</Text>
     )}
     <Button leftSection={<IconRefresh />} onClick={refetch}>
