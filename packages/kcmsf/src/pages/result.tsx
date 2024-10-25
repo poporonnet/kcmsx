@@ -39,12 +39,12 @@ export const Result = () => {
 
   const preMatches = useMemo(
     () => mainMatchData.filter((match) => match.departmentType === department),
-    [mainMatchData]
+    [mainMatchData, department]
   );
 
   const mainMatches = useMemo(
     () => preMatchData.filter((match) => match.departmentType === department),
-    [preMatchData]
+    [preMatchData, department]
   );
 
   return (
@@ -108,9 +108,12 @@ const MainMatchColum = (props: {
   teamData: Map<string, string>;
 }) => {
   const loserID =
-    props.match.winnerId === props.match.team1.id
-      ? props.match.team2.id
-      : props.match.team1.id;
+    props.match.winnerId !== ""
+      ? props.match.team1.id == props.match.winnerId
+        ? props.match.team2.id
+        : props.match.team1.id
+      : "";
+
   return (
     <>
       <Table.Td className="td">
