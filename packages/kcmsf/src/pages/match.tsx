@@ -1,122 +1,32 @@
 import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
 import { IconRotate } from "@tabler/icons-react";
-import { config, MatchInfo, MatchType } from "config";
+import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
-import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useTimer } from "react-timer-hook";
+import { useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { useForceReload } from "../hooks/useForceReload";
-import { GetMatchResponse } from "../types/api/match";
-import { GetTeamResponse } from "../types/api/team";
-import { MainMatch, PreMatch, Match as TMatch } from "../types/match";
-import { Judge } from "../utils/match/judge";
-import { expiryTimestamp, parseSeconds } from "../utils/time";
-
-type TimerState = "initial" | "counting" | "finished";
-
-type DiscriminatedMatch =
-  | (PreMatch & { matchType: "pre" })
-  | (MainMatch & { matchType: "main" });
+import { useJudge } from "../hooks/useJudge";
+import { useMatchInfo } from "../hooks/useMatchInfo";
+import { useMatchTimer } from "../hooks/useMatchTimer";
+import { parseSeconds } from "../utils/time";
 
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
   const isExhibition = !id || !matchType;
-  const [matchInfo, setMatchInfo] = useState<MatchInfo>();
-  const [matchJudge, setMatchJudge] = useState<Judge>(
-    new Judge({}, {}, { matchInfo }, { matchInfo })
-  );
-  const [matchCode, setMatchCode] = useState<string>();
-  useEffect(() => {
-    if (isExhibition) return;
-
-    const isMainMatch = (
-      matchType: MatchType,
-      _matchResponse: TMatch
-    ): _matchResponse is MainMatch => matchType === "main";
-
-    const getTeam = async (teamID: string): Promise<GetTeamResponse> => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/team/${teamID}`,
-        { method: "GET" }
-      );
-      return await res.json();
-    };
-
-    const fetchMatchInfo = async () => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
-        { method: "GET" }
-      );
-      if (!res.ok) return;
-
-      const matchData = (await res.json()) as GetMatchResponse;
-      const match: DiscriminatedMatch = isMainMatch(matchType, matchData)
-        ? { ...matchData, matchType: "main" }
-        : { ...matchData, matchType: "pre" };
-
-      const leftTeamID =
-        match.matchType == "main" ? match.team1.id : match.leftTeam?.id;
-      const leftTeam = leftTeamID ? await getTeam(leftTeamID) : undefined;
-
-      const rightTeamID =
-        match.matchType == "main" ? match.team2.id : match.rightTeam?.id;
-      const rightTeam = rightTeamID ? await getTeam(rightTeamID) : undefined;
-
-      const matchInfo: MatchInfo = {
-        id: matchData.id,
-        matchType,
-        teams: {
-          left: leftTeam
-            ? {
-                id: leftTeam.id,
-                teamName: leftTeam.name,
-                robotType: leftTeam.robotType,
-                departmentType: leftTeam.departmentType,
-              }
-            : undefined,
-          right: rightTeam
-            ? {
-                id: rightTeam.id,
-                teamName: rightTeam.name,
-                robotType: rightTeam.robotType,
-                departmentType: rightTeam.departmentType,
-              }
-            : undefined,
-        },
-      };
-      setMatchInfo(matchInfo);
-      setMatchJudge(new Judge({}, {}, { matchInfo }, { matchInfo }));
-      setMatchCode(matchData.matchCode);
-    };
-
-    fetchMatchInfo();
-  }, [id, isExhibition, matchType]);
+  const { match, matchInfo } = useMatchInfo(id, matchType);
+  const matchJudge = useJudge(matchInfo);
   const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
-  const [timerState, setTimerState] = useState<TimerState>("initial");
-  const { start, pause, resume, isRunning, totalSeconds } = useTimer({
-    expiryTimestamp: expiryTimestamp(matchTimeSec),
-    autoStart: false,
-    onExpire: () => setTimerState("finished"),
-  });
+  const {
+    totalSeconds,
+    isRunning,
+    state: timerState,
+    switchTimer,
+  } = useMatchTimer(matchInfo?.matchType || "pre");
   const forceReload = useForceReload();
-
-  const onClickTimer = () => {
-    if (timerState == "initial") {
-      start();
-      setTimerState("counting");
-      return;
-    }
-
-    if (isRunning) {
-      pause();
-    } else {
-      resume();
-    }
-  };
-
-  const resetPointState = useCallback(
+  const navigate = useNavigate();
+  const onClickReset = useCallback(
     (side: Side) => {
       matchJudge.team(side).reset();
       forceReload();
@@ -134,7 +44,9 @@ export const Match = () => {
             </Text>
             <Flex direction="column" align="center" justify="center" c="dark">
               {config.match[matchInfo?.matchType].name}
-              <Text size="2rem">#{matchCode}</Text>
+              <Text size="2rem">#{match?.matchCode}</Text>
+              {match?.matchType == "main" &&
+                `${match.runResults.length == 0 ? 1 : 2}試合目`}
             </Flex>
             <Text size="2rem" c="red" flex={1}>
               {matchInfo?.teams.right?.teamName}
@@ -148,7 +60,7 @@ export const Match = () => {
         pb="sm"
         variant="filled"
         color={timerState == "finished" ? "pink" : isRunning ? "teal" : "gray"}
-        onClick={onClickTimer}
+        onClick={switchTimer}
       >
         <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
       </Button>
@@ -161,7 +73,7 @@ export const Match = () => {
             leftSection={<IconRotate />}
             size="xl"
             fw="normal"
-            onClick={() => resetPointState("left")}
+            onClick={() => onClickReset("left")}
           >
             リセット
           </Button>
@@ -185,7 +97,7 @@ export const Match = () => {
             leftSection={<IconRotate />}
             size="xl"
             fw="normal"
-            onClick={() => resetPointState("right")}
+            onClick={() => onClickReset("right")}
           >
             リセット
           </Button>
@@ -242,6 +154,11 @@ export const Match = () => {
               time: matchJudge.rightTeam.goalTimeSeconds,
               teamName: matchInfo.teams.right.teamName,
             },
+          }}
+          onSubmit={(isSucceeded) => {
+            if (!isSucceeded || match?.matchType != "main") return;
+
+            navigate(0);
           }}
         />
       )}
