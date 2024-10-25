@@ -156,9 +156,11 @@ export const Match = () => {
             },
           }}
           onSubmit={(isSucceeded) => {
-            if (!isSucceeded || match?.matchType != "main") return;
+            if (!isSucceeded) return;
 
-            navigate(0);
+            navigate(`/matchlist?match_type=${matchType}`, {
+              viewTransition: true,
+            });
           }}
         />
       )}
