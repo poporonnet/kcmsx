@@ -30,6 +30,7 @@ export const MatchSubmit = ({
   matchInfo,
   available,
   result,
+  onSubmit,
 }: {
   matchInfo: MatchInfo;
   available: boolean;
@@ -37,6 +38,7 @@ export const MatchSubmit = ({
     left?: Omit<TeamResult, "id">;
     right?: Omit<TeamResult, "id">;
   };
+  onSubmit: (isSucceeded: boolean) => void;
 }) => {
   const submit = async () => {
     const runResults: APIPostRunResults = [];
@@ -81,6 +83,8 @@ export const MatchSubmit = ({
             color: "red",
           }
     );
+
+    onSubmit(res?.ok ?? false);
   };
   const [opened, { open, close }] = useDisclosure(false);
 
