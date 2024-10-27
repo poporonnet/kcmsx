@@ -4,14 +4,14 @@ type Option = {
   auto?: boolean;
 };
 
-type UseFetch<Response extends Object> = {
+type UseFetch<Response extends object> = {
   data?: Response;
   error?: Error;
   loading: boolean;
   refetch: () => Promise<void>;
 };
 
-export const useFetch = <Response extends Object>(
+export const useFetch = <Response extends object>(
   query: string,
   option: Option = {
     auto: true,
