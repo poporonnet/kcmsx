@@ -19,7 +19,7 @@ describe("header component", () => {
 
     expect(screen.getByText("参加者一覧")).toHaveAttribute("href", "/team");
     expect(screen.getByText("参加者登録")).toHaveAttribute("href", "/register");
-    expect(screen.getByText("参加者一括登録")).toHaveAttribute(
+    expect(screen.getByText("一括登録")).toHaveAttribute(
       "href",
       "/register/bulk"
     );
