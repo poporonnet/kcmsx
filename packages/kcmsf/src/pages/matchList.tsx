@@ -9,12 +9,11 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, isMatchType, MatchType } from "config";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CourseSelector } from "../components/courseSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
@@ -23,19 +22,28 @@ import {
   StatusButtonProps,
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useFetch } from "../hooks/useFetch";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
 
 export const MatchList = () => {
-  const [matches, setMatches] = useState<GetMatchesResponse>({
-    pre: [],
-    main: [],
-  });
-  const [courses, setCourses] = useState<number[]>([]);
+  const {
+    data: matches,
+    loading,
+    error,
+    refetch,
+  } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
+  const courses = useMemo(
+    () => [
+      ...new Set(
+        Object.values(matches ?? {})
+          .flat()
+          .map((match: Match) => Number(match.matchCode.split("-")[0]))
+      ),
+    ],
+    [matches]
+  );
   const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
-  const [loading, { open: startLoading, close: finishLoading }] =
-    useDisclosure(false);
-  const [error, setError] = useState<boolean>(false);
 
   const [searchParams] = useSearchParams();
   const [matchType, setMatchType] = useState<MatchType>(
@@ -47,45 +55,17 @@ export const MatchList = () => {
   const processedMatches = useMemo(
     () =>
       Cat.cat(matches)
-        .feed((matches) => matches[matchType])
+        .feed((matches) => matches?.[matchType])
         .feed((matches) =>
           selectedCourse == "all"
             ? matches
-            : matches.filter(
+            : matches?.filter(
                 (match) =>
                   Number(match.matchCode.split("-")[0]) == selectedCourse
               )
         ).value,
     [matches, matchType, selectedCourse]
   );
-
-  const fetchMatches = useCallback(async () => {
-    setError(false);
-    startLoading();
-
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/match`, {
-      method: "GET",
-    }).catch(() => undefined);
-
-    if (!res?.ok) {
-      setError(true);
-      finishLoading();
-      return;
-    }
-
-    const data = (await res.json()) as GetMatchesResponse;
-
-    setMatches(data);
-    setCourses([
-      ...new Set(
-        Object.values(data)
-          .flat()
-          .map((match: Match) => Number(match.matchCode.split("-")[0]))
-      ),
-    ]);
-
-    finishLoading();
-  }, [startLoading, finishLoading]);
 
   const generateMatch = useCallback(
     async (matchType: MatchType, departmentType: DepartmentType) => {
@@ -107,10 +87,6 @@ export const MatchList = () => {
     []
   );
 
-  useEffect(() => {
-    fetchMatches();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
     <Stack justify="center" align="center" gap="md" w="fit-content">
       <Title m="1rem">試合表</Title>
@@ -118,7 +94,7 @@ export const MatchList = () => {
         matchType={matchType}
         setMatchType={setMatchType}
       />
-      {processedMatches.length > 0 && (
+      {processedMatches && processedMatches.length > 0 && (
         <>
           <Flex w="100%" justify="right">
             <CourseSelector courses={courses} selector={setSelectedCourse} />
@@ -144,42 +120,45 @@ export const MatchList = () => {
           <Text c={"red"} fw={700}>
             サーバーからのフェッチに失敗しました。
           </Text>
-          <Button mt={"2rem"} onClick={fetchMatches}>
+          <Button mt={"2rem"} onClick={refetch}>
             <IconRefresh stroke={2} />
             再読み込み
           </Button>
         </>
       )}
-      {processedMatches.length === 0 && !loading && !error && (
-        <>
-          <Text>現在試合はありません。</Text>
-          <GenerateMatchButton
-            generate={async () => {
-              await Promise.all(
-                config.departmentTypes.map((departmentType) =>
-                  generateMatch(matchType, departmentType)
-                )
-              );
-              fetchMatches();
-            }}
-            modalTitle={`${config.match[matchType].name}試合表生成確認`}
-            modalDetail={
-              <>
-                以下の試合表を生成します:
-                <List withPadding>
-                  {config.departmentTypes.map((departmentType) => (
-                    <List.Item key={departmentType}>
-                      {config.match[matchType].name}&emsp;
-                      {config.department[departmentType].name}
-                    </List.Item>
-                  ))}
-                </List>
-              </>
-            }
-            disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
-          />
-        </>
-      )}
+      {processedMatches &&
+        processedMatches.length === 0 &&
+        !loading &&
+        !error && (
+          <>
+            <Text>現在試合はありません。</Text>
+            <GenerateMatchButton
+              generate={async () => {
+                await Promise.all(
+                  config.departmentTypes.map((departmentType) =>
+                    generateMatch(matchType, departmentType)
+                  )
+                );
+                refetch();
+              }}
+              modalTitle={`${config.match[matchType].name}試合表生成確認`}
+              modalDetail={
+                <>
+                  以下の試合表を生成します:
+                  <List withPadding>
+                    {config.departmentTypes.map((departmentType) => (
+                      <List.Item key={departmentType}>
+                        {config.match[matchType].name}&emsp;
+                        {config.department[departmentType].name}
+                      </List.Item>
+                    ))}
+                  </List>
+                </>
+              }
+              disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
+            />
+          </>
+        )}
     </Stack>
   );
 };
