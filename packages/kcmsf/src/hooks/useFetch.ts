@@ -7,7 +7,7 @@ type Option = {
 type UseFetch<Response extends Object> = {
   data?: Response;
   error?: Error;
-  loading?: boolean;
+  loading: boolean;
   refetch: () => Promise<void>;
 };
 
