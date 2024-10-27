@@ -24,7 +24,6 @@ export const useFetch = <Response extends Object>(
   const refetch = useCallback(async () => {
     try {
       setLoading(true);
-      setData(undefined);
       setError(undefined);
 
       const res = await fetch(query);
