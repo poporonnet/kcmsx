@@ -39,12 +39,12 @@ export const Result = () => {
 
   const preMatches = useMemo(
     () => mainMatchData.filter((match) => match.departmentType === department),
-    [mainMatchData]
+    [mainMatchData, department]
   );
 
   const mainMatches = useMemo(
     () => preMatchData.filter((match) => match.departmentType === department),
-    [preMatchData]
+    [preMatchData, department]
   );
 
   return (
@@ -108,9 +108,12 @@ const MainMatchColum = (props: {
   teamData: Map<string, string>;
 }) => {
   const loserID =
-    props.match.winnerId === props.match.team1.id
-      ? props.match.team2.id
-      : props.match.team1.id;
+    props.match.winnerId !== ""
+      ? props.match.team1.id == props.match.winnerId
+        ? props.match.team2.id
+        : props.match.team1.id
+      : "";
+
   return (
     <>
       <Table.Td className="td">
@@ -122,7 +125,7 @@ const MainMatchColum = (props: {
           .reduce((sum, result) => sum + result.points, 0)}
         -
         {props.match.runResults
-          .filter((result) => result.teamID !== props.match.winnerId)
+          .filter((result) => result.teamID === loserID)
           .reduce((sum, result) => sum + result.points, 0)}
       </Table.Td>
       <Table.Td className="td">{props.teamData.get(loserID)}</Table.Td>
@@ -150,7 +153,7 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
             <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -180,37 +183,27 @@ const PreResultColum = (props: { match: PreMatch }) => {
       ),
     [props.match]
   );
-  const leftGoalTimeSeconds = useMemo(() => {
-    if (!leftResult) {
-      return "";
-    }
-    if (leftResult.goalTimeSeconds === 0) {
-      return "0";
-    }
-    if (leftResult.goalTimeSeconds)
-      return parseSeconds(leftResult.goalTimeSeconds);
-    return "フィニッシュ";
-  }, [leftResult]);
-
-  const rightGoalTimeSeconds = useMemo(() => {
-    if (!rightResult) {
-      return "";
-    }
-    if (rightResult.goalTimeSeconds === 0) {
-      return "0";
-    }
-    if (rightResult.goalTimeSeconds)
-      return parseSeconds(rightResult.goalTimeSeconds);
-    return "フィニッシュ";
-  }, [rightResult]);
   return (
     <>
       <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
       <Table.Td className="td">{leftResult?.points}</Table.Td>
-      <Table.Td className="td">{leftGoalTimeSeconds}</Table.Td>
+      <Table.Td className="td">
+        {leftResult
+          ? leftResult.goalTimeSeconds === null
+            ? "フィニッシュ"
+            : parseSeconds(leftResult.goalTimeSeconds)
+          : ""}
+      </Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
-      <Table.Td className="td">{rightGoalTimeSeconds}</Table.Td>
+      <Table.Td className="td">
+        {rightResult
+          ? rightResult.goalTimeSeconds === null
+            ? "フィニッシュ"
+            : parseSeconds(rightResult.goalTimeSeconds)
+          : ""}
+      </Table.Td>
     </>
   );
 };
+
