@@ -19,8 +19,16 @@ describe("header component", () => {
 
     expect(screen.getByText("参加者一覧")).toHaveAttribute("href", "/team");
     expect(screen.getByText("参加者登録")).toHaveAttribute("href", "/register");
+    expect(screen.getByText("一括登録")).toHaveAttribute(
+      "href",
+      "/register/bulk"
+    );
     expect(screen.getByText("試合表")).toHaveAttribute("href", "/matchlist");
     expect(screen.getByText("試合結果")).toHaveAttribute("href", "/result");
     expect(screen.getByText("ランキング")).toHaveAttribute("href", "/ranking");
+    expect(screen.getByText("エキシビション")).toHaveAttribute(
+      "href",
+      "/match"
+    );
   });
 });
