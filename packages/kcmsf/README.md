@@ -1,31 +1,35 @@
 # kcmsf
 
-Matz葉がにロボコン 大会運営支援ツール  
-[バックエンドはこちら](https://github.com/poporonnet/kcms)
+Matz葉がにロボコン 大会運営支援ツール
 
 ## 開発者向け情報
 
 ### requires
 
 - Node.js(latest)
-- pnpm(latest)
 
-依存関係のインストール
+#### 依存関係のインストール
 
 ```bash
 pnpm i
 ```
 
-サーバの起動(開発モード)
+#### サーバの起動(開発モード)
 
 ```bash
 pnpm dev
 ```
 
-ビルド(プロダクション用)
+#### ビルド(プロダクションモード)
 
 ```bash
 pnpm build
+```
+
+#### サーバの起動(プロダクションモード)
+
+```bash
+pnpm start
 ```
 
 ## 利用者向け情報
