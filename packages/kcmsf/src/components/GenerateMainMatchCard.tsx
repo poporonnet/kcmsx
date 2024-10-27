@@ -8,10 +8,10 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useFetch } from "@mantine/hooks";
 import { IconRefresh } from "@tabler/icons-react";
 import { DepartmentType } from "config";
 import { useMemo } from "react";
+import { useFetch } from "../hooks/useFetch";
 import { RankingRecord } from "../types/contest";
 import { MainMatch } from "../types/match";
 import { GenerateMatchButton } from "./GenerateMatchButton";
