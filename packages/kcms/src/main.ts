@@ -5,12 +5,14 @@ MIT License.
 */
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { trimTrailingSlash } from 'hono/trailing-slash';
 import { matchHandler } from './match/main';
 import { teamHandler } from './team/main.js';
 
 const app = new Hono();
 
 app.use('*', cors());
+app.use(trimTrailingSlash());
 app.route('/', teamHandler);
 app.route('/', matchHandler);
 

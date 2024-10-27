@@ -326,11 +326,11 @@ export class MatchController {
     matchType: MatchType,
     departmentType: DepartmentType
   ): Promise<Result.Result<Error, z.infer<typeof GetRankingResponseSchema>>> {
-    if (matchType !== 'pre') {
-      return Result.err(new Error('Not implemented'));
-    }
-
-    const rankingRes = await this.generateRankingService.generatePreMatchRanking(departmentType);
+    const generateRanking = {
+      pre: () => this.generateRankingService.generatePreMatchRanking(departmentType),
+      main: () => this.generateRankingService.generateMainMatchRanking(departmentType),
+    }[matchType];
+    const rankingRes = await generateRanking();
     if (Result.isErr(rankingRes)) return rankingRes;
     const ranking = Result.unwrap(rankingRes);
 
