@@ -206,4 +206,3 @@ const PreResultColum = (props: { match: PreMatch }) => {
     </>
   );
 };
-
