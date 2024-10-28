@@ -52,18 +52,20 @@ export const MatchList = () => {
     ).value
   );
 
-  const processedMatches = useMemo(
+  const processedMatches = useMemo<Match[]>(
     () =>
-      Cat.cat(matches)
-        .feed((matches) => matches?.[matchType])
-        .feed((matches) =>
-          selectedCourse == "all"
-            ? matches
-            : matches?.filter(
-                (match) =>
-                  Number(match.matchCode.split("-")[0]) == selectedCourse
-              )
-        ).value,
+      matches
+        ? Cat.cat(matches)
+            .feed((matches) => matches[matchType])
+            .feed((matches) =>
+              selectedCourse == "all"
+                ? matches
+                : matches.filter(
+                    (match) =>
+                      Number(match.matchCode.split("-")[0]) == selectedCourse
+                  )
+            ).value
+        : [],
     [matches, matchType, selectedCourse]
   );
 
@@ -94,7 +96,7 @@ export const MatchList = () => {
         matchType={matchType}
         setMatchType={setMatchType}
       />
-      {processedMatches && processedMatches.length > 0 && (
+      {processedMatches.length > 0 && (
         <>
           <Flex w="100%" justify="right">
             <CourseSelector courses={courses} selector={setSelectedCourse} />
@@ -126,39 +128,36 @@ export const MatchList = () => {
           </Button>
         </>
       )}
-      {processedMatches &&
-        processedMatches.length === 0 &&
-        !loading &&
-        !error && (
-          <>
-            <Text>現在試合はありません。</Text>
-            <GenerateMatchButton
-              generate={async () => {
-                await Promise.all(
-                  config.departmentTypes.map((departmentType) =>
-                    generateMatch(matchType, departmentType)
-                  )
-                );
-                refetch();
-              }}
-              modalTitle={`${config.match[matchType].name}試合表生成確認`}
-              modalDetail={
-                <>
-                  以下の試合表を生成します:
-                  <List withPadding>
-                    {config.departmentTypes.map((departmentType) => (
-                      <List.Item key={departmentType}>
-                        {config.match[matchType].name}&emsp;
-                        {config.department[departmentType].name}
-                      </List.Item>
-                    ))}
-                  </List>
-                </>
-              }
-              disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
-            />
-          </>
-        )}
+      {processedMatches.length === 0 && !loading && !error && (
+        <>
+          <Text>現在試合はありません。</Text>
+          <GenerateMatchButton
+            generate={async () => {
+              await Promise.all(
+                config.departmentTypes.map((departmentType) =>
+                  generateMatch(matchType, departmentType)
+                )
+              );
+              refetch();
+            }}
+            modalTitle={`${config.match[matchType].name}試合表生成確認`}
+            modalDetail={
+              <>
+                以下の試合表を生成します:
+                <List withPadding>
+                  {config.departmentTypes.map((departmentType) => (
+                    <List.Item key={departmentType}>
+                      {config.match[matchType].name}&emsp;
+                      {config.department[departmentType].name}
+                    </List.Item>
+                  ))}
+                </List>
+              </>
+            }
+            disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
+          />
+        </>
+      )}
     </Stack>
   );
 };
