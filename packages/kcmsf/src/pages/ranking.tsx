@@ -8,11 +8,12 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, MatchType } from "config";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useFetch } from "../hooks/useFetch";
 import { useInterval } from "../hooks/useInterval";
 import { GetRankingResponse } from "../types/api/contest";
 import { GeneratePreMatchManualRequest } from "../types/api/match";
@@ -24,24 +25,13 @@ export const Ranking = () => {
   const [departmentType, setDepartmentType] = useState<DepartmentType>(
     config.departmentTypes[0]
   );
-  const [ranking, setRanking] = useState<RankingRecord[]>();
+  const { data: ranking, refetch } = useFetch<GetRankingResponse>(
+    `${import.meta.env.VITE_API_URL}/contest/${matchType}/${departmentType}/ranking`
+  );
   const [selectedTeams, setSelectedTeams] = useState<
     Map<RankingRecord["teamID"], RankingRecord>
   >(new Map());
   const navigate = useNavigate();
-
-  const getRanking = useCallback(async () => {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/contest/${matchType}/${departmentType}/ranking`
-    ).catch(() => undefined);
-    if (!res?.ok) {
-      setRanking(undefined);
-      return;
-    }
-
-    const rankingData = (await res.json()) as GetRankingResponse;
-    setRanking(rankingData);
-  }, [matchType, departmentType]);
 
   const generateMainMatch = useCallback(
     async (team1ID: string, team2ID: string) => {
@@ -74,11 +64,7 @@ export const Ranking = () => {
     [departmentType, navigate]
   );
 
-  useEffect(() => {
-    getRanking();
-  }, [getRanking]);
-
-  useInterval(getRanking, 10000); // 10秒ごとにランキングを更新
+  useInterval(refetch, 10000); // 10秒ごとにランキングを更新
 
   return (
     <Flex direction="column" align="center" justify="center" gap="md">

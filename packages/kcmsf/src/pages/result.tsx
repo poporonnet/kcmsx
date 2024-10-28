@@ -1,50 +1,39 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useFetch } from "../hooks/useFetch";
 import { GetMatchesResponse } from "../types/api/match";
 import { MainMatch, PreMatch } from "../types/match";
 import { parseSeconds } from "../utils/time";
 
 export const Result = () => {
-  const [preMatchData, setPreMatchData] = useState<PreMatch[]>([]);
-  const [mainMatchData, setMainMatchData] = useState<MainMatch[]>([]);
+  const { data: matches } = useFetch<GetMatchesResponse>(
+    `${import.meta.env.VITE_API_URL}/match`
+  );
   const [department, setDepartment] = useState<DepartmentType>(
     config.departments[0].type
   );
 
-  useEffect(() => {
-    const getMatches = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/match`, {
-        method: "GET",
-      }).catch(() => undefined);
-
-      const matchResponse = (await response?.json()) as
-        | GetMatchesResponse
-        | undefined;
-
-      setPreMatchData(matchResponse ? matchResponse.pre : []);
-      setMainMatchData(matchResponse ? matchResponse.main : []);
-    };
-    getMatches();
-  }, []);
-
   const teamNames: Map<string, string> = useMemo(() => {
     const team = new Map<string, string>();
-    mainMatchData.forEach((element) => {
+    matches?.main.forEach((element) => {
       if (element.team1) team.set(element.team1.id, element.team1.teamName);
       if (element.team2) team.set(element.team2.id, element.team2.teamName);
     });
     return team;
-  }, [mainMatchData]);
+  }, [matches]);
 
   const preMatches = useMemo(
-    () => mainMatchData.filter((match) => match.departmentType === department),
-    [mainMatchData, department]
+    () =>
+      matches?.pre.filter((match) => match.departmentType === department) ?? [],
+    [matches, department]
   );
 
   const mainMatches = useMemo(
-    () => preMatchData.filter((match) => match.departmentType === department),
-    [preMatchData, department]
+    () =>
+      matches?.main.filter((match) => match.departmentType === department) ??
+      [],
+    [matches, department]
   );
 
   return (
@@ -61,8 +50,8 @@ export const Result = () => {
       />
       <Flex direction="column" gap={20}>
         <Title order={3}>{config.department[department].name}</Title>
-        <MainResultTable matches={preMatches} teamNames={teamNames} />
-        <PreResultTable matches={mainMatches} />
+        <MainResultTable matches={mainMatches} teamNames={teamNames} />
+        <PreResultTable matches={preMatches} />
       </Flex>
     </>
   );
