@@ -90,11 +90,11 @@ export class GenerateRankingService {
       const prevPoints = rankingData[i - 1]?.points ?? -1;
       /** 前回のゴールタイム */
       const prevGoalTime = rankingData[i - 1]?.goalTimeSeconds ?? Infinity;
-      const rank = rankingData[i - 1]?.rank ?? 0;
+      const prevRank = rankingData[i - 1]?.rank ?? 0;
       const isSameRank = v[1].points === prevPoints && v[1].goalTimeSeconds === prevGoalTime;
-
+      const currentRank = isSameRank ? prevRank : i + 1;
       rankingData.push({
-        rank: isSameRank ? rank : rank + 1,
+        rank: currentRank,
         teamID: v[0],
         points: v[1].points,
         goalTimeSeconds: v[1].goalTimeSeconds,
