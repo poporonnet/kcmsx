@@ -15,6 +15,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter } from "../components/Filter";
 import { LoaderButton } from "../components/LoaderButton";
 import { Order, Sort } from "../components/Sort";
+import { useFetch } from "../hooks/useFetch";
 import { GetTeamsResponse } from "../types/api/team";
 import { Team } from "../types/team";
 
@@ -32,6 +33,9 @@ type SortState = {
 type FilterState = Partial<Team>;
 
 export const Teams = () => {
+  const { data: teamsRes } = useFetch<GetTeamsResponse>(
+    `${import.meta.env.VITE_API_URL}/team`
+  );
   const [teams, setTeams] = useState<Map<string, Team>>();
   const [sortState, setSortState] = useState<SortState>({
     key: "entryCode",
@@ -152,22 +156,10 @@ export const Teams = () => {
   );
 
   useEffect(() => {
-    const getTeams = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
-        method: "GET",
-      }).catch(() => undefined);
-      const teamResponse = (await response?.json()) as
-        | GetTeamsResponse
-        | undefined;
-
-      setTeams(
-        teamResponse
-          ? new Map(teamResponse.teams.map((team) => [team.id, team]))
-          : undefined
-      );
-    };
-    getTeams();
-  }, []);
+    setTeams(
+      teamsRes && new Map(teamsRes.teams.map((team) => [team.id, team]))
+    );
+  }, [setTeams, teamsRes]);
 
   return (
     <Flex direction="column" align="center" justify="center">

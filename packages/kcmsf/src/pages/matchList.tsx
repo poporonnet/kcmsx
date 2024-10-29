@@ -9,12 +9,11 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, isMatchType, MatchType } from "config";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CourseSelector } from "../components/courseSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
@@ -23,19 +22,28 @@ import {
   StatusButtonProps,
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useFetch } from "../hooks/useFetch";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
 
 export const MatchList = () => {
-  const [matches, setMatches] = useState<GetMatchesResponse>({
-    pre: [],
-    main: [],
-  });
-  const [courses, setCourses] = useState<number[]>([]);
+  const {
+    data: matches,
+    loading,
+    error,
+    refetch,
+  } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
+  const courses = useMemo(
+    () => [
+      ...new Set(
+        Object.values(matches ?? {})
+          .flat()
+          .map((match: Match) => Number(match.matchCode.split("-")[0]))
+      ),
+    ],
+    [matches]
+  );
   const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
-  const [loading, { open: startLoading, close: finishLoading }] =
-    useDisclosure(false);
-  const [error, setError] = useState<boolean>(false);
 
   const [searchParams] = useSearchParams();
   const [matchType, setMatchType] = useState<MatchType>(
@@ -44,48 +52,22 @@ export const MatchList = () => {
     ).value
   );
 
-  const processedMatches = useMemo(
+  const processedMatches = useMemo<Match[]>(
     () =>
-      Cat.cat(matches)
-        .feed((matches) => matches[matchType])
-        .feed((matches) =>
-          selectedCourse == "all"
-            ? matches
-            : matches.filter(
-                (match) =>
-                  Number(match.matchCode.split("-")[0]) == selectedCourse
-              )
-        ).value,
+      matches
+        ? Cat.cat(matches)
+            .feed((matches) => matches[matchType])
+            .feed((matches) =>
+              selectedCourse == "all"
+                ? matches
+                : matches.filter(
+                    (match) =>
+                      Number(match.matchCode.split("-")[0]) == selectedCourse
+                  )
+            ).value
+        : [],
     [matches, matchType, selectedCourse]
   );
-
-  const fetchMatches = useCallback(async () => {
-    setError(false);
-    startLoading();
-
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/match`, {
-      method: "GET",
-    }).catch(() => undefined);
-
-    if (!res?.ok) {
-      setError(true);
-      finishLoading();
-      return;
-    }
-
-    const data = (await res.json()) as GetMatchesResponse;
-
-    setMatches(data);
-    setCourses([
-      ...new Set(
-        Object.values(data)
-          .flat()
-          .map((match: Match) => Number(match.matchCode.split("-")[0]))
-      ),
-    ]);
-
-    finishLoading();
-  }, [startLoading, finishLoading]);
 
   const generateMatch = useCallback(
     async (matchType: MatchType, departmentType: DepartmentType) => {
@@ -106,10 +88,6 @@ export const MatchList = () => {
     },
     []
   );
-
-  useEffect(() => {
-    fetchMatches();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Stack justify="center" align="center" gap="md" w="fit-content">
@@ -144,7 +122,7 @@ export const MatchList = () => {
           <Text c={"red"} fw={700}>
             サーバーからのフェッチに失敗しました。
           </Text>
-          <Button mt={"2rem"} onClick={fetchMatches}>
+          <Button mt={"2rem"} onClick={refetch}>
             <IconRefresh stroke={2} />
             再読み込み
           </Button>
@@ -160,7 +138,7 @@ export const MatchList = () => {
                   generateMatch(matchType, departmentType)
                 )
               );
-              fetchMatches();
+              refetch();
             }}
             modalTitle={`${config.match[matchType].name}試合表生成確認`}
             modalDetail={
