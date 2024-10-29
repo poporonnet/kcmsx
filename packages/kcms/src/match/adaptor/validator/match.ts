@@ -23,6 +23,7 @@ export const RunResultSchema = z.object({
 export const PreSchema = z.object({
   id: z.string().openapi({ example: '320984' }),
   matchCode: z.string().openapi({ example: '1-3' }),
+  matchType: z.literal('pre').openapi({ example: 'pre' }),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
   leftTeam: BriefTeamSchema,
   rightTeam: BriefTeamSchema,
@@ -32,11 +33,28 @@ export const PreSchema = z.object({
 export const MainSchema = z.object({
   id: z.string().openapi({ example: '70983405' }),
   matchCode: z.string(),
+  matchType: z.literal('main').openapi({ example: 'main' }),
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
   team1: BriefTeamSchema,
   team2: BriefTeamSchema,
   winnerId: z.string().openapi({ example: '45098607' }),
   runResults: z.array(RunResultSchema).max(4),
+});
+
+export const ShortPreSchema = PreSchema.omit({
+  leftTeam: true,
+  rightTeam: true,
+}).extend({
+  leftTeamID: z.string().optional().openapi({ example: '45098607' }),
+  rightTeamID: z.string().optional().openapi({ example: '2230392' }),
+});
+
+export const ShortMainSchema = MainSchema.omit({
+  team1: true,
+  team2: true,
+}).extend({
+  team1ID: z.string().optional().openapi({ example: '45098607' }),
+  team2ID: z.string().optional().openapi({ example: '2230392' }),
 });
 
 export const GetMatchResponseSchema = z.object({
@@ -93,26 +111,19 @@ export const PostMatchGenerateParamsSchema = z.object({
   departmentType: DepartmentTypeSchema,
 });
 
-export const PostMatchGenerateResponseSchema = z.array(
-  z.union([
-    PreSchema.omit({
-      rightTeam: true,
-      leftTeam: true,
-    }).extend({
-      leftTeamID: z.string().optional().openapi({ example: '45098607' }),
-      rightTeamID: z.string().optional().openapi({ example: '2230392' }),
-    }),
-    MainSchema.omit({
-      team1: true,
-      team2: true,
-    })
-      .extend({
-        team1ID: z.string().optional().openapi({ example: '45098607' }),
-        team2ID: z.string().optional().openapi({ example: '2230392' }),
-      })
-      .array(),
-  ])
-);
+export const PostMatchGenerateResponseSchema = z.union([
+  ShortPreSchema.array(),
+  ShortMainSchema.array(),
+]);
+
+export const PostMatchGenerateManualParamsSchema = z.object({
+  departmentType: DepartmentTypeSchema,
+});
+export const PostMatchGenerateManualRequestSchema = z.object({
+  team1ID: z.string().openapi({ example: '45098607' }),
+  team2ID: z.string().openapi({ example: '2230392' }),
+});
+export const PostMatchGenerateManualResponseSchema = z.array(ShortMainSchema);
 
 export const PostMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,

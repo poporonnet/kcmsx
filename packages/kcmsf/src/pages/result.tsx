@@ -1,50 +1,39 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import { useFetch } from "../hooks/useFetch";
 import { GetMatchesResponse } from "../types/api/match";
 import { MainMatch, PreMatch } from "../types/match";
 import { parseSeconds } from "../utils/time";
 
 export const Result = () => {
-  const [preMatchData, setPreMatchData] = useState<PreMatch[]>([]);
-  const [mainMatchData, setMainMatchData] = useState<MainMatch[]>([]);
+  const { data: matches } = useFetch<GetMatchesResponse>(
+    `${import.meta.env.VITE_API_URL}/match`
+  );
   const [department, setDepartment] = useState<DepartmentType>(
     config.departments[0].type
   );
 
-  useEffect(() => {
-    const getMatches = async () => {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/match`, {
-        method: "GET",
-      }).catch(() => undefined);
-
-      const matchResponse = (await response?.json()) as
-        | GetMatchesResponse
-        | undefined;
-
-      setPreMatchData(matchResponse ? matchResponse.pre : []);
-      setMainMatchData(matchResponse ? matchResponse.main : []);
-    };
-    getMatches();
-  }, []);
-
   const teamNames: Map<string, string> = useMemo(() => {
     const team = new Map<string, string>();
-    mainMatchData.forEach((element) => {
+    matches?.main.forEach((element) => {
       if (element.team1) team.set(element.team1.id, element.team1.teamName);
       if (element.team2) team.set(element.team2.id, element.team2.teamName);
     });
     return team;
-  }, [mainMatchData]);
+  }, [matches]);
 
   const preMatches = useMemo(
-    () => mainMatchData.filter((match) => match.departmentType === department),
-    [mainMatchData]
+    () =>
+      matches?.pre.filter((match) => match.departmentType === department) ?? [],
+    [matches, department]
   );
 
   const mainMatches = useMemo(
-    () => preMatchData.filter((match) => match.departmentType === department),
-    [preMatchData]
+    () =>
+      matches?.main.filter((match) => match.departmentType === department) ??
+      [],
+    [matches, department]
   );
 
   return (
@@ -61,8 +50,8 @@ export const Result = () => {
       />
       <Flex direction="column" gap={20}>
         <Title order={3}>{config.department[department].name}</Title>
-        <MainResultTable matches={preMatches} teamNames={teamNames} />
-        <PreResultTable matches={mainMatches} />
+        <MainResultTable matches={mainMatches} teamNames={teamNames} />
+        <PreResultTable matches={preMatches} />
       </Flex>
     </>
   );
@@ -108,9 +97,12 @@ const MainMatchColum = (props: {
   teamData: Map<string, string>;
 }) => {
   const loserID =
-    props.match.winnerId === props.match.team1.id
-      ? props.match.team2.id
-      : props.match.team1.id;
+    props.match.winnerId !== ""
+      ? props.match.team1.id == props.match.winnerId
+        ? props.match.team2.id
+        : props.match.team1.id
+      : "";
+
   return (
     <>
       <Table.Td className="td">
@@ -122,7 +114,7 @@ const MainMatchColum = (props: {
           .reduce((sum, result) => sum + result.points, 0)}
         -
         {props.match.runResults
-          .filter((result) => result.teamID !== props.match.winnerId)
+          .filter((result) => result.teamID === loserID)
           .reduce((sum, result) => sum + result.points, 0)}
       </Table.Td>
       <Table.Td className="td">{props.teamData.get(loserID)}</Table.Td>
@@ -147,10 +139,10 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
           <Table.Tr>
             <Table.Th style={{ textAlign: "center" }}>左チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>時間</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
@@ -180,32 +172,26 @@ const PreResultColum = (props: { match: PreMatch }) => {
       ),
     [props.match]
   );
-  const leftGoalTimeSeconds = useMemo(() => {
-    if (!leftResult) {
-      return "";
-    } else {
-      if (leftResult.goalTimeSeconds)
-        return parseSeconds(leftResult.goalTimeSeconds);
-      return "フィニッシュ";
-    }
-  }, [leftResult]);
-  const rightGoalTimeSeconds = useMemo(() => {
-    if (!rightResult) {
-      return "";
-    } else {
-      if (rightResult.goalTimeSeconds)
-        return parseSeconds(rightResult.goalTimeSeconds);
-      return "フィニッシュ";
-    }
-  }, [leftResult]);
   return (
     <>
       <Table.Td className="td">{props.match.leftTeam?.teamName}</Table.Td>
       <Table.Td className="td">{leftResult?.points}</Table.Td>
-      <Table.Td className="td">{leftGoalTimeSeconds}</Table.Td>
+      <Table.Td className="td">
+        {leftResult
+          ? leftResult.goalTimeSeconds === null
+            ? "フィニッシュ"
+            : parseSeconds(leftResult.goalTimeSeconds)
+          : ""}
+      </Table.Td>
       <Table.Td className="td">{props.match.rightTeam?.teamName}</Table.Td>
       <Table.Td className="td">{rightResult?.points}</Table.Td>
-      <Table.Td className="td">{rightGoalTimeSeconds}</Table.Td>
+      <Table.Td className="td">
+        {rightResult
+          ? rightResult.goalTimeSeconds === null
+            ? "フィニッシュ"
+            : parseSeconds(rightResult.goalTimeSeconds)
+          : ""}
+      </Table.Td>
     </>
   );
 };

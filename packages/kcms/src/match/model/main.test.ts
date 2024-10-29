@@ -1,14 +1,16 @@
+import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { TeamID } from '../../team/models/team.js';
-import { MainMatch, MainMatchID } from './main.js';
+import { CreateMainMatchArgs, MainMatch, MainMatchID } from './main.js';
 import { RunResult, RunResultID } from './runResult.js';
 
 describe('MainMatch', () => {
   it('正しく初期化できる', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       winnerId: '2' as TeamID,
@@ -26,20 +28,19 @@ describe('MainMatch', () => {
   });
 
   it('走行結果は0 or 2 or 4になる', () => {
-    const args = {
-      id: '1' as MainMatchID,
-      courseIndex: 1,
-      matchIndex: 1,
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
-      winnerId: '2' as TeamID,
-      runResults: [],
-    };
-
     for (let j = 1; j < 100; j++) {
-      const mainMatch = MainMatch.new(args);
+      const mainMatch = MainMatch.new({
+        id: '1' as MainMatchID,
+        courseIndex: 1,
+        matchIndex: 1,
+        departmentType: config.departmentTypes[0],
+        teamId1: '2' as TeamID,
+        teamId2: '3' as TeamID,
+        winnerId: '2' as TeamID,
+        runResults: [],
+      });
       // 2か4以外は足せない
-      if (j == 2 || j == 4) {
+      if (j == 1 || j == 2 || j == 4) {
         expect(() => {
           mainMatch.appendRunResults(
             [...Array(j)].map((_, i) => {
@@ -47,12 +48,13 @@ describe('MainMatch', () => {
                 id: String(i) as RunResultID,
                 goalTimeSeconds: i * 10,
                 points: 10 + i,
-                teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
+                teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
                 finishState: 'FINISHED',
               });
             })
           );
         }).not.toThrow(new Error('RunResult length must be 2 or 4'));
+        expect(mainMatch.getRunResults().length).toBe(j);
         continue;
       }
       expect(() => {
@@ -62,20 +64,68 @@ describe('MainMatch', () => {
               id: String(i) as RunResultID,
               goalTimeSeconds: i * 10,
               points: 10 + i,
-              teamID: i % 2 == 0 ? args.teamId1 : args.teamId2,
+              teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
               finishState: 'FINISHED',
             });
           })
         );
       }).toThrow(new Error('RunResult length must be 2 or 4'));
+      expect(mainMatch.getRunResults().length).toBe(0);
+    }
+  });
+
+  it('走行結果を追加できる', () => {
+    for (let i = 1; i <= 2; i++) {
+      const mainMatch = MainMatch.new({
+        id: '1' as MainMatchID,
+        courseIndex: 1,
+        matchIndex: 1,
+        departmentType: config.departmentTypes[0],
+        teamId1: '2' as TeamID,
+        teamId2: '3' as TeamID,
+        winnerId: '2' as TeamID,
+        runResults: [],
+      });
+      for (let j = 1; j < 8; j++) {
+        if (j === 1 || j == 2) {
+          expect(() => {
+            mainMatch.appendRunResults(
+              [...Array(i)].map((_, i) => {
+                return RunResult.new({
+                  id: String(i) as RunResultID,
+                  goalTimeSeconds: i * 10,
+                  points: 10 + i,
+                  teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+                  finishState: 'FINISHED',
+                });
+              })
+            );
+          }).not.toThrow(new Error('RunResult length must be 2 or 4'));
+        } else {
+          expect(() => {
+            mainMatch.appendRunResults(
+              [...Array(i)].map((_, i) => {
+                return RunResult.new({
+                  id: String(i) as RunResultID,
+                  goalTimeSeconds: i * 10,
+                  points: 10 + i,
+                  teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+                  finishState: 'FINISHED',
+                });
+              })
+            );
+          }).toThrow(new Error('RunResult length must be 2 or 4'));
+        }
+      }
     }
   });
 
   it('勝者を指定できる', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) =>
@@ -97,10 +147,11 @@ describe('MainMatch', () => {
   });
 
   it('勝者が決まっているときは変更できない', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       winnerId: '2' as TeamID,
@@ -123,10 +174,11 @@ describe('MainMatch', () => {
   });
 
   it('試合が終わっていないときは設定できない', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) => {
@@ -148,10 +200,11 @@ describe('MainMatch', () => {
   });
 
   it('勝者はteamId1かteamId2でなければならない', () => {
-    const args = {
+    const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
+      departmentType: config.departmentTypes[0],
       teamId1: '2' as TeamID,
       teamId2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) => {

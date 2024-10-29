@@ -177,6 +177,8 @@
       "id": "320984",
       // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
       "matchCode": "1-3",
+      // 試合種別 (matchType 設定依存)
+      "matchType": "pre",
       // チームのカテゴリ (departmentType 設定依存)
       "departmentType": "elementary",
       // 左チーム (空になる可能性あり 空の場合undefined)
@@ -216,6 +218,8 @@
       "id": "70983405",
       // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
       "matchCode": "1-3",
+      // 試合種別 (matchType 設定依存)
+      "matchType": "main",
       // チームのカテゴリ (departmentType 設定依存)
       "departmentType": "elementary",
       // チーム1 (空になる可能性あり 空の場合undefined)
@@ -277,6 +281,8 @@
     "id": "320984",
     // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
     "matchCode": "1-3",
+    // 試合種別 (matchType 設定依存)
+    "matchType": "pre",
     // チームのカテゴリ (departmentType 設定依存)
     "departmentType": "elementary",
     // 左チーム (空になる可能性あり 空の場合undefined)
@@ -321,6 +327,8 @@
     "id": "70983405",
     // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
     "matchCode": "1-3",
+    // 試合種別 (matchType 設定依存)
+    "matchType": "main",
     // チームのカテゴリ (departmentType 設定依存)
     "departmentType": "elementary",
     // 左チーム (空になる可能性あり 空の場合undefined)
@@ -378,6 +386,8 @@
   "id": "70983405",
   // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
   "matchCode": "1-3",
+  // 試合種別 (matchType 設定依存)
+  "matchType": "pre",
   // チームのカテゴリ (departmentType 設定依存)
   "departmentType": "elementary",
   // 左チーム (空になる可能性あり 空の場合undefined)
@@ -422,6 +432,8 @@
   "id": "70983405",
   // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
   "matchCode": "1-3",
+  // 試合種別 (matchType 設定依存)
+  "matchType": "main",
   // チームのカテゴリ (departmentType 設定依存)
   "departmentType": "elementary",
   // 左チーム (空になる可能性あり 空の場合undefined)
@@ -479,6 +491,10 @@
     "id": "320984",
     // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
     "matchCode": "1-3",
+    // 試合種別 (matchType 設定依存)
+    "matchType": "pre",
+    // チームのカテゴリ (departmentType 設定依存)
+    "departmentType": "elementary",
     // 左チームのID (空になる可能性あり 空の場合undefined)
     "leftTeamID": "45098607",
     // 右チームのID (空になる可能性あり 空の場合undefined)
@@ -497,6 +513,8 @@
     "id": "70983405",
     // 試合コード `${コース番号}-${そのコースでの試合番号}` どちらも1始まり
     "matchCode": "1-3",
+    // チームのカテゴリ (departmentType 設定依存)
+    "departmentType": "elementary",
     // チーム1のID (空になる可能性あり 空の場合undefined)
     "Team1ID": "45098607",
     // チーム1のID (空になる可能性あり 空の場合undefined)

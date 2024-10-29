@@ -4,70 +4,70 @@ import {
   Flex,
   List,
   Loader,
-  Modal,
-  Paper,
+  Stack,
   Table,
   Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import {
-  IconAlertCircle,
-  IconRefresh,
-  IconTablePlus,
-} from "@tabler/icons-react";
-import { config, DepartmentType, MatchType } from "config";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Cat } from "@mikuroxina/mini-fn";
+import { IconRefresh } from "@tabler/icons-react";
+import { config, DepartmentType, isMatchType, MatchType } from "config";
+import { useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { CourseSelector } from "../components/courseSelector";
-import { LoaderButton } from "../components/LoaderButton";
-import { MatchStatusButton } from "../components/matchStatus";
-import { Match, PreMatch } from "../types/match";
+import { GenerateMatchButton } from "../components/GenerateMatchButton";
+import {
+  MatchStatusButton,
+  StatusButtonProps,
+} from "../components/matchStatus";
+import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useFetch } from "../hooks/useFetch";
+import { GetMatchesResponse } from "../types/api/match";
+import { Match } from "../types/match";
 
 export const MatchList = () => {
-  const [preMatches, setPreMatches] = useState<PreMatch[]>([]);
-  const [courses, setCourses] = useState<number[]>([]);
-  const [select, setSelect] = useState<number | "all">("all");
-  const [loading, { open: startLoading, close: finishLoading }] =
-    useDisclosure(false);
-  const [error, setError] = useState<boolean>(false);
-  const processedPreMatches = useMemo(
-    () =>
-      select == "all"
-        ? preMatches
-        : preMatches.filter(
-            (match) => Number(match.matchCode.split("-")[0]) == select
-          ),
-    [preMatches, select]
-  );
-  const [opened, { open, close }] = useDisclosure(false);
-
-  const fetchPre = useCallback(async () => {
-    setError(false);
-    startLoading();
-
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/match/pre`, {
-      method: "GET",
-    }).catch(() => undefined);
-
-    if (!res?.ok) {
-      setError(true);
-      finishLoading();
-      return;
-    }
-
-    const data = (await res.json()) as PreMatch[];
-
-    setPreMatches(data);
-    setCourses([
+  const {
+    data: matches,
+    loading,
+    error,
+    refetch,
+  } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
+  const courses = useMemo(
+    () => [
       ...new Set(
-        data.map((match: Match) => Number(match.matchCode.split("-")[0]))
+        Object.values(matches ?? {})
+          .flat()
+          .map((match: Match) => Number(match.matchCode.split("-")[0]))
       ),
-    ]);
+    ],
+    [matches]
+  );
+  const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
 
-    finishLoading();
-  }, [startLoading, finishLoading]);
+  const [searchParams] = useSearchParams();
+  const [matchType, setMatchType] = useState<MatchType>(
+    Cat.cat(searchParams.get("match_type")).feed((value) =>
+      value && isMatchType(value) ? value : "pre"
+    ).value
+  );
+
+  const processedMatches = useMemo<Match[]>(
+    () =>
+      matches
+        ? Cat.cat(matches)
+            .feed((matches) => matches[matchType])
+            .feed((matches) =>
+              selectedCourse == "all"
+                ? matches
+                : matches.filter(
+                    (match) =>
+                      Number(match.matchCode.split("-")[0]) == selectedCourse
+                  )
+            ).value
+        : [],
+    [matches, matchType, selectedCourse]
+  );
 
   const generateMatch = useCallback(
     async (matchType: MatchType, departmentType: DepartmentType) => {
@@ -89,42 +89,23 @@ export const MatchList = () => {
     []
   );
 
-  useEffect(() => {
-    fetchPre();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
   return (
-    <Flex
-      direction="column"
-      justify="center"
-      align="center"
-      gap="md"
-      w="fit-content"
-      mx="auto"
-    >
-      <Title order={1} m="1rem">
-        試合表
-      </Title>
-      {preMatches.length > 0 && (
+    <Stack justify="center" align="center" gap="md" w="fit-content">
+      <Title m="1rem">試合表</Title>
+      <MatchSegmentedControl
+        matchType={matchType}
+        setMatchType={setMatchType}
+      />
+      {processedMatches.length > 0 && (
         <>
           <Flex w="100%" justify="right">
-            <CourseSelector courses={courses} selector={setSelect} />
+            <CourseSelector courses={courses} selector={setSelectedCourse} />
           </Flex>
           <Table highlightOnHover>
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th>試合番号</Table.Th>
-                <Table.Th>コート番号</Table.Th>
-                <Table.Th>左コート</Table.Th>
-                <Table.Th>右コート</Table.Th>
-                <Table.Th>
-                  <Center>状態</Center>
-                </Table.Th>
-              </Table.Tr>
-            </Table.Thead>
+            <MatchHead matchType={matchType} />
             <Table.Tbody>
-              {processedPreMatches.map((match) => (
-                <PreMatchRow match={match} key={match.id} />
+              {processedMatches.map((match) => (
+                <MatchColumn match={match} key={match.id} />
               ))}
             </Table.Tbody>
           </Table>
@@ -141,110 +122,101 @@ export const MatchList = () => {
           <Text c={"red"} fw={700}>
             サーバーからのフェッチに失敗しました。
           </Text>
-          <Button mt={"2rem"} onClick={fetchPre}>
+          <Button mt={"2rem"} onClick={refetch}>
             <IconRefresh stroke={2} />
             再読み込み
           </Button>
         </>
       )}
-      {preMatches.length === 0 && !loading && !error && (
+      {processedMatches.length === 0 && !loading && !error && (
         <>
           <Text>現在試合はありません。</Text>
           <GenerateMatchButton
-            opened={opened}
-            open={open}
-            close={close}
             generate={async () => {
               await Promise.all(
                 config.departmentTypes.map((departmentType) =>
-                  generateMatch("pre", departmentType)
+                  generateMatch(matchType, departmentType)
                 )
               );
-              fetchPre();
-              close();
+              refetch();
             }}
+            modalTitle={`${config.match[matchType].name}試合表生成確認`}
+            modalDetail={
+              <>
+                以下の試合表を生成します:
+                <List withPadding>
+                  {config.departmentTypes.map((departmentType) => (
+                    <List.Item key={departmentType}>
+                      {config.match[matchType].name}&emsp;
+                      {config.department[departmentType].name}
+                    </List.Item>
+                  ))}
+                </List>
+              </>
+            }
+            disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
           />
         </>
       )}
-    </Flex>
+    </Stack>
   );
 };
 
-const PreMatchRow = ({ match }: { match: PreMatch }) => (
-  <Table.Tr key={match.id}>
-    <Table.Td>
-      <Center miw={50}>
-        <Text fw={700}>{match.matchCode}</Text>
-      </Center>
-    </Table.Td>
-    <Table.Td>
-      <Center miw={50}>
-        <Text fw={700}>{Number(match.matchCode.split("-")[0])}</Text>
-      </Center>
-    </Table.Td>
-    <Table.Td>
-      <Text fw={700} miw={200} ta="start">
-        {match.leftTeam?.teamName}
-      </Text>
-    </Table.Td>
-    <Table.Td>
-      <Text fw={700} miw={200} ta="start">
-        {match.rightTeam?.teamName}
-      </Text>
-    </Table.Td>
-    <Table.Td>
-      <Center>
-        <MatchStatusButton
-          status={match.runResults.length === 2 ? "end" : "future"}
-          id={match.id}
-          matchType="pre"
-        />
-      </Center>
-    </Table.Td>
-  </Table.Tr>
+const MatchHead = ({ matchType }: { matchType: MatchType }) => (
+  <Table.Thead>
+    <Table.Tr>
+      <Table.Th>試合番号</Table.Th>
+      <Table.Th>コース番号</Table.Th>
+      <Table.Th>{matchType == "pre" ? "左チーム" : "チーム1"}</Table.Th>
+      <Table.Th>{matchType == "pre" ? "右チーム" : "チーム2"}</Table.Th>
+      <Table.Th ta="center">状態</Table.Th>
+    </Table.Tr>
+  </Table.Thead>
 );
 
-const GenerateMatchButton = ({
-  opened,
-  open,
-  close,
-  generate,
-}: {
-  opened: boolean;
-  open: () => void;
-  close: () => void;
-  generate: () => Promise<void>;
-}) => {
-  const theme = useMantineTheme();
+const MatchColumn = ({ match }: { match: Match }) => {
+  const matchStatus: StatusButtonProps["status"] = useMemo(() => {
+    if (match.runResults.length == 0) return "future";
+
+    const maxRunResultLength = { pre: 2, main: 4 }[match.matchType];
+    return match.runResults.length < maxRunResultLength ? "now" : "end";
+  }, [match.runResults, match.matchType]);
 
   return (
-    <>
-      <Modal opened={opened} onClose={close} title="試合表生成確認" centered>
-        <Flex direction="column" gap="md">
-          <Text>以下の試合表を生成します:</Text>
-          <List>
-            {config.departmentTypes.map((departmentType) => (
-              <List.Item>
-                {config.match.pre.name}&emsp;
-                {config.department[departmentType].name}
-              </List.Item>
-            ))}
-          </List>
-
-          <Paper c="red" fw={600} bg={theme.colors.red[0]} p="md" withBorder>
-            <Flex direction="row" align="center" gap="sm">
-              <IconAlertCircle size="3rem" />
-              試合表を生成すると、以降はチーム登録やエントリーを変更できません。
-            </Flex>
-          </Paper>
-          <LoaderButton load={generate} leftSection={<IconTablePlus />}>
-            試合表を生成
-          </LoaderButton>
-        </Flex>
-      </Modal>
-      <Button onClick={open} leftSection={<IconTablePlus />}>
-        試合表を生成
-      </Button>
-    </>
+    <Table.Tr>
+      <Table.Td>
+        <Text fw="bold" ta="center">
+          {match.matchCode}
+        </Text>
+      </Table.Td>
+      <Table.Td>
+        <Text fw="bold" ta="center">
+          {Number(match.matchCode.split("-")[0])}
+        </Text>
+      </Table.Td>
+      <Table.Td>
+        <Text fw="bold" miw={200} ta="start">
+          {match.matchType == "pre"
+            ? match.leftTeam?.teamName
+            : match.team1?.teamName}
+        </Text>
+      </Table.Td>
+      <Table.Td>
+        <Text fw="bold" miw={200} ta="start">
+          {match.matchType == "pre"
+            ? match.rightTeam?.teamName
+            : match.team2?.teamName}
+        </Text>
+      </Table.Td>
+      <Table.Td>
+        <Center>
+          <MatchStatusButton
+            id={match.id}
+            matchType={match.matchType}
+            status={matchStatus}
+          />
+        </Center>
+      </Table.Td>
+    </Table.Tr>
   );
 };

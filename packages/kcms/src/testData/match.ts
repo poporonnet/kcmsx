@@ -39,6 +39,7 @@ export const testCreateRunResultMainData = [
     id: '900' as MainMatchID,
     courseIndex: 1,
     matchIndex: 1,
+    departmentType: config.departmentTypes[0],
     teamId1: '91' as TeamID,
     teamId2: '92' as TeamID,
     winnerId: '91' as TeamID,
@@ -291,12 +292,18 @@ export const testRankingPreMatchData = [
     runResults: [],
   }),
 ];
+
+/**
+ * **安来用**本戦ランキング生成用の試合データ
+ * 本戦は本来トーナメントなので、この限りではない
+ */
 export const testRankingMainMatchData = [
   // ToDo: L/Rを入れるとL/Rを入れ替えたデータも作れるようにしたい
   MainMatch.new({
     id: '900' as MainMatchID,
     courseIndex: 1,
     matchIndex: 1,
+    departmentType: config.departmentTypes[0],
     teamId1: '91' as TeamID,
     teamId2: '92' as TeamID,
     winnerId: '91' as TeamID,
@@ -318,14 +325,14 @@ export const testRankingMainMatchData = [
       RunResult.new({
         id: '82' as RunResultID,
         teamID: '91' as TeamID,
-        points: 12,
+        points: 5,
         goalTimeSeconds: Infinity,
         finishState: 'FINISHED',
       }),
       RunResult.new({
         id: '83' as RunResultID,
         teamID: '92' as TeamID,
-        points: 1,
+        points: 7,
         goalTimeSeconds: 80,
         finishState: 'GOAL',
       }),

@@ -1,12 +1,22 @@
-import { Button, Flex, Text } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  List,
+  Modal,
+  Paper,
+  Text,
+  useMantineTheme,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconSend2 } from "@tabler/icons-react";
-import { MatchInfo } from "config";
-
+import { IconAlertCircle, IconSend, IconSend2 } from "@tabler/icons-react";
+import { config, type MatchInfo, type MatchType } from "config";
+import { LoaderButton } from "../LoaderButton";
 type TeamResult = {
   id: string;
   points: number;
   time?: number;
+  teamName: string;
 };
 
 type APIPostRunResults = {
@@ -20,6 +30,7 @@ export const MatchSubmit = ({
   matchInfo,
   available,
   result,
+  onSubmit,
 }: {
   matchInfo: MatchInfo;
   available: boolean;
@@ -27,6 +38,7 @@ export const MatchSubmit = ({
     left?: Omit<TeamResult, "id">;
     right?: Omit<TeamResult, "id">;
   };
+  onSubmit: (isSucceeded: boolean) => void;
 }) => {
   const submit = async () => {
     const runResults: APIPostRunResults = [];
@@ -71,22 +83,82 @@ export const MatchSubmit = ({
             color: "red",
           }
     );
+
+    onSubmit(res?.ok ?? false);
   };
+  const [opened, { open, close }] = useDisclosure(false);
 
   return (
-    <Button
-      w="auto"
-      h="auto"
-      px="xl"
-      py="sm"
-      color="teal"
-      disabled={!available}
-      onClick={submit}
-    >
-      <Flex gap="xs">
-        <Text size="1.5rem">結果を送信</Text>
-        <IconSend2 />
+    <>
+      <Button
+        w="auto"
+        h="auto"
+        px="xl"
+        py="sm"
+        color="teal"
+        disabled={!available}
+        onClick={open}
+      >
+        <Flex gap="xs">
+          <Text size="1.5rem">結果を送信</Text>
+          <IconSend2 />
+        </Flex>
+      </Button>
+      <MatchSubmitModal
+        opened={opened}
+        close={close}
+        submit={submit}
+        result={result}
+        matchType={matchInfo.matchType}
+      />
+    </>
+  );
+};
+
+const MatchSubmitModal = ({
+  opened,
+  close,
+  submit,
+  result,
+  matchType,
+}: {
+  opened: boolean;
+  close: () => void;
+  submit: () => Promise<void>;
+  result: {
+    left?: Omit<TeamResult, "id">;
+    right?: Omit<TeamResult, "id">;
+  };
+  matchType: MatchType;
+}) => {
+  const theme = useMantineTheme();
+  return (
+    <Modal opened={opened} onClose={close} title="走行結果送信確認" centered>
+      <Flex direction="column" gap="md">
+        <Text>
+          以下のチームによる{config.match[matchType].name}
+          試合の走行結果を送信します:
+        </Text>
+        <List withPadding>
+          {result.left && <List.Item>{result.left.teamName}</List.Item>}
+          {result.right && <List.Item>{result.right.teamName}</List.Item>}
+        </List>
+        <Paper c="red" fw={600} bg={theme.colors.red[0]} p="md" withBorder>
+          <Flex direction="row" align="center" gap="sm">
+            <IconAlertCircle size="3rem" />
+            走行結果を送信すると、以降は削除したり変更したりすることができません。
+          </Flex>
+        </Paper>
+        <LoaderButton
+          load={async () => {
+            await submit();
+            close();
+          }}
+          leftSection={<IconSend />}
+        >
+          走行結果を送信
+        </LoaderButton>
       </Flex>
-    </Button>
+    </Modal>
   );
 };

@@ -9,6 +9,9 @@ import { RunResult, RunResultID } from '../../model/runResult';
 export class PrismaPreMatchRepository implements PreMatchRepository {
   constructor(private readonly client: PrismaClient) {}
 
+  //sqliteのIntegerにはInfinityを入れられないため十分に大きい整数に変換する
+  private readonly INT32MAX: number = 2147483647;
+
   private deserialize(
     res: Prisma.PromiseReturnType<
       typeof this.client.preMatch.findMany<{ include: { runResult: true } }>
@@ -31,7 +34,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
             id: v.id as RunResultID,
             teamID: v.teamID as TeamID,
             points: v.points,
-            goalTimeSeconds: v.goalTimeSeconds,
+            goalTimeSeconds: v.goalTimeSeconds === this.INT32MAX ? Infinity : v.goalTimeSeconds,
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
         ),
@@ -112,66 +115,69 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
 
   async update(match: PreMatch): Promise<Result.Result<Error, void>> {
     try {
-      const runResults = await this.client.runResult.findMany({
+      const currentRunResults = await this.client.runResult.findMany({
         where: {
           preMatchId: match.getId(),
         },
       });
-      if (runResults.length === 0) {
-        await this.client.runResult.createMany({
-          data: match.getRunResults().map((v) => {
-            return {
-              id: v.getId(),
-              teamID: v.getTeamId(),
-              points: v.getPoints(),
-              goalTimeSeconds: v.getGoalTimeSeconds(),
-              preMatchId: match.getId(),
-              // NOTE: GOAL: 0 , FINISHED: 1
-              finishState: v.isGoal() ? 0 : 1,
-            };
-          }),
-        });
-        await this.client.preMatch.update({
-          where: {
-            id: match.getId(),
+      const currentRunResultIDs = new Set<string>(currentRunResults.map((v) => v.id));
+
+      // 複数更新と複数作成が同時にできないため、クエリを分ける
+      const { updatable: updatableRunResults, new: newRunResults } = match
+        .getRunResults()
+        .reduce<{ updatable: RunResult[]; new: RunResult[] }>(
+          (results, runResult) => {
+            const updateType = currentRunResultIDs.has(runResult.getId()) ? 'updatable' : 'new';
+            results[updateType].push(runResult);
+            return results;
           },
-          data: {
-            courseIndex: match.getCourseIndex(),
-            matchIndex: match.getMatchIndex(),
-            leftTeamID: match.getTeamId1(),
-            rightTeamID: match.getTeamId2(),
+          { updatable: [], new: [] }
+        );
+
+      await this.client.runResult.createMany({
+        data: newRunResults.map((v) => ({
+          id: v.getId(),
+          teamID: v.getTeamId(),
+          points: v.getPoints(),
+          // NOTE: Infinity: 2147483647
+          goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+            ? v.getGoalTimeSeconds()
+            : this.INT32MAX,
+          preMatchId: match.getId(),
+          // NOTE: GOAL: 0 , FINISHED: 1
+          finishState: v.isGoal() ? 0 : 1,
+        })),
+      });
+      await this.client.preMatch.update({
+        where: {
+          id: match.getId(),
+        },
+        data: {
+          courseIndex: match.getCourseIndex(),
+          matchIndex: match.getMatchIndex(),
+          departmentType: match.getDepartmentType(),
+          leftTeamID: match.getTeamId1(),
+          rightTeamID: match.getTeamId2(),
+          runResult: {
+            updateMany: updatableRunResults.map((v) => ({
+              where: {
+                id: v.getId(),
+              },
+              data: {
+                id: v.getId(),
+                teamID: v.getTeamId(),
+                points: v.getPoints(),
+                // NOTE: Infinity: 2147483647
+                goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
+                  ? v.getGoalTimeSeconds()
+                  : this.INT32MAX,
+                // NOTE: GOAL: 0 , FINISHED: 1
+                finishState: v.isGoal() ? 0 : 1,
+              },
+            })),
           },
-        });
-      } else {
-        await this.client.preMatch.update({
-          where: {
-            id: match.getId(),
-          },
-          data: {
-            courseIndex: match.getCourseIndex(),
-            matchIndex: match.getMatchIndex(),
-            leftTeamID: match.getTeamId1(),
-            rightTeamID: match.getTeamId2(),
-            runResult: {
-              updateMany: match.getRunResults().map((v) => {
-                return {
-                  where: {
-                    id: v.getId(),
-                  },
-                  data: {
-                    id: v.getId(),
-                    teamID: v.getTeamId(),
-                    points: v.getPoints(),
-                    goalTimeSeconds: v.getGoalTimeSeconds(),
-                    // NOTE: GOAL: 0 , FINISHED: 1
-                    finishState: v.isGoal() ? 0 : 1,
-                  },
-                };
-              }),
-            },
-          },
-        });
-      }
+        },
+      });
       return Result.ok(undefined);
     } catch (e) {
       return Result.err(e as Error);

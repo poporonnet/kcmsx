@@ -32,13 +32,16 @@ model Team {
 }
 
 model MainMatch {
-  id           String  @id
-  courseIndex  Int     @map("course_index")
-  matchIndex   Int     @map("match_index")
-  leftTeamId   String? @map("left_team_id")
-  leftTeam     Team?   @relation("main_left_team", fields: [leftTeamId], references: [id])
-  rightTeamId  String? @map("right_team_id")
-  rightTeam    Team?   @relation("main_right_team", fields: [rightTeamId], references: [id])
+  id             String @id
+  departmentType String @map("department_type")
+  courseIndex    Int    @map("course_index")
+  matchIndex     Int    @map("match_index")
+
+  leftTeamId  String? @map("left_team_id")
+  leftTeam    Team?   @relation("main_left_team", fields: [leftTeamId], references: [id])
+  rightTeamId String? @map("right_team_id")
+  rightTeam   Team?   @relation("main_right_team", fields: [rightTeamId], references: [id])
+
   // NOTE: アプリケーション側を信用するのでここはリレーションを作らないことにした (PreMatchも同様)
   winnerTeamId String? @map("winner_team_id")
 

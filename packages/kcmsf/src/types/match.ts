@@ -1,4 +1,4 @@
-import { DepartmentType } from "config";
+import { DepartmentType, MatchType } from "config";
 import { RunResult } from "./runResult";
 
 /**
@@ -21,22 +21,31 @@ type MatchBase = {
 };
 
 /**
+ * マッチの試合種別にかかわる情報
+ */
+type MatchTypeRecord<Type extends MatchType> = {
+  matchType: Type;
+};
+
+/**
  * 予選のマッチ
  */
-export type PreMatch = MatchBase & {
-  leftTeam?: BriefTeam;
-  rightTeam?: BriefTeam;
-};
+export type PreMatch = MatchBase &
+  MatchTypeRecord<"pre"> & {
+    leftTeam?: BriefTeam;
+    rightTeam?: BriefTeam;
+  };
 
 /**
  * 本戦のマッチ
  * @todo `winnerId`のプロパティ名が誤っている (`winnerID`)
  */
-export type MainMatch = MatchBase & {
-  team1: BriefTeam;
-  team2: BriefTeam;
-  winnerId: string; // TODO: スキーマの修正漏れ
-};
+export type MainMatch = MatchBase &
+  MatchTypeRecord<"main"> & {
+    team1: BriefTeam;
+    team2: BriefTeam;
+    winnerId: string; // TODO: スキーマの修正漏れ
+  };
 
 /**
  * マッチ
@@ -59,6 +68,7 @@ export type ShortPreMatch = MatchBase & {
 export type ShortMainMatch = MatchBase & {
   team1ID: string;
   team2ID: string;
+  winnerId: string;
 };
 
 /**
@@ -66,3 +76,12 @@ export type ShortMainMatch = MatchBase & {
  * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortMatch = ShortPreMatch | ShortMainMatch;
+
+/**
+ * 本戦のマッチのマニュアル生成に必要な情報
+ * @description `POST /match/main/{departmentType}/generate/manual`のみで使われる
+ */
+export type CreateMainMatchManualArgs = {
+  team1ID: string;
+  team2ID: string;
+};

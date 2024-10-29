@@ -11,14 +11,15 @@
     "format": "prettier --write .",
     "test": "vitest --watch --ui --coverage.enabled=true",
     "test:ci": "vitest run --coverage.enabled=true",
-    "check": "prettier --check \"src/**/*.{ts,tsx}\" && tsc -p . --noEmit"
+    "check": "prettier --check \"src/**/*.{ts,tsx}\" && tsc -p . --noEmit",
+    "start": "serve -p 4173 -s dist/"
   },
   "dependencies": {
     "@mantine/carousel": "^7.3.1",
     "@mantine/core": "^7.3.1",
     "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.3.1",
-    "@mantine/notifications": "7.13.2",
+    "@mantine/notifications": "7.13.4",
     "@mikuroxina/mini-fn": "^6.0.0",
     "@tabler/icons-react": "3.17.0",
     "config": "workspace:^",
@@ -52,9 +53,10 @@
     "postcss-simple-vars": "^7.0.1",
     "prettier": "3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
+    "serve": "^14.2.4",
     "typescript": "^5.3.3",
     "vite": "^5.0.0",
     "vitest": "^2.0.0"
   },
-  "packageManager": "pnpm@9.12.1"
+  "packageManager": "pnpm@9.12.2"
 }

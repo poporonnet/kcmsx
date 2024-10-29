@@ -1,7 +1,9 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType } from 'config';
 import { TeamID } from '../../team/models/team';
-import { PreMatchRepository } from '../model/repository';
+import { MainMatch } from '../model/main';
+import { PreMatch } from '../model/pre';
+import { MainMatchRepository, PreMatchRepository } from '../model/repository';
 import { RunResult } from '../model/runResult';
 
 export interface RankingDatum {
@@ -12,7 +14,10 @@ export interface RankingDatum {
 }
 
 export class GenerateRankingService {
-  constructor(private readonly preMatchRepository: PreMatchRepository) {}
+  constructor(
+    private readonly preMatchRepository: PreMatchRepository,
+    private readonly mainMatchRepository: MainMatchRepository
+  ) {}
 
   async generatePreMatchRanking(
     departmentType: DepartmentType
@@ -25,6 +30,26 @@ export class GenerateRankingService {
       (match) => match.getDepartmentType() === departmentType
     );
 
+    return this.generateRanking(departmentMatches);
+  }
+
+  async generateMainMatchRanking(
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, RankingDatum[]>> {
+    const matchesRes = await this.mainMatchRepository.findAll();
+    if (Result.isErr(matchesRes)) {
+      return matchesRes;
+    }
+    const departmentMatches = Result.unwrap(matchesRes).filter(
+      (match) => match.getDepartmentType() === departmentType
+    );
+
+    return this.generateRanking(departmentMatches);
+  }
+
+  private async generateRanking(
+    matches: (PreMatch | MainMatch)[]
+  ): Promise<Result.Result<Error, RankingDatum[]>> {
     // 各チームごとに走行結果を集める
     const teamRunResults = new Map<TeamID, RunResult[]>();
     const addRunResults = (teamID: TeamID | undefined, runResultSource: RunResult[]) => {
@@ -34,7 +59,7 @@ export class GenerateRankingService {
       const prev = teamRunResults.get(teamID) ?? [];
       teamRunResults.set(teamID, [...prev, ...runResults]);
     };
-    departmentMatches.forEach((match) => {
+    matches.forEach((match) => {
       const runResults = match.getRunResults();
       addRunResults(match.getTeamId1(), runResults);
       addRunResults(match.getTeamId2(), runResults);
@@ -65,11 +90,11 @@ export class GenerateRankingService {
       const prevPoints = rankingData[i - 1]?.points ?? -1;
       /** 前回のゴールタイム */
       const prevGoalTime = rankingData[i - 1]?.goalTimeSeconds ?? Infinity;
-      const rank = rankingData[i - 1]?.rank ?? 0;
+      const prevRank = rankingData[i - 1]?.rank ?? 0;
       const isSameRank = v[1].points === prevPoints && v[1].goalTimeSeconds === prevGoalTime;
-
+      const currentRank = isSameRank ? prevRank : i + 1;
       rankingData.push({
-        rank: isSameRank ? rank : rank + 1,
+        rank: currentRank,
         teamID: v[0],
         points: v[1].points,
         goalTimeSeconds: v[1].goalTimeSeconds,

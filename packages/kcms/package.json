@@ -13,7 +13,8 @@
     "test": "vitest run --typecheck",
     "coverage": "vitest run --coverage",
     "check": "prettier --check 'src/**/**.ts' && tsc -p . --noEmit",
-    "prepare": "prisma generate"
+    "prepare": "prisma generate",
+    "studio": "prisma studio"
   },
   "keywords": [],
   "author": "Poporon Network (Tatsuto C. YAMAMOTO) & Other Contributors",
@@ -23,7 +24,7 @@
     "@hono/zod-openapi": "^0.16.0",
     "@hono/zod-validator": "^0.4.0",
     "@mikuroxina/mini-fn": "^6.0.0",
-    "@prisma/client": "5.20.0",
+    "@prisma/client": "5.21.1",
     "@scalar/hono-api-reference": "^0.5.152",
     "config": "workspace:^",
     "esbuild": "^0.24.0",
