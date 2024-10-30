@@ -5,7 +5,7 @@ import { DummyRepository } from '../adaptor/repository/dummyRepository.js';
 import { TeamID } from '../models/team.js';
 import { FetchTeamService } from './fetchTeam.js';
 
-describe('getEntryService', () => {
+describe('FetchTeamService', () => {
   const repository = new DummyRepository();
   const service = new FetchTeamService(repository);
 
