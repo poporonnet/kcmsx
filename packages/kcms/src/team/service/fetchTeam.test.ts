@@ -1,29 +1,49 @@
 import { Result } from '@mikuroxina/mini-fn';
-import { describe, expect, it } from 'vitest';
-import { DummyRepository } from '../adaptor/repository/dummyRepository';
-import { Team, TeamID } from '../models/team';
-import { FetchTeamService } from './fetchTeam';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { TestEntryData } from '../../testData/entry.js';
+import { DummyRepository } from '../adaptor/repository/dummyRepository.js';
+import { TeamID } from '../models/team.js';
+import { FetchTeamService } from './fetchTeam.js';
 
-describe('FetchTeamService', () => {
-  const teamData = Team.new({
-    id: '7549586' as TeamID,
-    teamName: 'かに2',
-    members: ['メンバー3'],
-    robotType: 'wheel',
-    departmentType: 'elementary',
-  });
-  const repository = new DummyRepository([teamData]);
+describe('getEntryService', () => {
+  const repository = new DummyRepository();
   const service = new FetchTeamService(repository);
 
-  it('チーム取得ができる', async () => {
-    const teamRes = await service.handle('7549586' as TeamID);
-    expect(Result.isErr(teamRes)).toBe(false);
-    const team = Result.unwrap(teamRes);
-    expect(team).toStrictEqual(teamData);
+  const testEntryData = [TestEntryData['ElementaryMultiWalk'], TestEntryData['ElementaryWheel']];
+
+  beforeEach(() => {
+    testEntryData.map((d) => repository.create(d));
+  });
+  afterEach(() => {
+    repository.reset();
   });
 
-  it('チームがない場合はエラーを返す', async () => {
-    const teamRes = await service.handle('0' as TeamID);
-    expect(Result.isErr(teamRes)).toBe(true);
+  it('すべて取得できる', async () => {
+    const actual = await service.findAll();
+
+    expect(Result.isOk(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(testEntryData);
+  });
+
+  it('チーム名で取得できる', async () => {
+    const actual = await service.findByTeamName(testEntryData[0].getTeamName());
+    expect(Result.isOk(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(testEntryData[0]);
+  });
+
+  it('チームIDで取得できる', async () => {
+    const actual = await service.findByID(testEntryData[0].getId());
+    expect(Result.isOk(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(testEntryData[0]);
+  });
+
+  it('存在しないときはエラーを返す', async () => {
+    const actual = await service.findByID('0' as TeamID);
+    expect(Result.isErr(actual)).toBe(true);
+    expect(actual[1]).toStrictEqual(new Error('Not found'));
+
+    const actual2 = await service.findByTeamName('team0');
+    expect(Result.isErr(actual2)).toBe(true);
+    expect(actual2[1]).toStrictEqual(new Error('Not found'));
   });
 });

@@ -27,7 +27,7 @@ import { GetMatchService } from '../match/service/get';
 import { CreateTeamService } from './service/createTeam';
 import { DeleteTeamService } from './service/delete';
 import { EntryService } from './service/entry';
-import { FetchTeamService } from './service/get';
+import { FetchTeamService } from './service/fetchTeam';
 
 export const teamHandler = new OpenAPIHono();
 const isProduction = process.env.NODE_ENV === 'production';
