@@ -33,7 +33,7 @@ export const MatchResult = () => {
         //   })
         //   .reduce((sum, result) => sum + result.points,0);
         // console.log(rightTeamResultPoints);
-        
+
         if (match.runResults[0].teamID == matchInfo?.teams.right?.id) {
           setRightTeamResult(match.runResults[0]);
           setLeftTeamResult(match.runResults[1]);
