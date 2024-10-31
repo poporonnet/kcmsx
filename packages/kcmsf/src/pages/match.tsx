@@ -34,7 +34,11 @@ export const Match = () => {
     },
     [matchJudge, forceReload]
   );
-  const isMatchFinished = match && match?.runResults.length >= 2 ? true : false;
+  //本選なら4つ,予選なら2つの結果があれば試合終了とみなす
+  const isMatchFinished =
+    matchInfo?.matchType == "pre"
+      ? match && match?.runResults.length >= 2
+      : match && match?.runResults.length >= 4;
   return (
     <>
       {isMatchFinished ? (
