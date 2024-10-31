@@ -48,7 +48,7 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.3.3
-        version: 1.13.2(hono@4.6.7)
+        version: 1.13.3(hono@4.6.7)
       '@hono/zod-openapi':
         specifier: ^0.16.0
         version: 0.16.4(hono@4.6.7)(zod@3.23.8)
@@ -290,8 +290,8 @@ packages:
     resolution: {integrity: sha512-z88xeGxnzehn2sqZ8UdGQEvYErF1odv2CftxInpSYJt6uHuPe9YjahKZITGs3l5LeI9d2ROG+obuDAoSlqbNfQ==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/code-frame@7.26.0':
-    resolution: {integrity: sha512-INCKxTtbXtcNbUZ3YXutwMpEleqttcswhAdee7dhuoVrD2cnuc3PqtERBtxkX5nziX9vnBL8WXmSGwv8CuPV6g==}
+  '@babel/code-frame@7.26.2':
+    resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/compat-data@7.25.9':
@@ -1086,8 +1086,8 @@ packages:
   '@floating-ui/utils@0.2.8':
     resolution: {integrity: sha512-kym7SodPp8/wloecOpcmSnWJsK7M0E5Wg8UcFA+uO4B9s5d0ywXOEro/8HM9x0rW+TljRzul/14UYz3TleT3ig==}
 
-  '@hono/node-server@1.13.2':
-    resolution: {integrity: sha512-0w8nEmAyx0Ul0CQp8BL2VtAG4YVdpzXd/mvvM+l0G5Oq22pUyHS+KeFFPSY+czLOF5NAiV3MUNPD1n14Ol5svg==}
+  '@hono/node-server@1.13.3':
+    resolution: {integrity: sha512-tEo3hcyQ6chvSnJ3tKzfX4z2sd7Q+ZkBwwBdW1Ya8Mz29dukxC2xcWiB/lAMwGJrYMW8QTgknIsLu1AsnMBe7A==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
       hono: ^4
@@ -3418,7 +3418,7 @@ snapshots:
       '@babel/highlight': 7.25.9
       picocolors: 1.1.1
 
-  '@babel/code-frame@7.26.0':
+  '@babel/code-frame@7.26.2':
     dependencies:
       '@babel/helper-validator-identifier': 7.25.9
       js-tokens: 4.0.0
@@ -3955,7 +3955,7 @@ snapshots:
 
   '@floating-ui/utils@0.2.8': {}
 
-  '@hono/node-server@1.13.2(hono@4.6.7)':
+  '@hono/node-server@1.13.3(hono@4.6.7)':
     dependencies:
       hono: 4.6.7
 
@@ -4234,7 +4234,7 @@ snapshots:
 
   '@testing-library/dom@10.4.0':
     dependencies:
-      '@babel/code-frame': 7.26.0
+      '@babel/code-frame': 7.26.2
       '@babel/runtime': 7.26.0
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
