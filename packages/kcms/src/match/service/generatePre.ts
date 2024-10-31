@@ -2,7 +2,7 @@ import { Result } from '@mikuroxina/mini-fn';
 import { config, DepartmentType } from 'config';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { Team } from '../../team/models/team';
-import { FetchTeamService } from '../../team/service/get';
+import { FetchTeamService } from '../../team/service/fetchTeam';
 import { PreMatch } from '../model/pre';
 import { PreMatchRepository } from '../model/repository';
 
