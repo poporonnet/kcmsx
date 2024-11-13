@@ -2,7 +2,7 @@ import { z } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType, MatchType } from 'config';
 import { Team, TeamID } from '../../../team/models/team';
-import { FetchTeamService } from '../../../team/service/get';
+import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { FetchRunResultService } from '../../service/fetchRunResult';

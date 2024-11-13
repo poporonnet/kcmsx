@@ -7,7 +7,7 @@ import { errorToCode } from '../team/adaptor/errors';
 import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
 import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
 import { TeamID } from '../team/models/team';
-import { FetchTeamService } from '../team/service/get';
+import { FetchTeamService } from '../team/service/fetchTeam';
 import { MatchController } from './adaptor/controller/match';
 import { DummyMainMatchRepository } from './adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from './adaptor/dummy/preMatchRepository';

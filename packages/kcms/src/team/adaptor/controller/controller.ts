@@ -4,7 +4,7 @@ import { TeamID } from '../../models/team';
 import { CreateTeamService } from '../../service/createTeam';
 import { DeleteTeamService } from '../../service/delete';
 import { EntryService } from '../../service/entry';
-import { FetchTeamService } from '../../service/get';
+import { FetchTeamService } from '../../service/fetchTeam';
 import {
   GetTeamResponseSchema,
   GetTeamsResponseSchema,
