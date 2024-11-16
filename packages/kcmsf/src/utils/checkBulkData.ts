@@ -23,8 +23,7 @@ export const checkData = (data: CSVRow[]) => {
   const newErrors = data.map(() => [false, false, false, false, false, false]);
   let isError = false;
   data.forEach((row, i) => {
-    const { teamName, member1, member2, robotType, departmentType } =
-      row;
+    const { teamName, member1, member2, robotType, departmentType } = row;
 
     // 1文字以上
     if (teamName.length < 1) {
