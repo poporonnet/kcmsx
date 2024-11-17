@@ -1,14 +1,4 @@
-import {
-  Box,
-  Button,
-  Code,
-  Group,
-  Paper,
-  rem,
-  Table,
-  Text,
-  Title,
-} from "@mantine/core";
+import { Box, Button, Group, Paper, rem, Text, Title } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import {
@@ -17,49 +7,32 @@ import {
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
-import { config, type DepartmentType, type RobotType } from "config";
+import { DepartmentType, RobotType } from "config";
 import { useState } from "react";
+import { CSVDescription } from "../components/CsvDescription";
+import { EntryTable } from "../components/EntryTable";
 import type { PostTeamsRequest } from "../types/api/team";
 import type { CreateTeamArgs } from "../types/team";
-import { checkData } from "../utils/checkBulkData";
 
 // CSVの1行を表す型
 export type CSVRow = {
   teamName: string;
   member1: string;
   member2: string;
-  robotType: RobotType;
-  departmentType: DepartmentType;
+  robotType: string;
+  departmentType: string;
   clubName: string;
-};
-
-const csvDescription = {
-  name: "1文字以上。重複できない。",
-  member1: "3文字以上。",
-  member2: "3文字以上。1人の場合は空欄。",
-  robotType: config.robotTypes.join("または"),
-  departmentType: config.departmentTypes.join("または"),
-  clubName: "所属していなければ空欄。",
 };
 
 export const RegisterBulk = () => {
   const [csvData, setCsvData] = useState<CSVRow[]>();
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errors, setErrors] = useState<boolean[][]>();
-
   const handleDrop = async (files: File[]) => {
     const file = files[0];
     if (!file) return;
-
     const text = await file.text();
     const data = parseCSV(text);
     setCsvData(data);
-
-    const { newErrors, isError } = checkData(data);
-    setErrors(newErrors);
-    setIsError(isError);
   };
-
   // CSVのテキストをパースして、CSVRowの配列に変換
   const parseCSV = (text: string): CSVRow[] => {
     const rows = text
@@ -74,8 +47,8 @@ export const RegisterBulk = () => {
       teamName: row[0],
       member1: row[1],
       member2: row[2],
-      robotType: row[3] as RobotType,
-      departmentType: row[4] as DepartmentType,
+      robotType: row[3],
+      departmentType: row[4],
       clubName: row[5],
     }));
 
@@ -88,8 +61,8 @@ export const RegisterBulk = () => {
       (row): CreateTeamArgs => ({
         name: row.teamName,
         members: [row.member1, row.member2],
-        robotType: row.robotType,
-        departmentType: row.departmentType,
+        robotType: row.robotType as RobotType,
+        departmentType: row.departmentType as DepartmentType,
         clubName: row.clubName,
       })
     );
@@ -115,25 +88,23 @@ export const RegisterBulk = () => {
     }
   };
 
-  const clear = () => {
-    setIsError(false);
-    setCsvData(undefined);
-    setErrors(undefined);
-  };
-
   return (
     <>
-      <Text>一括エントリー</Text>
-      {csvData && errors ? (
+      <Title>一括エントリー</Title>
+      {csvData ? (
         <>
           <p>この内容で登録します</p>
           <Box>
-            <EntryTable data={csvData} errors={errors} />
+            <EntryTable data={csvData} />
           </Box>
-          <Button m={"2rem"} onClick={clear} variant="default">
+          <Button
+            m={"2rem"}
+            onClick={() => setCsvData(undefined)}
+            variant="default"
+          >
             リセット
           </Button>
-          <Button m={"2rem"} onClick={sendData} disabled={isError}>
+          <Button m={"2rem"} onClick={sendData}>
             <IconSend stroke={2} />
             登録
           </Button>
@@ -203,90 +174,7 @@ export const RegisterBulk = () => {
           </Dropzone>
         </Paper>
       )}
-      <Paper p="xl" mt={16}>
-        <Title order={3}>CSVの形式</Title>
-        <DescriptionTable />
-        <RegisterBulkSample />
-      </Paper>
-    </>
-  );
-};
-
-const EntryTable = (props: { data: CSVRow[]; errors: boolean[][] }) => {
-  return (
-    <Box>
-      <Table>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>チーム名</Table.Th>
-            <Table.Th>メンバー1</Table.Th>
-            <Table.Th>メンバー2</Table.Th>
-            <Table.Th>ロボットの種別</Table.Th>
-            <Table.Th>部門</Table.Th>
-            <Table.Th>クラブ名</Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          {props.data.map((row, i) => (
-            <Table.Tr key={`row-${i}`}>
-              {Object.values(row).map((cell, j) => (
-                <Table.Td
-                  ta={"left"}
-                  key={`cell-${i}-${j}`}
-                  style={{
-                    backgroundColor: props.errors[i]?.[j]
-                      ? "#EC777E"
-                      : "inherit",
-                  }}
-                >
-                  {cell}
-                </Table.Td>
-              ))}
-            </Table.Tr>
-          ))}
-        </Table.Tbody>
-      </Table>
-    </Box>
-  );
-};
-
-const DescriptionTable = () => {
-  return (
-    <Table mb={10} striped withTableBorder horizontalSpacing="md">
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th ta="center">カラム名</Table.Th>
-          <Table.Th ta="center">制約</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {Object.entries(csvDescription).map(([key, value]) => (
-          <Table.Tr key={key}>
-            <Table.Td ta="center">
-              <Text>{key}</Text>
-            </Table.Td>
-            <Table.Td ta="left">
-              <Text>{value}</Text>
-            </Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
-  );
-};
-
-const RegisterBulkSample = () => {
-  const sampleCsv = `name,member1,member2,robotType,departmentType,clubName 
-はなびらちーむ,さくら,あお,leg,elementary,Rubyクラブ
-優勝するぞ,ちひろ,,${config.robotTypes[0]},elementary,
-ひまわり,ゆうた,ゆうと,leg,${config.departmentTypes[0]},`;
-
-  return (
-    <>
-      <Title order={3}>CSVの例</Title>
-      <Code block ta={"left"}>
-        {sampleCsv}
-      </Code>
+      <CSVDescription />
     </>
   );
 };

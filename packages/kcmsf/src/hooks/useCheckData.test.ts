@@ -1,7 +1,8 @@
 // registerBulk.test.tsx
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { checkData } from "../utils/checkBulkData";
-import { CSVRow } from "./registerBulk";
+import { CSVRow } from "../pages/registerBulk";
+import { errorMessages } from "../utils/notifyError";
+import { useCheckData } from "./useCheckData";
 describe("checkData", () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -17,9 +18,15 @@ describe("checkData", () => {
         clubName: "Rubyクラブ",
       },
     ];
-    const { newErrors, isError } = checkData(data);
-    expect(isError).toBe(false);
-    expect(newErrors[0]).toEqual([false, false, false, false, false, false]);
+    const errors = useCheckData(data);
+    expect(errors[0]).toEqual({
+      teamName: [],
+      member1: [],
+      member2: [],
+      robotType: [],
+      departmentType: [],
+      clubName: [],
+    });
   });
 
   it("チーム名が重複している場合、エラーを返す", () => {
@@ -42,10 +49,8 @@ describe("checkData", () => {
       },
     ];
 
-    const { newErrors, isError } = checkData(data as CSVRow[]);
-    expect(isError).toBe(true);
-    expect(newErrors[0][0]).toBe(true);
-    expect(newErrors[1][0]).toBe(true);
+    const errors = useCheckData(data as CSVRow[]);
+    expect(errors[1].teamName).toEqual([errorMessages.duplicateTeamName]);
   });
 
   it("メンバー名が3文字未満の場合、エラーを返す", () => {
@@ -60,10 +65,8 @@ describe("checkData", () => {
       },
     ];
 
-    const { newErrors, isError } = checkData(data as CSVRow[]);
-    expect(isError).toBe(true);
-    expect(newErrors[0][1]).toBe(true);
-    expect(newErrors[0][2]).toBe(true);
+    const errors = useCheckData(data as CSVRow[]);
+    expect(errors[0].member1).toEqual([errorMessages.shortMemberName]);
   });
 
   it("無効なロボットタイプの場合、エラーを返す", () => {
@@ -78,8 +81,7 @@ describe("checkData", () => {
       },
     ];
 
-    const { newErrors, isError } = checkData(data as CSVRow[]);
-    expect(isError).toBe(true);
-    expect(newErrors[0][3]).toBe(true);
+    const errors = useCheckData(data as CSVRow[]);
+    expect(errors[0].robotType).toEqual([errorMessages.invalidRobotCategory]);
   });
 });
