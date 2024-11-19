@@ -3,12 +3,12 @@ import { CSVRow } from "../pages/registerBulk";
 import { errorMessages } from "../utils/notifyError";
 
 export type ErrorData = {
-  teamName: string[];
-  member1: string[];
-  member2: string[];
-  robotType: string[];
-  departmentType: string[];
-  clubName: string[];
+  teamName?: string;
+  member1?: string;
+  member2:? string;
+  robotType?: string;
+  departmentType?: string;
+  clubName?: string;
 };
 export const useCheckData = (data: CSVRow[]) => {
   const errors: ErrorData[] = data.map(() => {
