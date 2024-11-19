@@ -8,12 +8,14 @@ export const errorMessages = {
     "ロボットのカテゴリーは車輪型または歩行型にしてください",
   shortClubName: "クラブ名が短すぎます",
   duplicateTeamName: "チーム名が重複しています",
-};
+} as const;
 
-export const notifyError = (error: keyof typeof errorMessages) => {
+export type ErrorMessages = (typeof errorMessages)[keyof typeof errorMessages];
+
+export const notifyError = (message: ErrorMessages) => {
   notifications.show({
     title: "不正な形式のファイルです",
-    message: errorMessages[error],
+    message: message,
     color: "red",
   });
 };

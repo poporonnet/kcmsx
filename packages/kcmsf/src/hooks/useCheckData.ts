@@ -1,24 +1,28 @@
 import { isDepartmentType, isRobotType } from "config";
-import { CSVRow } from "../pages/registerBulk";
-import { errorMessages } from "../utils/notifyError";
+import { useState } from "react";
+import type { CSVRow } from "../pages/registerBulk";
+import { errorMessages, type ErrorMessages } from "../utils/notifyError";
 
-export type ErrorData = {
-  teamName: string[];
-  member1: string[];
-  member2: string[];
-  robotType: string[];
-  departmentType: string[];
-  clubName: string[];
-};
-export const useCheckData = (data: CSVRow[]) => {
+export const errorFields = [
+  "teamName",
+  "member1",
+  "member2",
+  "robotType",
+  "departmentType",
+  "clubName",
+] as const;
+type ErrorData = Record<(typeof errorFields)[number], ErrorMessages | "">;
+
+export const useCheckData = (csv: CSVRow[]) => {
+  const [data] = useState(csv);
   const errors: ErrorData[] = data.map(() => {
     return {
-      teamName: [],
-      member1: [],
-      member2: [],
-      robotType: [],
-      departmentType: [],
-      clubName: [],
+      teamName: "",
+      member1: "",
+      member2: "",
+      robotType: "",
+      departmentType: "",
+      clubName: "",
     };
   });
   data.forEach((row, i) => {
@@ -26,40 +30,41 @@ export const useCheckData = (data: CSVRow[]) => {
 
     // 1文字以上
     if (teamName.length < 1) {
-      errors[i].teamName.push(errorMessages.shortTeamName);
+      errors[i].teamName = errorMessages.shortTeamName;
     }
     // 3文字以上
     if (member1.length < 3) {
-      errors[i].member1.push(errorMessages.shortMemberName);
+      errors[i].member1 = errorMessages.shortMemberName;
     }
 
     // 3文字以上 or ""
     if (member2 && member2.length < 3) {
-      errors[i].member2.push(errorMessages.shortMemberName);
+      errors[i].member2 = errorMessages.shortMemberName;
     }
 
     // 正しい部門
     if (!isDepartmentType(departmentType)) {
-      errors[i].departmentType.push(errorMessages.invalidCategory);
+      errors[i].departmentType = errorMessages.invalidCategory;
     }
 
     // 正しいロボットカテゴリー
     if (!isRobotType(robotType)) {
-      errors[i].robotType.push(errorMessages.invalidRobotCategory);
+      errors[i].robotType = errorMessages.invalidRobotCategory;
     }
   });
 
   // teamNameの重複チェック
-  const teamNames = data.map((row) => row.teamName);
-  console.log(teamNames);
-  const uniqueTeamNames = new Set(teamNames);
-  if (teamNames.length !== uniqueTeamNames.size) {
-    teamNames.forEach((teamName, i) => {
-      if (teamNames.indexOf(teamName) !== i) {
-        errors[i].teamName.push(errorMessages.duplicateTeamName);
-      }
-    });
-  }
+  const teamNameCounts = data.reduce<Record<string, number>>((acc, row) => {
+    acc[row.teamName] = (acc[row.teamName] || 0) + 1;
+    return acc;
+  }, {});
+
+  // 出現回数が2以上のteamNameについてエラーを設定
+  data.forEach((row, i) => {
+    if (teamNameCounts[row.teamName] > 1) {
+      errors[i].teamName = errorMessages.duplicateTeamName;
+    }
+  });
 
   return errors;
 };

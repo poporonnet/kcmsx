@@ -9,7 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { DepartmentType, RobotType } from "config";
 import { useState } from "react";
-import { CSVDescription } from "../components/CsvDescription";
+import { CsvExample } from "../components/CsvExample";
 import { EntryTable } from "../components/EntryTable";
 import type { PostTeamsRequest } from "../types/api/team";
 import type { CreateTeamArgs } from "../types/team";
@@ -174,7 +174,7 @@ export const RegisterBulk = () => {
           </Dropzone>
         </Paper>
       )}
-      <CSVDescription />
+      <CsvExample />
     </>
   );
 };

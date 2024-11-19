@@ -1,4 +1,5 @@
 // registerBulk.test.tsx
+import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CSVRow } from "../pages/registerBulk";
 import { errorMessages } from "../utils/notifyError";
@@ -18,14 +19,14 @@ describe("checkData", () => {
         clubName: "Rubyクラブ",
       },
     ];
-    const errors = useCheckData(data);
-    expect(errors[0]).toEqual({
-      teamName: [],
-      member1: [],
-      member2: [],
-      robotType: [],
-      departmentType: [],
-      clubName: [],
+    const { result } = renderHook(() => useCheckData(data));
+    expect(result.current[0]).toEqual({
+      teamName: "",
+      member1: "",
+      member2: "",
+      robotType: "",
+      departmentType: "",
+      clubName: "",
     });
   });
 
@@ -49,8 +50,9 @@ describe("checkData", () => {
       },
     ];
 
-    const errors = useCheckData(data as CSVRow[]);
-    expect(errors[1].teamName).toEqual([errorMessages.duplicateTeamName]);
+    const { result } = renderHook(() => useCheckData(data as CSVRow[]));
+    expect(result.current[0].teamName).toEqual(errorMessages.duplicateTeamName);
+    expect(result.current[1].teamName).toEqual(errorMessages.duplicateTeamName);
   });
 
   it("メンバー名が3文字未満の場合、エラーを返す", () => {
@@ -65,8 +67,9 @@ describe("checkData", () => {
       },
     ];
 
-    const errors = useCheckData(data as CSVRow[]);
-    expect(errors[0].member1).toEqual([errorMessages.shortMemberName]);
+    const { result } = renderHook(() => useCheckData(data as CSVRow[]));
+    expect(result.current[0].member1).toEqual(errorMessages.shortMemberName);
+    expect(result.current[0].member2).toEqual(errorMessages.shortMemberName);
   });
 
   it("無効なロボットタイプの場合、エラーを返す", () => {
@@ -81,7 +84,9 @@ describe("checkData", () => {
       },
     ];
 
-    const errors = useCheckData(data as CSVRow[]);
-    expect(errors[0].robotType).toEqual([errorMessages.invalidRobotCategory]);
+    const { result } = renderHook(() => useCheckData(data as CSVRow[]));
+    expect(result.current[0].robotType).toEqual(
+      errorMessages.invalidRobotCategory
+    );
   });
 });

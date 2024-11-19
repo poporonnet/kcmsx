@@ -1,8 +1,8 @@
 import { Box, Table } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { useEffect } from "react";
-import { ErrorData, useCheckData } from "../hooks/useCheckData";
-import { CSVRow } from "../pages/registerBulk";
+import { errorFields, useCheckData } from "../hooks/useCheckData";
+import type { CSVRow } from "../pages/registerBulk";
+import { notifyError } from "../utils/notifyError";
 
 export const EntryTable = (props: { data: CSVRow[] }) => {
   const errors = useCheckData(props.data ?? []);
@@ -13,26 +13,13 @@ export const EntryTable = (props: { data: CSVRow[] }) => {
       const allErrors = errors.flatMap((error) =>
         Object.values(error).flatMap((value) => value)
       );
-      console.log("allErrors ", allErrors);
       const notify = new Set(allErrors);
-      notify.forEach((message) => {
-        notifications.show({
-          title: "不正な形式のファイルです",
-          message: message,
-          color: "red",
-        });
-      });
+      for (const message of notify) {
+        if (message) notifyError(message);
+      }
     }
   }, [errors]);
 
-  const errorFields: (keyof ErrorData)[] = [
-    "teamName",
-    "member1",
-    "member2",
-    "robotType",
-    "departmentType",
-    "clubName",
-  ];
   return (
     <Box>
       <Table>
@@ -55,8 +42,7 @@ export const EntryTable = (props: { data: CSVRow[] }) => {
                   key={`cell-${i}-${j}`}
                   style={{
                     backgroundColor:
-                      errors[i][errorFields[j]] &&
-                      errors[i][errorFields[j]].length > 0
+                      errors[i] && errors[i][errorFields[j]]
                         ? "#EC777E"
                         : "inherit",
                   }}
