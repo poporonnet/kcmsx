@@ -31,7 +31,7 @@ describe("checkData", () => {
   });
 
   it("チーム名が重複している場合、エラーを返す", () => {
-    const data = [
+    const data: CSVRow[] = [
       {
         teamName: "チーム1",
         member1: "さくら",
