@@ -10,12 +10,12 @@ export const errorMessages = {
   duplicateTeamName: "チーム名が重複しています",
 } as const;
 
-export type ErrorMessages = (typeof errorMessages)[keyof typeof errorMessages];
+export type ErrorMessages = keyof typeof errorMessages;
 
 export const notifyError = (message: ErrorMessages) => {
   notifications.show({
     title: "不正な形式のファイルです",
-    message: message,
+    message: errorMessages[message],
     color: "red",
   });
 };

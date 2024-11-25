@@ -7,12 +7,14 @@ import {
   IconUpload,
   IconX,
 } from "@tabler/icons-react";
-import { DepartmentType, RobotType } from "config";
-import { useState } from "react";
+import type { DepartmentType, RobotType } from "config";
+import { useEffect, useState } from "react";
 import { CsvExample } from "../components/CsvExample";
 import { EntryTable } from "../components/EntryTable";
+import { useCheckData } from "../hooks/useCheckData";
 import type { PostTeamsRequest } from "../types/api/team";
 import type { CreateTeamArgs } from "../types/team";
+import { notifyError } from "../utils/notifyError";
 
 // CSVの1行を表す型
 export type CSVRow = {
@@ -23,9 +25,9 @@ export type CSVRow = {
   departmentType: string;
   clubName: string;
 };
-
 export const RegisterBulk = () => {
   const [csvData, setCsvData] = useState<CSVRow[]>();
+  const errors = useCheckData(csvData ?? []);
   const handleDrop = async (files: File[]) => {
     const file = files[0];
     if (!file) return;
@@ -33,6 +35,18 @@ export const RegisterBulk = () => {
     const data = parseCSV(text);
     setCsvData(data);
   };
+
+  useEffect(() => {
+    // エラーがあれば通知
+    if (errors && errors.length > 0) {
+      const allErrors = errors.flatMap((error) => Object.values(error));
+      const notify = new Set(allErrors);
+      for (const message of notify) {
+        if (message !== undefined) notifyError(message);
+      }
+    }
+  }, [errors]);
+
   // CSVのテキストをパースして、CSVRowの配列に変換
   const parseCSV = (text: string): CSVRow[] => {
     const rows = text
@@ -95,7 +109,7 @@ export const RegisterBulk = () => {
         <>
           <p>この内容で登録します</p>
           <Box>
-            <EntryTable data={csvData} />
+            <EntryTable data={csvData} errors={errors} />
           </Box>
           <Button
             m={"2rem"}

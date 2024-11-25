@@ -1,8 +1,6 @@
-// registerBulk.test.tsx
 import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { CSVRow } from "../pages/registerBulk";
-import { errorMessages } from "../utils/notifyError";
+import type { CSVRow } from "../pages/registerBulk";
 import { useCheckData } from "./useCheckData";
 describe("checkData", () => {
   afterEach(() => {
@@ -21,12 +19,12 @@ describe("checkData", () => {
     ];
     const { result } = renderHook(() => useCheckData(data));
     expect(result.current[0]).toEqual({
-      teamName: "",
-      member1: "",
-      member2: "",
-      robotType: "",
-      departmentType: "",
-      clubName: "",
+      teamName: undefined,
+      member1: undefined,
+      member2: undefined,
+      robotType: undefined,
+      departmentType: undefined,
+      clubName: undefined,
     });
   });
 
@@ -51,12 +49,12 @@ describe("checkData", () => {
     ];
 
     const { result } = renderHook(() => useCheckData(data));
-    expect(result.current[0].teamName).toEqual(errorMessages.duplicateTeamName);
-    expect(result.current[1].teamName).toEqual(errorMessages.duplicateTeamName);
+    expect(result.current[0].teamName).toEqual("duplicateTeamName");
+    expect(result.current[1].teamName).toEqual("duplicateTeamName");
   });
 
   it("メンバー名が3文字未満の場合、エラーを返す", () => {
-    const data = [
+    const data: CSVRow[] = [
       {
         teamName: "チーム1",
         member1: "さ",
@@ -67,13 +65,13 @@ describe("checkData", () => {
       },
     ];
 
-    const { result } = renderHook(() => useCheckData(data as CSVRow[]));
-    expect(result.current[0].member1).toEqual(errorMessages.shortMemberName);
-    expect(result.current[0].member2).toEqual(errorMessages.shortMemberName);
+    const { result } = renderHook(() => useCheckData(data));
+    expect(result.current[0].member1).toEqual("shortMemberName");
+    expect(result.current[0].member2).toEqual("shortMemberName");
   });
 
-  it("無効なロボットタイプの場合、エラーを返す", () => {
-    const data = [
+  it("無効なロボット種別の場合、エラーを返す", () => {
+    const data: CSVRow[] = [
       {
         teamName: "チーム1",
         member1: "さくら",
@@ -84,9 +82,7 @@ describe("checkData", () => {
       },
     ];
 
-    const { result } = renderHook(() => useCheckData(data as CSVRow[]));
-    expect(result.current[0].robotType).toEqual(
-      errorMessages.invalidRobotCategory
-    );
+    const { result } = renderHook(() => useCheckData(data));
+    expect(result.current[0].robotType).toEqual("invalidRobotCategory");
   });
 });

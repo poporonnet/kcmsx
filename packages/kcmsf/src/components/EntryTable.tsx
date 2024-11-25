@@ -1,25 +1,8 @@
 import { Box, Table } from "@mantine/core";
-import { useEffect } from "react";
-import { errorFields, useCheckData } from "../hooks/useCheckData";
+import type { ErrorData } from "../hooks/useCheckData";
+import { errorFields } from "../hooks/useCheckData";
 import type { CSVRow } from "../pages/registerBulk";
-import { notifyError } from "../utils/notifyError";
-
-export const EntryTable = (props: { data: CSVRow[] }) => {
-  const errors = useCheckData(props.data ?? []);
-
-  // エラー通知
-  useEffect(() => {
-    if (errors && errors.length > 0) {
-      const allErrors = errors.flatMap((error) =>
-        Object.values(error).flatMap((value) => value)
-      );
-      const notify = new Set(allErrors);
-      for (const message of notify) {
-        if (message) notifyError(message);
-      }
-    }
-  }, [errors]);
-
+export const EntryTable = (props: { data: CSVRow[]; errors: ErrorData[] }) => {
   return (
     <Box>
       <Table>
@@ -41,10 +24,9 @@ export const EntryTable = (props: { data: CSVRow[] }) => {
                   ta={"left"}
                   key={`cell-${i}-${j}`}
                   style={{
-                    backgroundColor:
-                      errors[i] && errors[i][errorFields[j]]
-                        ? "#EC777E"
-                        : "inherit",
+                    backgroundColor: props.errors[i]?.[errorFields[j]]
+                      ? "#EC777E"
+                      : "inherit",
                   }}
                 >
                   {cell}
