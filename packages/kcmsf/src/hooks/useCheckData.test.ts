@@ -50,7 +50,7 @@ describe("checkData", () => {
       },
     ];
 
-    const { result } = renderHook(() => useCheckData(data as CSVRow[]));
+    const { result } = renderHook(() => useCheckData(data));
     expect(result.current[0].teamName).toEqual(errorMessages.duplicateTeamName);
     expect(result.current[1].teamName).toEqual(errorMessages.duplicateTeamName);
   });
