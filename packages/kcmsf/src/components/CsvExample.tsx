@@ -11,7 +11,7 @@ const csvDescription = {
 
 export const CsvExample = () => {
   const sampleCsv = `name,member1,member2,robotType,departmentType,clubName 
-はなびらちーむ,さくら,あお,leg,elementary,Rubyクラブ
+はなびらちーむ,さくら,あおい,leg,elementary,Rubyクラブ
 優勝するぞ,ちひろ,,${config.robotTypes[0]},elementary,
 ひまわり,ゆうた,ゆうと,leg,${config.departmentTypes[0]},`;
   return (
