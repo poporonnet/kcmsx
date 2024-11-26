@@ -10,7 +10,7 @@ export const errorMessages = {
   duplicateTeamName: "チーム名が重複しています",
 } as const;
 
-export type ErrorMessages = keyof typeof errorMessages;
+export type ErrorKey = keyof typeof errorMessages;
 
 export const notifyError = (message: ErrorMessages) => {
   notifications.show({
