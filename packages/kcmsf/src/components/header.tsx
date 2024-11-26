@@ -9,7 +9,6 @@ export function Header() {
           <Title>kcms</Title>
         </RouterLink>
         <RouterLink to="/team">参加者一覧</RouterLink>
-        <RouterLink to="/team">参加者一覧</RouterLink>
         <RouterLink to="/register">参加者登録</RouterLink>
         <RouterLink to="/register/bulk">一括登録</RouterLink>
         <RouterLink to="/matchlist">試合表</RouterLink>
