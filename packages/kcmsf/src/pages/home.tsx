@@ -1,21 +1,29 @@
-import { Link } from "react-router-dom";
+import { NavLink, Stack, Title } from "@mantine/core";
+import { RouterNavLink } from "../components/RouterNavLink";
+
 export const Home = () => {
   return (
-    <>
-      <h1>Home</h1>
-      <Link to="/team">参加者一覧</Link>
-      <br />
-      <Link to="/register">参加者登録</Link>
-      <br />
-      <Link to="/register/bulk">参加者一括登録</Link>
-      <br />
-      <Link to="/matchlist">試合表</Link>
-      <br />
-      <Link to="/result">試合結果</Link>
-      <br />
-      <Link to="/ranking">ランキング</Link>
-      <br />
-      <Link to="/match">エキシビション</Link>
-    </>
+    <Stack gap="md">
+      <Title m="md">Home</Title>
+      <Stack gap={0} w="15rem">
+        <NavLink label="参加者" color="dark" variant="subtle" defaultOpened>
+          <HomeNavLink label="参加者一覧" to="/team" />
+          <HomeNavLink label="参加者登録" to="/register" />
+          <HomeNavLink label="参加者一括登録" to="/register/bulk" />
+        </NavLink>
+        <NavLink label="試合" color="dark" variant="subtle" defaultOpened>
+          <HomeNavLink label="試合表" to="/matchlist" />
+          <HomeNavLink label="エキシビション" to="/match" />
+        </NavLink>
+        <NavLink label="結果" color="dark" variant="subtle" defaultOpened>
+          <HomeNavLink label="試合結果" to="/result" />
+          <HomeNavLink label="ランキング" to="/ranking" />
+        </NavLink>
+      </Stack>
+    </Stack>
   );
 };
+
+const HomeNavLink = ({ label, to }: { label: string; to: string }) => (
+  <RouterNavLink label={label} to={to} c="indigo" active variant="subtle" />
+);
