@@ -12,7 +12,7 @@ export const errorMessages = {
 
 export type ErrorKey = keyof typeof errorMessages;
 
-export const notifyError = (message: ErrorMessages) => {
+export const notifyError = (message: ErrorKey) => {
   notifications.show({
     title: "不正な形式のファイルです",
     message: errorMessages[message],

@@ -1,7 +1,7 @@
 import { isDepartmentType, isRobotType } from "config";
 import { useMemo } from "react";
 import type { CSVRow } from "../pages/registerBulk";
-import type { ErrorMessages } from "../utils/notifyError";
+import type { ErrorKey } from "../utils/notifyError";
 
 export const errorFields = [
   "teamName",
@@ -13,7 +13,7 @@ export const errorFields = [
 ] as const;
 export type ErrorData = Record<
   (typeof errorFields)[number],
-  ErrorMessages | undefined
+  ErrorKey | undefined
 >;
 
 export const useCheckData = (data: CSVRow[]) => {
@@ -72,5 +72,6 @@ export const useCheckData = (data: CSVRow[]) => {
     });
     return errs;
   }, [data]);
-  return errors;
+  const isError = errors.some((error) => Object.values(error).some((v) => v));
+  return [errors, isError] as const;
 };

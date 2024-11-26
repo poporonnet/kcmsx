@@ -27,7 +27,7 @@ export type CSVRow = {
 };
 export const RegisterBulk = () => {
   const [csvData, setCsvData] = useState<CSVRow[]>();
-  const errors = useCheckData(csvData ?? []);
+  const [errors, isError] = useCheckData(csvData ?? []);
   const handleDrop = async (files: File[]) => {
     const file = files[0];
     if (!file) return;
@@ -118,7 +118,7 @@ export const RegisterBulk = () => {
           >
             リセット
           </Button>
-          <Button m={"2rem"} onClick={sendData}>
+          <Button m={"2rem"} onClick={sendData} disabled={isError}>
             <IconSend stroke={2} />
             登録
           </Button>
