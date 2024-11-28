@@ -18,6 +18,11 @@ export const config = createConfig(
       {
         type: "elementary",
         name: "小学生部門",
+        robotTypes: ["leg", "wheel"],
+      },
+      {
+        type: "open",
+        name: "オープン部門",
         robotTypes: ["leg"],
       },
     ],
@@ -27,7 +32,8 @@ export const config = createConfig(
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: 1,
+          elementary: 2,
+          open: 1,
         },
       },
       {
@@ -35,21 +41,22 @@ export const config = createConfig(
         name: "本戦",
         limitSeconds: 180,
         course: {
-          elementary: 0,
+          elementary: 2,
+          open: 1,
         },
       },
     ],
     rules: [
-      // {
-      //   name: "multiWalk",
-      //   label: "歩行型",
-      //   type: "single",
-      //   initial: true, // conditionsの"scorable"で制御する
-      //   point: (done: boolean) => (done ? 2 : 0),
-      // },
+      {
+        name: "multiWalk",
+        label: "歩行型",
+        type: "single",
+        initial: true, // conditionsの"scorable"で制御する
+        point: (done: boolean) => (done ? 2 : 0),
+      },
       {
         name: "leaveBase",
-        label: "水草エリアを出た",
+        label: "松江エリアを出た",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 1 : 0),
@@ -63,21 +70,21 @@ export const config = createConfig(
       },
       {
         name: "enterDestination",
-        label: "温暖化エリアに入った",
+        label: "金星エリアに入った",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 1 : 0),
       },
       {
         name: "placeBall",
-        label: "温暖化エリアに氷を置いた",
+        label: "金星エリアにプローブを投入した",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 1 : 0),
       },
       {
         name: "returnBase",
-        label: "水草エリアに戻った",
+        label: "松江エリアに戻った",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 2 : 0),
@@ -91,7 +98,7 @@ export const config = createConfig(
       },
       {
         name: "bringBall",
-        label: "どじょうの数",
+        label: "雲粒子の数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,
@@ -99,7 +106,7 @@ export const config = createConfig(
       },
       {
         name: "bringRareBall",
-        label: "激レアどじょうの数",
+        label: "激レアメタルの数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,
@@ -166,11 +173,11 @@ export const config = createConfig(
     },
     bringRareBall: {
       visible: (state) =>
-        !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアどじょうを表示しない
+        !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアメタルを表示しない
       changeable: (state) =>
         !state.matchState[state.side]?.getPointState().finish,
       scorable: (state) =>
-        !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアどじょうに得点を与えない
+        !state.matchInfo || state.matchInfo.matchType === "main", // 本戦以外では激レアメタルに得点を与えない
     },
     finish: {
       changeable: (state) =>
