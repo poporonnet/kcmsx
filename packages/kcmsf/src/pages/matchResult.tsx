@@ -42,12 +42,16 @@ export const MatchResult = () => {
           0
         );
 
-        const team1GoalTime = team1Results
-          .map((result) => result.goalTimeSeconds)
-          .sort()[1];
-        const team2GoalTime = team2Results
-          .map((result) => result.goalTimeSeconds)
-          .sort()[1];
+        const team1GoalTime = Math.min(
+          ...team1Results
+            .map((result) => result.goalTimeSeconds)
+            .filter((time) => time !== null)
+        );
+        const team2GoalTime = Math.min(
+          ...team2Results
+            .map((result) => result.goalTimeSeconds)
+            .filter((time) => time !== null)
+        );
 
         const team1Result = {
           teamID: team1ID,
@@ -115,7 +119,7 @@ export const MatchResult = () => {
         <Table.Tbody>
           <Table.Tr>
             <Table.Td>
-              <Text size="1.5rem" c="gray.7" ta="center">
+              <Text size="1.5rem" c="gray.7">
                 得点
               </Text>
             </Table.Td>
@@ -132,8 +136,8 @@ export const MatchResult = () => {
           </Table.Tr>
           <Table.Tr>
             <Table.Td>
-              <Text size="1.5rem" c="gray.7" ta="center">
-                タイム
+              <Text size="1.5rem" c="gray.7">
+                ゴールタイム
               </Text>
             </Table.Td>
             <Table.Td>
@@ -171,44 +175,3 @@ export const MatchResult = () => {
     </Flex>
   );
 };
-
-// <Flex align="center" justify="center">
-//           <Flex pb="sm" gap="sm">
-//             <Text size="4rem" c="blue" style={{ whiteSpace: "nowrap" }}>
-//               {leftTeamResult ? leftTeamResult.points + "点" : "結果無し"}
-//             </Text>
-//             <Text size="4rem" style={{ whiteSpace: "nowrap" }}>
-//               -
-//             </Text>
-//             <Text size="4rem" c="red" style={{ whiteSpace: "nowrap" }}>
-//               {rightTeamResult ? rightTeamResult.points + "点" : "結果無し"}
-//             </Text>
-//           </Flex>
-//         </Flex>
-//         <Flex align="center" justify="center">
-//           <Flex pb="sm" gap="sm">
-//             <Text size="4rem" c="blue" style={{ whiteSpace: "nowrap" }}>
-//               {leftTeamResult && leftTeamResult?.goalTimeSeconds !== null
-//                 ? leftTeamResult.goalTimeSeconds + "秒"
-//                 : "フィニッシュ"}
-//             </Text>
-//             <Text size="4rem">-</Text>
-//             <Text size="4rem" c="red" style={{ whiteSpace: "nowrap" }}>
-//               {rightTeamResult && rightTeamResult?.goalTimeSeconds !== null
-//                 ? rightTeamResult.goalTimeSeconds + "秒"
-//                 : "フィニッシュ"}
-//             </Text>
-//           </Flex>
-//         </Flex>
-//         <Flex>
-//           <Button mx="3rem" flex={1}>
-//             <Link to={"/matchlist"} style={{ color: "white" }}>
-//               <Text>試合表へ戻る</Text>
-//             </Link>
-//           </Button>
-//           <Button mx="3rem" flex={1}>
-//             <Link to={"/ranking"} style={{ color: "white" }}>
-//               <Text>ランキングへ</Text>
-//             </Link>
-//           </Button>
-//         </Flex>
