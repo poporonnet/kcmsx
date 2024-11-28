@@ -64,7 +64,7 @@ export const MatchResult = () => {
         setLeftTeamResult(team2Result);
       }
     }
-  }, [match]);
+  }, [match,matchInfo]);
   return (
     <Flex
       h="100%"
