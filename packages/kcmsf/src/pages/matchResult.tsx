@@ -14,7 +14,7 @@ export const MatchResult = () => {
 
   useEffect(() => {
     if (match?.runResults) {
-      if (matchInfo?.matchType == "pre") {
+      if (match.matchType == "pre") {
         if (match.runResults[0].teamID == matchInfo?.teams.right?.id) {
           setRightTeamResult(match.runResults[0]);
           setLeftTeamResult(match.runResults[1]);
@@ -22,7 +22,7 @@ export const MatchResult = () => {
           setRightTeamResult(match.runResults[1]);
           setLeftTeamResult(match.runResults[0]);
         }
-      } else if (matchInfo?.matchType == "main") {
+      } else {
         const team1ID = match.team1.id;
         const team2ID = match.team2.id;
 
@@ -64,7 +64,7 @@ export const MatchResult = () => {
         setLeftTeamResult(team2Result);
       }
     }
-  }, [match,matchInfo]);
+  }, [match, matchInfo]);
   return (
     <Flex
       h="100%"
