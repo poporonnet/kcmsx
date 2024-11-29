@@ -36,10 +36,10 @@ importers:
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.16.0(@typescript-eslint/parser@8.16.0(eslint@9.15.0)(typescript@5.7.2))(eslint@9.15.0)(typescript@5.7.2))(eslint@9.15.0)(typescript@5.7.2)(vitest@2.1.5)
       prettier:
         specifier: ^3.3.3
-        version: 3.4.0
+        version: 3.4.1
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.1.0(prettier@3.4.0)(typescript@5.7.2)
+        version: 4.1.0(prettier@3.4.1)(typescript@5.7.2)
       vitest:
         specifier: ^2.0.0
         version: 2.1.5(@types/node@22.10.1)(@vitest/ui@2.1.5)(jsdom@25.0.1)(sugarss@4.0.1(postcss@8.4.49))
@@ -109,10 +109,10 @@ importers:
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.16.0(@typescript-eslint/parser@8.16.0(eslint@9.15.0)(typescript@5.7.2))(eslint@9.15.0)(typescript@5.7.2))(eslint@9.15.0)(typescript@5.7.2)(vitest@2.1.5)
       prettier:
         specifier: ^3.1.0
-        version: 3.4.0
+        version: 3.4.1
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.1.0(prettier@3.4.0)(typescript@5.7.2)
+        version: 4.1.0(prettier@3.4.1)(typescript@5.7.2)
       prisma:
         specifier: ^5.20.0
         version: 5.22.0
@@ -267,7 +267,7 @@ importers:
         version: 4.20241112.0
       prettier:
         specifier: ^3.3.3
-        version: 3.4.0
+        version: 3.4.1
       wrangler:
         specifier: ^3.71.0
         version: 3.90.0(@cloudflare/workers-types@4.20241112.0)
@@ -2664,11 +2664,6 @@ packages:
     peerDependenciesMeta:
       vue-tsc:
         optional: true
-
-  prettier@3.4.0:
-    resolution: {integrity: sha512-/OXNZcLyWkfo13ofOW5M7SLh+k5pnIs07owXK2teFpnfaOEcycnSy7HQxldaVX1ZP/7Q8oO1eDuQJNwbomQq5Q==}
-    engines: {node: '>=14'}
-    hasBin: true
 
   prettier@3.4.1:
     resolution: {integrity: sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==}
@@ -5498,17 +5493,10 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-organize-imports@4.1.0(prettier@3.4.0)(typescript@5.7.2):
-    dependencies:
-      prettier: 3.4.0
-      typescript: 5.7.2
-
   prettier-plugin-organize-imports@4.1.0(prettier@3.4.1)(typescript@5.7.2):
     dependencies:
       prettier: 3.4.1
       typescript: 5.7.2
-
-  prettier@3.4.0: {}
 
   prettier@3.4.1: {}
 
