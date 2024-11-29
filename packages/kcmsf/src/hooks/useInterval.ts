@@ -5,12 +5,12 @@ export const useInterval = (onUpdate: OnUpdate, ms: number) => {
   useEffect(() => {
     onUpdateRef.current = onUpdate;
   }, [onUpdate]);
+  console.log(onUpdate);
   useEffect(() => {
     if (ms !== Infinity) {
       const intervalId = setInterval(() => onUpdateRef.current(), ms);
       return () => clearInterval(intervalId);
     }
-    return () => onUpdateRef.current();
   }, [ms]);
 };
 

@@ -71,19 +71,15 @@ export const Ranking = () => {
   );
 
   useEffect(() => {
-    if (isAutoReload) {
-      setDelay(10000);
-    } else {
-      setDelay(Infinity);
-    }
-  }, [isAutoReload]);
-
-  useEffect(() => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, "0");
     const minutes = now.getMinutes().toString().padStart(2, "0");
     setFetchTime(`${hours}:${minutes}`);
   }, [ranking]);
+
+  useEffect(() => {
+    setDelay(isAutoReload ? 10000 : Infinity);
+  }, [isAutoReload]);
 
   useInterval(refetch, delay);
 
