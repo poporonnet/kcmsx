@@ -9,9 +9,8 @@ export const useInterval = (onUpdate: OnUpdate, ms: number) => {
     if (ms !== Infinity) {
       const intervalId = setInterval(() => onUpdateRef.current(), ms);
       return () => clearInterval(intervalId);
-    } else {
-      return () => onUpdateRef.current();
     }
+    return () => onUpdateRef.current();
   }, [ms]);
 };
 

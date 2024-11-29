@@ -1,3 +1,11 @@
+export interface Ranking {
+  rank: number;
+  teamID: string;
+  teamName: string;
+  points: number;
+  goalTimeSeconds: number | null;
+}
+
 export const rankings = {
   pre: [
     {
@@ -5,14 +13,14 @@ export const rankings = {
       teamID: "4578932",
       teamName: "かに3",
       points: 8,
-      goalTimeSeconds: undefined,
+      goalTimeSeconds: null,
     },
     {
       rank: 2,
       teamID: "1392387",
       teamName: "かに1",
       points: 5,
-      goalTimeSeconds: undefined,
+      goalTimeSeconds: null,
     },
     {
       rank: 3,
@@ -21,21 +29,21 @@ export const rankings = {
       points: 4,
       goalTimeSeconds: 130,
     },
-  ],
+  ] as const satisfies Ranking[],
   main: [
     {
       rank: 1,
       teamID: "4578932",
       teamName: "かに3",
       points: 8,
-      goalTimeSeconds: undefined,
+      goalTimeSeconds: null,
     },
     {
       rank: 2,
       teamID: "1392387",
       teamName: "かに1",
       points: 5,
-      goalTimeSeconds: undefined,
+      goalTimeSeconds: null,
     },
-  ],
+  ] as const satisfies Ranking[],
 };
