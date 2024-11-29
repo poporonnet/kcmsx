@@ -6,8 +6,12 @@ export const useInterval = (onUpdate: OnUpdate, ms: number) => {
     onUpdateRef.current = onUpdate;
   }, [onUpdate]);
   useEffect(() => {
-    const intervalId = setInterval(() => onUpdateRef.current(), ms);
-    return () => clearInterval(intervalId);
+    if (ms !== Infinity) {
+      const intervalId = setInterval(() => onUpdateRef.current(), ms);
+      return () => clearInterval(intervalId);
+    } else {
+      return () => onUpdateRef.current();
+    }
   }, [ms]);
 };
 
