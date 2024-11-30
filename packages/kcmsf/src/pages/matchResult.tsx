@@ -1,4 +1,4 @@
-import { Button, Flex, Table, Text, Title } from "@mantine/core";
+import { Button, Flex, Text, Title } from "@mantine/core";
 import { config, MatchType } from "config";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -41,18 +41,27 @@ export const MatchResult = () => {
           (sum, result) => sum + result.points,
           0
         );
-
-        const team1GoalTime = Math.min(
-          ...team1Results
-            .map((result) => result.goalTimeSeconds)
-            .filter((time) => time !== null)
-        );
-        const team2GoalTime = Math.min(
-          ...team2Results
-            .map((result) => result.goalTimeSeconds)
-            .filter((time) => time !== null)
-        );
-
+        //　ゴール宣言した結果のみを抽出
+        const tema1GoalStateData = team1Results.filter((result) => {
+          return result.finishState === "goal";
+        });
+        const tema2GoalStateData = team2Results.filter((result) => {
+          return result.finishState === "goal";
+        });
+        // ゴール宣言した結果の中で最も早いゴールタイムを取得,0件の場合はnull
+        const team1GoalTime =
+          tema1GoalStateData.length === 0
+            ? null
+            : Math.min(
+                ...tema1GoalStateData.map((result) => result.goalTimeSeconds)
+              );
+        const team2GoalTime =
+          tema2GoalStateData.length === 0
+            ? null
+            : Math.min(
+                ...tema2GoalStateData.map((result) => result.goalTimeSeconds)
+              );
+        //　結果を作成
         const team1Result = {
           teamID: team1ID,
           points: team1Point,
@@ -78,97 +87,58 @@ export const MatchResult = () => {
       justify="center"
       mx="2rem"
     >
-      <Title order={1}>試合結果</Title>
       {matchInfo && (
-        <Flex direction="row" align="center" justify="center">
-          <Text size="2rem" mx="1rem">
-            {config.match[matchInfo?.matchType].name}
-          </Text>
-          <Text size="2rem">#{match?.matchCode}</Text>
+        <Flex align="center" direction="column" justify="center" gap="sm">
+          <Title order={1}>{config.contestName}</Title>
+          <Title order={2}>
+            {config.match[matchInfo?.matchType].name} #{match?.matchCode}{" "}
+            試合結果
+          </Title>
         </Flex>
       )}
-      <Table
-        striped
-        withTableBorder
-        stickyHeader
-        stickyHeaderOffset={60}
-        horizontalSpacing="lg"
-        highlightOnHover={matchType == "pre"}
-        style={{ fontSize: "1rem" }}
-        flex={1}
-      >
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th>
-              <Text size="1.5rem" c="gray.8" ta="center">
-                チーム名
-              </Text>
-            </Table.Th>
-            <Table.Th>
-              <Text size="1.5rem" c="dark.7" ta="center">
-                {matchInfo?.teams.left?.teamName}
-              </Text>
-            </Table.Th>
-            <Table.Th>
-              <Text size="1.5rem" c="dark.7" ta="center">
-                {matchInfo?.teams.right?.teamName}
-              </Text>
-            </Table.Th>
-          </Table.Tr>
-        </Table.Thead>
-        <Table.Tbody>
-          <Table.Tr>
-            <Table.Td>
-              <Text size="1.5rem" c="gray.7">
-                得点
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size="3rem" c="dark.4">
-                {leftTeamResult ? leftTeamResult.points + "点" : "結果無し"}
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              <Text size="3rem" c="dark.4">
-                {rightTeamResult ? rightTeamResult.points + "点" : "結果無し"}
-              </Text>
-            </Table.Td>
-          </Table.Tr>
-          <Table.Tr>
-            <Table.Td>
-              <Text size="1.5rem" c="gray.7">
-                ゴールタイム
-              </Text>
-            </Table.Td>
-            <Table.Td>
-              {leftTeamResult && leftTeamResult?.goalTimeSeconds !== null ? (
-                <Text size="3rem" c="dark.4">
-                  {parseSeconds(leftTeamResult.goalTimeSeconds)}
-                </Text>
-              ) : (
-                <Text size="3rem" c="dark.4">
-                  -
-                </Text>
-              )}
-            </Table.Td>
-            <Table.Td>
-              {rightTeamResult && rightTeamResult?.goalTimeSeconds !== null ? (
-                <Text size="3rem" c="dark.4">
-                  {parseSeconds(rightTeamResult.goalTimeSeconds)}
-                </Text>
-              ) : (
-                <Text size="3rem" c="dark.4">
-                  -
-                </Text>
-              )}
-            </Table.Td>
-          </Table.Tr>
-        </Table.Tbody>
-      </Table>
+      <Flex align="center" justify="center">
+        <Flex pb="sm" gap="lg">
+          <Text size="2.5rem" c="blue">
+            {matchInfo?.teams.left?.teamName}
+          </Text>
+          <Text size="2.5rem">vs</Text>
+          <Text size="2.5rem" c="red">
+            {matchInfo?.teams.right?.teamName}
+          </Text>
+        </Flex>
+      </Flex>
+      <Text size="2.5rem">得点</Text>
+      <Flex align="center" justify="center">
+        <Flex pb="sm" gap="lg">
+          <Text size="3rem" c="blue">
+            {leftTeamResult ? leftTeamResult.points + "点" : "結果無し"}
+          </Text>
+          <Text size="3rem">-</Text>
+          <Text size="3rem" c="red">
+            {rightTeamResult ? rightTeamResult.points + "点" : "結果無し"}
+          </Text>
+        </Flex>
+      </Flex>
+      <Text size="2.5rem">ゴールタイム</Text>
+      <Flex align="center" justify="center">
+        <Flex pb="sm" gap="lg">
+          <Text size="3rem" c="blue">
+            {leftTeamResult && leftTeamResult?.goalTimeSeconds !== null
+              ? parseSeconds(leftTeamResult.goalTimeSeconds)
+              : "フィニッシュ"}
+          </Text>
+          <Text size="3rem">-</Text>
+          <Text size="3rem" c="red">
+            {rightTeamResult && rightTeamResult?.goalTimeSeconds !== null
+              ? parseSeconds(rightTeamResult.goalTimeSeconds)
+              : "フィニッシュ"}
+          </Text>
+        </Flex>
+      </Flex>
       <Flex mt="1rem">
         <Button mx="3rem" flex={1}>
           <Link to={"/matchlist"} style={{ color: "white" }}>
-            <Text>試合表へ戻る</Text>
+            <Text>試合表に戻る</Text>
           </Link>
         </Button>
       </Flex>
