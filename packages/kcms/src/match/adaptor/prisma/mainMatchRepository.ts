@@ -12,20 +12,35 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
   //sqliteのIntegerにはInfinityを入れられないため十分に大きい整数に変換する
   private readonly INT32MAX: number = 2147483647;
 
-  private deserialize(
+  private async deserialize(
     res: Prisma.PromiseReturnType<
-      typeof this.client.mainMatch.findMany<{ include: { runResult: true; childrenMatch: true } }>
+      typeof this.client.mainMatch.findMany<{
+        include: {
+          runResult: true;
+          childrenRight: true;
+          childrenLeft: true;
+        };
+      }>
     >
-  ): MainMatch[] {
+  ): Promise<MainMatch[]> {
     if (!res) {
       throw new Error('invalid data');
     }
 
+    const parentIDMap = new Map<MainMatchID, MainMatchID>();
+    for (const v of res) {
+      const parentID = await this.findParent(v.id as MainMatchID);
+      // ToDo: エラーのことを考えてられないので適当にthrowしておく
+      const parentIDValue = Result.unwrap(parentID);
+      parentIDMap.set(v.id as MainMatchID, parentIDValue);
+    }
+
     return res.map((data) => {
       const childrenMatches = (): ChildrenMatches | undefined => {
-        // NOTE: ChildrenMatchは2つ存在するか、両方undefinedになる
-        const childrenMatch1 = data.childrenMatch[0];
-        const childrenMatch2 = data.childrenMatch[1];
+        // NOTE: left/rightは1つずつしかないので0番目を取る
+        const childrenMatch1 = data.childrenLeft[0];
+        const childrenMatch2 = data.childrenRight[0];
+        // NOTE: left/rightが両方存在しない場合(まだ生成されていない状態)はundefinedを返す
         if (!childrenMatch1 && !childrenMatch2) {
           return undefined;
         }
@@ -40,7 +55,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             teamId2: (childrenMatch1.rightTeamId as TeamID) ?? undefined,
             winnerId: (childrenMatch1.winnerTeamId as TeamID) ?? undefined,
             runResults: [],
-            parentID: (childrenMatch1.parentMatchID as MainMatchID) ?? undefined,
+            parentID: data.id as MainMatchID,
             // NOTE: 無限再帰になるのでネストは1つまでにする
             childrenMatches: undefined,
           }),
@@ -53,7 +68,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             teamId2: (childrenMatch2.rightTeamId as TeamID) ?? undefined,
             winnerId: (childrenMatch2.winnerTeamId as TeamID) ?? undefined,
             runResults: [],
-            parentID: (childrenMatch2.parentMatchID as MainMatchID) ?? undefined,
+            parentID: data.id as MainMatchID,
             // NOTE: 無限再帰クエリになるのでネストは1つまでにする
             childrenMatches: undefined,
           }),
@@ -79,7 +94,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
         ),
-        parentID: (data.parentMatchID as MainMatchID) ?? undefined,
+        parentID: parentIDMap.get(data.id as MainMatchID)!,
         childrenMatches: childrenMatches(),
       });
     });
@@ -128,9 +143,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
   async findAll(): Promise<Result.Result<Error, MainMatch[]>> {
     try {
       const res = await this.client.mainMatch.findMany({
-        include: { runResult: true, childrenMatch: true },
+        include: { runResult: true, childrenRight: true, childrenLeft: true },
       });
-      return Result.ok(this.deserialize(res));
+      return Result.ok(await this.deserialize(res));
     } catch (e) {
       return Result.err(e as Error);
     }
@@ -144,16 +159,34 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         },
         include: {
           runResult: true,
-          childrenMatch: true,
+          childrenLeft: true,
+          childrenRight: true,
         },
       });
       if (!res) {
         return Option.none();
       }
 
-      return Option.some(this.deserialize([res])[0]);
+      return Option.some((await this.deserialize([res]))[0]);
     } catch {
       return Option.none();
+    }
+  }
+
+  private async findParent(id: MainMatchID): Promise<Result.Result<Error, MainMatchID>> {
+    try {
+      const res = await this.client.mainMatch.findFirst({
+        where: {
+          OR: [{ childrenLeftMatchID: id }, { childrenRightMatchID: id }],
+        },
+      });
+      if (!res) {
+        return Result.err(new Error('parent not found'));
+      }
+
+      return Result.ok(res.id as MainMatchID);
+    } catch (e) {
+      return Result.err(e as Error);
     }
   }
 
