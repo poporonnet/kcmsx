@@ -42,10 +42,14 @@ model MainMatch {
   rightTeamId String? @map("right_team_id")
   rightTeam   Team?   @relation("main_right_team", fields: [rightTeamId], references: [id])
 
+  parentMatchID String?    @map("parent_match_id")
+  parentMatch   MainMatch? @relation("parent", fields: [parentMatchID], references: [id])
+
   // NOTE: アプリケーション側を信用するのでここはリレーションを作らないことにした (PreMatchも同様)
   winnerTeamId String? @map("winner_team_id")
 
-  runResult RunResult[]
+  runResult     RunResult[]
+  childrenMatch MainMatch[] @relation("parent")
 
   @@map("main_match")
 }
