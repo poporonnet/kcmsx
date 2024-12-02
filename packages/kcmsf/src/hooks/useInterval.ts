@@ -1,6 +1,10 @@
 import { useEffect, useRef } from "react";
 
-export const useInterval = (onUpdate: OnUpdate, ms: number, active:boolean = true) => {
+export const useInterval = (
+  onUpdate: OnUpdate,
+  ms: number,
+  active: boolean = true
+) => {
   const onUpdateRef = useRef<OnUpdate>(() => {});
   useEffect(() => {
     onUpdateRef.current = onUpdate;
