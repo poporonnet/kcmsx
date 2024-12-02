@@ -33,7 +33,6 @@ export const Match = () => {
     },
     [matchJudge, forceReload]
   );
-
   return (
     <Flex h="100%" direction="column" gap="md" align="center" justify="center">
       {matchInfo && (
