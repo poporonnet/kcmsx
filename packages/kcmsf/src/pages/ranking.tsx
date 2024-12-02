@@ -34,10 +34,8 @@ export const Ranking = () => {
   >(new Map());
   const navigate = useNavigate();
 
-  const [delay, setDelay] = useState(10000);
-  const [isAutoReload, setIsAutoReload] = useState(false);
-
-  const [fetchTime, setFetchTime] = useState<string>("00:00");
+  const [isAutoReload, setIsAutoReload] = useState(true);
+  const [fetchTime, setFetchTime] = useState<Date>();
 
   const generateMainMatch = useCallback(
     async (team1ID: string, team2ID: string) => {
@@ -72,16 +70,10 @@ export const Ranking = () => {
 
   useEffect(() => {
     const now = new Date();
-    const hours = now.getHours().toString().padStart(2, "0");
-    const minutes = now.getMinutes().toString().padStart(2, "0");
-    setFetchTime(`${hours}:${minutes}`);
+    setFetchTime(now);
   }, [ranking]);
 
-  useEffect(() => {
-    setDelay(isAutoReload ? 10000 : Infinity);
-  }, [isAutoReload]);
-
-  useInterval(refetch, delay);
+  useInterval(refetch, 1000, isAutoReload);
 
   return (
     <Flex direction="column" align="center" justify="center" gap="md">
@@ -105,9 +97,11 @@ export const Ranking = () => {
       >
         <Stack>
           <Flex justify="space-between">
-            <Text size="sm">更新時間 {fetchTime}</Text>
+            <Text size="sm">
+              最終更新
+              {` ${fetchTime?.getHours().toString().padStart(2, "0")}:${fetchTime?.getMinutes().toString().padStart(2, "0")}`}
+            </Text>
             <Checkbox
-              defaultChecked
               label="自動更新"
               checked={isAutoReload}
               onChange={(e) => setIsAutoReload(e.currentTarget.checked)}
