@@ -1,16 +1,19 @@
 import { useCallback, useSyncExternalStore } from "react";
 
 export const useResizeObserver = (target: Element | null) => {
-  const subscribe = useCallback((onStoreChange: () => void) => {
-    const observer = new ResizeObserver((entries) =>
-      entries.forEach(onStoreChange)
-    );
-    if (target) {
-      observer.observe(target);
-    }
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      const observer = new ResizeObserver((entries) =>
+        entries.forEach(onStoreChange)
+      );
+      if (target) {
+        observer.observe(target);
+      }
 
-    return () => observer.disconnect();
-  }, []);
+      return () => observer.disconnect();
+    },
+    [target]
+  );
 
   const width = useSyncExternalStore(
     subscribe,

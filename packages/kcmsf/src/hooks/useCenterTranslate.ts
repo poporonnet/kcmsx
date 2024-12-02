@@ -28,7 +28,7 @@ export const useCenterTranslate = (option: Option) => {
       x: containerWidth / 2 + (option.offset?.x ?? 0),
       y: containerHeight / 2 - gHeight / 2 + (option.offset?.y ?? 0),
     }),
-    [containerWidth, containerHeight, gHeight]
+    [containerWidth, containerHeight, gHeight, option]
   );
 
   return { containerRef, setTargetClassName, translate };
