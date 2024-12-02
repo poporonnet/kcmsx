@@ -15,7 +15,7 @@ importers:
         version: 3.2.0
       '@eslint/js':
         specifier: ^9.0.0
-        version: 9.15.0
+        version: 9.16.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.0.0
         version: 8.16.0(@typescript-eslint/parser@8.16.0(eslint@9.15.0)(typescript@5.7.2))(eslint@9.15.0)(typescript@5.7.2)
@@ -51,7 +51,7 @@ importers:
         version: 1.13.7(hono@4.6.12)
       '@hono/zod-openapi':
         specifier: ^0.18.0
-        version: 0.18.2(hono@4.6.12)(zod@3.23.8)
+        version: 0.18.3(hono@4.6.12)(zod@3.23.8)
       '@hono/zod-validator':
         specifier: ^0.4.0
         version: 0.4.1(hono@4.6.12)(zod@3.23.8)
@@ -85,7 +85,7 @@ importers:
         version: 3.2.0
       '@eslint/js':
         specifier: ^9.0.0
-        version: 9.15.0
+        version: 9.16.0
       '@types/node':
         specifier: ^20.10.2
         version: 20.17.9
@@ -886,6 +886,10 @@ packages:
     resolution: {integrity: sha512-tMTqrY+EzbXmKJR5ToI8lxu7jaN5EdmrBFJpQk5JmSlyLsx6o4t27r883K5xsLuCYCpfKBCGswMSWXsM+jB7lg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
+  '@eslint/js@9.16.0':
+    resolution: {integrity: sha512-tw2HxzQkrbeuvyj1tG2Yqq+0H9wGoI2IMk4EOsQeX+vmd75FtJAzf+gTA69WF+baUKRYQ3x2kbLE08js5OsTVg==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
   '@eslint/object-schema@2.1.4':
     resolution: {integrity: sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -925,8 +929,8 @@ packages:
     peerDependencies:
       hono: ^4
 
-  '@hono/zod-openapi@0.18.2':
-    resolution: {integrity: sha512-CW4HkkW5Uq9YWweYWgi5UIAmlUlDQaRl642QFX7QKto9uv7ZDD15cvzOclGD55fL9yiKh5bk3dymDVSlwz8dEg==}
+  '@hono/zod-openapi@0.18.3':
+    resolution: {integrity: sha512-bNlRDODnp7P9Fs13ZPajEOt13G0XwXKfKRHMEFCphQsFiD1Y+twzHaglpNAhNcflzR1DQwHY92ZS06b4LTPbIQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       hono: '>=4.3.6'
@@ -3571,6 +3575,8 @@ snapshots:
 
   '@eslint/js@9.15.0': {}
 
+  '@eslint/js@9.16.0': {}
+
   '@eslint/object-schema@2.1.4': {}
 
   '@eslint/plugin-kit@0.2.3':
@@ -3608,7 +3614,7 @@ snapshots:
     dependencies:
       hono: 4.6.12
 
-  '@hono/zod-openapi@0.18.2(hono@4.6.12)(zod@3.23.8)':
+  '@hono/zod-openapi@0.18.3(hono@4.6.12)(zod@3.23.8)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.23.8)
       '@hono/zod-validator': 0.4.1(hono@4.6.12)(zod@3.23.8)
