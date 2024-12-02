@@ -2,14 +2,16 @@ import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
 import { IconRotate } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
+import { StatusButtonProps } from "../components/matchStatus";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
 import { useMatchInfo } from "../hooks/useMatchInfo";
 import { useMatchTimer } from "../hooks/useMatchTimer";
+import { getMatchStatus } from "../utils/matchStatus";
 import { parseSeconds } from "../utils/time";
 import { MatchResult } from "./matchResult";
 
@@ -34,14 +36,16 @@ export const Match = () => {
     },
     [matchJudge, forceReload]
   );
-  //本選なら4つ,予選なら2つの結果があれば試合終了とみなす
-  const isMatchFinished =
-    matchInfo?.matchType == "pre"
-      ? match && match?.runResults.length >= 2
-      : match && match?.runResults.length >= 4;
+  const matchStatus: StatusButtonProps["status"] | undefined = useMemo(() => {
+    if (match) {
+      return getMatchStatus(match);
+    }
+    return undefined;
+  }, [match?.runResults, match?.matchType]);
+
   return (
     <>
-      {isMatchFinished ? (
+      {matchStatus == "end" ? (
         <MatchResult />
       ) : (
         <Flex
