@@ -17,6 +17,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CourseSelector } from "../components/courseSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
+import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
   MatchStatusButton,
   StatusButtonProps,
@@ -92,10 +93,12 @@ export const MatchList = () => {
   return (
     <Stack justify="center" align="center" gap="md" w="fit-content">
       <Title m="1rem">試合表</Title>
-      <MatchSegmentedControl
-        matchType={matchType}
-        setMatchType={setMatchType}
-      />
+      <LabeledSegmentedControls>
+        <MatchSegmentedControl
+          matchType={matchType}
+          setMatchType={setMatchType}
+        />
+      </LabeledSegmentedControls>
       {processedMatches.length > 0 && (
         <>
           <Flex w="100%" justify="right">
