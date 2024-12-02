@@ -7,22 +7,24 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { config, DepartmentType, MatchType } from "config";
+import { config } from "config";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useDepartmentType } from "../hooks/useDepartmentType";
 import { useFetch } from "../hooks/useFetch";
 import { useInterval } from "../hooks/useInterval";
+import { useMatchType } from "../hooks/useMatchType";
 import { GetRankingResponse } from "../types/api/contest";
 import { GeneratePreMatchManualRequest } from "../types/api/match";
 import { RankingRecord } from "../types/contest";
 import { parseSeconds } from "../utils/time";
 
 export const Ranking = () => {
-  const [matchType, setMatchType] = useState<MatchType>(config.matchTypes[0]);
-  const [departmentType, setDepartmentType] = useState<DepartmentType>(
+  const [matchType, setMatchType] = useMatchType(config.matchTypes[0]);
+  const [departmentType, setDepartmentType] = useDepartmentType(
     config.departmentTypes[0]
   );
   const { data: ranking, refetch } = useFetch<GetRankingResponse>(

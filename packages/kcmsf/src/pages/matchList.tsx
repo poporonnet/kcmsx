@@ -12,9 +12,8 @@ import {
 import { notifications } from "@mantine/notifications";
 import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
-import { config, DepartmentType, isMatchType, MatchType } from "config";
+import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { CourseSelector } from "../components/courseSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import {
@@ -23,6 +22,7 @@ import {
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useFetch } from "../hooks/useFetch";
+import { useMatchType } from "../hooks/useMatchType";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
 
@@ -44,13 +44,7 @@ export const MatchList = () => {
     [matches]
   );
   const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
-
-  const [searchParams] = useSearchParams();
-  const [matchType, setMatchType] = useState<MatchType>(
-    Cat.cat(searchParams.get("match_type")).feed((value) =>
-      value && isMatchType(value) ? value : "pre"
-    ).value
-  );
+  const [matchType, setMatchType] = useMatchType(config.matchTypes[0]);
 
   const processedMatches = useMemo<Match[]>(
     () =>

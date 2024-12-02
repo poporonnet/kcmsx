@@ -1,6 +1,7 @@
 import { Flex, Select, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { useDepartmentType } from "../hooks/useDepartmentType";
 import { useFetch } from "../hooks/useFetch";
 import { GetMatchesResponse } from "../types/api/match";
 import { MainMatch, PreMatch } from "../types/match";
@@ -10,7 +11,7 @@ export const Result = () => {
   const { data: matches } = useFetch<GetMatchesResponse>(
     `${import.meta.env.VITE_API_URL}/match`
   );
-  const [department, setDepartment] = useState<DepartmentType>(
+  const [department, setDepartment] = useDepartmentType(
     config.departments[0].type
   );
 
