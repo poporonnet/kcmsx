@@ -13,7 +13,7 @@ import { useMatchInfo } from "../hooks/useMatchInfo";
 import { useMatchTimer } from "../hooks/useMatchTimer";
 import { getMatchStatus } from "../utils/matchStatus";
 import { parseSeconds } from "../utils/time";
-import { MatchResult } from "./matchResult";
+import { MatchResult } from "../components/matchResult";
 
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
@@ -45,8 +45,8 @@ export const Match = () => {
 
   return (
     <>
-      {matchStatus == "end" ? (
-        <MatchResult />
+      {matchStatus == "end"? (
+        <MatchResult match={match!} matchInfo={matchInfo!} />
       ) : (
         <Flex
           h="100%"
