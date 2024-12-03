@@ -1,20 +1,24 @@
 import { useEffect, useRef } from "react";
 
+type Option = {
+  active: boolean;
+};
+
 export const useInterval = (
   onUpdate: OnUpdate,
   ms: number,
-  active: boolean = true
+  option: Option = { active: true }
 ) => {
   const onUpdateRef = useRef<OnUpdate>(() => {});
   useEffect(() => {
     onUpdateRef.current = onUpdate;
   }, [onUpdate]);
   useEffect(() => {
-    if (active) {
+    if (option.active) {
       const intervalId = setInterval(() => onUpdateRef.current(), ms);
       return () => clearInterval(intervalId);
     }
-  }, [ms, active]);
+  }, [ms, option.active]);
 };
 
 type OnUpdate = () => void;

@@ -35,7 +35,7 @@ export const Ranking = () => {
   const navigate = useNavigate();
 
   const [isAutoReload, setIsAutoReload] = useState(true);
-  const [fetchTime, setFetchTime] = useState<Date>();
+  const [latestFetchTime, setLatestFetchTime] = useState<Date>();
 
   const generateMainMatch = useCallback(
     async (team1ID: string, team2ID: string) => {
@@ -70,10 +70,10 @@ export const Ranking = () => {
 
   useEffect(() => {
     const now = new Date();
-    setFetchTime(now);
+    setLatestFetchTime(now);
   }, [ranking]);
 
-  useInterval(refetch, 1000, isAutoReload);
+  useInterval(refetch, 10000, { active: isAutoReload });
 
   return (
     <Flex direction="column" align="center" justify="center" gap="md">
@@ -99,7 +99,7 @@ export const Ranking = () => {
           <Flex justify="space-between">
             <Text size="sm">
               最終更新
-              {` ${fetchTime?.getHours().toString().padStart(2, "0")}:${fetchTime?.getMinutes().toString().padStart(2, "0")}`}
+              {` ${latestFetchTime?.getHours().toString().padStart(2, "0")}:${latestFetchTime?.getMinutes().toString().padStart(2, "0")}`}
             </Text>
             <Checkbox
               label="自動更新"
