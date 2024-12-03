@@ -6,6 +6,7 @@ import { useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
+import { MatchResult } from "../components/matchResult";
 import { StatusButtonProps } from "../components/matchStatus";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
@@ -13,7 +14,6 @@ import { useMatchInfo } from "../hooks/useMatchInfo";
 import { useMatchTimer } from "../hooks/useMatchTimer";
 import { getMatchStatus } from "../utils/matchStatus";
 import { parseSeconds } from "../utils/time";
-import { MatchResult } from "../components/matchResult";
 
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
@@ -41,11 +41,11 @@ export const Match = () => {
       return getMatchStatus(match);
     }
     return undefined;
-  }, [match?.runResults, match?.matchType]);
+  }, [match]);
 
   return (
     <>
-      {matchStatus == "end"? (
+      {matchStatus == "end" ? (
         <MatchResult match={match!} matchInfo={matchInfo!} />
       ) : (
         <Flex

@@ -177,8 +177,8 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
 
 const MatchColumn = ({ match }: { match: Match }) => {
   const matchStatus: StatusButtonProps["status"] = useMemo(() => {
-      return getMatchStatus(match);
-  }, [match.runResults, match.matchType]);
+    return getMatchStatus(match);
+  }, [match]);
 
   return (
     <Table.Tr>

@@ -43,7 +43,7 @@ export const MatchResult = ({
         (sum, result) => sum + result.points,
         0
       );
-      //　ゴール宣言した結果のみを抽出
+      //ゴール宣言した結果のみを抽出
       const tema1GoalStateData = team1Results.filter((result) => {
         return result.finishState === "goal";
       });
@@ -63,7 +63,7 @@ export const MatchResult = ({
           : Math.min(
               ...tema2GoalStateData.map((result) => result.goalTimeSeconds)
             );
-      //　結果を作成
+      //結果を作成
       const team1Result = {
         teamID: team1ID!,
         points: team1Point!,
@@ -137,12 +137,7 @@ export const MatchResult = ({
         <Text size="2rem" flex="none">
           -
         </Text>
-        <Text
-          size="2rem"
-          c="red"
-          flex={1}
-          style={{ "white-space": "nowrap" }}
-        >
+        <Text size="2rem" c="red" flex={1} style={{ "white-space": "nowrap" }}>
           {rightTeamResult && rightTeamResult?.goalTimeSeconds !== null
             ? parseSeconds(rightTeamResult.goalTimeSeconds)
             : "finish"}
