@@ -3,7 +3,7 @@ import { config, MatchType } from "config";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { TournamentBracket } from "../components/tournament/TournamentBracket";
-import { useDepartmentType } from "../hooks/useDepartmentType";
+import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { Tournament as TournamentType } from "../types/tournament";
 
 const tournamentSample: TournamentType = {
@@ -72,7 +72,7 @@ const tournamentSample: TournamentType = {
 };
 
 export const Tournament = () => {
-  const [departmentType, setDepartmentType] = useDepartmentType(
+  const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departmentTypes[0]
   );
   const navigate = useNavigate();

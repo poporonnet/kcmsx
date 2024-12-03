@@ -13,18 +13,18 @@ import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
-import { useDepartmentType } from "../hooks/useDepartmentType";
+import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
 import { useInterval } from "../hooks/useInterval";
-import { useMatchType } from "../hooks/useMatchType";
+import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetRankingResponse } from "../types/api/contest";
 import { GeneratePreMatchManualRequest } from "../types/api/match";
 import { RankingRecord } from "../types/contest";
 import { parseSeconds } from "../utils/time";
 
 export const Ranking = () => {
-  const [matchType, setMatchType] = useMatchType(config.matchTypes[0]);
-  const [departmentType, setDepartmentType] = useDepartmentType(
+  const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
+  const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departmentTypes[0]
   );
   const { data: ranking, refetch } = useFetch<GetRankingResponse>(

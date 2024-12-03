@@ -3,7 +3,7 @@ import { isMatchType, MatchType } from "config";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
-export const useMatchType = (defaultType: MatchType) => {
+export const useMatchTypeQuery = (defaultType: MatchType) => {
   const [searchParams] = useSearchParams();
   const matchType = useState<MatchType>(
     Cat.cat(searchParams.get("match_type")).feed((value) =>

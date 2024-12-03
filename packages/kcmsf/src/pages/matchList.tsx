@@ -22,7 +22,7 @@ import {
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useFetch } from "../hooks/useFetch";
-import { useMatchType } from "../hooks/useMatchType";
+import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
 
@@ -44,7 +44,7 @@ export const MatchList = () => {
     [matches]
   );
   const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
-  const [matchType, setMatchType] = useMatchType(config.matchTypes[0]);
+  const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
 
   const processedMatches = useMemo<Match[]>(
     () =>
