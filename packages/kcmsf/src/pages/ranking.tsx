@@ -1,17 +1,11 @@
-import {
-  Checkbox,
-  Flex,
-  Stack,
-  Table,
-  Title,
-  useMantineTheme,
-} from "@mantine/core";
+import { Checkbox, Flex, Table, Title, useMantineTheme } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config } from "config";
 import { useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
+import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
@@ -71,7 +65,7 @@ export const Ranking = () => {
   return (
     <Flex direction="column" align="center" justify="center" gap="md">
       <Title mt="md">ランキング</Title>
-      <Stack gap={6} align="flex-end">
+      <LabeledSegmentedControls>
         <MatchSegmentedControl
           matchType={matchType}
           setMatchType={setMatchType}
@@ -80,7 +74,7 @@ export const Ranking = () => {
           departmentType={departmentType}
           setDepartmentType={setDepartmentType}
         />
-      </Stack>
+      </LabeledSegmentedControls>
       <Flex
         direction="row"
         align="stretch"

@@ -2,6 +2,7 @@ import { Stack, Title } from "@mantine/core";
 import { config, MatchType } from "config";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
+import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import { TournamentBracket } from "../components/tournament/TournamentBracket";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { Tournament as TournamentType } from "../types/tournament";
@@ -80,10 +81,12 @@ export const Tournament = () => {
   return (
     <Stack gap="md" flex={1} justify="center" align="center">
       <Title m="md">本戦トーナメント</Title>
-      <DepartmentSegmentedControl
-        departmentType={departmentType}
-        setDepartmentType={setDepartmentType}
-      />
+      <LabeledSegmentedControls>
+        <DepartmentSegmentedControl
+          departmentType={departmentType}
+          setDepartmentType={setDepartmentType}
+        />
+      </LabeledSegmentedControls>
       <TournamentBracket
         tournament={tournamentSample}
         onClickNode={(node) => {
