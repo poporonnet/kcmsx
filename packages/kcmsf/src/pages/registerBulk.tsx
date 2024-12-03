@@ -112,11 +112,7 @@ export const RegisterBulk = () => {
             <EntryTable data={csvData} errors={errors} />
           </Box>
           <Group align="center" justify="center" m="xl" gap="xl">
-            <Button
-           
-            onClick={() => setCsvData(undefined)}
-            variant="default"
-          >
+            <Button onClick={() => setCsvData(undefined)} variant="default">
               リセット
             </Button>
             <Button
