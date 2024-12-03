@@ -79,7 +79,7 @@ export const Tournament = () => {
 
   return (
     <Stack gap="md" flex={1} justify="center" align="center">
-      <Title m="md">本選トーナメント</Title>
+      <Title m="md">本戦トーナメント</Title>
       <DepartmentSegmentedControl
         departmentType={departmentType}
         setDepartmentType={setDepartmentType}
