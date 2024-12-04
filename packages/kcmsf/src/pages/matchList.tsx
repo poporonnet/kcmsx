@@ -15,7 +15,7 @@ import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, isMatchType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CourseSelector } from "../components/courseSelector";
+import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
@@ -35,17 +35,18 @@ export const MatchList = () => {
     error,
     refetch,
   } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
-  const courses = useMemo(
-    () => [
-      ...new Set(
-        Object.values(matches ?? {})
-          .flat()
-          .map((match: Match) => Number(match.matchCode.split("-")[0]))
-      ),
-    ],
+  const courts = useMemo(
+    () =>
+      [
+        ...new Set(
+          Object.values(matches ?? {})
+            .flat()
+            .map((match: Match) => Number(match.matchCode.split("-")[0]))
+        ),
+      ].sort(),
     [matches]
   );
-  const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
+  const [selectedCourt, setSelectedCourt] = useState<CourtFilter>("all");
 
   const [searchParams] = useSearchParams();
   const [matchType, setMatchType] = useState<MatchType>(
@@ -60,15 +61,15 @@ export const MatchList = () => {
         ? Cat.cat(matches)
             .feed((matches) => matches[matchType])
             .feed((matches) =>
-              selectedCourse == "all"
+              selectedCourt == "all"
                 ? matches
                 : matches.filter(
                     (match) =>
-                      Number(match.matchCode.split("-")[0]) == selectedCourse
+                      Number(match.matchCode.split("-")[0]) == selectedCourt
                   )
             ).value
         : [],
-    [matches, matchType, selectedCourse]
+    [matches, matchType, selectedCourt]
   );
 
   const generateMatch = useCallback(
@@ -100,12 +101,24 @@ export const MatchList = () => {
           setMatchType={setMatchType}
         />
       </LabeledSegmentedControls>
-      {processedMatches.length > 0 && (
+      {!loading && matches && matches[matchType].length > 0 && (
         <>
           <Flex w="100%" justify="right">
-            <CourseSelector courses={courses} selector={setSelectedCourse} />
+            <CourtSelector
+              courts={courts}
+              court={selectedCourt}
+              setCourt={setSelectedCourt}
+            />
           </Flex>
-          <Table highlightOnHover>
+          <Table
+            highlightOnHover
+            striped
+            withTableBorder
+            stickyHeader
+            stickyHeaderOffset={60}
+            horizontalSpacing="md"
+            miw="40rem"
+          >
             <MatchHead matchType={matchType} />
             <Table.Tbody>
               {processedMatches.map((match) => (
@@ -132,9 +145,9 @@ export const MatchList = () => {
           </Button>
         </>
       )}
-      {processedMatches.length === 0 && !loading && !error && (
+      {matches?.[matchType].length === 0 && !loading && !error && (
         <>
-          <Text>現在試合はありません。</Text>
+          <Text>現在{config.match[matchType].name}試合はありません。</Text>
           <GenerateMatchButton
             generate={async () => {
               await Promise.all(
@@ -169,8 +182,8 @@ export const MatchList = () => {
 const MatchHead = ({ matchType }: { matchType: MatchType }) => (
   <Table.Thead>
     <Table.Tr>
-      <Table.Th>試合番号</Table.Th>
-      <Table.Th>コース番号</Table.Th>
+      <Table.Th ta="center">試合番号</Table.Th>
+      <Table.Th ta="center">コート番号</Table.Th>
       <Table.Th>{matchType == "pre" ? "左チーム" : "チーム1"}</Table.Th>
       <Table.Th>{matchType == "pre" ? "右チーム" : "チーム2"}</Table.Th>
       <Table.Th ta="center">状態</Table.Th>
