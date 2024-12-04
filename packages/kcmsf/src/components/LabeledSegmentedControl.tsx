@@ -1,7 +1,7 @@
 import {
-  Group,
   SegmentedControl,
   SegmentedControlItem,
+  Table,
   Text,
 } from "@mantine/core";
 
@@ -16,8 +16,17 @@ export const LabeledSegmentedControl = ({
   value: string;
   onChange: (value: string) => void;
 }) => (
-  <Group>
-    <Text c="dark">{label}</Text>
-    <SegmentedControl {...{ data, value, onChange }} w="7rem" />
-  </Group>
+  <Table.Tr>
+    <Table.Td>
+      <Text
+        c="dark"
+        children={label}
+        ta="right"
+        style={{ whiteSpace: "nowrap" }}
+      />
+    </Table.Td>
+    <Table.Td>
+      <SegmentedControl w="100%" {...{ data, value, onChange }} />
+    </Table.Td>
+  </Table.Tr>
 );

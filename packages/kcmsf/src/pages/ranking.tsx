@@ -3,15 +3,17 @@ import {
   Flex,
   Stack,
   Table,
+  Text,
   Title,
   useMantineTheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, MatchType } from "config";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
+import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useFetch } from "../hooks/useFetch";
 import { useInterval } from "../hooks/useInterval";
@@ -32,6 +34,9 @@ export const Ranking = () => {
     Map<RankingRecord["teamID"], RankingRecord>
   >(new Map());
   const navigate = useNavigate();
+
+  const [isAutoReload, setIsAutoReload] = useState(true);
+  const [latestFetchTime, setLatestFetchTime] = useState<Date>();
 
   const generateMainMatch = useCallback(
     async (team1ID: string, team2ID: string) => {
@@ -64,12 +69,17 @@ export const Ranking = () => {
     [departmentType, navigate]
   );
 
-  useInterval(refetch, 10000); // 10秒ごとにランキングを更新
+  useEffect(() => {
+    const now = new Date();
+    setLatestFetchTime(now);
+  }, [ranking]);
+
+  useInterval(refetch, 10000, { active: isAutoReload });
 
   return (
     <Flex direction="column" align="center" justify="center" gap="md">
       <Title mt="md">ランキング</Title>
-      <Stack gap={6} align="flex-end">
+      <LabeledSegmentedControls>
         <MatchSegmentedControl
           matchType={matchType}
           setMatchType={setMatchType}
@@ -78,7 +88,7 @@ export const Ranking = () => {
           departmentType={departmentType}
           setDepartmentType={setDepartmentType}
         />
-      </Stack>
+      </LabeledSegmentedControls>
       <Flex
         direction="row"
         align="stretch"
@@ -86,45 +96,60 @@ export const Ranking = () => {
         gap="md"
         h="fit-content"
       >
-        <Table
-          striped
-          withTableBorder
-          stickyHeader
-          stickyHeaderOffset={60}
-          horizontalSpacing="lg"
-          highlightOnHover={matchType == "pre"}
-          style={{ fontSize: "1rem" }}
-          flex={1}
-        >
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th ta="center">順位</Table.Th>
-              <Table.Th ta="center">チーム名</Table.Th>
-              <Table.Th ta="center">合計得点</Table.Th>
-              <Table.Th ta="center">ベストタイム</Table.Th>
-              {matchType == "pre" && <Table.Th ta="center">本戦出場</Table.Th>}
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            {ranking?.map((record) => (
-              <RankingColumn
-                record={record}
-                selectable={matchType == "pre"}
-                selected={selectedTeams.has(record.teamID)}
-                onSelect={() => {
-                  if (selectedTeams.has(record.teamID))
-                    selectedTeams.delete(record.teamID);
-                  else if (selectedTeams.size < 2)
-                    selectedTeams.set(record.teamID, record);
-                  else return;
+        <Stack>
+          <Flex justify="space-between">
+            <Text size="sm">
+              最終更新
+              {` ${latestFetchTime?.getHours().toString().padStart(2, "0")}:${latestFetchTime?.getMinutes().toString().padStart(2, "0")}`}
+            </Text>
+            <Checkbox
+              label="自動更新"
+              checked={isAutoReload}
+              onChange={(e) => setIsAutoReload(e.currentTarget.checked)}
+            />
+          </Flex>
+          <Table
+            striped
+            withTableBorder
+            stickyHeader
+            stickyHeaderOffset={60}
+            horizontalSpacing="lg"
+            highlightOnHover={matchType == "pre"}
+            style={{ fontSize: "1rem" }}
+            flex={1}
+          >
+            <Table.Thead>
+              <Table.Tr>
+                <Table.Th ta="center">順位</Table.Th>
+                <Table.Th ta="center">チーム名</Table.Th>
+                <Table.Th ta="center">合計得点</Table.Th>
+                <Table.Th ta="center">ベストタイム</Table.Th>
+                {matchType == "pre" && (
+                  <Table.Th ta="center">本戦出場</Table.Th>
+                )}
+              </Table.Tr>
+            </Table.Thead>
+            <Table.Tbody>
+              {ranking?.map((record) => (
+                <RankingColumn
+                  record={record}
+                  selectable={matchType == "pre"}
+                  selected={selectedTeams.has(record.teamID)}
+                  onSelect={() => {
+                    if (selectedTeams.has(record.teamID))
+                      selectedTeams.delete(record.teamID);
+                    else if (selectedTeams.size < 2)
+                      selectedTeams.set(record.teamID, record);
+                    else return;
 
-                  setSelectedTeams(new Map(selectedTeams));
-                }}
-                key={record.teamID}
-              />
-            ))}
-          </Table.Tbody>
-        </Table>
+                    setSelectedTeams(new Map(selectedTeams));
+                  }}
+                  key={record.teamID}
+                />
+              ))}
+            </Table.Tbody>
+          </Table>
+        </Stack>
         {matchType == "pre" && (
           <GenerateMainMatchCard
             requiredTeamCount={2}
