@@ -105,7 +105,15 @@ export const MatchList = () => {
           <Flex w="100%" justify="right">
             <CourseSelector courses={courses} selector={setSelectedCourse} />
           </Flex>
-          <Table highlightOnHover>
+          <Table
+            highlightOnHover
+            striped
+            withTableBorder
+            stickyHeader
+            stickyHeaderOffset={60}
+            horizontalSpacing="md"
+            miw="40rem"
+          >
             <MatchHead matchType={matchType} />
             <Table.Tbody>
               {processedMatches.map((match) => (
@@ -169,8 +177,8 @@ export const MatchList = () => {
 const MatchHead = ({ matchType }: { matchType: MatchType }) => (
   <Table.Thead>
     <Table.Tr>
-      <Table.Th>試合番号</Table.Th>
-      <Table.Th>コース番号</Table.Th>
+      <Table.Th ta="center">試合番号</Table.Th>
+      <Table.Th ta="center">コート番号</Table.Th>
       <Table.Th>{matchType == "pre" ? "左チーム" : "チーム1"}</Table.Th>
       <Table.Th>{matchType == "pre" ? "右チーム" : "チーム2"}</Table.Th>
       <Table.Th ta="center">状態</Table.Th>
