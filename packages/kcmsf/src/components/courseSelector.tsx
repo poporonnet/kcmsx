@@ -1,30 +1,31 @@
 import { ComboboxData, Select } from "@mantine/core";
 import { useMemo } from "react";
+
+export type CourtFilter = number | "all";
+
 type Props = {
-  courses: number[] | undefined;
-  selector: (value: number | "all") => void;
+  courts: number[] | undefined;
+  court: CourtFilter;
+  setCourt: (value: CourtFilter) => void;
 };
-export const CourseSelector = (props: Props) => {
-  const courseSelection: ComboboxData = useMemo((): ComboboxData => {
-    const course: ComboboxData =
-      props.courses?.map((course) => `${course}`) ?? [];
+export const CourtSelector = ({ courts, court, setCourt }: Props) => {
+  const courtSelection: ComboboxData = useMemo((): ComboboxData => {
+    const courtData = courts?.map((court) => `${court}`) ?? [];
     return [
       {
         value: "all",
         label: "全てのコート",
       },
-      ...course,
+      ...courtData,
     ];
-  }, [props]);
+  }, [courts]);
 
   return (
     <Select
       maw={150}
-      data={courseSelection}
-      defaultValue="all"
-      onChange={(value) =>
-        props.selector(value === "all" ? "all" : Number(value))
-      }
+      data={courtSelection}
+      value={`${court}`}
+      onChange={(value) => setCourt(value === "all" ? "all" : Number(value))}
       allowDeselect={false}
     />
   );
