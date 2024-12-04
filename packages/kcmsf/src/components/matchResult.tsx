@@ -18,11 +18,13 @@ export const MatchResult = ({
   match: Match;
   matchInfo: MatchInfo;
 }) => {
+  //本選の場合は右が勝利チーム，左が敗北チーム
   const [rightTeamResult, setRightTeamResult] = useState<MatchResult>();
   const [leftTeamResult, setLeftTeamResult] = useState<MatchResult>();
 
   useEffect(() => {
     if (match?.runResults) {
+      //TODO: 本選ではwinnerIDを用いる
       const team1ID =
         match.matchType === "pre" ? matchInfo.teams.right?.id : match.team1.id;
       const team2ID =
@@ -43,36 +45,33 @@ export const MatchResult = ({
         (sum, result) => sum + result.points,
         0
       );
-      //ゴール宣言した結果のみを抽出
-      const tema1GoalStateData = team1Results.filter((result) => {
-        return result.finishState === "goal";
-      });
-      const tema2GoalStateData = team2Results.filter((result) => {
-        return result.finishState === "goal";
-      });
-      // ゴール宣言した結果の中で最も早いゴールタイムを取得,0件の場合はnull
-      const team1GoalTime =
-        tema1GoalStateData.length === 0
-          ? null
-          : Math.min(
-              ...tema1GoalStateData.map((result) => result.goalTimeSeconds)
-            );
-      const team2GoalTime =
-        tema2GoalStateData.length === 0
-          ? null
-          : Math.min(
-              ...tema2GoalStateData.map((result) => result.goalTimeSeconds)
-            );
+
+      const team1GoalTime = team1Results.reduce((min, result) => {
+        if (result.goalTimeSeconds !== null) {
+          if (result.goalTimeSeconds < min) {
+            return result.goalTimeSeconds;
+          }
+        }
+        return min;
+      }, Infinity);
+      const team2GoalTime = team1Results.reduce((min, result) => {
+        if (result.goalTimeSeconds !== null) {
+          if (result.goalTimeSeconds < min) {
+            return result.goalTimeSeconds;
+          }
+        }
+        return min;
+      }, Infinity);
       //結果を作成
       const team1Result = {
         teamID: team1ID!,
-        points: team1Point!,
-        goalTimeSeconds: team1GoalTime!,
+        points: team1Point,
+        goalTimeSeconds: team1GoalTime,
       };
       const team2Result = {
         teamID: team2ID!,
-        points: team2Point!,
-        goalTimeSeconds: team2GoalTime!,
+        points: team2Point,
+        goalTimeSeconds: team2GoalTime,
       };
 
       setRightTeamResult(team1Result);
@@ -130,7 +129,7 @@ export const MatchResult = ({
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">
         <Text size="2rem" c="blue" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {leftTeamResult && leftTeamResult?.goalTimeSeconds !== null
+          {leftTeamResult && leftTeamResult?.goalTimeSeconds !== Infinity
             ? parseSeconds(leftTeamResult.goalTimeSeconds)
             : "finish"}
         </Text>
@@ -138,7 +137,7 @@ export const MatchResult = ({
           -
         </Text>
         <Text size="2rem" c="red" flex={1} style={{ "white-space": "nowrap" }}>
-          {rightTeamResult && rightTeamResult?.goalTimeSeconds !== null
+          {rightTeamResult && rightTeamResult?.goalTimeSeconds !== Infinity
             ? parseSeconds(rightTeamResult.goalTimeSeconds)
             : "finish"}
         </Text>
