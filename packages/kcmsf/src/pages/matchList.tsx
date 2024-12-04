@@ -179,10 +179,8 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
 
 const MatchColumn = ({ match }: { match: Match }) => {
   const matchStatus: StatusButtonProps["status"] = useMemo(() => {
-    if (match.runResults.length == 0) return "future";
-
-    const maxRunResultLength = { pre: 2, main: 4 }[match.matchType];
-    return match.runResults.length < maxRunResultLength ? "now" : "end";
+    if (match.matchType === "main" && match.runResults.length < 4) return "now";
+    return match.runResults.length === 0 ? "future" : "end";
   }, [match.runResults, match.matchType]);
 
   return (
