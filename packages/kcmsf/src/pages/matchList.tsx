@@ -100,7 +100,7 @@ export const MatchList = () => {
           setMatchType={setMatchType}
         />
       </LabeledSegmentedControls>
-      {processedMatches.length > 0 && (
+      {!loading && matches && matches[matchType].length > 0 && (
         <>
           <Flex w="100%" justify="right">
             <CourseSelector courses={courses} selector={setSelectedCourse} />
@@ -132,9 +132,9 @@ export const MatchList = () => {
           </Button>
         </>
       )}
-      {processedMatches.length === 0 && !loading && !error && (
+      {matches?.[matchType].length === 0 && !loading && !error && (
         <>
-          <Text>現在試合はありません。</Text>
+          <Text>現在{config.match[matchType].name}試合はありません。</Text>
           <GenerateMatchButton
             generate={async () => {
               await Promise.all(
