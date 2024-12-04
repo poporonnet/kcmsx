@@ -15,7 +15,7 @@ import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, isMatchType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CourtFilter, CourtSelector } from "../components/courseSelector";
+import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
