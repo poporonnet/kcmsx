@@ -140,30 +140,30 @@ export const mainMatches: MainMatch[] = [
     ],
   },
   {
-    id: "943629",
-    matchCode: "2-1",
+    id: "874381",
+    matchCode: "2-2",
     matchType: "main",
     departmentType: config.departmentTypes[0],
     team1: {
-      id: "1392387",
+      id: "4578932",
       teamName: "かに3",
     },
     team2: {
       id: "7549586",
       teamName: "かに2",
     },
-    winnerID: "1392387",
+    winnerID: "4578932",
     runResults: [
       {
         id: "4279861",
-        teamID: "1392387",
+        teamID: "4578932",
         points: 5,
         goalTimeSeconds: 150,
         finishState: "goal",
       },
       {
         id: "987326732",
-        teamID: "1392387",
+        teamID: "4578932",
         points: 4,
         goalTimeSeconds: null,
         finishState: "finished",
