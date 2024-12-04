@@ -1,20 +1,29 @@
-import { Select } from "@mantine/core";
+import { ComboboxData, Select } from "@mantine/core";
+import { useMemo } from "react";
 type Props = {
   courses: number[] | undefined;
   selector: (value: number | "all") => void;
 };
 export const CourseSelector = (props: Props) => {
-  const course = props.courses?.map((courses) => String(courses)) ?? [];
+  const courseSelection: ComboboxData = useMemo((): ComboboxData => {
+    const course: ComboboxData =
+      props.courses?.map((course) => `${course}`) ?? [];
+    return [
+      {
+        value: "all",
+        label: "全てのコート",
+      },
+      ...course,
+    ];
+  }, [props]);
 
-  course.unshift("全てのコート");
   return (
     <Select
       maw={150}
-      placeholder="Pick value"
-      data={course}
-      defaultValue="全てのコート"
+      data={courseSelection}
+      defaultValue="all"
       onChange={(value) =>
-        props.selector(value === "全てのコート" ? "all" : Number(value))
+        props.selector(value === "all" ? "all" : Number(value))
       }
       allowDeselect={false}
     />
