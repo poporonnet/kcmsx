@@ -35,13 +35,14 @@ export const MatchList = () => {
     refetch,
   } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
   const courses = useMemo(
-    () => [
-      ...new Set(
-        Object.values(matches ?? {})
-          .flat()
-          .map((match: Match) => Number(match.matchCode.split("-")[0]))
-      ),
-    ],
+    () =>
+      [
+        ...new Set(
+          Object.values(matches ?? {})
+            .flat()
+            .map((match: Match) => Number(match.matchCode.split("-")[0]))
+        ),
+      ].sort(),
     [matches]
   );
   const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
