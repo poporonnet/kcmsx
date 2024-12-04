@@ -15,7 +15,7 @@ import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, isMatchType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { CourseSelector } from "../components/courseSelector";
+import { CourtFilter, CourtSelector } from "../components/courseSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
@@ -34,7 +34,7 @@ export const MatchList = () => {
     error,
     refetch,
   } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
-  const courses = useMemo(
+  const courts = useMemo(
     () =>
       [
         ...new Set(
@@ -45,7 +45,7 @@ export const MatchList = () => {
       ].sort(),
     [matches]
   );
-  const [selectedCourse, setSelectedCourse] = useState<number | "all">("all");
+  const [selectedCourt, setSelectedCourt] = useState<CourtFilter>("all");
 
   const [searchParams] = useSearchParams();
   const [matchType, setMatchType] = useState<MatchType>(
@@ -60,15 +60,15 @@ export const MatchList = () => {
         ? Cat.cat(matches)
             .feed((matches) => matches[matchType])
             .feed((matches) =>
-              selectedCourse == "all"
+              selectedCourt == "all"
                 ? matches
                 : matches.filter(
                     (match) =>
-                      Number(match.matchCode.split("-")[0]) == selectedCourse
+                      Number(match.matchCode.split("-")[0]) == selectedCourt
                   )
             ).value
         : [],
-    [matches, matchType, selectedCourse]
+    [matches, matchType, selectedCourt]
   );
 
   const generateMatch = useCallback(
@@ -103,7 +103,11 @@ export const MatchList = () => {
       {!loading && matches && matches[matchType].length > 0 && (
         <>
           <Flex w="100%" justify="right">
-            <CourseSelector courses={courses} selector={setSelectedCourse} />
+            <CourtSelector
+              courts={courts}
+              court={selectedCourt}
+              setCourt={setSelectedCourt}
+            />
           </Flex>
           <Table
             highlightOnHover
