@@ -39,6 +39,8 @@ describe('DummyMainMatchRepository', () => {
           finishState: 'FINISHED',
         }),
       ],
+      parentID: '999' as MainMatchID,
+      childrenMatches: undefined,
     });
     const res = await repository.create(match);
 
@@ -75,6 +77,8 @@ describe('DummyMainMatchRepository', () => {
           finishState: 'FINISHED',
         }),
       ],
+      parentID: '999' as MainMatchID,
+      childrenMatches: undefined,
     });
     const res = await repository.update(match);
     expect(Result.isErr(res)).toBe(false);

@@ -1,3 +1,4 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType } from 'config';
 import { SnowflakeID } from '../../id/main.js';
 import { TeamID } from '../../team/models/team.js';
@@ -13,10 +14,21 @@ export interface CreateMainMatchArgs {
   teamId2?: TeamID;
   winnerId?: TeamID;
   runResults: RunResult[];
+  parentID: MainMatchID | undefined;
+  childrenMatches: ChildrenMatches | undefined;
+}
+
+/**
+ * 自分より前に行われた試合
+ */
+export interface ChildrenMatches {
+  match1: MainMatch;
+  match2: MainMatch;
 }
 
 /*
  * @description 本戦の試合
+ * parentIDとchildrenMatchesがそれぞれundefinedになることはない
  */
 export class MainMatch {
   private readonly id: MainMatchID;
@@ -25,6 +37,18 @@ export class MainMatch {
   private readonly departmentType: DepartmentType;
   private readonly teamId1?: TeamID;
   private readonly teamId2?: TeamID;
+
+  /**
+   * 自分より後に行われる試合のID\
+   * 決勝試合の場合はparentIDはundefinedになる
+   */
+  private parentID?: MainMatchID;
+  /**
+   * 自分より前に行われた試合\
+   * 1回戦目の場合はundefinedになる
+   */
+  private childrenMatches?: ChildrenMatches;
+
   private winnerId?: TeamID;
   private runResults: RunResult[];
 
@@ -37,9 +61,19 @@ export class MainMatch {
     this.teamId2 = args.teamId2;
     this.winnerId = args.winnerId;
     this.runResults = args.runResults;
+    this.parentID = args.parentID;
+    this.childrenMatches = args.childrenMatches;
   }
 
+  /**
+   * @description MainMatchを生成する
+   * @param args
+   * @throws {Error} parentID と childrenMatches が同時にundefinedの時はErrorをthrowする
+   */
   public static new(args: CreateMainMatchArgs) {
+    if (!args.childrenMatches && !args.parentID) {
+      throw new Error('ParentIDとChildrenMatchesは同時にundefinedにできません');
+    }
     return new MainMatch(args);
   }
 
@@ -95,5 +129,29 @@ export class MainMatch {
       throw new Error('RunResult length must be 2 or 4');
     }
     this.runResults.push(...results);
+  }
+
+  getParentID(): MainMatchID | undefined {
+    return this.parentID;
+  }
+
+  setParentID(parentID: MainMatchID): Result.Result<Error, void> {
+    if (this.parentID) {
+      return Result.err(new Error('ParentIDはすでにセットされています'));
+    }
+    this.parentID = parentID;
+    return Result.ok(undefined);
+  }
+
+  getChildrenMatches(): ChildrenMatches | undefined {
+    return this.childrenMatches;
+  }
+
+  setChildrenMatches(childrenMatches: ChildrenMatches): Result.Result<Error, void> {
+    if (this.childrenMatches) {
+      return Result.err(new Error('ChildrenMatchesはすでにセットされています'));
+    }
+    this.childrenMatches = childrenMatches;
+    return Result.ok(undefined);
   }
 }
