@@ -27,7 +27,7 @@
     "embla-carousel-react": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.20.1",
+    "react-router-dom": "^7.0.0",
     "react-timer-hook": "^3.0.7"
   },
   "devDependencies": {
