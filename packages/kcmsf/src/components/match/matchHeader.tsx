@@ -1,6 +1,6 @@
 import { Flex, Paper, Text } from "@mantine/core";
 import { config, MatchInfo } from "config";
-import { Match } from "../types/match";
+import { Match } from "../../types/match";
 
 export const MatchHeader = ({
   match,

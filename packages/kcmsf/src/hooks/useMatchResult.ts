@@ -5,10 +5,9 @@ type MatchResult = {
   goalTimeSeconds: number;
 };
 export const useMatchResult = (match: Match): MatchResult[] => {
-  console.log(match);
   //TODO: 本選ではwinnerIDを用いる
   const team1ID =
-    match.matchType === "pre" ? match.rightTeam?.id : match.team1.id;
+    match.matchType === "pre" ? match.leftTeam?.id : match.team1.id;
   const team2ID =
     match.matchType === "pre" ? match.rightTeam?.id : match.team2.id;
 

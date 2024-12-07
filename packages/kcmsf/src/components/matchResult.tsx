@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { useMatchResult } from "../hooks/useMatchResult";
 import { Match } from "../types/match";
 import { parseSeconds } from "../utils/time";
-import { MatchHeader } from "./matchHeader";
+import { MatchHeader } from "./match/matchHeader";
+import { MatchPointViewer } from "./match/matchPointViewer";
 
 export const MatchResult = ({
   match,
@@ -14,6 +15,7 @@ export const MatchResult = ({
   match: Match;
   matchInfo: MatchInfo;
 }) => {
+  console.log(match);
   const [team1Result, team2Result] = useMatchResult(match);
   return (
     <Flex
@@ -26,30 +28,24 @@ export const MatchResult = ({
     >
       {matchInfo && <MatchHeader match={match!} matchInfo={matchInfo} />}
       <Text size="2rem">得点</Text>
-      <Flex align="center" justify="center">
-        <Flex pb="sm" gap="lg">
-          <Text size="3rem" c="blue" flex={1}>
-            {team2Result ? team2Result.points : "結果無し"}
-          </Text>
-          <Text size="3rem">-</Text>
-          <Text size="3rem" c="red" flex={1}>
-            {team1Result ? team1Result.points : "結果無し"}
-          </Text>
-        </Flex>
-      </Flex>
+      <MatchPointViewer
+        isExhibition={false}
+        matchInfo={matchInfo}
+        points={{ left: team1Result.points, right: team2Result.points }}
+      />
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">
         <Text size="2rem" c="blue" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {team2Result && team2Result?.goalTimeSeconds !== Infinity
-            ? parseSeconds(team2Result.goalTimeSeconds)
+          {team1Result && team1Result?.goalTimeSeconds !== Infinity
+            ? parseSeconds(team1Result.goalTimeSeconds)
             : "finish"}
         </Text>
         <Text size="2rem" flex="none">
           -
         </Text>
-        <Text size="2rem" c="red" flex={1} style={{ "white-space": "nowrap" }}>
-          {team1Result && team1Result?.goalTimeSeconds !== Infinity
-            ? parseSeconds(team1Result.goalTimeSeconds)
+        <Text size="2rem" c="red" flex={1} style={{ whiteSpace: "nowrap" }}>
+          {team2Result && team2Result?.goalTimeSeconds !== Infinity
+            ? parseSeconds(team2Result.goalTimeSeconds)
             : "finish"}
         </Text>
       </Flex>

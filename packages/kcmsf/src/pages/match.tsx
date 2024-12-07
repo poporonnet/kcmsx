@@ -4,9 +4,10 @@ import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { MatchHeader } from "../components/match/matchHeader";
+import { MatchPointViewer } from "../components/match/matchPointViewer";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
-import { MatchHeader } from "../components/matchHeader";
 import { MatchResult } from "../components/matchResult";
 import { StatusButtonProps } from "../components/matchStatus";
 import { useForceReload } from "../hooks/useForceReload";
@@ -82,19 +83,14 @@ export const Match = () => {
               >
                 リセット
               </Button>
-              <Flex pb="sm" gap="sm">
-                <Text size="4rem" c="blue">
-                  {isExhibition || matchInfo?.teams.left
-                    ? matchJudge.leftTeam.point.point()
-                    : 0}
-                </Text>
-                <Text size="4rem">-</Text>
-                <Text size="4rem" c="red">
-                  {isExhibition || matchInfo?.teams.right
-                    ? matchJudge.rightTeam.point.point()
-                    : 0}
-                </Text>
-              </Flex>
+              <MatchPointViewer
+                isExhibition={isExhibition}
+                matchInfo={matchInfo}
+                points={{
+                  right: matchJudge.rightTeam.point.point() || 0,
+                  left: matchJudge.leftTeam.point.point() || 0,
+                }}
+              />
               <Button
                 flex={1}
                 variant="transparent"
