@@ -1,17 +1,12 @@
-import { Button, Flex, Paper, Text } from "@mantine/core";
+import { Button, Flex, Text } from "@mantine/core";
 import { IconArrowBack } from "@tabler/icons-react";
-import { config, MatchInfo } from "config";
-import { useEffect, useState } from "react";
+import { MatchInfo } from "config";
 import { Link } from "react-router-dom";
+import { useMatchResult } from "../hooks/useMatchResult";
 import { Match } from "../types/match";
 import { parseSeconds } from "../utils/time";
-import { useMatchResult } from "../hooks/useMatchResult";
+import { MatchHeader } from "./matchHeader";
 
-type MatchResult = {
-  teamID: string | undefined;
-  points: number;
-  goalTimeSeconds: number;
-};
 export const MatchResult = ({
   match,
   matchInfo,
@@ -19,17 +14,7 @@ export const MatchResult = ({
   match: Match;
   matchInfo: MatchInfo;
 }) => {
-  //本選の場合は右が勝利チーム，左が敗北チーム
-  const [team1Result, setTeam1Result] = useState<MatchResult>();
-  const [team2Result, setTeam2Result] = useState<MatchResult>();
-
-  useEffect(() => {
-    if (match?.runResults) {
-      const [team1Result, team2Result] = useMatchResult(match);
-      setTeam1Result(team1Result);
-      setTeam2Result(team2Result);
-    }
-  }, [match]);
+  const [team1Result, team2Result] = useMatchResult(match);
   return (
     <Flex
       h="100%"
@@ -39,33 +24,7 @@ export const MatchResult = ({
       align="center"
       justify="center"
     >
-      {matchInfo && (
-        <Paper p="xs" w="100%" withBorder>
-          <Flex direction="row" align="center" justify="center">
-            <Text
-              size="1.5rem"
-              c="blue"
-              flex={1}
-              style={{ whiteSpace: "nowrap" }}
-            >
-              {matchInfo?.teams.left?.teamName}
-            </Text>
-            <Flex direction="column" align="center" justify="center" c="dark">
-              {config.match[matchInfo?.matchType].name}
-              <Text size="2rem">#{match?.matchCode}</Text>
-            </Flex>
-            <Text
-              size="1.5rem"
-              c="red"
-              flex={1}
-              style={{ whiteSpace: "nowrap" }}
-            >
-              {matchInfo?.teams.right?.teamName}
-            </Text>
-          </Flex>
-        </Paper>
-      )}
-
+      {matchInfo && <MatchHeader match={match!} matchInfo={matchInfo} />}
       <Text size="2rem">得点</Text>
       <Flex align="center" justify="center">
         <Flex pb="sm" gap="lg">

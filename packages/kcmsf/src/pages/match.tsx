@@ -6,6 +6,7 @@ import { useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
+import { MatchHeader } from "../components/matchHeader";
 import { MatchResult } from "../components/matchResult";
 import { StatusButtonProps } from "../components/matchStatus";
 import { useForceReload } from "../hooks/useForceReload";
@@ -45,7 +46,7 @@ export const Match = () => {
 
   return (
     <>
-      {matchStatus == "end" ? (
+      {matchStatus === "end" ? (
         <MatchResult match={match!} matchInfo={matchInfo!} />
       ) : (
         <Flex
@@ -55,29 +56,7 @@ export const Match = () => {
           align="center"
           justify="center"
         >
-          {matchInfo && (
-            <Paper w="100%" p="xs" withBorder>
-              <Flex direction="row" align="center" justify="center">
-                <Text size="2rem" c="blue" flex={1}>
-                  {matchInfo?.teams.left?.teamName}
-                </Text>
-                <Flex
-                  direction="column"
-                  align="center"
-                  justify="center"
-                  c="dark"
-                >
-                  {config.match[matchInfo?.matchType].name}
-                  <Text size="2rem">#{match?.matchCode}</Text>
-                  {match?.matchType == "main" &&
-                    `${match.runResults.length == 0 ? 1 : 2}試合目`}
-                </Flex>
-                <Text size="2rem" c="red" flex={1}>
-                  {matchInfo?.teams.right?.teamName}
-                </Text>
-              </Flex>
-            </Paper>
-          )}
+          {matchInfo && <MatchHeader match={match!} matchInfo={matchInfo} />}
           <Button
             w="100%"
             h="auto"

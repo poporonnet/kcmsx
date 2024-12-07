@@ -1,6 +1,11 @@
 import { Match } from "../types/match";
-
-export const useMatchResult = (match: Match) => {
+type MatchResult = {
+  teamID: string | undefined;
+  points: number;
+  goalTimeSeconds: number;
+};
+export const useMatchResult = (match: Match): MatchResult[] => {
+  console.log(match);
   //TODO: 本選ではwinnerIDを用いる
   const team1ID =
     match.matchType === "pre" ? match.rightTeam?.id : match.team1.id;
