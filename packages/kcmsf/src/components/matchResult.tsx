@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Match } from "../types/match";
 import { parseSeconds } from "../utils/time";
+import { useMatchResult } from "../hooks/useMatchResult";
 
 type MatchResult = {
-  teamID: string;
+  teamID: string | undefined;
   points: number;
   goalTimeSeconds: number;
 };
@@ -19,65 +20,16 @@ export const MatchResult = ({
   matchInfo: MatchInfo;
 }) => {
   //本選の場合は右が勝利チーム，左が敗北チーム
-  const [rightTeamResult, setRightTeamResult] = useState<MatchResult>();
-  const [leftTeamResult, setLeftTeamResult] = useState<MatchResult>();
+  const [team1Result, setTeam1Result] = useState<MatchResult>();
+  const [team2Result, setTeam2Result] = useState<MatchResult>();
 
   useEffect(() => {
     if (match?.runResults) {
-      //TODO: 本選ではwinnerIDを用いる
-      const team1ID =
-        match.matchType === "pre" ? matchInfo.teams.right?.id : match.team1.id;
-      const team2ID =
-        match.matchType === "pre" ? matchInfo.teams.left?.id : match.team2.id;
-
-      const team1Results = match.runResults.filter(
-        (result) => result.teamID === team1ID
-      );
-      const team2Results = match.runResults.filter(
-        (result) => result.teamID === team2ID
-      );
-
-      const team1Point = team1Results.reduce(
-        (sum, result) => sum + result.points,
-        0
-      );
-      const team2Point = team2Results.reduce(
-        (sum, result) => sum + result.points,
-        0
-      );
-
-      const team1GoalTime = team1Results.reduce((min, result) => {
-        if (result.goalTimeSeconds !== null) {
-          if (result.goalTimeSeconds < min) {
-            return result.goalTimeSeconds;
-          }
-        }
-        return min;
-      }, Infinity);
-      const team2GoalTime = team1Results.reduce((min, result) => {
-        if (result.goalTimeSeconds !== null) {
-          if (result.goalTimeSeconds < min) {
-            return result.goalTimeSeconds;
-          }
-        }
-        return min;
-      }, Infinity);
-      //結果を作成
-      const team1Result = {
-        teamID: team1ID!,
-        points: team1Point,
-        goalTimeSeconds: team1GoalTime,
-      };
-      const team2Result = {
-        teamID: team2ID!,
-        points: team2Point,
-        goalTimeSeconds: team2GoalTime,
-      };
-
-      setRightTeamResult(team1Result);
-      setLeftTeamResult(team2Result);
+      const [team1Result, team2Result] = useMatchResult(match);
+      setTeam1Result(team1Result);
+      setTeam2Result(team2Result);
     }
-  }, [match, matchInfo]);
+  }, [match]);
   return (
     <Flex
       h="100%"
@@ -118,27 +70,27 @@ export const MatchResult = ({
       <Flex align="center" justify="center">
         <Flex pb="sm" gap="lg">
           <Text size="3rem" c="blue" flex={1}>
-            {leftTeamResult ? leftTeamResult.points : "結果無し"}
+            {team2Result ? team2Result.points : "結果無し"}
           </Text>
           <Text size="3rem">-</Text>
           <Text size="3rem" c="red" flex={1}>
-            {rightTeamResult ? rightTeamResult.points : "結果無し"}
+            {team1Result ? team1Result.points : "結果無し"}
           </Text>
         </Flex>
       </Flex>
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">
         <Text size="2rem" c="blue" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {leftTeamResult && leftTeamResult?.goalTimeSeconds !== Infinity
-            ? parseSeconds(leftTeamResult.goalTimeSeconds)
+          {team2Result && team2Result?.goalTimeSeconds !== Infinity
+            ? parseSeconds(team2Result.goalTimeSeconds)
             : "finish"}
         </Text>
         <Text size="2rem" flex="none">
           -
         </Text>
         <Text size="2rem" c="red" flex={1} style={{ "white-space": "nowrap" }}>
-          {rightTeamResult && rightTeamResult?.goalTimeSeconds !== Infinity
-            ? parseSeconds(rightTeamResult.goalTimeSeconds)
+          {team1Result && team1Result?.goalTimeSeconds !== Infinity
+            ? parseSeconds(team1Result.goalTimeSeconds)
             : "finish"}
         </Text>
       </Flex>
