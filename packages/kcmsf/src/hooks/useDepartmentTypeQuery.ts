@@ -1,15 +1,5 @@
-import { Cat } from "@mikuroxina/mini-fn";
 import { DepartmentType, isDepartmentType } from "config";
-import { useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useQueryParamsState } from "./useQueryParamsState";
 
-export const useDepartmentTypeQuery = (defaultType: DepartmentType) => {
-  const [searchParams] = useSearchParams();
-  const departmentType = useState<DepartmentType>(
-    Cat.cat(searchParams.get("department_type")).feed((value) =>
-      value && isDepartmentType(value) ? value : defaultType
-    ).value
-  );
-
-  return departmentType;
-};
+export const useDepartmentTypeQuery = (defaultType: DepartmentType) =>
+  useQueryParamsState("department_type", defaultType, isDepartmentType);
