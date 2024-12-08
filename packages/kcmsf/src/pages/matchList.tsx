@@ -26,6 +26,7 @@ import { useFetch } from "../hooks/useFetch";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
+import { getMatchStatus } from "../utils/matchStatus";
 
 export const MatchList = () => {
   const {
@@ -186,11 +187,8 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
 
 const MatchColumn = ({ match }: { match: Match }) => {
   const matchStatus: StatusButtonProps["status"] = useMemo(() => {
-    if (match.runResults.length == 0) return "future";
-
-    const maxRunResultLength = { pre: 2, main: 4 }[match.matchType];
-    return match.runResults.length < maxRunResultLength ? "now" : "end";
-  }, [match.runResults, match.matchType]);
+    return getMatchStatus(match);
+  }, [match]);
 
   return (
     <Table.Tr>
