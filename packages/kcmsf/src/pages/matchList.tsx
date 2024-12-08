@@ -12,9 +12,8 @@ import {
 import { notifications } from "@mantine/notifications";
 import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
-import { config, DepartmentType, isMatchType, MatchType } from "config";
+import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
@@ -24,6 +23,7 @@ import {
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useFetch } from "../hooks/useFetch";
+import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
 import { getMatchStatus } from "../utils/matchStatus";
@@ -47,13 +47,7 @@ export const MatchList = () => {
     [matches]
   );
   const [selectedCourt, setSelectedCourt] = useState<CourtFilter>("all");
-
-  const [searchParams] = useSearchParams();
-  const [matchType, setMatchType] = useState<MatchType>(
-    Cat.cat(searchParams.get("match_type")).feed((value) =>
-      value && isMatchType(value) ? value : "pre"
-    ).value
-  );
+  const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
 
   const processedMatches = useMemo<Match[]>(
     () =>

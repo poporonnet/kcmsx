@@ -1,0 +1,22 @@
+.path {
+  stroke: gray !important;
+  stroke-width: 1;
+  mix-blend-mode: darken;
+}
+
+.path-winner {
+  stroke: dimgray !important;
+  stroke-width: 4;
+}
+
+.node-match {
+  fill: white !important;
+}
+
+.node-match:hover {
+  fill: gainsboro !important;
+}
+
+.node-match:active {
+  fill: lightgray !important;
+}

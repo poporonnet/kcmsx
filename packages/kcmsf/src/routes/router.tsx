@@ -7,6 +7,7 @@ import { Register } from "../pages/register.tsx";
 import { RegisterBulk } from "../pages/registerBulk.tsx";
 import { Result } from "../pages/result.tsx";
 import { Teams } from "../pages/teams.tsx";
+import { Tournament } from "../pages/tournament.tsx";
 import { Layout } from "./layout.tsx";
 
 export const router = createBrowserRouter(
@@ -55,6 +56,10 @@ export const router = createBrowserRouter(
         {
           path: "ranking",
           element: <Ranking />,
+        },
+        {
+          path: "tournament",
+          element: <Tournament />,
         },
       ],
     },

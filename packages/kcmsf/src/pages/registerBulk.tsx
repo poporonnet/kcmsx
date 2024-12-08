@@ -111,17 +111,18 @@ export const RegisterBulk = () => {
           <Box>
             <EntryTable data={csvData} errors={errors} />
           </Box>
-          <Button
-            m={"2rem"}
-            onClick={() => setCsvData(undefined)}
-            variant="default"
-          >
-            リセット
-          </Button>
-          <Button m={"2rem"} onClick={sendData} disabled={isError}>
-            <IconSend stroke={2} />
-            登録
-          </Button>
+          <Group align="center" justify="center" m="xl" gap="xl">
+            <Button onClick={() => setCsvData(undefined)} variant="default">
+              リセット
+            </Button>
+            <Button
+              onClick={sendData}
+              leftSection={<IconSend />}
+              disabled={isError}
+            >
+              登録
+            </Button>
+          </Group>
         </>
       ) : (
         <Paper
