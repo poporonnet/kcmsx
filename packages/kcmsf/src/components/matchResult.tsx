@@ -6,7 +6,7 @@ import { useMatchResult } from "../hooks/useMatchResult";
 import { Match } from "../types/match";
 import { parseSeconds } from "../utils/time";
 import { MatchNameCard } from "./match/MatchNameCard";
-import { MatchPointViewer } from "./match/MatchPointViewer";
+import { MatchPointViewer } from "./match/MatchPointCard";
 
 export const MatchResult = ({
   match,
