@@ -16,6 +16,7 @@ export const MatchResult = ({
   matchInfo: MatchInfo;
 }) => {
   const { team1Result, team2Result } = useMatchResult(match);
+  console.log(team1Result, team2Result);
   return (
     <Flex
       h="100%"
@@ -30,8 +31,6 @@ export const MatchResult = ({
       )}
       <Text size="2rem">得点</Text>
       <MatchPointViewer
-        IsExhibition={false}
-        MatchInfo={matchInfo}
         LeftTeamPoint={team1Result.points}
         RightTeamPoint={team2Result.points}
       />

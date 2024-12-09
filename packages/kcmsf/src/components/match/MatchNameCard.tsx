@@ -7,7 +7,7 @@ export const MatchNameCard = ({
   description,
 }: {
   matchInfo: MatchInfo;
-  matchCode?: string;
+  matchCode: string;
   description?: string;
 }) => {
   return (

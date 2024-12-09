@@ -8,6 +8,7 @@ export const useMatchResult = (
   match: Match
 ): { team1Result: MatchResult; team2Result: MatchResult } => {
   //TODO: 本選ではwinnerIDを用いる
+  console.log(match);
   const team1ID =
     match.matchType === "pre" ? match.leftTeam?.id : match.team1.id;
   const team2ID =

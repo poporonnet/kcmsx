@@ -38,7 +38,6 @@ export const Match = () => {
     [matchJudge, forceReload]
   );
   const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
-  const description = `${match?.runResults.length == 0 ? 1 : 2}試合目`;
   return (
     <>
       {match && matchInfo && matchStatus === "end" ? (
@@ -52,7 +51,15 @@ export const Match = () => {
           justify="center"
         >
           {match && matchInfo && (
-            <MatchNameCard matchInfo={matchInfo} description={description} />
+            <MatchNameCard
+              matchInfo={matchInfo}
+              matchCode={match?.matchCode}
+              description={
+                match.matchType === "main"
+                  ? `${match?.runResults.length == 0 ? 1 : 2}試合目`
+                  : ""
+              }
+            />
           )}
           <Button
             w="100%"
@@ -80,10 +87,16 @@ export const Match = () => {
                 リセット
               </Button>
               <MatchPointViewer
-                IsExhibition={isExhibition}
-                MatchInfo={matchInfo}
-                RightTeamPoint={matchJudge.rightTeam.point.point()}
-                LeftTeamPoint={matchJudge.leftTeam.point.point()}
+                RightTeamPoint={
+                  isExhibition || matchInfo?.teams.right
+                    ? matchJudge.rightTeam.point.point()
+                    : 0
+                }
+                LeftTeamPoint={
+                  isExhibition || matchInfo?.teams.left
+                    ? matchJudge.leftTeam.point.point()
+                    : 0
+                }
               />
               <Button
                 flex={1}
