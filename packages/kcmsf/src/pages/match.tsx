@@ -9,7 +9,6 @@ import { MatchPointViewer } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/matchResult";
-import { StatusButtonProps } from "../components/matchStatus";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
 import { useMatchInfo } from "../hooks/useMatchInfo";
@@ -38,17 +37,12 @@ export const Match = () => {
     },
     [matchJudge, forceReload]
   );
-  const matchStatus: StatusButtonProps["status"] | undefined = useMemo(() => {
-    if (match) {
-      return getMatchStatus(match);
-    }
-    return undefined;
-  }, [match]);
-
+  const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
+  const description = `${match?.runResults.length == 0 ? 1 : 2}試合目`;
   return (
     <>
-      {matchStatus === "end" ? (
-        <MatchResult match={match!} matchInfo={matchInfo!} />
+      {match && matchInfo && matchStatus === "end" ? (
+        <MatchResult match={match} matchInfo={matchInfo} />
       ) : (
         <Flex
           h="100%"
@@ -57,7 +51,9 @@ export const Match = () => {
           align="center"
           justify="center"
         >
-          {matchInfo && <MatchNameCard match={match!} matchInfo={matchInfo} />}
+          {match && matchInfo && (
+            <MatchNameCard matchInfo={matchInfo} description={description} />
+          )}
           <Button
             w="100%"
             h="auto"

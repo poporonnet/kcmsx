@@ -1,10 +1,12 @@
 import { Match } from "../types/match";
 type MatchResult = {
-  teamID: string | undefined;
+  teamID: string;
   points: number;
   goalTimeSeconds: number;
 };
-export const useMatchResult = (match: Match): MatchResult[] => {
+export const useMatchResult = (
+  match: Match
+): { team1Result: MatchResult; team2Result: MatchResult } => {
   //TODO: 本選ではwinnerIDを用いる
   const team1ID =
     match.matchType === "pre" ? match.leftTeam?.id : match.team1.id;
@@ -37,14 +39,14 @@ export const useMatchResult = (match: Match): MatchResult[] => {
   }, Infinity);
   //結果を作成
   const team1Result = {
-    teamID: team1ID,
+    teamID: team1ID === undefined ? "" : team1ID,
     points: team1Point,
     goalTimeSeconds: team1GoalTime,
   };
   const team2Result = {
-    teamID: team2ID,
+    teamID: team2ID === undefined ? "" : team2ID,
     points: team2Point,
     goalTimeSeconds: team2GoalTime,
   };
-  return [team1Result, team2Result];
+  return { team1Result, team2Result };
 };

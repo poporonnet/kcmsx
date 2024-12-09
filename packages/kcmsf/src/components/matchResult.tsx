@@ -15,8 +15,7 @@ export const MatchResult = ({
   match: Match;
   matchInfo: MatchInfo;
 }) => {
-  console.log(match);
-  const [team1Result, team2Result] = useMatchResult(match);
+  const { team1Result, team2Result } = useMatchResult(match);
   return (
     <Flex
       h="100%"
@@ -26,7 +25,9 @@ export const MatchResult = ({
       align="center"
       justify="center"
     >
-      {matchInfo && <MatchNameCard match={match!} matchInfo={matchInfo} />}
+      {matchInfo && (
+        <MatchNameCard matchInfo={matchInfo} matchCode={match?.matchCode} />
+      )}
       <Text size="2rem">得点</Text>
       <MatchPointViewer
         IsExhibition={false}
@@ -37,17 +38,21 @@ export const MatchResult = ({
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">
         <Text size="2rem" c="blue" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {team1Result && team1Result?.goalTimeSeconds !== Infinity
-            ? parseSeconds(team1Result.goalTimeSeconds)
-            : "finish"}
+          {team1Result.teamID === ""
+            ? "-"
+            : team1Result && team1Result?.goalTimeSeconds === Infinity
+              ? "フィニッシュ"
+              : parseSeconds(team1Result.goalTimeSeconds)}
         </Text>
         <Text size="2rem" flex="none">
           -
         </Text>
         <Text size="2rem" c="red" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {team2Result && team2Result?.goalTimeSeconds !== Infinity
-            ? parseSeconds(team2Result.goalTimeSeconds)
-            : "finish"}
+          {team2Result.teamID === ""
+            ? "-"
+            : team2Result && team2Result?.goalTimeSeconds === Infinity
+              ? "フィニッシュ"
+              : parseSeconds(team2Result.goalTimeSeconds)}
         </Text>
       </Flex>
       <Button
