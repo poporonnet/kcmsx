@@ -14,7 +14,7 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
