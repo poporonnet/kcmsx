@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { useMatchResult } from "../hooks/useMatchResult";
 import { Match } from "../types/match";
 import { parseSeconds } from "../utils/time";
-import { MatchHeader } from "./match/matchHeader";
-import { MatchPointViewer } from "./match/matchPointViewer";
+import { MatchNameCard } from "./match/MatchNameCard";
+import { MatchPointViewer } from "./match/MatchPointViewer";
 
 export const MatchResult = ({
   match,
@@ -26,12 +26,13 @@ export const MatchResult = ({
       align="center"
       justify="center"
     >
-      {matchInfo && <MatchHeader match={match!} matchInfo={matchInfo} />}
+      {matchInfo && <MatchNameCard match={match!} matchInfo={matchInfo} />}
       <Text size="2rem">得点</Text>
       <MatchPointViewer
-        isExhibition={false}
-        matchInfo={matchInfo}
-        points={{ left: team1Result.points, right: team2Result.points }}
+        IsExhibition={false}
+        MatchInfo={matchInfo}
+        LeftTeamPoint={team1Result.points}
+        RightTeamPoint={team2Result.points}
       />
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">

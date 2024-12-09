@@ -1,27 +1,25 @@
 import { Flex, Text } from "@mantine/core";
 import { MatchInfo } from "config";
 
-type point = {
-  right: number;
-  left: number;
-};
 export const MatchPointViewer = ({
-  isExhibition,
-  matchInfo,
-  points,
+  IsExhibition,
+  MatchInfo,
+  RightTeamPoint,
+  LeftTeamPoint,
 }: {
-  isExhibition: boolean;
-  matchInfo?: MatchInfo;
-  points: point;
+  IsExhibition: boolean;
+  MatchInfo?: MatchInfo;
+  RightTeamPoint: number;
+  LeftTeamPoint: number;
 }) => {
   return (
     <Flex pb="sm" gap="sm">
       <Text size="4rem" c="blue">
-        {isExhibition || matchInfo?.teams.left ? points.left : 0}
+        {IsExhibition || MatchInfo?.teams.left ? LeftTeamPoint : 0}
       </Text>
       <Text size="4rem">-</Text>
       <Text size="4rem" c="red">
-        {isExhibition || matchInfo?.teams.right ? points.right : 0}
+        {IsExhibition || MatchInfo?.teams.right ? RightTeamPoint : 0}
       </Text>
     </Flex>
   );
