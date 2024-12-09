@@ -8,23 +8,25 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import { config, DepartmentType, MatchType } from "config";
+import { config } from "config";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
 import { useInterval } from "../hooks/useInterval";
+import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetRankingResponse } from "../types/api/contest";
 import { GeneratePreMatchManualRequest } from "../types/api/match";
 import { RankingRecord } from "../types/contest";
 import { parseSeconds } from "../utils/time";
 
 export const Ranking = () => {
-  const [matchType, setMatchType] = useState<MatchType>(config.matchTypes[0]);
-  const [departmentType, setDepartmentType] = useState<DepartmentType>(
+  const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
+  const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departmentTypes[0]
   );
   const { data: ranking, refetch } = useFetch<GetRankingResponse>(
