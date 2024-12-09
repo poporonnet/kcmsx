@@ -1,7 +1,7 @@
 import { Box, Button, Group, SegmentedControl, TextInput } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, RobotType } from "config";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateTeamArgs } from "../types/team";
 
 export const Register = () => {
@@ -14,6 +14,13 @@ export const Register = () => {
     config.departments[0].type
   );
   const [member, setMember] = useState<[string, string]>(["", ""]);
+
+  // カテゴリーが変更されたとき、ロボットタイプが自明な場合は自動で設定する
+  useEffect(() => {
+    if (config.department[category].robotTypes.length === 1) {
+      setRobotType(config.department[category].robotTypes[0]);
+    }
+  }, [category]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
