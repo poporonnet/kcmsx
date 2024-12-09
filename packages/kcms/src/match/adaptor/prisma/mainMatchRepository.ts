@@ -38,10 +38,15 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
     return res.map((data) => {
       const childrenMatches = (): ChildrenMatches | undefined => {
         // NOTE: left/rightは1つずつしかないので0番目を取る
-        const childrenMatch1 = data.childrenLeft[0];
-        const childrenMatch2 = data.childrenRight[0];
+        const childrenMatch1 = data.childrenLeft ?? undefined;
+        const childrenMatch2 = data.childrenRight ?? undefined;
         // NOTE: left/rightが両方存在しない場合(まだ生成されていない状態)はundefinedを返す
         if (!childrenMatch1 && !childrenMatch2) {
+          return undefined;
+        }
+        // NOTE: どちらかが存在しない場合は本来エラーだが、取り敢えずundefinedを返しておく
+        // TODO: ここをエラーにする
+        if (!childrenMatch1 || !childrenMatch2) {
           return undefined;
         }
 
@@ -177,7 +182,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
     try {
       const res = await this.client.mainMatch.findFirst({
         where: {
-          OR: [{ childrenLeftMatchID: id }, { childrenRightMatchID: id }],
+          OR: [{ childrenLeftID: id }, { childrenRightID: id }],
         },
       });
       if (!res) {
