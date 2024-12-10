@@ -19,7 +19,7 @@ export interface TeamCreateArgs {
 export class Team {
   private readonly id: TeamID;
   private readonly teamName: string;
-  private readonly members: Array<string>;
+  private readonly members: string[];
   private readonly departmentType: DepartmentType;
   private readonly robotType: RobotType;
   private readonly clubName?: string;
@@ -51,7 +51,7 @@ export class Team {
     return this.teamName;
   }
 
-  getMembers(): Array<string> {
+  getMembers(): string[] {
     return this.members;
   }
 
