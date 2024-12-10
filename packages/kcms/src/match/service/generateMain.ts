@@ -30,8 +30,8 @@ export class GenerateMainMatchService {
       runResults: [],
       teamId1: teamID1,
       teamId2: teamID2,
-      parentID: '999' as MainMatchID,
-      childrenMatches: undefined,
+      parentMatchID: '999' as MainMatchID,
+      childMatches: undefined,
     });
 
     const matches = await this.mainMatchRepository.create(match);

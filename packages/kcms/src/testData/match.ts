@@ -44,8 +44,8 @@ export const testCreateRunResultMainData = [
     teamId2: '92' as TeamID,
     winnerId: '91' as TeamID,
     runResults: [],
-    parentID: '999' as MainMatchID,
-    childrenMatches: undefined,
+    parentMatchID: '999' as MainMatchID,
+    childMatches: undefined,
   }),
 ];
 // ランキング生成用の試合データ
@@ -339,7 +339,7 @@ export const testRankingMainMatchData = [
         finishState: 'GOAL',
       }),
     ],
-    parentID: '999' as MainMatchID,
-    childrenMatches: undefined,
+    parentMatchID: '999' as MainMatchID,
+    childMatches: undefined,
   }),
 ];

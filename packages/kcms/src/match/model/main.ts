@@ -14,8 +14,8 @@ export interface CreateMainMatchArgs {
   teamId2?: TeamID;
   winnerId?: TeamID;
   runResults: RunResult[];
-  parentID: MainMatchID | undefined;
-  childrenMatches: ChildrenMatches | undefined;
+  parentMatchID: MainMatchID | undefined;
+  childMatches: ChildrenMatches | undefined;
 }
 
 /**
@@ -61,8 +61,8 @@ export class MainMatch {
     this.teamId2 = args.teamId2;
     this.winnerId = args.winnerId;
     this.runResults = args.runResults;
-    this.parentID = args.parentID;
-    this.childrenMatches = args.childrenMatches;
+    this.parentID = args.parentMatchID;
+    this.childrenMatches = args.childMatches;
   }
 
   /**
@@ -71,7 +71,7 @@ export class MainMatch {
    * @throws {Error} parentID と childrenMatches が同時にundefinedの時はErrorをthrowする
    */
   public static new(args: CreateMainMatchArgs) {
-    if (!args.childrenMatches && !args.parentID) {
+    if (!args.childMatches && !args.parentMatchID) {
       throw new Error('ParentIDとChildrenMatchesは同時にundefinedにできません');
     }
     return new MainMatch(args);

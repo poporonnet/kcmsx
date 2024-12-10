@@ -15,8 +15,8 @@ describe('MainMatch', () => {
       teamId2: '3' as TeamID,
       winnerId: '2' as TeamID,
       runResults: [],
-      parentID: '10' as MainMatchID,
-      childrenMatches: undefined,
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
     };
 
     const res = MainMatch.new(args);
@@ -40,8 +40,8 @@ describe('MainMatch', () => {
         teamId2: '3' as TeamID,
         winnerId: '2' as TeamID,
         runResults: [],
-        parentID: '10' as MainMatchID,
-        childrenMatches: undefined,
+        parentMatchID: '10' as MainMatchID,
+        childMatches: undefined,
       });
       // 2か4以外は足せない
       if (j == 1 || j == 2 || j == 4) {
@@ -89,8 +89,8 @@ describe('MainMatch', () => {
         teamId2: '3' as TeamID,
         winnerId: '2' as TeamID,
         runResults: [],
-        parentID: '10' as MainMatchID,
-        childrenMatches: undefined,
+        parentMatchID: '10' as MainMatchID,
+        childMatches: undefined,
       });
       for (let j = 1; j < 8; j++) {
         if (j === 1 || j == 2) {
@@ -143,8 +143,8 @@ describe('MainMatch', () => {
           finishState: 'FINISHED',
         })
       ),
-      parentID: '10' as MainMatchID,
-      childrenMatches: undefined,
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
     };
 
     const mainMatch = MainMatch.new(args);
@@ -172,8 +172,8 @@ describe('MainMatch', () => {
           finishState: 'FINISHED',
         });
       }),
-      parentID: '10' as MainMatchID,
-      childrenMatches: undefined,
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
     };
 
     const mainMatch = MainMatch.new(args);
@@ -200,8 +200,8 @@ describe('MainMatch', () => {
           finishState: 'FINISHED',
         });
       }),
-      parentID: '10' as MainMatchID,
-      childrenMatches: undefined,
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
     };
 
     const mainMatch = MainMatch.new(args);
@@ -228,8 +228,8 @@ describe('MainMatch', () => {
           finishState: 'FINISHED',
         });
       }),
-      parentID: '10' as MainMatchID,
-      childrenMatches: undefined,
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
     };
 
     const mainMatch = MainMatch.new(args);

@@ -60,9 +60,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             teamId2: (childrenMatch1.rightTeamId as TeamID) ?? undefined,
             winnerId: (childrenMatch1.winnerTeamId as TeamID) ?? undefined,
             runResults: [],
-            parentID: data.id as MainMatchID,
+            parentMatchID: data.id as MainMatchID,
             // NOTE: 無限再帰になるのでネストは1つまでにする
-            childrenMatches: undefined,
+            childMatches: undefined,
           }),
           match2: MainMatch.new({
             id: childrenMatch2.id as MainMatchID,
@@ -73,9 +73,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             teamId2: (childrenMatch2.rightTeamId as TeamID) ?? undefined,
             winnerId: (childrenMatch2.winnerTeamId as TeamID) ?? undefined,
             runResults: [],
-            parentID: data.id as MainMatchID,
+            parentMatchID: data.id as MainMatchID,
             // NOTE: 無限再帰クエリになるのでネストは1つまでにする
-            childrenMatches: undefined,
+            childMatches: undefined,
           }),
         };
       };
@@ -99,8 +99,8 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
         ),
-        parentID: parentIDMap.get(data.id as MainMatchID)!,
-        childrenMatches: childrenMatches(),
+        parentMatchID: parentIDMap.get(data.id as MainMatchID)!,
+        childMatches: childrenMatches(),
       });
     });
   }
