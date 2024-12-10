@@ -9,7 +9,7 @@ export const Layout = () => (
     padding="md"
   >
     <Header />
-    <AppShell.Main>
+    <AppShell.Main display="flex" style={{ flexDirection: "column" }}>
       <Outlet />
     </AppShell.Main>
     <AppShell.Footer>kcms &copy; 2023-2024 Poporon Network</AppShell.Footer>

@@ -3,7 +3,7 @@ import { config, pick } from "config";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { z } from "zod";
-import { matches, Team, teams } from "./data/main";
+import { matches, rankings, Team, teams } from "./data/main";
 
 const app = new Hono();
 
@@ -19,6 +19,14 @@ app.use(
 app.get("/", (c) => {
   return c.json({ message: "kcmsx/mock is up." });
 });
+
+app.get("/login", (c) => {
+  return c.newResponse(null, 200);
+})
+
+app.get("/logout", (c) => {
+  return c.newResponse(null, 200);
+})
 
 app.get("/team", (c) => {
   return c.json({ teams: teams });
@@ -151,6 +159,15 @@ app.post(
     return c.json(c.req.valid("json"), 200);
   }
 );
+
+app.get("/contest/:matchType/:departmentType/ranking", (c) => {
+  const { matchType, departmentType } = c.req.param();
+  if (matchType != "pre" && matchType != "main")
+    return c.json({ error: "invalid matchType" }, 400);
+  if (departmentType != "elementary" && departmentType != "open")
+    return c.json({ error: "invalid departmentType" }, 400);
+  return c.json(rankings[matchType]);
+});
 
 app.get("/sponsor", (c) => {
   return c.json({
