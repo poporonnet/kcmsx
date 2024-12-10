@@ -1,14 +1,13 @@
-import { Option, Result } from "@mikuroxina/mini-fn";
-import type { Prisma, PrismaClient } from "@prisma/client";
-import { DepartmentType } from "config";
-import { TeamID } from "../../../team/models/team";
-import { ChildrenMatches, MainMatch, MainMatchID } from "../../model/main";
-import { MainMatchRepository } from "../../model/repository";
-import { RunResult, RunResultID } from "../../model/runResult";
+import { Option, Result } from '@mikuroxina/mini-fn';
+import type { Prisma, PrismaClient } from '@prisma/client';
+import { DepartmentType } from 'config';
+import { TeamID } from '../../../team/models/team';
+import { ChildrenMatches, MainMatch, MainMatchID } from '../../model/main';
+import { MainMatchRepository } from '../../model/repository';
+import { RunResult, RunResultID } from '../../model/runResult';
 
 export class PrismaMainMatchRepository implements MainMatchRepository {
-  constructor(private readonly client: PrismaClient) {
-  }
+  constructor(private readonly client: PrismaClient) {}
 
   //sqliteのIntegerにはInfinityを入れられないため十分に大きい整数に変換する
   private readonly INT32MAX: number = 2147483647;
@@ -24,10 +23,10 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
           parent2: true;
         };
       }>
-    >,
+    >
   ): Promise<MainMatch[]> {
     if (!res) {
-      throw new Error("invalid data");
+      throw new Error('invalid data');
     }
 
     return res.map((data) => {
@@ -100,8 +99,8 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             // NOTE: Infinity: 2147483647
             goalTimeSeconds: v.goalTimeSeconds === this.INT32MAX ? Infinity : v.goalTimeSeconds,
             // NOTE: GOAL: 0 , FINISHED: 1
-            finishState: v.finishState === 0 ? "GOAL" : "FINISHED",
-          }),
+            finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
+          })
         ),
         parentMatchID: parentMatchID(),
         childMatches: childrenMatches(),
@@ -153,7 +152,10 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
     try {
       const res = await this.client.mainMatch.findMany({
         include: {
-          runResult: true, childrenRight: true, childrenLeft: true, parent1: true,
+          runResult: true,
+          childrenRight: true,
+          childrenLeft: true,
+          parent1: true,
           parent2: true,
         },
       });
@@ -199,11 +201,11 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         .getRunResults()
         .reduce<{ updatable: RunResult[]; new: RunResult[] }>(
           (results, runResult) => {
-            const updateType = currentRunResultIDs.has(runResult.getId()) ? "updatable" : "new";
+            const updateType = currentRunResultIDs.has(runResult.getId()) ? 'updatable' : 'new';
             results[updateType].push(runResult);
             return results;
           },
-          { updatable: [], new: [] },
+          { updatable: [], new: [] }
         );
 
       await this.client.runResult.createMany({
