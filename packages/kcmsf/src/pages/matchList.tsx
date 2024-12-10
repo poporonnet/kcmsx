@@ -14,6 +14,7 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
@@ -190,8 +191,14 @@ const MatchColumn = ({ match }: { match: Match }) => {
     return getMatchStatus(match);
   }, [match]);
 
+  const navigate = useNavigate();
+
   return (
-    <Table.Tr>
+    <Table.Tr
+      onClick={() => {
+        navigate(`/match/${match.matchType}/${match.id}`);
+      }}
+    >
       <Table.Td>
         <Text fw="bold" ta="center">
           {match.matchCode}
@@ -218,11 +225,7 @@ const MatchColumn = ({ match }: { match: Match }) => {
       </Table.Td>
       <Table.Td>
         <Center>
-          <MatchStatusButton
-            id={match.id}
-            matchType={match.matchType}
-            status={matchStatus}
-          />
+          <MatchStatusButton status={matchStatus} />
         </Center>
       </Table.Td>
     </Table.Tr>
