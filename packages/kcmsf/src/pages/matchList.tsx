@@ -225,11 +225,7 @@ const MatchColumn = ({ match }: { match: Match }) => {
       </Table.Td>
       <Table.Td>
         <Center>
-          <MatchStatusButton
-            id={match.id}
-            matchType={match.matchType}
-            status={matchStatus}
-          />
+          <MatchStatusButton status={matchStatus} />
         </Center>
       </Table.Td>
     </Table.Tr>
