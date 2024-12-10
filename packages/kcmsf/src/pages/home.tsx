@@ -13,6 +13,7 @@ export const Home = () => {
         </NavLink>
         <NavLink label="試合" color="dark" variant="subtle" defaultOpened>
           <HomeNavLink label="試合表" to="/matchlist" />
+          <HomeNavLink label="本戦トーナメント表" to="/tournament" />
           <HomeNavLink label="エキシビション" to="/match" />
         </NavLink>
         <NavLink label="結果" color="dark" variant="subtle" defaultOpened>
