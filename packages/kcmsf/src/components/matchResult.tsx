@@ -6,7 +6,7 @@ import { useMatchResult } from "../hooks/useMatchResult";
 import { Match } from "../types/match";
 import { parseSeconds } from "../utils/time";
 import { MatchNameCard } from "./match/MatchNameCard";
-import { MatchPointViewer } from "./match/MatchPointCard";
+import { MatchPointCard } from "./match/MatchPointCard";
 
 export const MatchResult = ({
   match,
@@ -33,9 +33,9 @@ export const MatchResult = ({
         leftTeamName={matchInfo.teams.left?.teamName}
       />
       <Text size="2rem">得点</Text>
-      <MatchPointViewer
-        LeftTeamPoint={team1Result.points}
-        RightTeamPoint={team2Result.points}
+      <MatchPointCard
+        leftTeamPoint={team1Result.points}
+        rightTeamPoint={team2Result.points}
       />
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">

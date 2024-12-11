@@ -5,7 +5,7 @@ import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
-import { MatchPointViewer } from "../components/match/MatchPointCard";
+import { MatchPointCard } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/matchResult";
@@ -88,13 +88,13 @@ export const Match = () => {
               >
                 リセット
               </Button>
-              <MatchPointViewer
-                RightTeamPoint={
+              <MatchPointCard
+                rightTeamPoint={
                   isExhibition || matchInfo?.teams.right
                     ? matchJudge.rightTeam.point.point()
                     : 0
                 }
-                LeftTeamPoint={
+                leftTeamPoint={
                   isExhibition || matchInfo?.teams.left
                     ? matchJudge.leftTeam.point.point()
                     : 0
