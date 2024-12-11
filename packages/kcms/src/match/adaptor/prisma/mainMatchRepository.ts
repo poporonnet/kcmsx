@@ -46,8 +46,8 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         return {
           match1: MainMatch.new({
             id: childMatch1.id as MainMatchID,
-            courseIndex:    childMatch1.courseIndex,
-            matchIndex:     childMatch1.matchIndex,
+            courseIndex: childMatch1.courseIndex,
+            matchIndex: childMatch1.matchIndex,
             departmentType: childMatch1.departmentType as DepartmentType,
             teamId1: (childMatch1.leftTeamId as TeamID) ?? undefined,
             teamId2: (childMatch1.rightTeamId as TeamID) ?? undefined,
@@ -58,13 +58,13 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             childMatches: undefined,
           }),
           match2: MainMatch.new({
-            id:             childMatch2.id as MainMatchID,
-            courseIndex:    childMatch2.courseIndex,
-            matchIndex:     childMatch2.matchIndex,
+            id: childMatch2.id as MainMatchID,
+            courseIndex: childMatch2.courseIndex,
+            matchIndex: childMatch2.matchIndex,
             departmentType: childMatch2.departmentType as DepartmentType,
-            teamId1: (      childMatch2.leftTeamId as TeamID) ?? undefined,
-            teamId2: (      childMatch2.rightTeamId as TeamID) ?? undefined,
-            winnerId: (     childMatch2.winnerTeamId as TeamID) ?? undefined,
+            teamId1: (childMatch2.leftTeamId as TeamID) ?? undefined,
+            teamId2: (childMatch2.rightTeamId as TeamID) ?? undefined,
+            winnerId: (childMatch2.winnerTeamId as TeamID) ?? undefined,
             // NOTE: 子の試合結果は必要ないので空のママにしておく
             runResults: [],
             parentMatchID: data.id as MainMatchID,
@@ -183,7 +183,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         return Option.none();
       }
 
-      return Option.some((this.deserialize([res]))[0]);
+      return Option.some(this.deserialize([res])[0]);
     } catch {
       return Option.none();
     }
