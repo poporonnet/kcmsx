@@ -16,6 +16,7 @@ datasource db {
 model Team {
   id         String  @id
   name       String  @unique
+  members    String
   robotType  String  @map("robot_type")
   department String
   clubName   String? @map("club_name")
