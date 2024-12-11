@@ -84,18 +84,21 @@ app.get('/logout', async (c) => {
   deleteCookie(c, cookieKey);
   return c.newResponse(null, 200);
 });
-app.use('*', except(['/login', '/logout']), (c, next) => {
-  const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = env<Env>(c);
-  return jwt({
-    secret: jwtSecret.publicKey,
-    cookie: {
-      key: cookieKey,
-      secret: cookieSecret,
-      prefixOptions: nodeEnv === 'production' ? 'host' : undefined,
-    },
-    alg: 'ES256',
-  })(c, next);
-});
+app.use(
+  '*',
+  except(['/login', '/logout'], (c, next) => {
+    const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = env<Env>(c);
+    return jwt({
+      secret: jwtSecret.publicKey,
+      cookie: {
+        key: cookieKey,
+        secret: cookieSecret,
+        prefixOptions: nodeEnv === 'production' ? 'host' : undefined,
+      },
+      alg: 'ES256',
+    })(c, next);
+  })
+);
 
 app.route('/', teamHandler);
 app.route('/', matchHandler);
