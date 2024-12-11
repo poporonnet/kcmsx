@@ -4,13 +4,10 @@ import { apiReference } from '@scalar/hono-api-reference';
 import { prismaClient } from '../adaptor';
 import { SnowflakeIDGenerator } from '../id/main';
 import { errorToCode } from '../team/adaptor/errors';
-import { DummyRepository } from '../team/adaptor/repository/dummyRepository';
 import { PrismaTeamRepository } from '../team/adaptor/repository/prismaRepository';
 import { TeamID } from '../team/models/team';
 import { FetchTeamService } from '../team/service/fetchTeam';
 import { MatchController } from './adaptor/controller/match';
-import { DummyMainMatchRepository } from './adaptor/dummy/mainMatchRepository';
-import { DummyPreMatchRepository } from './adaptor/dummy/preMatchRepository';
 import { PrismaMainMatchRepository } from './adaptor/prisma/mainMatchRepository';
 import { PrismaPreMatchRepository } from './adaptor/prisma/preMatchRepository';
 import { Controller } from './controller';
@@ -34,18 +31,11 @@ import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
 import { GetMatchService } from './service/get';
 import { upcase } from './utility/upcase';
-const isProduction = process.env.NODE_ENV === 'production';
 
 // Repositories
-const preMatchRepository = isProduction
-  ? new PrismaPreMatchRepository(prismaClient)
-  : new DummyPreMatchRepository();
-const mainMatchRepository = isProduction
-  ? new PrismaMainMatchRepository(prismaClient)
-  : new DummyMainMatchRepository();
-const teamRepository = isProduction
-  ? new PrismaTeamRepository(prismaClient)
-  : new DummyRepository();
+const preMatchRepository = new PrismaPreMatchRepository(prismaClient);
+const mainMatchRepository = new PrismaMainMatchRepository(prismaClient);
+const teamRepository = new PrismaTeamRepository(prismaClient);
 
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
