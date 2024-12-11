@@ -28,7 +28,7 @@ export interface ChildMatches {
 
 /*
  * @description 本戦の試合
- * parentIDとchildrenMatchesが同時にundefinedになることはない
+ * parentIDとchildMatchesが同時にundefinedになることはない
  */
 export class MainMatch {
   private readonly id: MainMatchID;
@@ -68,11 +68,11 @@ export class MainMatch {
   /**
    * @description MainMatchを生成する
    * @param args
-   * @throws {Error} parentID と childrenMatches が同時にundefinedの時はErrorをthrowする
+   * @throws {Error} parentID と childMatches が同時にundefinedの時はErrorをthrowする
    */
   public static new(args: CreateMainMatchArgs) {
     if (!args.childMatches && !args.parentMatchID) {
-      throw new Error('ParentIDとChildrenMatchesは同時にundefinedにできません');
+      throw new Error('ParentIDとchildMatchesは同時にundefinedにできません');
     }
     return new MainMatch(args);
   }
@@ -143,15 +143,15 @@ export class MainMatch {
     return Result.ok(undefined);
   }
 
-  getChildrenMatches(): ChildMatches | undefined {
+  getchildMatches(): ChildMatches | undefined {
     return this.childMatches;
   }
 
-  setChildrenMatches(childrenMatches: ChildMatches): Result.Result<Error, void> {
+  setchildMatches(childMatches: ChildMatches): Result.Result<Error, void> {
     if (this.childMatches) {
-      return Result.err(new Error('ChildrenMatchesはすでにセットされています'));
+      return Result.err(new Error('childMatchesはすでにセットされています'));
     }
-    this.childMatches = childrenMatches;
+    this.childMatches = childMatches;
     return Result.ok(undefined);
   }
 }
