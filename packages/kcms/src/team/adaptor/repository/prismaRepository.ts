@@ -13,8 +13,7 @@ export class PrismaTeamRepository implements TeamRepository {
     return Team.reconstruct({
       id: data.id as TeamID,
       teamName: data.name,
-      // ToDo: メンバーをどう扱うかを決める
-      members: [],
+      members: JSON.parse(data.members),
       departmentType: data.department as DepartmentType,
       robotType: data.robotType as RobotType,
       clubName: data.clubName ?? undefined,
@@ -28,6 +27,7 @@ export class PrismaTeamRepository implements TeamRepository {
         data: {
           id: team.getId(),
           name: team.getTeamName(),
+          members: JSON.stringify(team.getMembers()),
           department: team.getDepartmentType(),
           clubName: team.getClubName(),
           isEntered: team.getIsEntered(),

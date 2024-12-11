@@ -20,6 +20,14 @@ app.get("/", (c) => {
   return c.json({ message: "kcmsx/mock is up." });
 });
 
+app.get("/login", (c) => {
+  return c.newResponse(null, 200);
+});
+
+app.get("/logout", (c) => {
+  return c.newResponse(null, 200);
+});
+
 app.get("/team", (c) => {
   return c.json({ teams: teams });
 });

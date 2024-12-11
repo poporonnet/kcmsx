@@ -1,11 +1,7 @@
 import { Button, MantineColor, Text } from "@mantine/core";
-import { MatchInfo } from "config";
-import { LinkToMatch } from "./linkToMatch";
 
 export type StatusButtonProps = {
-  id: string;
   status: "now" | "future" | "end";
-  matchType: MatchInfo["matchType"];
 };
 
 export const MatchStatusButton = (props: StatusButtonProps) => {
@@ -23,15 +19,7 @@ export const MatchStatusButton = (props: StatusButtonProps) => {
   };
   const status = getColorAndText();
   return (
-    <Button
-      component={LinkToMatch}
-      id={props.id}
-      matchType={props.matchType}
-      variant="filled"
-      color={status.color}
-      radius={"lg"}
-      size="xs"
-    >
+    <Button variant="filled" color={status.color} radius={"lg"} size="xs">
       <Text fw={700}>{status.text}</Text>
     </Button>
   );
