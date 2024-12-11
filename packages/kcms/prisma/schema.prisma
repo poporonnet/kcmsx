@@ -43,14 +43,14 @@ model MainMatch {
   rightTeamId String? @map("right_team_id")
   rightTeam   Team?   @relation("main_right_team", fields: [rightTeamId], references: [id])
 
-  childrenLeft   MainMatch? @relation("parent1")
-  childrenLeftID String?    @unique @map("children_left_id")
+  childLeft   MainMatch? @relation("parent1")
+  childLeftID String?    @unique @map("child_left_id")
 
-  childrenRight   MainMatch? @relation("parent2")
-  childrenRightID String?    @unique @map("children_right_id")
+  childRight   MainMatch? @relation("parent2")
+  childRightID String?    @unique @map("child_right_id")
 
-  parent1 MainMatch? @relation("parent1", fields: [childrenLeftID], references: [id])
-  parent2 MainMatch? @relation("parent2", fields: [childrenRightID], references: [id])
+  parent1 MainMatch? @relation("parent1", fields: [childLeftID], references: [id])
+  parent2 MainMatch? @relation("parent2", fields: [childRightID], references: [id])
 
   // NOTE: アプリケーション側を信用するのでここはリレーションを作らないことにした (PreMatchも同様)
   winnerTeamId String? @map("winner_team_id")

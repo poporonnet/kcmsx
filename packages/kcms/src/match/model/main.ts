@@ -19,7 +19,7 @@ export interface CreateMainMatchArgs {
 }
 
 /**
- * 自分より前に行われた試合
+ * トーナメントで自分より前に行われた2試合
  */
 export interface ChildrenMatches {
   match1: MainMatch;
@@ -28,7 +28,7 @@ export interface ChildrenMatches {
 
 /*
  * @description 本戦の試合
- * parentIDとchildrenMatchesがそれぞれundefinedになることはない
+ * parentIDとchildrenMatchesが同時にundefinedになることはない
  */
 export class MainMatch {
   private readonly id: MainMatchID;
@@ -39,13 +39,13 @@ export class MainMatch {
   private readonly teamId2?: TeamID;
 
   /**
-   * 自分より後に行われる試合のID\
-   * 決勝試合の場合はparentIDはundefinedになる
+   * トーナメントで自分より後に行われる1試合のID\
+   * 決勝の場合はparentIDはundefinedになる
    */
   private parentID?: MainMatchID;
   /**
-   * 自分より前に行われた試合\
-   * 1回戦目の場合はundefinedになる
+   * トーナメントで自分より前に行われた2試合\
+   * 1回戦目はundefinedになる
    */
   private childrenMatches?: ChildrenMatches;
 
