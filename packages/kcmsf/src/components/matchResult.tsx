@@ -26,9 +26,12 @@ export const MatchResult = ({
       align="center"
       justify="center"
     >
-      {matchInfo && (
-        <MatchNameCard matchInfo={matchInfo} matchCode={match?.matchCode} />
-      )}
+      <MatchNameCard
+        matchType={matchInfo.matchType}
+        matchCode={match.matchCode}
+        rightTeamName={matchInfo.teams.right?.teamName}
+        leftTeamName={matchInfo.teams.left?.teamName}
+      />
       <Text size="2rem">得点</Text>
       <MatchPointViewer
         LeftTeamPoint={team1Result.points}

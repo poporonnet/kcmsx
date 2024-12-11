@@ -52,13 +52,15 @@ export const Match = () => {
         >
           {match && matchInfo && (
             <MatchNameCard
-              matchInfo={matchInfo}
-              matchCode={match?.matchCode}
+              matchType={matchInfo.matchType}
+              matchCode={match.matchCode}
               description={
                 match.matchType === "main"
-                  ? `${match?.runResults.length == 0 ? 1 : 2}試合目`
+                  ? `${match.runResults.length == 0 ? 1 : 2}試合目`
                   : ""
               }
+              rightTeamName={matchInfo.teams.right?.teamName}
+              leftTeamName={matchInfo.teams.left?.teamName}
             />
           )}
           <Button
