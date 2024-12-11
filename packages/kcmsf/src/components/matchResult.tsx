@@ -16,7 +16,6 @@ export const MatchResult = ({
   matchInfo: MatchInfo;
 }) => {
   const { team1Result, team2Result } = useMatchResult(match);
-  console.log(team1Result, team2Result);
   return (
     <Flex
       h="100%"
@@ -34,15 +33,15 @@ export const MatchResult = ({
       />
       <Text size="2rem">得点</Text>
       <MatchPointCard
-        leftTeamPoint={team1Result.points}
-        rightTeamPoint={team2Result.points}
+        leftTeamPoint={team1Result === undefined ? 0 : team1Result.points}
+        rightTeamPoint={team2Result === undefined ? 0 : team2Result.points}
       />
       <Text size="1.5rem">ゴールタイム</Text>
       <Flex align="center" justify="center" pb="sm" gap="lg">
         <Text size="2rem" c="blue" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {team1Result.teamID === ""
+          {team1Result === undefined
             ? "-"
-            : team1Result && team1Result?.goalTimeSeconds === Infinity
+            : team1Result.goalTimeSeconds === Infinity
               ? "フィニッシュ"
               : parseSeconds(team1Result.goalTimeSeconds)}
         </Text>
@@ -50,9 +49,9 @@ export const MatchResult = ({
           -
         </Text>
         <Text size="2rem" c="red" flex={1} style={{ whiteSpace: "nowrap" }}>
-          {team2Result.teamID === ""
+          {team2Result === undefined
             ? "-"
-            : team2Result && team2Result?.goalTimeSeconds === Infinity
+            : team2Result.goalTimeSeconds === Infinity
               ? "フィニッシュ"
               : parseSeconds(team2Result.goalTimeSeconds)}
         </Text>
