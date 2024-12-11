@@ -15,13 +15,13 @@ export interface CreateMainMatchArgs {
   winnerId?: TeamID;
   runResults: RunResult[];
   parentMatchID: MainMatchID | undefined;
-  childMatches: ChildrenMatches | undefined;
+  childMatches: ChildMatches | undefined;
 }
 
 /**
  * トーナメントで自分より前に行われた2試合
  */
-export interface ChildrenMatches {
+export interface ChildMatches {
   match1: MainMatch;
   match2: MainMatch;
 }
@@ -47,7 +47,7 @@ export class MainMatch {
    * トーナメントで自分より前に行われた2試合\
    * 1回戦目はundefinedになる
    */
-  private childrenMatches?: ChildrenMatches;
+  private childMatches?: ChildMatches;
 
   private winnerId?: TeamID;
   private runResults: RunResult[];
@@ -62,7 +62,7 @@ export class MainMatch {
     this.winnerId = args.winnerId;
     this.runResults = args.runResults;
     this.parentID = args.parentMatchID;
-    this.childrenMatches = args.childMatches;
+    this.childMatches = args.childMatches;
   }
 
   /**
@@ -143,15 +143,15 @@ export class MainMatch {
     return Result.ok(undefined);
   }
 
-  getChildrenMatches(): ChildrenMatches | undefined {
-    return this.childrenMatches;
+  getChildrenMatches(): ChildMatches | undefined {
+    return this.childMatches;
   }
 
-  setChildrenMatches(childrenMatches: ChildrenMatches): Result.Result<Error, void> {
-    if (this.childrenMatches) {
+  setChildrenMatches(childrenMatches: ChildMatches): Result.Result<Error, void> {
+    if (this.childMatches) {
       return Result.err(new Error('ChildrenMatchesはすでにセットされています'));
     }
-    this.childrenMatches = childrenMatches;
+    this.childMatches = childrenMatches;
     return Result.ok(undefined);
   }
 }

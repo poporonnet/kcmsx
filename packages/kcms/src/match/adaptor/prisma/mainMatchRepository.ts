@@ -2,7 +2,7 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 import type { Prisma, PrismaClient } from '@prisma/client';
 import { DepartmentType } from 'config';
 import { TeamID } from '../../../team/models/team';
-import { ChildrenMatches, MainMatch, MainMatchID } from '../../model/main';
+import { ChildMatches, MainMatch, MainMatchID } from '../../model/main';
 import { MainMatchRepository } from '../../model/repository';
 import { RunResult, RunResultID } from '../../model/runResult';
 
@@ -30,7 +30,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
     }
 
     return res.map((data) => {
-      const childMatches = (): ChildrenMatches | undefined => {
+      const childMatches = (): ChildMatches | undefined => {
         const childMatch1 = data.childLeft ?? undefined;
         const childMatch2 = data.childRight ?? undefined;
         // NOTE: left/rightが両方存在しない場合(まだ生成されていない状態)はundefinedを返す
