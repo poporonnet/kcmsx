@@ -9,6 +9,7 @@ import { basicAuth } from 'hono/basic-auth';
 import { except } from 'hono/combine';
 import { deleteCookie, setSignedCookie } from 'hono/cookie';
 import { cors } from 'hono/cors';
+import { HTTPException } from 'hono/http-exception';
 import { jwt, sign } from 'hono/jwt';
 import { secureHeaders } from 'hono/secure-headers';
 import { trimTrailingSlash } from 'hono/trailing-slash';
@@ -99,7 +100,18 @@ app.use(
     })(c, next);
   })
 );
+app.onError((err) => {
+  if (!(err instanceof HTTPException)) {
+    throw err;
+  }
 
+  const response = err.getResponse();
+  if (response.status == 401 && response.headers.get('www-authenticate')?.startsWith('Basic')) {
+    response.headers.set('www-authenticate', 'KCMS-Basic');
+  }
+
+  return response;
+});
 app.route('/', teamHandler);
 app.route('/', matchHandler);
 app.route('/', sponsorHandler);
