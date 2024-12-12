@@ -71,17 +71,17 @@ app.get(
     const {
       NODE_ENV: nodeEnv,
       KCMS_COOKIE_TOKEN_KEY: cookieKey,
+      KCMS_COOKIE_MAX_AGE: cookieMaxAge,
     } = getEnv(c);
 
     const nowSeconds = Math.floor(Date.now() / 1000);
-    const ageSeconds = 60 * 5; // 5 minutes
 
     const token = await sign(
       {
         sub: 'admin',
         iss: 'kcms',
         iat: nowSeconds,
-        exp: nowSeconds + ageSeconds,
+        exp: nowSeconds + cookieMaxAge,
       },
       jwtSecret.privateKey,
       'ES256'
@@ -90,8 +90,8 @@ app.get(
       path: '/',
       httpOnly: true,
       secure: true,
-      maxAge: ageSeconds,
-      expires: new Date((nowSeconds + ageSeconds) * 1000),
+      maxAge: cookieMaxAge,
+      expires: new Date((nowSeconds + cookieMaxAge) * 1000),
       sameSite: 'strict',
       prefix: nodeEnv === 'production' ? 'host' : undefined,
     });
