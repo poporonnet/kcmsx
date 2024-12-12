@@ -29,7 +29,7 @@ const EnvScheme = z.object({
 
 export type Env = z.infer<typeof EnvScheme>;
 
-const getEnv = <C extends Context = Context<{}, any, {}>>(c: C) => {
+const getEnv = <C extends Context = Parameters<typeof env>['0']>(c: C) => {
   const envSource = env<Env>(c);
   const envRes = EnvScheme.safeParse(envSource);
   if (!envRes.success) {
