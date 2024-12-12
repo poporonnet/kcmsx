@@ -26,7 +26,9 @@ export const useFetch = <Response extends object>(
       setLoading(true);
       setError(undefined);
 
-      const res = await fetch(query);
+      const res = await fetch(query, {
+        credentials: "include",
+      });
       const data = (await res.json()) as Response;
 
       setLoading(false);
