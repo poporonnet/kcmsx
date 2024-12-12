@@ -112,6 +112,8 @@ app.onError((err) => {
 
   return response;
 });
+
+app.get('/', (c) => c.json({ message: 'kcms is up' }));
 app.route('/', teamHandler);
 app.route('/', matchHandler);
 app.route('/', sponsorHandler);
