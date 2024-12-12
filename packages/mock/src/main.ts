@@ -13,6 +13,7 @@ app.use(
       origin.match(/https:\/\/([a-zA-Z0-9\-]+\.)?kcmsx\.pages\.dev/) // Pagesのプレビュービルドのため
         ? origin
         : "http://localhost:5173",
+    credentials: true,
   })
 );
 
