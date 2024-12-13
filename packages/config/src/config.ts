@@ -3,7 +3,7 @@ import { createConfig } from "./utility/createConfig";
 
 export const config = createConfig(
   {
-    contestName: "第2回 Matz葉ガニロボコン",
+    contestName: "第2回 Matz葉がにロボコン",
     robots: [
       {
         type: "leg",
