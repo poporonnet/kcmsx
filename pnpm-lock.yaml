@@ -51,10 +51,10 @@ importers:
         version: 1.13.7(hono@4.6.13)
       '@hono/zod-openapi':
         specifier: ^0.18.0
-        version: 0.18.3(hono@4.6.13)(zod@3.24.0)
+        version: 0.18.3(hono@4.6.13)(zod@3.24.1)
       '@hono/zod-validator':
         specifier: ^0.4.0
-        version: 0.4.1(hono@4.6.13)(zod@3.24.0)
+        version: 0.4.1(hono@4.6.13)(zod@3.24.1)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
         version: 6.7.0
@@ -78,7 +78,7 @@ importers:
         version: 5.7.2
       zod:
         specifier: ^3.22.4
-        version: 3.24.0
+        version: 3.24.1
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -254,7 +254,7 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.4.0
-        version: 0.4.1(hono@4.6.13)(zod@3.24.0)
+        version: 0.4.1(hono@4.6.13)(zod@3.24.1)
       config:
         specifier: workspace:^
         version: link:../config
@@ -263,7 +263,7 @@ importers:
         version: 4.6.13
       zod:
         specifier: ^3.22.4
-        version: 3.24.0
+        version: 3.24.1
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240529.0
@@ -3511,8 +3511,8 @@ packages:
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
-  zod@3.24.0:
-    resolution: {integrity: sha512-Hz+wiY8yD0VLA2k/+nsg2Abez674dDGTai33SwNvMPuf9uIrBC9eFgIMQxBBbHFxVXi8W+5nX9DcAh9YNSQm/w==}
+  zod@3.24.1:
+    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
 
 snapshots:
 
@@ -3523,10 +3523,10 @@ snapshots:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
 
-  '@asteasolutions/zod-to-openapi@7.2.0(zod@3.24.0)':
+  '@asteasolutions/zod-to-openapi@7.2.0(zod@3.24.1)':
     dependencies:
       openapi3-ts: 4.4.0
-      zod: 3.24.0
+      zod: 3.24.1
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -3677,7 +3677,7 @@ snapshots:
   '@cloudflare/workers-shared@0.11.0':
     dependencies:
       mime: 3.0.0
-      zod: 3.24.0
+      zod: 3.24.1
 
   '@cloudflare/workers-types@4.20241205.0': {}
 
@@ -4048,17 +4048,17 @@ snapshots:
     dependencies:
       hono: 4.6.13
 
-  '@hono/zod-openapi@0.18.3(hono@4.6.13)(zod@3.24.0)':
+  '@hono/zod-openapi@0.18.3(hono@4.6.13)(zod@3.24.1)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.24.0)
-      '@hono/zod-validator': 0.4.1(hono@4.6.13)(zod@3.24.0)
+      '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.24.1)
+      '@hono/zod-validator': 0.4.1(hono@4.6.13)(zod@3.24.1)
       hono: 4.6.13
-      zod: 3.24.0
+      zod: 3.24.1
 
-  '@hono/zod-validator@0.4.1(hono@4.6.13)(zod@3.24.0)':
+  '@hono/zod-validator@0.4.1(hono@4.6.13)(zod@3.24.1)':
     dependencies:
       hono: 4.6.13
-      zod: 3.24.0
+      zod: 3.24.1
 
   '@humanfs/core@0.19.1': {}
 
@@ -5610,7 +5610,7 @@ snapshots:
       workerd: 1.20241205.0
       ws: 8.18.0
       youch: 3.3.4
-      zod: 3.24.0
+      zod: 3.24.1
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -6532,4 +6532,4 @@ snapshots:
 
   zhead@2.2.4: {}
 
-  zod@3.24.0: {}
+  zod@3.24.1: {}
