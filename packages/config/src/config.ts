@@ -32,8 +32,7 @@ export const config = createConfig(
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: 2,
-          open: 1,
+          elementary: [1, 2, 3],
         },
       },
       {
@@ -41,8 +40,8 @@ export const config = createConfig(
         name: "本戦",
         limitSeconds: 180,
         course: {
-          elementary: 2,
-          open: 1,
+          elementary: [1, 2, 3],
+          open: [1],
         },
       },
     ],
