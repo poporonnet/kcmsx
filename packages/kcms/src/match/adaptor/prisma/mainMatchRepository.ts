@@ -2,7 +2,7 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 import type { Prisma, PrismaClient } from '@prisma/client';
 import { DepartmentType } from 'config';
 import { TeamID } from '../../../team/models/team';
-import { MainMatch, MainMatchID } from '../../model/main';
+import { ChildMatches, MainMatch, MainMatchID } from '../../model/main';
 import { MainMatchRepository } from '../../model/repository';
 import { RunResult, RunResultID } from '../../model/runResult';
 
@@ -14,15 +14,76 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
 
   private deserialize(
     res: Prisma.PromiseReturnType<
-      typeof this.client.mainMatch.findMany<{ include: { runResult: true } }>
+      typeof this.client.mainMatch.findMany<{
+        include: {
+          runResult: true;
+          childRight: true;
+          childLeft: true;
+          parent1: true;
+          parent2: true;
+        };
+      }>
     >
   ): MainMatch[] {
     if (!res) {
       throw new Error('invalid data');
     }
 
-    return res.map((data) =>
-      MainMatch.new({
+    return res.map((data) => {
+      const childMatches = (): ChildMatches | undefined => {
+        const childMatch1 = data.childLeft ?? undefined;
+        const childMatch2 = data.childRight ?? undefined;
+        // NOTE: left/rightが両方存在しない場合(まだ生成されていない状態)はundefinedを返す
+        if (!childMatch1 && !childMatch2) {
+          return undefined;
+        }
+        // NOTE: どちらかが存在しない場合は本来エラーだが、取り敢えずundefinedを返しておく
+        // TODO: ここをエラーにする
+        if (!childMatch1 || !childMatch2) {
+          return undefined;
+        }
+
+        return {
+          match1: MainMatch.new({
+            id: childMatch1.id as MainMatchID,
+            courseIndex: childMatch1.courseIndex,
+            matchIndex: childMatch1.matchIndex,
+            departmentType: childMatch1.departmentType as DepartmentType,
+            teamId1: (childMatch1.leftTeamId as TeamID) ?? undefined,
+            teamId2: (childMatch1.rightTeamId as TeamID) ?? undefined,
+            winnerId: (childMatch1.winnerTeamId as TeamID) ?? undefined,
+            runResults: [],
+            parentMatchID: data.id as MainMatchID,
+            // NOTE: ネストは1つまでにする
+            childMatches: undefined,
+          }),
+          match2: MainMatch.new({
+            id: childMatch2.id as MainMatchID,
+            courseIndex: childMatch2.courseIndex,
+            matchIndex: childMatch2.matchIndex,
+            departmentType: childMatch2.departmentType as DepartmentType,
+            teamId1: (childMatch2.leftTeamId as TeamID) ?? undefined,
+            teamId2: (childMatch2.rightTeamId as TeamID) ?? undefined,
+            winnerId: (childMatch2.winnerTeamId as TeamID) ?? undefined,
+            // NOTE: 子の試合結果は必要ないので空のママにしておく
+            runResults: [],
+            parentMatchID: data.id as MainMatchID,
+            // NOTE: 無限再帰クエリになるのでネストは1つまでにする
+            childMatches: undefined,
+          }),
+        };
+      };
+      const parentMatchID = (): MainMatchID | undefined => {
+        // NOTE: 決勝戦はparentを持たない
+        if (!data.parent1 && !data.parent2) {
+          return undefined;
+        }
+
+        if (!data.parent1) return data.parent2!.id as MainMatchID;
+        return data.parent1!.id as MainMatchID;
+      };
+
+      return MainMatch.new({
         id: data.id as MainMatchID,
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
@@ -41,8 +102,10 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             finishState: v.finishState === 0 ? 'GOAL' : 'FINISHED',
           })
         ),
-      })
-    );
+        parentMatchID: parentMatchID(),
+        childMatches: childMatches(),
+      });
+    });
   }
 
   async create(match: MainMatch): Promise<Result.Result<Error, void>> {
@@ -87,8 +150,16 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
 
   async findAll(): Promise<Result.Result<Error, MainMatch[]>> {
     try {
-      const res = await this.client.mainMatch.findMany({ include: { runResult: true } });
-      return Result.ok(this.deserialize(res));
+      const res = await this.client.mainMatch.findMany({
+        include: {
+          runResult: true,
+          childRight: true,
+          childLeft: true,
+          parent1: true,
+          parent2: true,
+        },
+      });
+      return Result.ok(await this.deserialize(res));
     } catch (e) {
       return Result.err(e as Error);
     }
@@ -102,6 +173,10 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         },
         include: {
           runResult: true,
+          childLeft: true,
+          childRight: true,
+          parent1: true,
+          parent2: true,
         },
       });
       if (!res) {

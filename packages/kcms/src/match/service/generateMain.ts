@@ -2,7 +2,7 @@ import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType } from 'config';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
-import { MainMatch } from '../model/main';
+import { MainMatch, MainMatchID } from '../model/main';
 import { MainMatchRepository } from '../model/repository';
 
 export class GenerateMainMatchService {
@@ -30,6 +30,8 @@ export class GenerateMainMatchService {
       runResults: [],
       teamId1: teamID1,
       teamId2: teamID2,
+      parentMatchID: '999' as MainMatchID,
+      childMatches: undefined,
     });
 
     const matches = await this.mainMatchRepository.create(match);
