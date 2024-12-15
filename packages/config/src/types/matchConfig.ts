@@ -45,7 +45,7 @@ export type DerivedCourseConfig<
   Robots extends RobotConfig[],
   Departments extends DepartmentConfig<Robots>[],
   Courses extends number[],
-> = Partial<Record<Departments[number]["type"], Courses>>;
+> = Record<Departments[number]["type"], Courses>;
 
 /**
  * @description {@link MatchConfig}の配列から導出される試合種別設定のオブジェクト

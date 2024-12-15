@@ -49,7 +49,7 @@ export const createConfig = <
   MatchName extends string,
   MatchLimitSeconds extends number,
   MatchCourseIndex extends number,
-  MatchCourses extends [MatchCourseIndex, ...MatchCourseIndex[]],
+  MatchCourses extends [] | [MatchCourseIndex, ...MatchCourseIndex[]],
   MatchCourse extends DerivedCourseConfig<Robots, Departments, MatchCourses>,
   Match extends DerivedMatchConfig<
     MatchType,
