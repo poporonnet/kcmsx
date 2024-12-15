@@ -12,7 +12,12 @@ export type MatchConfig = DerivedMatchConfig<
   number,
   RobotConfig[],
   DepartmentConfig<RobotConfig[]>[],
-  DerivedCourseConfig<RobotConfig[], DepartmentConfig<RobotConfig[]>[]>
+  number[],
+  DerivedCourseConfig<
+    RobotConfig[],
+    DepartmentConfig<RobotConfig[]>[],
+    number[]
+  >
 >;
 
 /**
@@ -24,7 +29,8 @@ export type DerivedMatchConfig<
   LimitSeconds extends number,
   Robots extends RobotConfig[],
   Departments extends DepartmentConfig<Robots>[],
-  Course extends DerivedCourseConfig<Robots, Departments>,
+  Courses extends number[],
+  Course extends DerivedCourseConfig<Robots, Departments, Courses>,
 > = {
   type: Type;
   name: Name;
@@ -38,7 +44,8 @@ export type DerivedMatchConfig<
 export type DerivedCourseConfig<
   Robots extends RobotConfig[],
   Departments extends DepartmentConfig<Robots>[],
-> = Partial<Record<Departments[number]["type"], number>>;
+  Courses extends number[],
+> = Record<Departments[number]["type"], Courses>;
 
 /**
  * @description {@link MatchConfig}の配列から導出される試合種別設定のオブジェクト

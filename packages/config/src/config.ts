@@ -3,7 +3,7 @@ import { createConfig } from "./utility/createConfig";
 
 export const config = createConfig(
   {
-    contestName: "第1回 どじょうすくいロボコン",
+    contestName: "第2回 Matz葉がにロボコン",
     robots: [
       {
         type: "leg",
@@ -23,7 +23,7 @@ export const config = createConfig(
       {
         type: "open",
         name: "オープン部門",
-        robotTypes: ["leg"],
+        robotTypes: ["leg", "wheel"],
       },
     ],
     matches: [
@@ -32,8 +32,8 @@ export const config = createConfig(
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: 2,
-          open: 1,
+          elementary: [1, 2, 3],
+          open: [],
         },
       },
       {
@@ -41,8 +41,8 @@ export const config = createConfig(
         name: "本戦",
         limitSeconds: 180,
         course: {
-          elementary: 2,
-          open: 1,
+          elementary: [1, 2, 3],
+          open: [1],
         },
       },
     ],

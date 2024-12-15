@@ -23,7 +23,7 @@ describe("正しい設定を生成できる", () => {
             type: "pre",
             name: "予選",
             limitSeconds: 180,
-            course: { elementary: 3 },
+            course: { elementary: [1, 2, 3] },
           },
         ],
         rules: [
@@ -77,7 +77,7 @@ describe("正しい設定を生成できる", () => {
     expect(config.matchTypes).toEqual(["pre"]);
     expect(config.match.pre.name).toBe("予選");
     expect(config.match.pre.limitSeconds).toBe(180);
-    expect(config.match.pre.course.elementary).toBe(3);
+    expect(config.match.pre.course.elementary).toEqual([1, 2, 3]);
   });
 
   it("複数項目の設定を生成できる", () => {
@@ -86,13 +86,15 @@ describe("正しい設定を生成できる", () => {
     type RobotTypes = [Robot["type"], ...Robot["type"][]];
     type Department = DerivedDepartmentConfig<string, string, RobotTypes>;
     type Departments = [Department, ...Department[]];
+    type Courses = [number, ...number[]];
     type Match = DerivedMatchConfig<
       string,
       string,
       number,
       Robots,
       Departments,
-      DerivedCourseConfig<Robots, Departments> & { __department0: 0 } // ValidCourseConfigsを通過させるため
+      Courses,
+      DerivedCourseConfig<Robots, Departments, Courses> & { __department0: [0] } // ValidCourseConfigsを通過させるため
     >;
     type Matches = [Match, ...Match[]];
     type Sponsor = DerivedSponsorConfig<string, SponsorClass, string>;
@@ -119,8 +121,8 @@ describe("正しい設定を生成できる", () => {
         name: `試合${i}`,
         limitSeconds: 100 * i,
         course: {
-          [`department${i}`]: 3,
-          __department0: 0, // ValidCourseConfigsを通過させるため
+          [`department${i}`]: [1, 2, 3],
+          __department0: [0], // ValidCourseConfigsを通過させるため
         },
       })
     ) as Matches;
@@ -217,7 +219,7 @@ describe("正しい設定を生成できる", () => {
             type: "pre",
             name: "予選",
             limitSeconds: 180,
-            course: { elementary: 3 },
+            course: { elementary: [1, 2, 3] },
           },
         ],
         rules: [
