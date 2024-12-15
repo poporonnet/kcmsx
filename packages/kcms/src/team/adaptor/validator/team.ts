@@ -10,7 +10,7 @@ const TeamSchema = z.object({
   name: z.string().min(1).openapi({ example: 'かに１' }),
   entryCode: z.string().openapi({ example: '1' }),
   members: z
-    .array(z.string().min(3))
+    .array(z.string().min(2))
     .max(2)
     .nonempty()
     .openapi({ example: ['メンバー1', 'メンバー2'] }),
