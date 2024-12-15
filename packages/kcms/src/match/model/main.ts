@@ -71,9 +71,7 @@ export class MainMatch {
    * @throws {Error} parentID と childMatches が同時にundefinedの時はErrorをthrowする
    */
   public static new(args: CreateMainMatchArgs) {
-    if (!args.childMatches && !args.parentMatchID) {
-      throw new Error('ParentIDとchildMatchesは同時にundefinedにできません');
-    }
+    // Note: 本戦トーナメント生成時にはparentID/childMatchesはどちらもundefinedになる
     return new MainMatch(args);
   }
 
