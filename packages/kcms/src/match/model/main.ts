@@ -141,11 +141,11 @@ export class MainMatch {
     return Result.ok(undefined);
   }
 
-  getchildMatches(): ChildMatches | undefined {
+  getChildMatches(): ChildMatches | undefined {
     return this.childMatches;
   }
 
-  setchildMatches(childMatches: ChildMatches): Result.Result<Error, void> {
+  setChildMatches(childMatches: ChildMatches): Result.Result<Error, void> {
     if (this.childMatches) {
       return Result.err(new Error('childMatchesはすでにセットされています'));
     }
