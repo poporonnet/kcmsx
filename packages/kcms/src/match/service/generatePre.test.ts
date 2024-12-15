@@ -21,18 +21,21 @@ describe('GeneratePreMatchService', () => {
   const expectedTeamPair = [
     [
       ['A1', 'B3'],
-      ['A3', 'C2'],
-      ['B1', 'N2'],
+      ['A4', 'N1'],
       ['B3', 'A1'],
-      ['C2', 'A3'],
+      ['N1', 'A4'],
+    ],
+    [
+      ['A2', 'C1'],
+      ['B1', 'N2'],
+      ['C1', 'A2'],
       ['N2', 'B1'],
     ],
     [
-      ['A2', 'B2'],
-      ['A4', 'C1'],
-      ['B2', 'N1'],
-      ['C1', 'A2'],
-      ['N1', 'A4'],
+      ['A3', 'C2'],
+      ['B2', undefined],
+      [undefined, 'A3'],
+      ['C2', 'B2'],
     ],
   ];
 
@@ -41,7 +44,7 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
-    for (let i = 0; i < config.match.pre.course.elementary; i++) {
+    for (let i = 0; i < config.match.pre.course.elementary.length; i++) {
       const course = res.filter((v) => v.getCourseIndex() === i + 1);
       const pair = course.map((v) => [
         testTeamData.get(v.getTeamId1() ?? ('' as TeamID))?.getTeamName(),
