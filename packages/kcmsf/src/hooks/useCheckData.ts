@@ -36,13 +36,13 @@ export const useCheckData = (data: CSVRow[]) => {
       if (teamName.length < 1) {
         errs[i].teamName = "shortTeamName";
       }
-      // 3文字以上
-      if (member1.length < 3) {
+      // 2文字以上
+      if (member1.length < 2) {
         errs[i].member1 = "shortMemberName";
       }
 
-      // 3文字以上 or ""
-      if (member2 && member2.length < 3) {
+      // 2文字以上 or ""
+      if (member2 && member2.length < 2) {
         errs[i].member2 = "shortMemberName";
       }
 
