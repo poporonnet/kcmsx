@@ -52,6 +52,7 @@ export const Ranking = () => {
         {
           method: "POST",
           body: JSON.stringify(req),
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },

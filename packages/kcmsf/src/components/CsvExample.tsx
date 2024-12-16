@@ -2,8 +2,8 @@ import { Code, Paper, Table, Text, Title } from "@mantine/core";
 import { config } from "config";
 const csvDescription = {
   name: "1文字以上。重複できない。",
-  member1: "3文字以上。",
-  member2: "3文字以上。1人の場合は空欄。",
+  member1: "2文字以上。",
+  member2: "2文字以上。1人の場合は空欄。",
   robotType: config.robotTypes.join("または"),
   departmentType: config.departmentTypes.join("または"),
   clubName: "所属していなければ空欄。",

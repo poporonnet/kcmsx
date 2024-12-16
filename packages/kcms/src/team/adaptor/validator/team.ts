@@ -7,10 +7,10 @@ export const CommonErrorSchema = z.object({
 
 const TeamSchema = z.object({
   id: z.string().openapi({ example: '1392387' }),
-  name: z.string().openapi({ example: 'かに１' }),
+  name: z.string().min(1).openapi({ example: 'かに１' }),
   entryCode: z.string().openapi({ example: '1' }),
   members: z
-    .array(z.string())
+    .array(z.string().min(2))
     .max(2)
     .nonempty()
     .openapi({ example: ['メンバー1', 'メンバー2'] }),
