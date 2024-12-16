@@ -12,7 +12,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const res = checkRes?.ok ?? false;
 
     if (!res) {
-      await fetch(`${import.meta.env.VITE_API_URL}/logout`);
+      await fetch(`${import.meta.env.VITE_API_URL}/logout`).catch(
+        () => undefined
+      );
     }
     setAuth(res);
     return res;
