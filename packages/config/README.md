@@ -6,7 +6,7 @@
     - [baseConfig.contestName](#baseconfigcontestname)
     - [baseConfig.robots](#baseconfigrobots)
     - [baseConfig.departments](#baseconfigdepartments)
-    - [baseConfig.matches](#baseconfigmatches)
+    - [baseConfig.match](#baseconfigmatch)
     - [baseConfig.rules](#baseconfigrules)
     - [baseConfig.sponsors](#baseconfigsponsors)
   - [conditions](#conditions)
@@ -141,7 +141,7 @@ departments: [
 
 </details>
 
-### baseConfig.matches
+### baseConfig.match
 
 - 型: `MatchConfig`
 
@@ -162,7 +162,7 @@ departments: [
 <summary>例: 予選と本戦の2種別の場合</summary>
 
 ```ts
-matches: {
+match: {
   pre: {
     name: "予選",
     limitSeconds: 180,
