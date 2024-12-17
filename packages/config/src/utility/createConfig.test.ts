@@ -100,7 +100,6 @@ describe("正しい設定を生成できる", () => {
       Courses,
       DerivedCourseConfig<Robots, Departments, Courses> & { __department0: [0] } // ValidCourseConfigsを通過させるため
     >;
-    // type Matches = [Match, ...Match[]];
     type Sponsor = DerivedSponsorConfig<string, SponsorClass, string>;
     type Sponsors = [Sponsor, ...Sponsor[]];
     type Rule = DerivedRuleBaseVariant;
