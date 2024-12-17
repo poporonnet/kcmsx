@@ -85,5 +85,5 @@ export const testTeamData: Map<TeamID, Team> = new Map<TeamID, Team>(
     testDataGenerator({ clubName: 'C', teamName: '2', department: 'elementary', isEntered: true }),
     testDataGenerator({ teamName: '1', department: 'elementary', isEntered: true }), // N1
     testDataGenerator({ teamName: '2', department: 'elementary', isEntered: true }), // N2
-  ].map((v) => [v.getId(), v])
+  ].map((v) => [v.getID(), v])
 );

@@ -42,7 +42,7 @@ export class TeamController {
     return Result.ok(
       unwrapped.map((v) => {
         return {
-          id: v.getId(),
+          id: v.getID(),
           name: v.getTeamName(),
           members: v.getMembers() as [string, ...string[]],
           clubName: v.getClubName() ?? '',
@@ -65,7 +65,7 @@ export class TeamController {
     return Result.ok({
       teams: teams.map((v) => {
         return {
-          id: v.getId(),
+          id: v.getID(),
           name: v.getTeamName(),
           members: v.getMembers() as [string, ...string[]],
           clubName: v.getClubName() ?? '',
@@ -86,7 +86,7 @@ export class TeamController {
     const team = Result.unwrap(res);
 
     return Result.ok({
-      id: team.getId(),
+      id: team.getID(),
       name: team.getTeamName(),
       members: team.getMembers() as [string, ...string[]],
       clubName: team.getClubName() ?? '',

@@ -11,17 +11,17 @@ describe('PreMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departments[0].type,
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
       runResults: [],
     };
     const res = PreMatch.new(args);
 
-    expect(res.getId()).toBe(args.id);
+    expect(res.getID()).toBe(args.id);
     expect(res.getCourseIndex()).toBe(args.courseIndex);
     expect(res.getMatchIndex()).toBe(args.matchIndex);
-    expect(res.getTeamId1()).toBe(args.teamId1);
-    expect(res.getTeamId2()).toBe(args.teamId2);
+    expect(res.getTeamID1()).toBe(args.teamID1);
+    expect(res.getTeamID2()).toBe(args.teamID2);
     expect(res.getRunResults()).toBe(args.runResults);
   });
 
@@ -31,8 +31,8 @@ describe('PreMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departments[0].type,
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) =>
         RunResult.new({
           id: String(i) as RunResultID,
@@ -55,8 +55,8 @@ describe('PreMatch', () => {
         courseIndex: 1,
         matchIndex: 1,
         departmentType: config.departments[0].type,
-        teamId1: '2' as TeamID,
-        teamId2: '3' as TeamID,
+        teamID1: '2' as TeamID,
+        teamID2: '3' as TeamID,
         runResults: [],
       });
       // 1,2以外は足せない
@@ -98,8 +98,8 @@ describe('PreMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departments[0].type,
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
       runResults: [],
     };
     const res = PreMatch.new(args);
@@ -116,6 +116,6 @@ describe('PreMatch', () => {
           });
         })
       )
-    ).toThrowError(new Error('RunResult teamId must be teamId1 or teamId2'));
+    ).toThrowError(new Error('RunResult teamID must be teamID1 or teamID2'));
   });
 });

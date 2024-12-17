@@ -32,7 +32,7 @@ describe('FetchTeamService', () => {
   });
 
   it('チームIDで取得できる', async () => {
-    const actual = await service.findByID(testEntryData[0].getId());
+    const actual = await service.findByID(testEntryData[0].getID());
     expect(Result.isOk(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(testEntryData[0]);
   });

@@ -49,9 +49,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             courseIndex: childMatch1.courseIndex,
             matchIndex: childMatch1.matchIndex,
             departmentType: childMatch1.departmentType as DepartmentType,
-            teamId1: (childMatch1.leftTeamId as TeamID) ?? undefined,
-            teamId2: (childMatch1.rightTeamId as TeamID) ?? undefined,
-            winnerId: (childMatch1.winnerTeamId as TeamID) ?? undefined,
+            teamID1: (childMatch1.leftTeamID as TeamID) ?? undefined,
+            teamID2: (childMatch1.rightTeamID as TeamID) ?? undefined,
+            winnerID: (childMatch1.winnerTeamID as TeamID) ?? undefined,
             runResults: [],
             parentMatchID: data.id as MainMatchID,
             // NOTE: ネストは1つまでにする
@@ -62,9 +62,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             courseIndex: childMatch2.courseIndex,
             matchIndex: childMatch2.matchIndex,
             departmentType: childMatch2.departmentType as DepartmentType,
-            teamId1: (childMatch2.leftTeamId as TeamID) ?? undefined,
-            teamId2: (childMatch2.rightTeamId as TeamID) ?? undefined,
-            winnerId: (childMatch2.winnerTeamId as TeamID) ?? undefined,
+            teamID1: (childMatch2.leftTeamID as TeamID) ?? undefined,
+            teamID2: (childMatch2.rightTeamID as TeamID) ?? undefined,
+            winnerID: (childMatch2.winnerTeamID as TeamID) ?? undefined,
             // NOTE: 子の試合結果は必要ないので空のママにしておく
             runResults: [],
             parentMatchID: data.id as MainMatchID,
@@ -88,9 +88,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
         departmentType: data.departmentType as DepartmentType,
-        teamId1: (data.leftTeamId as TeamID) ?? undefined,
-        teamId2: (data.rightTeamId as TeamID) ?? undefined,
-        winnerId: (data.winnerTeamId as TeamID) ?? undefined,
+        teamID1: (data.leftTeamID as TeamID) ?? undefined,
+        teamID2: (data.rightTeamID as TeamID) ?? undefined,
+        winnerID: (data.winnerTeamID as TeamID) ?? undefined,
         runResults: data.runResult.map((v) =>
           RunResult.new({
             id: v.id as RunResultID,
@@ -112,12 +112,12 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
     try {
       await this.client.mainMatch.create({
         data: {
-          id: match.getId(),
+          id: match.getID(),
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
           departmentType: match.getDepartmentType(),
-          leftTeamId: match.getTeamId1(),
-          rightTeamId: match.getTeamId2(),
+          leftTeamID: match.getTeamID1(),
+          rightTeamID: match.getTeamID2(),
         },
       });
 
@@ -132,12 +132,12 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
       await this.client.mainMatch.createMany({
         data: matches.map((v) => {
           return {
-            id: v.getId(),
+            id: v.getID(),
             courseIndex: v.getCourseIndex(),
             matchIndex: v.getMatchIndex(),
             departmentType: v.getDepartmentType(),
-            leftTeamId: v.getTeamId1(),
-            rightTeamId: v.getTeamId2(),
+            leftTeamID: v.getTeamID1(),
+            rightTeamID: v.getTeamID2(),
           };
         }),
       });
@@ -192,7 +192,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
   async update(match: MainMatch): Promise<Result.Result<Error, void>> {
     try {
       const currentRunResults = await this.client.runResult.findMany({
-        where: { mainMatchId: match.getId() },
+        where: { mainMatchID: match.getID() },
       });
       const currentRunResultIDs = new Set<string>(currentRunResults.map((v) => v.id));
 
@@ -201,7 +201,7 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
         .getRunResults()
         .reduce<{ updatable: RunResult[]; new: RunResult[] }>(
           (results, runResult) => {
-            const updateType = currentRunResultIDs.has(runResult.getId()) ? 'updatable' : 'new';
+            const updateType = currentRunResultIDs.has(runResult.getID()) ? 'updatable' : 'new';
             results[updateType].push(runResult);
             return results;
           },
@@ -210,37 +210,37 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
 
       await this.client.runResult.createMany({
         data: newRunResults.map((v) => ({
-          id: v.getId(),
-          teamID: v.getTeamId(),
+          id: v.getID(),
+          teamID: v.getTeamID(),
           points: v.getPoints(),
           // NOTE: Infinity: 2147483647
           goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
             ? v.getGoalTimeSeconds()
             : this.INT32MAX,
-          mainMatchId: match.getId(),
+          mainMatchID: match.getID(),
           // NOTE: GOAL: 0 , FINISHED: 1
           finishState: v.isGoal() ? 0 : 1,
         })),
       });
       await this.client.mainMatch.update({
         where: {
-          id: match.getId(),
+          id: match.getID(),
         },
         data: {
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
           departmentType: match.getDepartmentType(),
-          leftTeamId: match.getTeamId1(),
-          rightTeamId: match.getTeamId2(),
-          winnerTeamId: match.getWinnerId(),
+          leftTeamID: match.getTeamID1(),
+          rightTeamID: match.getTeamID2(),
+          winnerTeamID: match.getWinnerID(),
           runResult: {
             updateMany: updatableRunResults.map((v) => ({
               where: {
-                id: v.getId(),
+                id: v.getID(),
               },
               data: {
-                id: v.getId(),
-                teamID: v.getTeamId(),
+                id: v.getID(),
+                teamID: v.getTeamID(),
                 points: v.getPoints(),
                 // NOTE: Infinity: 2147483647
                 goalTimeSeconds: isFinite(v.getGoalTimeSeconds())

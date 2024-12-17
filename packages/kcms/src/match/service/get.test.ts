@@ -17,7 +17,7 @@ describe('GetMatchService', () => {
   });
 
   it('取得できる(PreMatch)', async () => {
-    const res = await service.findById('100' as PreMatchID);
+    const res = await service.findByID('100' as PreMatchID);
 
     expect(Result.isErr(res)).toStrictEqual(false);
     expect(res[1]).toStrictEqual(testRankingPreMatchData[0]);
@@ -26,7 +26,7 @@ describe('GetMatchService', () => {
   it.todo('取得できる(MainMatch)');
 
   it('存在しないときはエラー', async () => {
-    const res = await service.findById('222' as PreMatchID);
+    const res = await service.findByID('222' as PreMatchID);
 
     expect(Result.isErr(res)).toStrictEqual(true);
     expect(res[1]).toStrictEqual(new Error('Not found'));

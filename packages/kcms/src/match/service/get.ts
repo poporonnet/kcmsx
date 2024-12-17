@@ -14,7 +14,7 @@ export class GetMatchService {
    * @description 試合を取得 ※preMatch -> MainMatchの順に取得し、どちらも存在しない場合はエラーを返す
    * @param id
    */
-  async findById(
+  async findByID(
     id: PreMatchID | MainMatchID
   ): Promise<Result.Result<Error, PreMatch | MainMatch>> {
     const preRes = await this.preMatchRepository.findByID(id as PreMatchID);

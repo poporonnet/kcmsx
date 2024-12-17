@@ -18,8 +18,8 @@ describe('GenerateMainMatchService', () => {
     expect(Result.isOk(res)).toBe(true);
 
     const match = Result.unwrap(res);
-    expect(match.getTeamId1()).toBe('1');
-    expect(match.getTeamId2()).toBe('2');
+    expect(match.getTeamID1()).toBe('1');
+    expect(match.getTeamID2()).toBe('2');
   });
 
   it('(安来用) 本戦試合の試合番号は1-1になる', async () => {

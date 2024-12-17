@@ -15,7 +15,7 @@ export const useTournamentData = (tournament: Tournament): TournamentData => {
           : undefined;
       const getRootTeamName = ({ attributes }: TournamentData): string =>
         attributes.type == "match"
-          ? attributes.winnerId == attributes.team1Id
+          ? attributes.winnerID == attributes.team1ID
             ? attributes.team1Name
             : attributes.team2Name
           : attributes.teamName;
@@ -28,22 +28,22 @@ export const useTournamentData = (tournament: Tournament): TournamentData => {
         : "";
 
       return {
-        name: node.type == "match" ? node.matchId : node.teamId,
+        name: node.type == "match" ? node.matchID : node.teamID,
         attributes:
           node.type == "match"
             ? {
                 type: "match",
-                matchId: node.matchId,
+                matchID: node.matchID,
                 matchCode: node.matchCode,
-                team1Id: node.team1Id,
+                team1ID: node.team1ID,
                 team1Name: previousNode1TeamName,
-                team2Id: node.team2Id,
+                team2ID: node.team2ID,
                 team2Name: previousNode2TeamName,
-                winnerId: node.winnerId,
+                winnerID: node.winnerID,
               }
             : {
                 type: "team",
-                teamId: node.teamId,
+                teamID: node.teamID,
                 teamName: node.teamName,
               },
         children:
