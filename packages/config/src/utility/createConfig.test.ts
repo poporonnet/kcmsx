@@ -18,14 +18,18 @@ describe("正しい設定を生成できる", () => {
         departments: [
           { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],
-        matches: [
-          {
-            type: "pre",
+        match: {
+          pre: {
             name: "予選",
             limitSeconds: 180,
             course: { elementary: [1, 2, 3] },
           },
-        ],
+          main: {
+            name: "本戦",
+            limitSeconds: 180,
+            course: { elementary: [1, 2, 3] },
+          },
+        },
         rules: [
           {
             name: "goal",
@@ -51,10 +55,11 @@ describe("正しい設定を生成できる", () => {
     expect(config.departments[0].name).toBe("小学生部門");
     expect(config.departments[0].robotTypes).toEqual(["wheel"]);
 
-    expect(config.matches).toHaveLength(1);
+    expect(config.matches).toHaveLength(2);
     expect(config.matches[0].type).toBe("pre");
     expect(config.matches[0].name).toBe("予選");
     expect(config.matches[0].limitSeconds).toBe(180);
+    expect(config.matches[0].course.elementary).toEqual([1, 2, 3]);
 
     expect(config.rules).toHaveLength(1);
     expect(config.rules[0].name).toBe("goal");
@@ -74,7 +79,7 @@ describe("正しい設定を生成できる", () => {
     expect(config.department.elementary.name).toBe("小学生部門");
     expect(config.department.elementary.robotTypes).toEqual(["wheel"]);
 
-    expect(config.matchTypes).toEqual(["pre"]);
+    expect(config.matchTypes).toEqual(["pre", "main"]);
     expect(config.match.pre.name).toBe("予選");
     expect(config.match.pre.limitSeconds).toBe(180);
     expect(config.match.pre.course.elementary).toEqual([1, 2, 3]);
@@ -89,14 +94,12 @@ describe("正しい設定を生成できる", () => {
     type Courses = [number, ...number[]];
     type Match = DerivedMatchConfig<
       string,
-      string,
       number,
       Robots,
       Departments,
       Courses,
       DerivedCourseConfig<Robots, Departments, Courses> & { __department0: [0] } // ValidCourseConfigsを通過させるため
     >;
-    type Matches = [Match, ...Match[]];
     type Sponsor = DerivedSponsorConfig<string, SponsorClass, string>;
     type Sponsors = [Sponsor, ...Sponsor[]];
     type Rule = DerivedRuleBaseVariant;
@@ -115,17 +118,18 @@ describe("正しい設定を生成できる", () => {
         robotTypes: robots.slice(0, i + 1).map((r) => r.type) as RobotTypes,
       })
     ) as Departments;
-    const matches = range.map(
-      (i): Match => ({
-        type: `match${i}`,
-        name: `試合${i}`,
-        limitSeconds: 100 * i,
-        course: {
-          [`department${i}`]: [1, 2, 3],
-          __department0: [0], // ValidCourseConfigsを通過させるため
-        },
-      })
-    ) as Matches;
+    const match: Match = {
+      pre: {
+        name: "予選",
+        limitSeconds: 180,
+        course: { elementary: [1], __department0: [0] },
+      },
+      main: {
+        name: "本戦",
+        limitSeconds: 180,
+        course: { elementary: [1], __department0: [0] },
+      },
+    };
     const singleRules = range.map(
       (i): Rule => ({
         name: `rule${i}-1`,
@@ -155,9 +159,9 @@ describe("正しい設定を生成できる", () => {
     const config = createConfig(
       {
         contestName: "かにロボコン",
-        robots: robots,
+        robots,
         departments,
-        matches,
+        match,
         rules,
         sponsors,
       },
@@ -166,12 +170,15 @@ describe("正しい設定を生成できる", () => {
 
     expect(config.robots).toEqual(robots);
     expect(config.departments).toEqual(departments);
-    expect(config.matches).toEqual(matches);
+    expect(config.match).toEqual(match);
     expect(config.rules).toEqual(rules);
     expect(config.sponsors).toEqual(sponsors);
     expect(config.robotTypes).toEqual(robots.map((r) => r.type));
     expect(config.departmentTypes).toEqual(departments.map((d) => d.type));
-    expect(config.matchTypes).toEqual(matches.map((m) => m.type));
+    expect(config.matches).toEqual(
+      Object.entries(match).map(([type, m]) => ({ type, ...m }))
+    );
+    expect(config.matchTypes).toEqual(["pre", "main"]);
     range.map((i) =>
       expect(config.robot).toHaveProperty([`robot${i}`, "name"], `ロボット${i}`)
     );
@@ -181,14 +188,13 @@ describe("正しい設定を生成できる", () => {
         `部門${i}`
       )
     );
-    range.map((i) =>
-      expect(config.match).toHaveProperty([`match${i}`, "name"], `試合${i}`)
-    );
+    expect(config.match.pre.name).toBe("予選");
+    expect(config.match.main.name).toBe("本戦");
   });
 
   it("conditionが正しく設定できる", () => {
     type PremiseState = DerivedPremiseState<
-      "pre",
+      "pre" | "main",
       "wheel",
       "elementary",
       DerivedPointState<{
@@ -214,14 +220,18 @@ describe("正しい設定を生成できる", () => {
         departments: [
           { type: "elementary", name: "小学生部門", robotTypes: ["wheel"] },
         ],
-        matches: [
-          {
-            type: "pre",
+        match: {
+          pre: {
             name: "予選",
             limitSeconds: 180,
             course: { elementary: [1, 2, 3] },
           },
-        ],
+          main: {
+            name: "本戦",
+            limitSeconds: 180,
+            course: { elementary: [1, 2, 3] },
+          },
+        },
         rules: [
           {
             name: "goal",

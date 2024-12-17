@@ -7,9 +7,9 @@ import {
 } from "../types/departmentConfig";
 import {
   DerivedCourseConfig,
-  DerivedMatch,
   DerivedMatchConfig,
-  MatchConfig,
+  DerivedMatches,
+  matchTypes,
 } from "../types/matchConfig";
 import {
   DerivedRobot,
@@ -45,14 +45,12 @@ export const createConfig = <
     DepartmentRobotTypes
   >,
   Departments extends [Department, ...Department[]],
-  MatchType extends string,
   MatchName extends string,
   MatchLimitSeconds extends number,
   MatchCourseIndex extends number,
   MatchCourses extends [] | [MatchCourseIndex, ...MatchCourseIndex[]],
   MatchCourse extends DerivedCourseConfig<Robots, Departments, MatchCourses>,
   Match extends DerivedMatchConfig<
-    MatchType,
     MatchName,
     MatchLimitSeconds,
     Robots,
@@ -60,7 +58,6 @@ export const createConfig = <
     MatchCourses,
     MatchCourse
   >,
-  Matches extends [Match, ...Match[]],
   RuleBaseName extends string,
   RuleBaseLabel extends string,
   RuleBaseType extends RuleType,
@@ -81,42 +78,42 @@ export const createConfig = <
     SponsorLogo
   >,
   Sponsors extends [] | [Sponsor, ...Sponsor[]],
-  Conditions extends ConditionsConfig<Robots, RuleBases, Matches, Departments>,
+  Conditions extends ConditionsConfig<Robots, RuleBases, Match, Departments>,
 >(
   baseConfig: BaseConfig<
     ContestName,
     Robots,
     Departments,
-    Matches,
+    Match,
     RuleBaseType,
     RuleBaseInitial,
     RuleBases,
     Sponsors
   >,
-  conditions: ConditionsConfig<Robots, RuleBases, Matches, Departments>
+  conditions: ConditionsConfig<Robots, RuleBases, Match, Departments>
 ): Readonly<
   Config<
     ContestName,
     Robots,
     Departments,
-    Matches,
+    Match,
     RuleBaseType,
     RuleBaseInitial,
-    DerivedRuleList<RuleBases, Robots, Matches, Departments, Conditions>,
+    DerivedRuleList<RuleBases, Robots, Match, Departments, Conditions>,
     Sponsors
   >
 > => ({
   contestName: baseConfig.contestName,
   robots: baseConfig.robots,
   departments: baseConfig.departments,
-  matches: baseConfig.matches,
+  match: baseConfig.match,
   rules: baseConfig.rules.map<
     DerivedRuleList<
       RuleBaseList,
       Robots,
-      Matches,
+      Match,
       Departments,
-      ConditionsConfig<Robots, RuleBaseList, Matches, Departments>
+      ConditionsConfig<Robots, RuleBaseList, Match, Departments>
     >[number]
   >((ruleBase) => {
     const name: RuleBases[number]["name"] = ruleBase.name;
@@ -129,7 +126,7 @@ export const createConfig = <
   }) as ValidRuleList<
     RuleBaseType,
     RuleBaseInitial,
-    DerivedRuleList<RuleBases, Robots, Matches, Departments, Conditions>
+    DerivedRuleList<RuleBases, Robots, Match, Departments, Conditions>
   >,
   sponsors: baseConfig.sponsors,
   robotTypes: pick(baseConfig.robots, "type"),
@@ -144,13 +141,9 @@ export const createConfig = <
       [Departments[number]["type"], Omit<DepartmentConfig<Robots>, "type">]
     >(({ type, name, robotTypes }) => [type, { name, robotTypes }])
   ) as DerivedDepartment<Robots, Departments>,
-  matchTypes: pick(baseConfig.matches, "type"),
-  match: Object.fromEntries(
-    baseConfig.matches.map<
-      [Matches[number]["type"], Omit<MatchConfig, "type">]
-    >(({ type, name, limitSeconds, course }) => [
-      type,
-      { name, limitSeconds, course },
-    ])
-  ) as DerivedMatch<Matches>,
+  matchTypes: matchTypes,
+  matches: matchTypes.map<DerivedMatches<Match>[number]>((matchType) => ({
+    type: matchType,
+    ...baseConfig.match[matchType],
+  })) as unknown as DerivedMatches<Match>,
 });
