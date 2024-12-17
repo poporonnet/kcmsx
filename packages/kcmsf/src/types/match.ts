@@ -38,13 +38,12 @@ export type PreMatch = MatchBase &
 
 /**
  * 本戦のマッチ
- * @todo `winnerID`のプロパティ名が誤っている (`winnerID`)
  */
 export type MainMatch = MatchBase &
   MatchTypeRecord<"main"> & {
     team1: BriefTeam;
     team2: BriefTeam;
-    winnerID: string; // TODO: スキーマの修正漏れ
+    winnerID: string;
   };
 
 /**
