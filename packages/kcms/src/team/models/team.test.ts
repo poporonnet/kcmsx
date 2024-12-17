@@ -13,7 +13,7 @@ describe('正しくインスタンスを生成できる', () => {
       isEntered: true,
     });
 
-    expect(actual.getId()).toBe('123');
+    expect(actual.getID()).toBe('123');
     expect(actual.getTeamName()).toBe('チーム1');
     expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
     expect(actual.getRobotType()).toBe('leg');
@@ -31,7 +31,7 @@ describe('正しくインスタンスを生成できる', () => {
       clubName: 'テストクラブ',
     });
 
-    expect(actual.getId()).toBe('123');
+    expect(actual.getID()).toBe('123');
     expect(actual.getTeamName()).toBe('チーム1');
     expect(actual.getMembers()).toEqual(['山田太郎', 'テスト大介']);
     expect(actual.getRobotType()).toBe('leg');

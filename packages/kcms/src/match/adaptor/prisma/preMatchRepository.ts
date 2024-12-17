@@ -27,8 +27,8 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
         courseIndex: data.courseIndex,
         matchIndex: data.matchIndex,
         departmentType: data.departmentType as DepartmentType,
-        teamId1: (data.leftTeamID as TeamID) ?? undefined,
-        teamId2: (data.rightTeamID as TeamID) ?? undefined,
+        teamID1: (data.leftTeamID as TeamID) ?? undefined,
+        teamID2: (data.rightTeamID as TeamID) ?? undefined,
         runResults: data.runResult.map((v) =>
           RunResult.new({
             id: v.id as RunResultID,
@@ -46,12 +46,12 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
     try {
       await this.client.preMatch.create({
         data: {
-          id: match.getId(),
+          id: match.getID(),
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
           departmentType: match.getDepartmentType(),
-          leftTeamID: match.getTeamId1(),
-          rightTeamID: match.getTeamId2(),
+          leftTeamID: match.getTeamID1(),
+          rightTeamID: match.getTeamID2(),
         },
       });
       return Result.ok(undefined);
@@ -65,12 +65,12 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
       await this.client.preMatch.createMany({
         data: matches.map((v) => {
           return {
-            id: v.getId(),
+            id: v.getID(),
             courseIndex: v.getCourseIndex(),
             matchIndex: v.getMatchIndex(),
             departmentType: v.getDepartmentType(),
-            leftTeamID: v.getTeamId1(),
-            rightTeamID: v.getTeamId2(),
+            leftTeamID: v.getTeamID1(),
+            rightTeamID: v.getTeamID2(),
           };
         }),
       });
@@ -117,7 +117,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
     try {
       const currentRunResults = await this.client.runResult.findMany({
         where: {
-          preMatchId: match.getId(),
+          preMatchID: match.getID(),
         },
       });
       const currentRunResultIDs = new Set<string>(currentRunResults.map((v) => v.id));
@@ -127,7 +127,7 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
         .getRunResults()
         .reduce<{ updatable: RunResult[]; new: RunResult[] }>(
           (results, runResult) => {
-            const updateType = currentRunResultIDs.has(runResult.getId()) ? 'updatable' : 'new';
+            const updateType = currentRunResultIDs.has(runResult.getID()) ? 'updatable' : 'new';
             results[updateType].push(runResult);
             return results;
           },
@@ -136,36 +136,36 @@ export class PrismaPreMatchRepository implements PreMatchRepository {
 
       await this.client.runResult.createMany({
         data: newRunResults.map((v) => ({
-          id: v.getId(),
-          teamID: v.getTeamId(),
+          id: v.getID(),
+          teamID: v.getTeamID(),
           points: v.getPoints(),
           // NOTE: Infinity: 2147483647
           goalTimeSeconds: isFinite(v.getGoalTimeSeconds())
             ? v.getGoalTimeSeconds()
             : this.INT32MAX,
-          preMatchId: match.getId(),
+          preMatchID: match.getID(),
           // NOTE: GOAL: 0 , FINISHED: 1
           finishState: v.isGoal() ? 0 : 1,
         })),
       });
       await this.client.preMatch.update({
         where: {
-          id: match.getId(),
+          id: match.getID(),
         },
         data: {
           courseIndex: match.getCourseIndex(),
           matchIndex: match.getMatchIndex(),
           departmentType: match.getDepartmentType(),
-          leftTeamID: match.getTeamId1(),
-          rightTeamID: match.getTeamId2(),
+          leftTeamID: match.getTeamID1(),
+          rightTeamID: match.getTeamID2(),
           runResult: {
             updateMany: updatableRunResults.map((v) => ({
               where: {
-                id: v.getId(),
+                id: v.getID(),
               },
               data: {
-                id: v.getId(),
-                teamID: v.getTeamId(),
+                id: v.getID(),
+                teamID: v.getTeamID(),
                 points: v.getPoints(),
                 // NOTE: Infinity: 2147483647
                 goalTimeSeconds: isFinite(v.getGoalTimeSeconds())

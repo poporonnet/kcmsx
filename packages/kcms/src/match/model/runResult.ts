@@ -19,7 +19,7 @@ export interface CreateRunResultArgs {
 
 export class RunResult {
   private readonly id: RunResultID;
-  private readonly teamId: TeamID;
+  private readonly teamID: TeamID;
   private readonly points: number;
   private readonly goalTimeSeconds: number;
   private readonly finishState: FinishState;
@@ -32,7 +32,7 @@ export class RunResult {
     finishState: FinishState;
   }) {
     this.id = args.id;
-    this.teamId = args.teamID;
+    this.teamID = args.teamID;
     this.points = args.points;
     this.goalTimeSeconds = args.goalTimeSeconds;
     this.finishState = args.finishState;
@@ -45,12 +45,12 @@ export class RunResult {
     return new RunResult(args);
   }
 
-  public getId(): RunResultID {
+  public getID(): RunResultID {
     return this.id;
   }
 
-  public getTeamId(): TeamID {
-    return this.teamId;
+  public getTeamID(): TeamID {
+    return this.teamID;
   }
 
   public getPoints(): number {

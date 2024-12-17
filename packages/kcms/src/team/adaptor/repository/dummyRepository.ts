@@ -6,11 +6,11 @@ export class DummyRepository implements TeamRepository {
   private data: Map<TeamID, Team>;
 
   constructor(data: Team[] = []) {
-    this.data = new Map<TeamID, Team>(data.map((v) => [v.getId(), v]));
+    this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), v]));
   }
 
   async create(team: Team): Promise<Result.Result<Error, Team>> {
-    const res = this.data.set(team.getId(), team);
+    const res = this.data.set(team.getID(), team);
     if (!res) {
       return Result.err(new Error('Team not found'));
     }
@@ -27,7 +27,7 @@ export class DummyRepository implements TeamRepository {
   }
 
   async findByID(id: string): Promise<Option.Option<Team>> {
-    const team = [...this.data.values()].find((v) => v.getId() === id);
+    const team = [...this.data.values()].find((v) => v.getID() === id);
     if (!team) {
       return Option.none();
     }
@@ -44,16 +44,16 @@ export class DummyRepository implements TeamRepository {
   }
 
   async update(team: Team): Promise<Result.Result<Error, Team>> {
-    const res = this.data.get(team.getId());
+    const res = this.data.get(team.getID());
     if (!res) {
       return Result.err(new Error('Team not found'));
     }
 
-    this.data.set(team.getId(), team);
+    this.data.set(team.getID(), team);
     return Result.ok(team);
   }
 
   reset(data: Team[] = []) {
-    this.data = new Map<TeamID, Team>(data.map((v) => [v.getId(), v]));
+    this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), v]));
   }
 }

@@ -11,7 +11,7 @@ import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
 import { GetMatchService } from '../../service/get';
 import {
-  GetMatchIdResponseSchema,
+  GetMatchIDResponseSchema,
   GetMatchResponseSchema,
   GetMatchRunResultResponseSchema,
   GetMatchTypeResponseSchema,
@@ -44,14 +44,14 @@ export class MatchController {
     if (Result.isErr(teamsRes)) return teamsRes;
     const teams = Result.unwrap(teamsRes);
 
-    const teamMap = new Map(teams.map((v) => [v.getId(), v]));
+    const teamMap = new Map(teams.map((v) => [v.getID(), v]));
 
     const getTeam = (teamID: TeamID | undefined): { id: string; teamName: string } | undefined => {
       if (!teamID) return undefined;
       const team = teamMap.get(teamID);
       if (!team) return undefined;
       return {
-        id: team.getId(),
+        id: team.getID(),
         teamName: team.getTeamName(),
       };
     };
@@ -59,15 +59,15 @@ export class MatchController {
     return Result.ok({
       pre: match.pre.map(
         (v): z.infer<typeof PreSchema> => ({
-          id: v.getId(),
+          id: v.getID(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
           matchType: 'pre',
           departmentType: v.getDepartmentType(),
-          leftTeam: getTeam(v.getTeamId1()),
-          rightTeam: getTeam(v.getTeamId2()),
+          leftTeam: getTeam(v.getTeamID1()),
+          rightTeam: getTeam(v.getTeamID2()),
           runResults: v.getRunResults().map((v) => ({
-            id: v.getId(),
-            teamID: v.getTeamId(),
+            id: v.getID(),
+            teamID: v.getTeamID(),
             points: v.getPoints(),
             goalTimeSeconds: v.getGoalTimeSeconds(),
             finishState: v.isGoal() ? 'goal' : 'finished',
@@ -76,16 +76,16 @@ export class MatchController {
       ),
       main: match.main.map(
         (v): z.infer<typeof MainSchema> => ({
-          id: v.getId(),
+          id: v.getID(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
           matchType: 'main',
           departmentType: v.getDepartmentType(),
-          team1: getTeam(v.getTeamId1()),
-          team2: getTeam(v.getTeamId2()),
-          winnerId: v.getWinnerId() ?? '',
+          team1: getTeam(v.getTeamID1()),
+          team2: getTeam(v.getTeamID2()),
+          winnerID: v.getWinnerID() ?? '',
           runResults: v.getRunResults().map((v) => ({
-            id: v.getId(),
-            teamID: v.getTeamId(),
+            id: v.getID(),
+            teamID: v.getTeamID(),
             points: v.getPoints(),
             goalTimeSeconds: v.getGoalTimeSeconds(),
             finishState: v.isGoal() ? 'goal' : 'finished',
@@ -111,12 +111,12 @@ export class MatchController {
     return Result.ok(
       matches.map((v): z.infer<typeof ShortPreSchema> => {
         return {
-          id: v.getId(),
+          id: v.getID(),
           matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
           matchType: 'pre',
           departmentType: v.getDepartmentType(),
-          leftTeamID: v.getTeamId1(),
-          rightTeamID: v.getTeamId2(),
+          leftTeamID: v.getTeamID1(),
+          rightTeamID: v.getTeamID2(),
           runResults: [],
         };
       })
@@ -138,14 +138,14 @@ export class MatchController {
     const match = Result.unwrap(res);
     return Result.ok<z.infer<typeof ShortMainSchema>[]>([
       {
-        id: match.getId(),
+        id: match.getID(),
         matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
         matchType: 'main',
         departmentType,
-        team1ID: match.getTeamId1(),
-        team2ID: match.getTeamId2(),
+        team1ID: match.getTeamID1(),
+        team2ID: match.getTeamID2(),
         runResults: [],
-        winnerId: match.getWinnerId() ?? '',
+        winnerID: match.getWinnerID() ?? '',
       },
     ]);
   }
@@ -153,8 +153,8 @@ export class MatchController {
   async getMatchByID<T extends MatchType>(
     matchType: T,
     id: T extends 'pre' ? PreMatchID : MainMatchID
-  ): Promise<Result.Result<Error, z.infer<typeof GetMatchIdResponseSchema>>> {
-    const res = await this.getMatchService.findById(id);
+  ): Promise<Result.Result<Error, z.infer<typeof GetMatchIDResponseSchema>>> {
+    const res = await this.getMatchService.findByID(id);
     if (Result.isErr(res)) return res;
     const match = Result.unwrap(res);
 
@@ -166,7 +166,7 @@ export class MatchController {
       if (Result.isErr(teamRes)) return undefined;
       const team = Result.unwrap(teamRes);
       return {
-        id: team.getId(),
+        id: team.getID(),
         teamName: team.getTeamName(),
       };
     };
@@ -175,16 +175,16 @@ export class MatchController {
       const pre = match as PreMatch;
 
       return Result.ok<z.infer<typeof PreSchema>>({
-        id: pre.getId(),
+        id: pre.getID(),
         matchCode: `${pre.getCourseIndex()}-${pre.getMatchIndex()}`,
         matchType: 'pre',
         departmentType: pre.getDepartmentType(),
-        leftTeam: await getTeam(pre.getTeamId1()),
-        rightTeam: await getTeam(pre.getTeamId2()),
+        leftTeam: await getTeam(pre.getTeamID1()),
+        rightTeam: await getTeam(pre.getTeamID2()),
         runResults: pre.getRunResults().map(
           (v): z.infer<typeof RunResultSchema> => ({
-            id: v.getId(),
-            teamID: v.getTeamId(),
+            id: v.getID(),
+            teamID: v.getTeamID(),
             points: v.getPoints(),
             goalTimeSeconds: v.getGoalTimeSeconds(),
             finishState: v.isGoal() ? 'goal' : 'finished',
@@ -195,17 +195,17 @@ export class MatchController {
       const main = match as MainMatch;
 
       return Result.ok<z.infer<typeof MainSchema>>({
-        id: main.getId(),
+        id: main.getID(),
         matchCode: `${main.getCourseIndex()}-${main.getMatchIndex()}`,
         matchType: 'main',
         departmentType: main.getDepartmentType(),
-        team1: await getTeam(main.getTeamId1()),
-        team2: await getTeam(main.getTeamId2()),
-        winnerId: main.getWinnerId() ?? '',
+        team1: await getTeam(main.getTeamID1()),
+        team2: await getTeam(main.getTeamID2()),
+        winnerID: main.getWinnerID() ?? '',
         runResults: main.getRunResults().map(
           (v): z.infer<typeof RunResultSchema> => ({
-            id: v.getId(),
-            teamID: v.getTeamId(),
+            id: v.getID(),
+            teamID: v.getTeamID(),
             points: v.getPoints(),
             goalTimeSeconds: v.getGoalTimeSeconds(),
             finishState: v.isGoal() ? 'goal' : 'finished',
@@ -222,35 +222,35 @@ export class MatchController {
       const matchRes = await this.getMatchService.findAllPreMatch();
       if (Result.isErr(matchRes)) return matchRes;
       const matches = Result.unwrap(matchRes);
-      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
+      const teamIDs = new Set(matches.map((v) => [v.getTeamID1(), v.getTeamID2()]).flat());
       const teamsMap = new Map<TeamID, Team>();
       for (const teamID of teamIDs) {
         const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
         if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
-        teamsMap.set(team.getId(), team);
+        teamsMap.set(team.getID(), team);
       }
       return Result.ok(
         matches.map((v): z.infer<typeof PreSchema> => {
-          const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
-          const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
+          const team1Name = teamsMap.get(v.getTeamID1() ?? ('' as TeamID))!.getTeamName();
+          const team2Name = teamsMap.get(v.getTeamID2() ?? ('' as TeamID))!.getTeamName();
           return {
-            id: v.getId(),
+            id: v.getID(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
             matchType: 'pre',
-            departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
+            departmentType: teamsMap.get(v.getTeamID1() ?? ('' as TeamID))!.getDepartmentType(),
             leftTeam:
-              v.getTeamId1() == undefined
+              v.getTeamID1() == undefined
                 ? undefined
                 : {
-                    id: v.getTeamId1()!,
+                    id: v.getTeamID1()!,
                     teamName: team1Name,
                   },
             rightTeam:
-              v.getTeamId2() == undefined
+              v.getTeamID2() == undefined
                 ? undefined
                 : {
-                    id: v.getTeamId2()!,
+                    id: v.getTeamID2()!,
                     teamName: team2Name,
                   },
             runResults:
@@ -258,8 +258,8 @@ export class MatchController {
                 ? []
                 : v.getRunResults().map(
                     (v): z.infer<typeof RunResultSchema> => ({
-                      id: v.getId(),
-                      teamID: v.getTeamId(),
+                      id: v.getID(),
+                      teamID: v.getTeamID(),
                       points: v.getPoints(),
                       goalTimeSeconds: v.getGoalTimeSeconds(),
                       finishState: v.isGoal() ? 'goal' : 'finished',
@@ -272,45 +272,45 @@ export class MatchController {
       const matchRes = await this.getMatchService.findAllMainMatch();
       if (Result.isErr(matchRes)) return matchRes;
       const matches = Result.unwrap(matchRes);
-      const teamIDs = new Set(matches.map((v) => [v.getTeamId1(), v.getTeamId2()]).flat());
+      const teamIDs = new Set(matches.map((v) => [v.getTeamID1(), v.getTeamID2()]).flat());
       const teamsMap = new Map<TeamID, Team>();
       for (const teamID of teamIDs) {
         const teamRes = await this.fetchTeamService.findByID(teamID as TeamID);
         if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
-        teamsMap.set(team.getId(), team);
+        teamsMap.set(team.getID(), team);
       }
       return Result.ok(
         matches.map((v): z.infer<typeof MainSchema> => {
-          const team1Name = teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getTeamName();
-          const team2Name = teamsMap.get(v.getTeamId2() ?? ('' as TeamID))!.getTeamName();
+          const team1Name = teamsMap.get(v.getTeamID1() ?? ('' as TeamID))!.getTeamName();
+          const team2Name = teamsMap.get(v.getTeamID2() ?? ('' as TeamID))!.getTeamName();
           return {
-            id: v.getId(),
+            id: v.getID(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
             matchType: 'main',
-            departmentType: teamsMap.get(v.getTeamId1() ?? ('' as TeamID))!.getDepartmentType(),
+            departmentType: teamsMap.get(v.getTeamID1() ?? ('' as TeamID))!.getDepartmentType(),
             team1:
-              v.getTeamId1() == undefined
+              v.getTeamID1() == undefined
                 ? undefined
                 : {
-                    id: v.getTeamId1()!,
+                    id: v.getTeamID1()!,
                     teamName: team1Name,
                   },
             team2:
-              v.getTeamId2() == undefined
+              v.getTeamID2() == undefined
                 ? undefined
                 : {
-                    id: v.getTeamId2()!,
+                    id: v.getTeamID2()!,
                     teamName: team2Name,
                   },
-            winnerId: v.getWinnerId() ?? '',
+            winnerID: v.getWinnerID() ?? '',
             runResults:
               v.getRunResults() == undefined
                 ? []
                 : v.getRunResults().map(
                     (v): z.infer<typeof RunResultSchema> => ({
-                      id: v.getId(),
-                      teamID: v.getTeamId(),
+                      id: v.getID(),
+                      teamID: v.getTeamID(),
                       points: v.getPoints(),
                       goalTimeSeconds: v.getGoalTimeSeconds(),
                       finishState: v.isGoal() ? 'goal' : 'finished',
@@ -337,7 +337,7 @@ export class MatchController {
     // NOTE: 一つずつ取得しても良いが、エラーの扱いが煩雑になるので簡単化のために*一時的に*全て取得するようにした
     const teamsRes = await this.fetchTeamService.findAll();
     if (Result.isErr(teamsRes)) return teamsRes;
-    const teamsMap = new Map<TeamID, Team>(Result.unwrap(teamsRes).map((v) => [v.getId(), v]));
+    const teamsMap = new Map<TeamID, Team>(Result.unwrap(teamsRes).map((v) => [v.getID(), v]));
 
     return Result.ok(
       ranking.map((v) => ({
@@ -359,8 +359,8 @@ export class MatchController {
     return Result.ok(
       Result.unwrap(res).map(
         (v): z.infer<typeof RunResultSchema> => ({
-          id: v.getId(),
-          teamID: v.getTeamId(),
+          id: v.getID(),
+          teamID: v.getTeamID(),
           points: v.getPoints(),
           goalTimeSeconds: v.getGoalTimeSeconds(),
           finishState: v.isGoal() ? 'goal' : 'finished',
