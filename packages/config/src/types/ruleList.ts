@@ -10,9 +10,9 @@ import { RuleBaseList } from "./rule";
 export type DerivedRuleList<
   RuleBases extends RuleBaseList,
   Robots extends RobotConfig[],
-  Matches extends MatchConfig[],
+  Match extends MatchConfig,
   Departments extends DepartmentConfig<Robots>[],
-  Conditions extends ConditionsConfig<Robots, RuleBases, Matches, Departments>,
+  Conditions extends ConditionsConfig<Robots, RuleBases, Match, Departments>,
 > = {
   [K in keyof RuleBases]: RuleBases[K] &
     Readonly<Conditions[RuleBases[K]["name"]]>;
