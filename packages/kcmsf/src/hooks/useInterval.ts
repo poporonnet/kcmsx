@@ -15,8 +15,8 @@ export const useInterval = (
   }, [onUpdate]);
   useEffect(() => {
     if (option.active) {
-      const intervalId = setInterval(() => onUpdateRef.current(), ms);
-      return () => clearInterval(intervalId);
+      const intervalID = setInterval(() => onUpdateRef.current(), ms);
+      return () => clearInterval(intervalID);
     }
   }, [ms, option.active]);
 };

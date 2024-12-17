@@ -40,8 +40,8 @@ export class GeneratePreMatchService {
           courseIndex: courseIndex + 1,
           matchIndex: matchIndex + 1,
           departmentType: (pair[0] || pair[1]!).getDepartmentType(),
-          teamId1: pair[0]?.getId(),
-          teamId2: pair[1]?.getId(),
+          teamID1: pair[0]?.getID(),
+          teamID2: pair[1]?.getID(),
           runResults: [],
         });
         return Result.ok(match);

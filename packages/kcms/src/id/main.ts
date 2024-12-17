@@ -14,16 +14,16 @@ export class SnowflakeIDGenerator {
   private readonly MAX_WORKER_ID = (1n << this.WORKER_ID_BIT_LENGTH) - 1n;
   private readonly MAX_INCREMENTAL = (1n << this.INCREMENTAL_BIT_LENGTH) - 1n;
 
-  private readonly workerId: bigint;
+  private readonly workerID: bigint;
   private incremental = 0n;
   private lastTimestamp: bigint;
   private clock: () => bigint;
 
-  constructor(workerId: number, clock: () => bigint) {
-    if (workerId < 0n || workerId > this.MAX_WORKER_ID) {
+  constructor(workerID: number, clock: () => bigint) {
+    if (workerID < 0n || workerID > this.MAX_WORKER_ID) {
       throw new Error(`worker id must be between 0 and ${this.MAX_WORKER_ID}`);
     }
-    this.workerId = BigInt(workerId);
+    this.workerID = BigInt(workerID);
     this.lastTimestamp = 0n;
     this.clock = clock;
   }
@@ -47,7 +47,7 @@ export class SnowflakeIDGenerator {
     this.lastTimestamp = timestamp;
     const id =
       (timeFromEpoch << (this.WORKER_ID_BIT_LENGTH + this.INCREMENTAL_BIT_LENGTH)) |
-      (this.workerId << this.INCREMENTAL_BIT_LENGTH) |
+      (this.workerID << this.INCREMENTAL_BIT_LENGTH) |
       this.incremental;
 
     return Result.ok(id.toString() as SnowflakeID<T>);

@@ -55,14 +55,14 @@ export class GenerateRankingService {
     const addRunResults = (teamID: TeamID | undefined, runResultSource: RunResult[]) => {
       if (!teamID) return;
 
-      const runResults = runResultSource.filter((result) => result.getTeamId() === teamID);
+      const runResults = runResultSource.filter((result) => result.getTeamID() === teamID);
       const prev = teamRunResults.get(teamID) ?? [];
       teamRunResults.set(teamID, [...prev, ...runResults]);
     };
     matches.forEach((match) => {
       const runResults = match.getRunResults();
-      addRunResults(match.getTeamId1(), runResults);
-      addRunResults(match.getTeamId2(), runResults);
+      addRunResults(match.getTeamID1(), runResults);
+      addRunResults(match.getTeamID2(), runResults);
     });
 
     // 各チームごとに結果を集計する

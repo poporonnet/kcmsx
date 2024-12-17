@@ -20,7 +20,7 @@ export class DummyPreMatchRepository implements PreMatchRepository {
   }
 
   public async findByID(id: PreMatchID): Promise<Option.Option<PreMatch>> {
-    const match = this.data.find((m) => m.getId() === id);
+    const match = this.data.find((m) => m.getID() === id);
     if (!match) {
       return Option.none();
     }
@@ -28,7 +28,7 @@ export class DummyPreMatchRepository implements PreMatchRepository {
   }
 
   public async update(match: PreMatch): Promise<Result.Result<Error, void>> {
-    const i = this.data.findIndex((m) => m.getId() === match.getId());
+    const i = this.data.findIndex((m) => m.getID() === match.getID());
     this.data[i] = match;
     return Result.ok(undefined);
   }

@@ -11,21 +11,21 @@ describe('MainMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departmentTypes[0],
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
-      winnerId: '2' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
+      winnerID: '2' as TeamID,
       runResults: [],
       parentMatchID: '10' as MainMatchID,
       childMatches: undefined,
     };
 
     const res = MainMatch.new(args);
-    expect(res.getId()).toBe(args.id);
+    expect(res.getID()).toBe(args.id);
     expect(res.getCourseIndex()).toBe(args.courseIndex);
     expect(res.getMatchIndex()).toBe(args.matchIndex);
-    expect(res.getTeamId1()).toBe(args.teamId1);
-    expect(res.getTeamId2()).toBe(args.teamId2);
-    expect(res.getWinnerId()).toBe(args.winnerId);
+    expect(res.getTeamID1()).toBe(args.teamID1);
+    expect(res.getTeamID2()).toBe(args.teamID2);
+    expect(res.getWinnerID()).toBe(args.winnerID);
     expect(res.getRunResults()).toBe(args.runResults);
   });
 
@@ -36,9 +36,9 @@ describe('MainMatch', () => {
         courseIndex: 1,
         matchIndex: 1,
         departmentType: config.departmentTypes[0],
-        teamId1: '2' as TeamID,
-        teamId2: '3' as TeamID,
-        winnerId: '2' as TeamID,
+        teamID1: '2' as TeamID,
+        teamID2: '3' as TeamID,
+        winnerID: '2' as TeamID,
         runResults: [],
         parentMatchID: '10' as MainMatchID,
         childMatches: undefined,
@@ -85,9 +85,9 @@ describe('MainMatch', () => {
         courseIndex: 1,
         matchIndex: 1,
         departmentType: config.departmentTypes[0],
-        teamId1: '2' as TeamID,
-        teamId2: '3' as TeamID,
-        winnerId: '2' as TeamID,
+        teamID1: '2' as TeamID,
+        teamID2: '3' as TeamID,
+        winnerID: '2' as TeamID,
         runResults: [],
         parentMatchID: '10' as MainMatchID,
         childMatches: undefined,
@@ -132,8 +132,8 @@ describe('MainMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departmentTypes[0],
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) =>
         RunResult.new({
           id: String(i) as RunResultID,
@@ -149,8 +149,8 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('2' as TeamID)).not.toThrow(
-      new Error('WinnerId is already set')
+    expect(() => mainMatch.setWinnerID('2' as TeamID)).not.toThrow(
+      new Error('WinnerID is already set')
     );
   });
 
@@ -160,9 +160,9 @@ describe('MainMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departmentTypes[0],
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
-      winnerId: '2' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
+      winnerID: '2' as TeamID,
       runResults: [...Array(4)].map((_, i) => {
         return RunResult.new({
           id: String(i) as RunResultID,
@@ -178,8 +178,8 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('2' as TeamID)).toThrowError(
-      new Error('WinnerId is already set')
+    expect(() => mainMatch.setWinnerID('2' as TeamID)).toThrowError(
+      new Error('WinnerID is already set')
     );
   });
 
@@ -189,8 +189,8 @@ describe('MainMatch', () => {
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departmentTypes[0],
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
       runResults: [...Array(2)].map((_, i) => {
         return RunResult.new({
           id: String(i) as RunResultID,
@@ -206,19 +206,19 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('2' as TeamID)).toThrowError(
+    expect(() => mainMatch.setWinnerID('2' as TeamID)).toThrowError(
       new Error('This match is not finished')
     );
   });
 
-  it('勝者はteamId1かteamId2でなければならない', () => {
+  it('勝者はteamID1かteamID2でなければならない', () => {
     const args: CreateMainMatchArgs = {
       id: '1' as MainMatchID,
       courseIndex: 1,
       matchIndex: 1,
       departmentType: config.departmentTypes[0],
-      teamId1: '2' as TeamID,
-      teamId2: '3' as TeamID,
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
       runResults: [...Array(4)].map((_, i) => {
         return RunResult.new({
           id: String(i) as RunResultID,
@@ -234,11 +234,11 @@ describe('MainMatch', () => {
 
     const mainMatch = MainMatch.new(args);
 
-    expect(() => mainMatch.setWinnerId('0' as TeamID)).toThrowError(
-      new Error('WinnerId must be teamId1 or teamId2')
+    expect(() => mainMatch.setWinnerID('0' as TeamID)).toThrowError(
+      new Error('WinnerID must be teamID1 or teamID2')
     );
-    expect(() => mainMatch.setWinnerId('1' as TeamID)).toThrowError(
-      new Error('WinnerId must be teamId1 or teamId2')
+    expect(() => mainMatch.setWinnerID('1' as TeamID)).toThrowError(
+      new Error('WinnerID must be teamID1 or teamID2')
     );
   });
 });
