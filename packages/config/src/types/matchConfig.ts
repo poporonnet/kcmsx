@@ -18,6 +18,12 @@ export type MatchConfig = DerivedMatchConfig<
     RobotConfig[],
     DepartmentConfig<RobotConfig[]>[],
     number[]
+  >,
+  number,
+  DerivedRequiredTeamsConfig<
+    RobotConfig[],
+    DepartmentConfig<RobotConfig[]>[],
+    number
   >
 >;
 
@@ -31,12 +37,19 @@ export type DerivedMatchConfig<
   Departments extends DepartmentConfig<Robots>[],
   Courses extends number[],
   Course extends DerivedCourseConfig<Robots, Departments, Courses>,
+  RequiredTeamsNumber extends number,
+  RequiredTeams extends DerivedRequiredTeamsConfig<
+    Robots,
+    Departments,
+    RequiredTeamsNumber
+  >,
 > = Record<
   MatchType,
   {
     name: Name;
     limitSeconds: LimitSeconds;
     course: Course;
+    requiredTeams?: RequiredTeams;
   }
 >;
 
@@ -48,6 +61,15 @@ export type DerivedCourseConfig<
   Departments extends DepartmentConfig<Robots>[],
   Courses extends number[],
 > = Record<Departments[number]["type"], Courses>;
+
+/**
+ * @description 1つの必要チーム数設定の, リテラル型から導出される型
+ */
+export type DerivedRequiredTeamsConfig<
+  Robots extends RobotConfig[],
+  Departments extends DepartmentConfig<Robots>[],
+  RequiredTeamsNumber extends number,
+> = Partial<Record<Departments[number]["type"], RequiredTeamsNumber>>;
 
 /**
  * @description {@link MatchConfig}から導出される試合種別設定の配列
