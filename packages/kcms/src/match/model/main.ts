@@ -10,9 +10,9 @@ export interface CreateMainMatchArgs {
   courseIndex: number;
   matchIndex: number;
   departmentType: DepartmentType;
-  teamId1?: TeamID;
-  teamId2?: TeamID;
-  winnerId?: TeamID;
+  teamID1?: TeamID;
+  teamID2?: TeamID;
+  winnerID?: TeamID;
   runResults: RunResult[];
   parentMatchID: MainMatchID | undefined;
   childMatches: ChildMatches | undefined;
@@ -35,8 +35,8 @@ export class MainMatch {
   private readonly courseIndex: number;
   private readonly matchIndex: number;
   private readonly departmentType: DepartmentType;
-  private readonly teamId1?: TeamID;
-  private readonly teamId2?: TeamID;
+  private readonly teamID1?: TeamID;
+  private readonly teamID2?: TeamID;
 
   /**
    * トーナメントで自分より後に行われる1試合のID\
@@ -49,7 +49,7 @@ export class MainMatch {
    */
   private childMatches?: ChildMatches;
 
-  private winnerId?: TeamID;
+  private winnerID?: TeamID;
   private runResults: RunResult[];
 
   private constructor(args: CreateMainMatchArgs) {
@@ -57,9 +57,9 @@ export class MainMatch {
     this.courseIndex = args.courseIndex;
     this.matchIndex = args.matchIndex;
     this.departmentType = args.departmentType;
-    this.teamId1 = args.teamId1;
-    this.teamId2 = args.teamId2;
-    this.winnerId = args.winnerId;
+    this.teamID1 = args.teamID1;
+    this.teamID2 = args.teamID2;
+    this.winnerID = args.winnerID;
     this.runResults = args.runResults;
     this.parentID = args.parentMatchID;
     this.childMatches = args.childMatches;
@@ -75,7 +75,7 @@ export class MainMatch {
     return new MainMatch(args);
   }
 
-  getId(): MainMatchID {
+  getID(): MainMatchID {
     return this.id;
   }
 
@@ -91,29 +91,29 @@ export class MainMatch {
     return this.departmentType;
   }
 
-  getTeamId1(): TeamID | undefined {
-    return this.teamId1;
+  getTeamID1(): TeamID | undefined {
+    return this.teamID1;
   }
 
-  getTeamId2(): TeamID | undefined {
-    return this.teamId2;
+  getTeamID2(): TeamID | undefined {
+    return this.teamID2;
   }
 
-  getWinnerId(): TeamID | undefined {
-    return this.winnerId;
+  getWinnerID(): TeamID | undefined {
+    return this.winnerID;
   }
 
-  setWinnerId(winnerId: TeamID) {
-    if (this.winnerId !== undefined) {
-      throw new Error('WinnerId is already set');
+  setWinnerID(winnerID: TeamID) {
+    if (this.winnerID !== undefined) {
+      throw new Error('WinnerID is already set');
     }
-    if (this.teamId1 !== winnerId && this.teamId2 !== winnerId) {
-      throw new Error('WinnerId must be teamId1 or teamId2');
+    if (this.teamID1 !== winnerID && this.teamID2 !== winnerID) {
+      throw new Error('WinnerID must be teamID1 or teamID2');
     }
     if (this.runResults.length !== 4) {
       throw new Error('This match is not finished');
     }
-    this.winnerId = winnerId;
+    this.winnerID = winnerID;
   }
 
   getRunResults(): RunResult[] {

@@ -28,8 +28,8 @@ export class GenerateMainMatchService {
       matchIndex: 1,
       departmentType,
       runResults: [],
-      teamId1: teamID1,
-      teamId2: teamID2,
+      teamID1: teamID1,
+      teamID2: teamID2,
       parentMatchID: '999' as MainMatchID,
       childMatches: undefined,
     });

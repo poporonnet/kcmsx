@@ -15,8 +15,8 @@ describe('EntryService', () => {
   const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
   const service = new EntryService(teamRepository, getMatchService);
 
-  const enteredTeamID = TestEntryData.Entered().getId();
-  const notEnteredTeamID = TestEntryData.NotEntered().getId();
+  const enteredTeamID = TestEntryData.Entered().getID();
+  const notEnteredTeamID = TestEntryData.NotEntered().getID();
 
   beforeEach(() => {
     teamRepository.reset([TestEntryData.Entered(), TestEntryData.NotEntered()]);

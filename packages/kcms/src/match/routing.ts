@@ -1,8 +1,8 @@
 import { createRoute } from '@hono/zod-openapi';
 import {
   CommonErrorSchema,
-  GetMatchIdParamsSchema,
-  GetMatchIdResponseSchema,
+  GetMatchIDParamsSchema,
+  GetMatchIDResponseSchema,
   GetMatchResponseSchema,
   GetMatchRunResultParamsSchema,
   GetMatchRunResultResponseSchema,
@@ -66,15 +66,15 @@ export const GetMatchTypeRoute = createRoute({
   },
 });
 
-export const GetMatchIdRoute = createRoute({
+export const GetMatchIDRoute = createRoute({
   method: 'get',
   path: '/match/{matchType}/{matchID}',
-  request: { params: GetMatchIdParamsSchema },
+  request: { params: GetMatchIDParamsSchema },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: GetMatchIdResponseSchema,
+          schema: GetMatchIDResponseSchema,
         },
       },
       description: 'Retrieve a match by matchID',

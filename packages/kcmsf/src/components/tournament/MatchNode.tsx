@@ -35,9 +35,9 @@ export const MatchNode = ({
       textAnchor="middle"
       dominantBaseline="central"
       style={{
-        fill: attributes.winnerId == attributes.team1Id ? "red" : "black",
+        fill: attributes.winnerID == attributes.team1ID ? "red" : "black",
         stroke: "red",
-        strokeWidth: attributes.winnerId == attributes.team1Id ? 1 : 0,
+        strokeWidth: attributes.winnerID == attributes.team1ID ? 1 : 0,
       }}
     >
       {attributes.team1Name}
@@ -47,9 +47,9 @@ export const MatchNode = ({
       textAnchor="middle"
       dominantBaseline="central"
       style={{
-        fill: attributes.winnerId == attributes.team2Id ? "red" : "black",
+        fill: attributes.winnerID == attributes.team2ID ? "red" : "black",
         stroke: "red",
-        strokeWidth: attributes.winnerId == attributes.team2Id ? 1 : 0,
+        strokeWidth: attributes.winnerID == attributes.team2ID ? 1 : 0,
       }}
     >
       {attributes.team2Name}
