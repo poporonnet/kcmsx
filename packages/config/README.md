@@ -157,6 +157,9 @@ departments: [
 - `course`
   - 型: `CourseConfig`
   - 使用するコースの設定です。部門種別ごとに使用するコースの番号のリストを設定します。`baseConfig.departments`の`type`に指定した値がキーになります。値を空にすると、該当する試合種別では該当する部門の試合が行われないことになります。
+- `requiredTeams`
+  - 型: `RequiredTeamsConfig`
+  - 試合種別に必要なチーム数です。試合表を生成する際、チーム数がこれに一致しないと生成できません。`baseConfig.departments`の`type`に指定した値がキーになります。`requiredTeams`レコード自体を空にすることも、特定の部門のレコードだけを空にすることもできます。その場合、該当する部分の制約は存在しないことになります。
 
 <details open>
 <summary>例: 予選と本戦の2種別の場合</summary>
@@ -170,13 +173,18 @@ match: {
       elementary: [1, 2, 3], // 小学生部門の予選は1,2,3番コースで行う
       open: [], // オープン部門の予選は行わない
     },
+    // 予選にチーム数の制約は存在しない
   },
   main: {
     name: "本戦",
     limitSeconds: 180,
     course: {
-      elementary: [1, 2, 3], // 小学生部門の本選は1,2,3番コースで行う
+      elementary: [1, 2, 3], // 小学生部門の本戦は1,2,3番コースで行う
       open: [1], // オープン部門の本戦は1番コースで行う
+    },
+    requiredTeams: {
+      elementary: 4 // 小学生部門の本戦は4チームで行う
+      // オープン部門の本戦にチーム数の制約は存在しない
     },
   },
 },
