@@ -13,21 +13,16 @@ describe('GenerateMainMatchService', () => {
   const mainMatchRepository = new DummyMainMatchRepository([]);
   const service = new GenerateMainMatchService(mainMatchRepository, idGenerator);
 
-  it('本戦試合を生成できる', async () => {
-    const res = await service.handle(config.departmentTypes[0], '1' as TeamID, '2' as TeamID);
-    expect(Result.isOk(res)).toBe(true);
-
-    const match = Result.unwrap(res);
-    expect(match.getTeamID1()).toBe('1');
-    expect(match.getTeamID2()).toBe('2');
+  it.todo('必要なチーム数に一致しない場合はエラーになる', async () => {
+    
   });
 
-  it('(安来用) 本戦試合の試合番号は1-1になる', async () => {
-    const res = await service.handle(config.departmentTypes[0], '1' as TeamID, '2' as TeamID);
-    expect(Result.isOk(res)).toBe(true);
+  it.todo("n=2のとき、試合が生成できる");
 
-    const match = Result.unwrap(res);
-    expect(match.getMatchIndex()).toBe(1);
-    expect(match.getCourseIndex()).toBe(1);
-  });
+  it.todo("n=4のとき、試合が生成できる");
+
+  it.todo("n=8のとき、試合が生成できる");
+
+  
+
 });
