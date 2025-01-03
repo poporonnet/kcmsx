@@ -14,11 +14,18 @@ export class GeneratePreMatchService {
   ) {}
 
   async handle(departmentType: DepartmentType): Promise<Result.Result<Error, PreMatch[]>> {
-    if (!config.match.pre.course[departmentType]) {
+    if (!config.match.pre.course[departmentType].length) {
       return Result.err(new Error('DepartmentType is not defined'));
     }
-    const pair = await this.makePairs(departmentType);
-    return await this.makeMatches(pair);
+    const matches = new Map();
+    for (const e of config.departmentTypes) {
+      if (config.match.pre.course[e].length) {
+        const pair = await this.makePairs(e);
+        const match = await this.makeMatches(pair);
+        matches.set(e, match);
+      }
+    }
+    return matches.get(departmentType);
   }
 
   private async makeMatches(
