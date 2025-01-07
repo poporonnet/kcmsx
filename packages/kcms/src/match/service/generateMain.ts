@@ -1,5 +1,5 @@
 import { Result } from '@mikuroxina/mini-fn';
-import { DepartmentType } from 'config';
+import { config, DepartmentType } from 'config';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
 import { ChildMatches, MainMatch, MainMatchID } from '../model/main';
@@ -32,7 +32,7 @@ export class GenerateMainMatchService {
     }
     const pair = Result.unwrap(pairRes);
 
-    const matchesRes = this.generateTournament(pair);
+    const matchesRes = this.generateTournament(departmentType, pair);
     if (Result.isErr(matchesRes)) {
       return matchesRes;
     }
@@ -82,7 +82,6 @@ export class GenerateMainMatchService {
     /*
      * 3. 順位で並べてグルーピングする
      * グループ数: n/4
-     * ToDo: n=4のときは2、n=2のときは1として扱うようにする
      */
     const groupNum = ((n: number) => {
       if (n === 4) return 2;
@@ -106,12 +105,13 @@ export class GenerateMainMatchService {
    * トーナメントを生成する
    */
   private generateTournament(
+    departmentType: DepartmentType,
     firstRoundMatches: [TeamID | undefined, TeamID | undefined][]
   ): Result.Result<Error, MainMatch[]> {
     // K: トーナメントのラウンド数(0が決勝) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
     // 現在のラウンド数(0だとlog_2が0になるため1からスタート)
-    let round = 1;
+    let round = Math.floor(Math.log2(firstRoundMatches.length));
     /*
       試合を生成
 
@@ -122,21 +122,39 @@ export class GenerateMainMatchService {
 
       NOTE: 注意 **ラウンドはトーナメント実行順とは逆方向に数えています(例(n=8):初戦: 2, 準決勝: 1, 決勝: 0)**
     */
-    for (let i = 1; i < firstRoundMatches.length * 2; i++) {
+    // K: コース番号 / V: そのコースの試合番号
+    const matchIndex: Map<number, number> = new Map(
+      config.match.main.course[departmentType].map((v) => [v, 1])
+    );
+    let courseIndex = 0;
+    for (let i = firstRoundMatches.length * 2 - 1; i !== 0; i--) {
       if (Math.floor(Math.log2(i)) != round) {
         round = Math.floor(Math.log2(i));
+        courseIndex = 0;
       }
       if (!matches.has(round)) {
         matches.set(round, []);
       }
 
+      if (courseIndex === config.match.main.course[departmentType].length) {
+        courseIndex = 0;
+      }
+
+      // 試合番号を生成する
+      const newMatchIndex = matchIndex.get(config.match.main.course[departmentType][courseIndex])!;
+      const newCourseIndex = config.match.main.course[departmentType][courseIndex];
+
+      matchIndex.set(config.match.main.course[departmentType][courseIndex], newMatchIndex + 1);
+      courseIndex++;
+
       // 試合を生成する
-      // ToDo: 試合番号、部門を正しく埋める
       const res = this.generateMainMatch(
-        'elementary',
+        departmentType,
         [undefined, undefined],
         undefined,
-        undefined
+        undefined,
+        newMatchIndex,
+        newCourseIndex
       );
       if (Result.isErr(res)) {
         return res;
@@ -204,6 +222,7 @@ export class GenerateMainMatchService {
         pair[1].setParentID(parent);
       }
     }
+
     return Result.ok([...matches.entries()].map((v) => v[1]).flat());
   }
 
@@ -212,7 +231,9 @@ export class GenerateMainMatchService {
     departmentType: DepartmentType,
     pair: [TeamID | undefined, TeamID | undefined],
     parent: MainMatchID | undefined,
-    child: ChildMatches | undefined
+    child: ChildMatches | undefined,
+    matchIndex: number,
+    courseIndex: number
   ): Result.Result<Error, MainMatch> {
     const id = this.idGenerator.generate<MainMatch>();
     if (Result.isErr(id)) {
@@ -222,8 +243,8 @@ export class GenerateMainMatchService {
     return Result.ok(
       MainMatch.new({
         id: Result.unwrap(id),
-        courseIndex: 1,
-        matchIndex: 1,
+        courseIndex,
+        matchIndex,
         departmentType: departmentType,
         teamID1: pair[0],
         teamID2: pair[1],
