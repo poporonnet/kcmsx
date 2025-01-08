@@ -1,6 +1,6 @@
 import { z } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
-import { config, DepartmentType, MatchType } from 'config';
+import { DepartmentType, MatchType } from 'config';
 import { Team, TeamID } from '../../../team/models/team';
 import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
@@ -131,7 +131,7 @@ export class MatchController {
   > {
     const data = [];
     const res = await this.generateAllPreMatchService.handle();
-    for (const e of config.departmentTypes) {
+    for (const e of res.keys()) {
       const matches = res.get(e);
       if (matches) {
         if (Result.isErr(matches)) return matches;
