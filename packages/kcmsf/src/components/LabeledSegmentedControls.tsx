@@ -12,6 +12,6 @@ export const LabeledSegmentedControls = ({
     horizontalSpacing="0.5rem"
     verticalSpacing="0.2rem"
   >
-    {children}
+    <Table.Tbody>{children}</Table.Tbody>
   </Table>
 );
