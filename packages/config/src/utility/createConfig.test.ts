@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { DerivedDepartmentConfig } from "../types/departmentConfig";
-import { DerivedCourseConfig, DerivedMatchConfig } from "../types/matchConfig";
+import {
+  DerivedCourseConfig,
+  DerivedMatchConfig,
+  DerivedRequiredTeamsConfig,
+} from "../types/matchConfig";
 import { DerivedPremiseState } from "../types/premise";
 import { DerivedRobotConfig } from "../types/robotConfig";
 import { DerivedPointState, DerivedRuleBaseVariant } from "../types/rule";
@@ -28,6 +32,7 @@ describe("正しい設定を生成できる", () => {
             name: "本戦",
             limitSeconds: 180,
             course: { elementary: [1, 2, 3] },
+            requiredTeams: { elementary: 4 },
           },
         },
         rules: [
@@ -61,6 +66,8 @@ describe("正しい設定を生成できる", () => {
     expect(config.matches[0].limitSeconds).toBe(180);
     expect(config.matches[0].course.elementary).toEqual([1, 2, 3]);
 
+    expect(config.matches[1].requiredTeams.elementary).toBe(4);
+
     expect(config.rules).toHaveLength(1);
     expect(config.rules[0].name).toBe("goal");
     expect(config.rules[0].label).toBe("ゴール");
@@ -83,6 +90,7 @@ describe("正しい設定を生成できる", () => {
     expect(config.match.pre.name).toBe("予選");
     expect(config.match.pre.limitSeconds).toBe(180);
     expect(config.match.pre.course.elementary).toEqual([1, 2, 3]);
+    expect(config.match.main.requiredTeams.elementary).toBe(4);
   });
 
   it("複数項目の設定を生成できる", () => {
@@ -98,7 +106,11 @@ describe("正しい設定を生成できる", () => {
       Robots,
       Departments,
       Courses,
-      DerivedCourseConfig<Robots, Departments, Courses> & { __department0: [0] } // ValidCourseConfigsを通過させるため
+      DerivedCourseConfig<Robots, Departments, Courses> & {
+        __department0: [0];
+      }, // ValidCourseConfigsを通過させるため,
+      number,
+      DerivedRequiredTeamsConfig<Robots, Departments, number>
     >;
     type Sponsor = DerivedSponsorConfig<string, SponsorClass, string>;
     type Sponsors = [Sponsor, ...Sponsor[]];

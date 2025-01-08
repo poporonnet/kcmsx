@@ -9,6 +9,7 @@ import {
   DerivedCourseConfig,
   DerivedMatchConfig,
   DerivedMatches,
+  DerivedRequiredTeamsConfig,
   matchTypes,
 } from "../types/matchConfig";
 import {
@@ -50,13 +51,21 @@ export const createConfig = <
   MatchCourseIndex extends number,
   MatchCourses extends [] | [MatchCourseIndex, ...MatchCourseIndex[]],
   MatchCourse extends DerivedCourseConfig<Robots, Departments, MatchCourses>,
+  MatchRequiredTeamsNumber extends number,
+  MatchRequiredTeams extends DerivedRequiredTeamsConfig<
+    Robots,
+    Departments,
+    MatchRequiredTeamsNumber
+  >,
   Match extends DerivedMatchConfig<
     MatchName,
     MatchLimitSeconds,
     Robots,
     Departments,
     MatchCourses,
-    MatchCourse
+    MatchCourse,
+    MatchRequiredTeamsNumber,
+    MatchRequiredTeams
   >,
   RuleBaseName extends string,
   RuleBaseLabel extends string,
