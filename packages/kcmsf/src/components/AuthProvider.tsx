@@ -1,7 +1,6 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AutoContext";
 import { Login } from "./Login";
-
-export const AuthContext = createContext<boolean | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [auth, setAuth] = useState<boolean>();
@@ -29,12 +28,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       return await check();
     },
-    [check, setAuth]
+    [check]
   );
 
   useEffect(() => {
     check();
-  }, []);
+  }, [check]);
 
   return (
     <AuthContext.Provider value={auth}>

@@ -95,7 +95,7 @@ export const Ranking = () => {
       [...new Array(ranking?.length ?? 0)].map((_, i) => i)
     );
     setSelectedTeams(new Map());
-  }, [ranking]);
+  }, [ranking, rankingOrderHandlers]);
 
   useInterval(refetch, 10000, { active: isAutoReload });
 
