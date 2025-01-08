@@ -106,7 +106,7 @@ const GenerableBody = ({
 }) => (
   <>
     現在選択しているチーム:
-    <List withPadding flex={1} ta="left">
+    <List withPadding flex={1} ta="left" type="ordered">
       {selectedTeams.map(({ teamID, teamName }) => (
         <List.Item key={teamID}>{teamName}</List.Item>
       ))}
