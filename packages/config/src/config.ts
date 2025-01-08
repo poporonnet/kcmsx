@@ -44,6 +44,7 @@ export const config = createConfig(
         },
         requiredTeams: {
           elementary: 4,
+          open: 4,
         },
       },
     },
