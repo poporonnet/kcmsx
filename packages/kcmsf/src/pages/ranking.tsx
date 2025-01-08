@@ -45,6 +45,17 @@ export const Ranking = () => {
   const [isAutoReload, setIsAutoReload] = useState(true);
   const [latestFetchTime, setLatestFetchTime] = useState<Date>();
 
+  const requiredTeams = useMemo(() => {
+    const requiredTeamsConfig = config.match.main.requiredTeams;
+    const isKeyofRequiredTeams = (
+      key: string
+    ): key is keyof typeof requiredTeamsConfig => key in requiredTeamsConfig;
+
+    return isKeyofRequiredTeams(departmentType)
+      ? requiredTeamsConfig[departmentType]
+      : undefined;
+  }, [departmentType]);
+
   const generateMainMatch = useCallback(
     async (team1ID: string, team2ID: string) => {
       const req: GeneratePreMatchManualRequest = {
@@ -83,6 +94,7 @@ export const Ranking = () => {
     rankingOrderHandlers.setState(
       [...new Array(ranking?.length ?? 0)].map((_, i) => i)
     );
+    setSelectedTeams(new Map());
   }, [ranking]);
 
   useInterval(refetch, 10000, { active: isAutoReload });
@@ -138,7 +150,7 @@ export const Ranking = () => {
 
                   if (selectedTeams.has(record.teamID))
                     selectedTeams.delete(record.teamID);
-                  else if (selectedTeams.size < 4)
+                  else if (!requiredTeams || selectedTeams.size < requiredTeams)
                     selectedTeams.set(record.teamID, record);
                   else return;
 
@@ -150,7 +162,7 @@ export const Ranking = () => {
         </Stack>
         {matchType == "pre" && (
           <GenerateMainMatchCard
-            requiredTeamCount={2}
+            requiredTeamCount={requiredTeams}
             selectedTeams={
               ranking
                 ? rankingOrder
