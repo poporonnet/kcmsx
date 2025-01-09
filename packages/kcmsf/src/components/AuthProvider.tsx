@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { AuthContext } from "../contexts/AutoContext";
+import { AuthContext } from "../contexts/AuthContext";
 import { Login } from "./Login";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
