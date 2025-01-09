@@ -38,7 +38,10 @@ export const Ranking = () => {
   const [selectedTeams, setSelectedTeams] = useState<
     Map<RankingRecord["teamID"], RankingRecord>
   >(new Map());
-  const [rankingOrder, rankingOrderHandlers] = useListState<number>([]);
+  const [
+    rankingOrder,
+    { setState: setRankingOrder, reorder: reorderRankingOrder },
+  ] = useListState<number>([]);
 
   const navigate = useNavigate();
 
@@ -91,11 +94,9 @@ export const Ranking = () => {
   useEffect(() => {
     const now = new Date();
     setLatestFetchTime(now);
-    rankingOrderHandlers.setState(
-      [...new Array(ranking?.length ?? 0)].map((_, i) => i)
-    );
+    setRankingOrder([...new Array(ranking?.length ?? 0)].map((_, i) => i));
     setSelectedTeams(new Map());
-  }, [ranking, rankingOrderHandlers]);
+  }, [ranking, setRankingOrder]);
 
   useInterval(refetch, 10000, { active: isAutoReload });
 
@@ -133,7 +134,7 @@ export const Ranking = () => {
           </Flex>
           <DragDropContext
             onDragEnd={({ destination, source }) => {
-              rankingOrderHandlers.reorder({
+              reorderRankingOrder({
                 from: source.index,
                 to: destination?.index ?? source.index,
               });
