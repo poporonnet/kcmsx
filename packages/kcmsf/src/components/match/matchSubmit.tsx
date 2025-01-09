@@ -20,7 +20,7 @@ type TeamResult = {
 };
 
 type APIPostRunResults = {
-  teamID: string; // `teamID`でないことに注意
+  teamID: string;
   points: number;
   goalTimeSeconds: number | null;
   finishState: "goal" | "finished";

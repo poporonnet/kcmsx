@@ -26,9 +26,8 @@ export const config = createConfig(
         robotTypes: ["leg", "wheel"],
       },
     ],
-    matches: [
-      {
-        type: "pre",
+    match: {
+      pre: {
         name: "予選",
         limitSeconds: 180,
         course: {
@@ -36,16 +35,18 @@ export const config = createConfig(
           open: [],
         },
       },
-      {
-        type: "main",
+      main: {
         name: "本戦",
         limitSeconds: 180,
         course: {
           elementary: [1, 2, 3],
           open: [1],
         },
+        requiredTeams: {
+          elementary: 4,
+        },
       },
-    ],
+    },
     rules: [
       {
         name: "multiWalk",

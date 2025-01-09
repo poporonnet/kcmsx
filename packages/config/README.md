@@ -6,7 +6,7 @@
     - [baseConfig.contestName](#baseconfigcontestname)
     - [baseConfig.robots](#baseconfigrobots)
     - [baseConfig.departments](#baseconfigdepartments)
-    - [baseConfig.matches](#baseconfigmatches)
+    - [baseConfig.match](#baseconfigmatch)
     - [baseConfig.rules](#baseconfigrules)
     - [baseConfig.sponsors](#baseconfigsponsors)
   - [conditions](#conditions)
@@ -34,7 +34,7 @@ export const config = createConfig(
     contestName: "",
     robots: [],
     departments: [],
-    matches: [],
+    match: {},
     rules: [],
     sponsors: [],
   },
@@ -141,17 +141,13 @@ departments: [
 
 </details>
 
-### baseConfig.matches
+### baseConfig.match
 
-- 型: `MatchConfig[]`
+- 型: `MatchConfig`
 
-試合の種別です。予選もしくは本戦、といった種別を定義します。
-1つ以上の種別が必要です。
-以下で、配列の要素である`MatchConfig`のプロパティについて説明しています。
+試合の種別です。`pre`(予選)と`main`(本戦)がキーのオブジェクトで定義します。
+以下で、オブジェクトの値である`MatchConfig`のプロパティについて説明しています。
 
-- `type`
-  - 型: `string`
-  - 試合種別の種別名です。主にプログラム中で使われます。他の試合種別と重複させることはできません。
 - `name`
   - 型: `string`
   - 試合種別の表示名です。主にフロントエンドでの表示に使われます。
@@ -161,31 +157,37 @@ departments: [
 - `course`
   - 型: `CourseConfig`
   - 使用するコースの設定です。部門種別ごとに使用するコースの番号のリストを設定します。`baseConfig.departments`の`type`に指定した値がキーになります。値を空にすると、該当する試合種別では該当する部門の試合が行われないことになります。
+- `requiredTeams`
+  - 型: `RequiredTeamsConfig`
+  - 試合種別に必要なチーム数です。試合表を生成する際、チーム数がこれに一致しないと生成できません。`baseConfig.departments`の`type`に指定した値がキーになります。`requiredTeams`レコード自体を空にすることも、特定の部門のレコードだけを空にすることもできます。その場合、該当する部分の制約は存在しないことになります。
 
 <details open>
 <summary>例: 予選と本戦の2種別の場合</summary>
 
 ```ts
-matches: [
-  {
-    type: "pre",
+match: {
+  pre: {
     name: "予選",
     limitSeconds: 180,
     course: {
       elementary: [1, 2, 3], // 小学生部門の予選は1,2,3番コースで行う
       open: [], // オープン部門の予選は行わない
     },
+    // 予選にチーム数の制約は存在しない
   },
-  {
-    type: "main",
+  main: {
     name: "本戦",
     limitSeconds: 180,
     course: {
-      elementary: [1, 2, 3], // 小学生部門の本選は1,2,3番コースで行う
+      elementary: [1, 2, 3], // 小学生部門の本戦は1,2,3番コースで行う
       open: [1], // オープン部門の本戦は1番コースで行う
     },
+    requiredTeams: {
+      elementary: 4 // 小学生部門の本戦は4チームで行う
+      // オープン部門の本戦にチーム数の制約は存在しない
+    },
   },
-],
+},
 ```
 
 </details>
