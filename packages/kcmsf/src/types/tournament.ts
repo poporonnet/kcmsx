@@ -14,7 +14,7 @@ export type TournamentNode = TeamNode | MatchNode;
  * チームのノード
  */
 export type TeamNode = {
-  teamId: string;
+  teamID: string;
   teamName: string;
 } & NodeType<"team">;
 
@@ -22,11 +22,11 @@ export type TeamNode = {
  * マッチのノード
  */
 export type MatchNode = {
-  matchId: string;
+  matchID: string;
   matchCode: string;
-  team1Id: string;
-  team2Id: string;
-  winnerId?: string;
+  team1ID: string;
+  team2ID: string;
+  winnerID?: string;
   previousNode1: TournamentNode;
   previousNode2: TournamentNode;
 } & NodeType<"match">;

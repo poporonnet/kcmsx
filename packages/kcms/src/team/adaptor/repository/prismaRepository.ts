@@ -25,7 +25,7 @@ export class PrismaTeamRepository implements TeamRepository {
     try {
       const res = await this.client.team.create({
         data: {
-          id: team.getId(),
+          id: team.getID(),
           name: team.getTeamName(),
           members: JSON.stringify(team.getMembers()),
           department: team.getDepartmentType(),
@@ -93,7 +93,7 @@ export class PrismaTeamRepository implements TeamRepository {
     try {
       const res = await this.client.team.update({
         where: {
-          id: team.getId(),
+          id: team.getID(),
         },
         data: {
           isEntered: team.getIsEntered(),

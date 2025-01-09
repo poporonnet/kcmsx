@@ -19,8 +19,8 @@ describe('DummyPreMatchRepository', () => {
       id: '900' as PreMatchID,
       courseIndex: 0,
       matchIndex: 91,
-      teamId1: '91' as TeamID,
-      teamId2: '92' as TeamID,
+      teamID1: '91' as TeamID,
+      teamID2: '92' as TeamID,
       departmentType: config.departments[0].type,
       runResults: [
         RunResult.new({
@@ -54,8 +54,8 @@ describe('DummyPreMatchRepository', () => {
       id: '100' as PreMatchID,
       courseIndex: 0,
       matchIndex: 1,
-      teamId1: '1' as TeamID,
-      teamId2: '2' as TeamID,
+      teamID1: '1' as TeamID,
+      teamID2: '2' as TeamID,
       departmentType: config.departments[0].type,
       runResults: [
         RunResult.new({

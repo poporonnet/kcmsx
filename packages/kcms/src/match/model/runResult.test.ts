@@ -12,8 +12,8 @@ describe('RunResult', () => {
       finishState: 'GOAL',
     });
 
-    expect(result.getId()).toBe('999');
-    expect(result.getTeamId()).toBe('100');
+    expect(result.getID()).toBe('999');
+    expect(result.getTeamID()).toBe('100');
     expect(result.getPoints()).toBe(10);
     expect(result.getGoalTimeSeconds()).toBe(100);
     expect(result.isGoal()).toBe(true);
@@ -29,8 +29,8 @@ describe('RunResult', () => {
       finishState: 'FINISHED',
     });
 
-    expect(result.getId()).toBe('999');
-    expect(result.getTeamId()).toBe('100');
+    expect(result.getID()).toBe('999');
+    expect(result.getTeamID()).toBe('100');
     expect(result.getPoints()).toBe(10);
     // フィニッシュ(リタイア)時はゴールタイムを記録しないのでInfinityにする
     expect(result.getGoalTimeSeconds()).not.toBe(10);

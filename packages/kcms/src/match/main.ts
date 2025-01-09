@@ -15,7 +15,7 @@ import { MainMatchID } from './model/main';
 import { PreMatchID } from './model/pre';
 import { CreateRunResultArgs } from './model/runResult';
 import {
-  GetMatchIdRoute,
+  GetMatchIDRoute,
   GetMatchRoute,
   GetMatchRunResultRoute,
   GetMatchTypeRoute,
@@ -123,7 +123,7 @@ matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
   return c.json(res[1], 200);
 });
 
-matchHandler.openapi(GetMatchIdRoute, async (c) => {
+matchHandler.openapi(GetMatchIDRoute, async (c) => {
   const { matchType, matchID } = c.req.valid('param');
 
   const res = await matchController.getMatchByID(matchType, matchID as MainMatchID | PreMatchID);

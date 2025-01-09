@@ -59,10 +59,10 @@ export const TournamentBracket = ({
           const to = props.source.data as unknown as TournamentData<"match">;
           const teams =
             from.attributes.type == "match"
-              ? [from.attributes.team1Id, from.attributes.team2Id]
+              ? [from.attributes.team1ID, from.attributes.team2ID]
               : [from.name];
-          const winnerId = to.attributes.winnerId ?? "";
-          return teams.includes(winnerId)
+          const winnerID = to.attributes.winnerID ?? "";
+          return teams.includes(winnerID)
             ? styles["path-winner"]
             : styles["path"];
         }}

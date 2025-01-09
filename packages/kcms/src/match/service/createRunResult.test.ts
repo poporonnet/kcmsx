@@ -34,8 +34,8 @@ describe('CreateRunResult', () => {
     const res = await service.handle('pre', '1' as PreMatchID, runResult);
     expect(Result.isOk(res)).toBe(true);
     const results = Result.unwrap(res);
-    expect(results[0].getId()).toBe(id);
-    expect(results[0].getTeamId()).toBe('1');
+    expect(results[0].getID()).toBe(id);
+    expect(results[0].getTeamID()).toBe('1');
     expect(results[0].getPoints()).toBe(10);
     expect(results[0].getGoalTimeSeconds()).toBe(100);
     expect(results[0].isGoal()).toBe(true);
@@ -69,8 +69,8 @@ describe('CreateRunResult', () => {
     const res = await service.handle('main', '900' as MainMatchID, runResult);
     expect(Result.isOk(res)).toBe(true);
     const results = Result.unwrap(res);
-    expect(results[0].getId()).toBe(id);
-    expect(results[0].getTeamId()).toBe('91');
+    expect(results[0].getID()).toBe(id);
+    expect(results[0].getTeamID()).toBe('91');
     expect(results[0].getPoints()).toBe(10);
     expect(results[0].getGoalTimeSeconds()).toBe(100);
     expect(results[0].isGoal()).toBe(true);
