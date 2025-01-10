@@ -241,4 +241,60 @@ describe('MainMatch', () => {
       new Error('WinnerID must be teamID1 or teamID2')
     );
   });
+
+  it('チームは上書き設定できない', () => {
+    const args: CreateMainMatchArgs = {
+      id: '1' as MainMatchID,
+      courseIndex: 1,
+      matchIndex: 1,
+      departmentType: config.departmentTypes[0],
+      teamID1: '2' as TeamID,
+      teamID2: '3' as TeamID,
+      runResults: [...Array(4)].map((_, i) => {
+        return RunResult.new({
+          id: String(i) as RunResultID,
+          goalTimeSeconds: i * 10,
+          points: 10 + i,
+          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+          finishState: 'FINISHED',
+        });
+      }),
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
+    };
+    const mainMatch = MainMatch.new(args);
+
+    expect(() => mainMatch.setTeams('4' as TeamID, '5' as TeamID)).toThrowError(
+      new Error('Teams are already set')
+    );
+  });
+
+  it('チームを設定できる', () => {
+    const args: CreateMainMatchArgs = {
+      id: '1' as MainMatchID,
+      courseIndex: 1,
+      matchIndex: 1,
+      departmentType: config.departmentTypes[0],
+      teamID1: undefined,
+      teamID2: undefined,
+      runResults: [...Array(4)].map((_, i) => {
+        return RunResult.new({
+          id: String(i) as RunResultID,
+          goalTimeSeconds: i * 10,
+          points: 10 + i,
+          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+          finishState: 'FINISHED',
+        });
+      }),
+      parentMatchID: '10' as MainMatchID,
+      childMatches: undefined,
+    };
+    const mainMatch = MainMatch.new(args);
+
+    expect(() => mainMatch.setTeams('4' as TeamID, '5' as TeamID)).not.toThrowError(
+      new Error('Teams are already set')
+    );
+    expect(mainMatch.getTeamID1()).toStrictEqual('4' as TeamID);
+    expect(mainMatch.getTeamID2()).toStrictEqual('5' as TeamID);
+  });
 });

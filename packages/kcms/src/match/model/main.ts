@@ -113,6 +113,15 @@ export class MainMatch {
     this.teamID2 = teamID;
   }
 
+  setTeams(teamID1: TeamID, teamID2: TeamID) {
+    // すでにチームがセットされている場合はエラー
+    if (this.teamID1 || this.teamID2) {
+      throw new Error('Teams are already set');
+    }
+    this.teamID1 = teamID1;
+    this.teamID2 = teamID2;
+  }
+
   getWinnerID(): TeamID | undefined {
     return this.winnerID;
   }
