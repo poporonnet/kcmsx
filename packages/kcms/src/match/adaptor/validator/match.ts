@@ -86,6 +86,17 @@ const DepartmentTypeSchema = z.enum(pick(config.departments, 'type')).openapi({
   example: config.departments[0].type,
 });
 
+// 再帰的スキーマのため型定義が必要
+type Tournament = Omit<z.infer<typeof MainSchema>, 'runResults'> & {
+  childMatch1?: Tournament;
+  childMatch2?: Tournament;
+};
+
+const TournamentSchema: z.ZodType<Tournament> = MainSchema.omit({ runResults: true }).extend({
+  childMatch1: z.lazy(() => TournamentSchema.optional()),
+  childMatch2: z.lazy(() => TournamentSchema.optional()),
+});
+
 export const GetMatchTypeParamsSchema = z.object({
   matchType: MatchTypeSchema,
 });
@@ -149,3 +160,10 @@ export const GetRankingResponseSchema = z.array(
     goalTimeSeconds: z.number().nullable().openapi({ example: 30 }),
   })
 );
+
+export const GetTournamentParamsSchema = z.object({
+  matchType: MatchTypeSchema,
+  departmentType: DepartmentTypeSchema,
+});
+
+export const GetTournamentResponseSchema = TournamentSchema;
