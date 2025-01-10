@@ -18,12 +18,13 @@ export class GenerateMainMatchService {
     departmentType: DepartmentType,
     teamIDs: TeamID[]
   ): Promise<Result.Result<Error, MainMatch[]>> {
-    const requiredTeams = Object.entries(this.requiredTeams).find(([k]) => k === departmentType);
-    if (!requiredTeams) {
+    const requiredTeamCount = Object.hasOwn(this.requiredTeams, departmentType)
+      ? this.requiredTeams[departmentType]
+      : undefined;
+    if (requiredTeamCount == null) {
       return Result.err(new Error('制約が存在しないため、試合を生成できません(未実装)'));
     }
 
-    const requiredTeamCount = requiredTeams[1];
     if (teamIDs.length !== requiredTeamCount) {
       return Result.err(new Error('必要なチーム数に一致しません'));
     }
@@ -34,7 +35,6 @@ export class GenerateMainMatchService {
     }
     // @ts-expect-error TS2589(flatが動的に行われるので型計算できない)
     const pair: [TeamID, TeamID][] = Result.unwrap(pairRes).flat(Math.log2(teamIDs.length) - 2);
-    
 
     const matchesRes = this.generateTournament(departmentType, pair);
     if (Result.isErr(matchesRes)) {
@@ -75,14 +75,13 @@ export class GenerateMainMatchService {
     firstRoundMatches: [TeamID, TeamID][]
   ): Result.Result<Error, MainMatch[]> {
     // FIXME: n=2のときは特別処理している([1,2]として与えられるが、下の処理に影響するので[[1,2]]に変換する)
-    if ((firstRoundMatches.flat()).length === 2) {
+    if (firstRoundMatches.flat().length === 2) {
       firstRoundMatches = [[firstRoundMatches[0][0], firstRoundMatches[1][0]]];
     }
-    console.log("f",firstRoundMatches);
 
     // K: トーナメントのラウンド数(0が決勝) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
-    // 現在のラウンド数(0だとlog_2が0になるため1からスタート)
+    // 現在のラウンド数(0だとlog_2が-Infinityになるため1からスタート)
     let round = Math.floor(Math.log2(firstRoundMatches.length));
     /*
       試合を生成
@@ -95,7 +94,7 @@ export class GenerateMainMatchService {
       NOTE: 注意 **ラウンドはトーナメント実行順とは逆方向に数えています(例(n=8):初戦: 2, 準決勝: 1, 決勝: 0)**
     */
     // K: コース番号 / V: そのコースの試合番号
-    const matchIndex: Map<number, number> = new Map(
+    const matchIndexes: Map<number, number> = new Map(
       config.match.main.course[departmentType].map((v) => [v, 1])
     );
     let courseIndex = 0;
@@ -113,10 +112,9 @@ export class GenerateMainMatchService {
       }
 
       // 試合番号を生成する
-      const newMatchIndex = matchIndex.get(config.match.main.course[departmentType][courseIndex])!;
-      const newCourseIndex = config.match.main.course[departmentType][courseIndex];
-
-      matchIndex.set(config.match.main.course[departmentType][courseIndex], newMatchIndex + 1);
+      const course = config.match.main.course[departmentType][courseIndex];
+      const matchIndex = matchIndexes.get(course)!;
+      matchIndexes.set(course, matchIndex + 1);
       courseIndex++;
 
       // 試合を生成する
@@ -125,8 +123,8 @@ export class GenerateMainMatchService {
         [undefined, undefined],
         undefined,
         undefined,
-        newMatchIndex,
-        newCourseIndex
+        matchIndex,
+        courseIndex
       );
       if (Result.isErr(res)) {
         return res;
@@ -135,7 +133,7 @@ export class GenerateMainMatchService {
     }
 
     // 最初の試合のチームを埋める
-    for (const v of matches.get([...matches].length - 1)!) {
+    for (const v of matches.get(matches.size - 1)!) {
       const pair = firstRoundMatches.shift();
       if (!pair) {
         return Result.err(new Error('ペアがありません'));
@@ -144,7 +142,7 @@ export class GenerateMainMatchService {
       if (pair[1]) v.setTeamID2(pair[1]);
     }
 
-    for (let i = [...matches].length - 1; 0 <= i; i--) {
+    for (let i = matches.size - 1; i >= 0; i--) {
       /** 生成手順
        * 1. 自分のIDをparentに持つ試合を、前のラウンドのIDリストから取りして、childにセットする
        *   - i=0のときはなにもしない
@@ -159,12 +157,12 @@ export class GenerateMainMatchService {
         return Result.err(new Error('試合がありません'));
       }
       const previousRoundMatches = matches.get(i + 1);
-      if (i !== [...matches].length - 1 && !previousRoundMatches) {
+      if (i !== matches.size - 1 && !previousRoundMatches) {
         return Result.err(new Error('前のラウンドの試合がありません'));
       }
 
       for (const match of currentRoundMatches) {
-        if (i !== [...matches].length - 1) {
+        if (i !== matches.size - 1) {
           // 自分のIDをparentに持つ試合を前のラウンドのidリストから取りだす
           const child = previousRoundMatches!.filter((v) => v.getParentID() === match.getID());
           if (child.length !== 2) return Result.err(new Error('前のラウンドの試合が2つありません'));

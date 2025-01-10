@@ -89,7 +89,7 @@ describe('GenerateMainMatchService', () => {
     expect(notHasChildMatches.length).toStrictEqual(4 / 2);
   });
 
-  it('孤児試合は生成されない', async () => {
+  it('子も親も存在しないは生成されない', async () => {
     const res = await service.handle('elementary', ['1', '2', '3', '4'] as TeamID[]);
     expect(Result.isErr(res)).toStrictEqual(false);
 
