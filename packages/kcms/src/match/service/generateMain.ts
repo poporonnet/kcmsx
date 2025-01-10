@@ -78,123 +78,105 @@ export class GenerateMainMatchService {
     departmentType: DepartmentType,
     firstRoundMatches: [TeamID, TeamID][]
   ): Result.Result<Error, MainMatch[]> {
-    // K: トーナメントのラウンド数(0が決勝) / V: そのラウンドの試合
+    // K: トーナメントのラウンド(0が初戦) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
-    // 現在のラウンド数
-    let round = Math.floor(Math.log2(firstRoundMatches.length));
-    /*
-      試合を生成
+    // トーナメントのチーム数
+    const teamCount = firstRoundMatches.length * 2;
+    // トーナメントの試合数
+    const matchCount = teamCount - 1;
+    // トーナメントのラウンド数
+    const roundCount = Math.floor(Math.log2(teamCount));
 
-      終了条件:
-        - チーム数-1に達した(試合を生成しきった)
-      ラウンド終了条件:
-        - log_2(これまでの生成数)が変わった
-
-      NOTE: 注意 **ラウンドはトーナメント実行順とは逆方向に数えています(例(n=8):初戦: 2, 準決勝: 1, 決勝: 0)**
-    */
     // K: コース番号 / V: そのコースの試合番号
     const matchIndexes: Map<number, number> = new Map(
       config.match.main.course[departmentType].map((v) => [v, 1])
     );
     let courseIndex = 0;
 
-    const teamCount = firstRoundMatches.length * 2;
-    for (let i = teamCount - 1; i > 0; i--) {
-      if (Math.floor(Math.log2(i)) != round) {
-        round = Math.floor(Math.log2(i));
-        courseIndex = 0;
-      }
+    /*
+      試合を生成
+
+      NOTE: ラウンドはトーナメント実行順に数えています(例(n=8):初戦: 0, 準決勝: 1, 決勝: 2)
+            算出: ラウンド数 - floor(log_2(残りの試合数)) - 1 (0-indexed)
+            例(8チームでの最初の試合の場合): 3ラウンド - floor(log_2(7試合 - 0番目)) - 1 = 0ラウンド目
+    */
+    for (let matchNumber = 0; matchNumber < matchCount; matchNumber++) {
+      const round = roundCount - Math.floor(Math.log2(matchCount - matchNumber)) - 1;
+      // 新しいラウンド
       if (!matches.has(round)) {
-        matches.set(round, []);
-      }
-
-      if (courseIndex === config.match.main.course[departmentType].length) {
         courseIndex = 0;
       }
 
-      // 試合番号を生成する
       const course = config.match.main.course[departmentType][courseIndex];
       const matchIndex = matchIndexes.get(course)!;
       matchIndexes.set(course, matchIndex + 1);
-      courseIndex++;
+      courseIndex = (courseIndex + 1) % config.match.main.course[departmentType].length;
 
-      // 試合を生成する
       const res = this.generateMainMatch(
         departmentType,
         [undefined, undefined],
         undefined,
         undefined,
         matchIndex,
-        courseIndex
+        course
       );
       if (Result.isErr(res)) {
         return res;
       }
-      matches.get(round)!.push(Result.unwrap(res));
+      matches.set(round, [...(matches.get(round) ?? []), Result.unwrap(res)]);
     }
 
     // 最初の試合のチームを埋める
-    for (const v of matches.get(matches.size - 1)!) {
-      const pair = firstRoundMatches.shift();
+    for (const [i, match] of matches.get(0)!.entries()) {
+      const pair = firstRoundMatches.at(i);
       if (!pair) {
         return Result.err(new Error('ペアがありません'));
       }
-      if (pair[0]) v.setTeamID1(pair[0]);
-      if (pair[1]) v.setTeamID2(pair[1]);
+
+      if (pair[0]) match.setTeamID1(pair[0]);
+      if (pair[1]) match.setTeamID2(pair[1]);
     }
 
-    for (let i = matches.size - 1; i >= 0; i--) {
-      /** 生成手順
-       * 1. 自分のIDをparentに持つ試合を、前のラウンドのIDリストから取りして、childにセットする
-       *   - i=0のときはなにもしない
-       *   - 2個にならない場合は終了する
-       * 2. 左から2こずつ試合を取り出して、上のラウンドのIDリストから1つとってくる(parentIDにセット)
-       *  - 最終ラウンド(決勝)なら、parentはundefinedにする
-       * 3. 1-2を繰り返す
-       */
-
-      const currentRoundMatches = matches.get(i);
-      if (!currentRoundMatches) {
-        return Result.err(new Error('試合がありません'));
-      }
-      const previousRoundMatches = matches.get(i + 1);
-      if (i !== matches.size - 1 && !previousRoundMatches) {
+    // 試合の親子関係を設定
+    for (const [round, currentRoundMatches] of matches) {
+      const previousRoundMatches = matches.get(round - 1);
+      const nextRoundMatches = matches.get(round + 1);
+      if (round > 0 && !previousRoundMatches) {
         return Result.err(new Error('前のラウンドの試合がありません'));
       }
-
-      for (const match of currentRoundMatches) {
-        if (i !== matches.size - 1) {
-          // 自分のIDをparentに持つ試合を前のラウンドのidリストから取りだす
-          const child = previousRoundMatches!.filter((v) => v.getParentID() === match.getID());
-          if (child.length !== 2) return Result.err(new Error('前のラウンドの試合が2つありません'));
-          match.setChildMatches({
-            match1: child[0],
-            match2: child[1],
-          });
-        }
-      }
-
-      const nextRoundMatchID = matches.get(i - 1)?.map((v) => v.getID());
-      if (i !== 0 && !nextRoundMatchID) {
+      if (round < roundCount - 1 && !nextRoundMatches) {
         return Result.err(new Error('次のラウンドの試合がありません'));
       }
-      // 全部読み切ったら抜ける
-      if (!nextRoundMatchID) {
-        break;
-      }
 
-      // 左から2こずつ試合を取り出して、上のラウンドのIDリストから1つとってくる(parentIDにセット)
-      for (let j = 0; j < currentRoundMatches.length; j += 2) {
-        const pair = currentRoundMatches.slice(j, j + 2);
-        const parent = nextRoundMatchID!.shift();
+      // 前のラウンドの試合をペアに分割したもの
+      const previousRoundMatchPairs = previousRoundMatches
+        ? eachSlice(previousRoundMatches, 2)
+        : undefined;
+      for (const [i, match] of currentRoundMatches.entries()) {
+        // 最初のラウンドでない場合、子試合を設定
+        if (round > 0) {
+          const children = previousRoundMatchPairs!.at(i);
+          if (children?.length !== 2) {
+            return Result.err(new Error('前のラウンドの試合が2つありません'));
+          }
 
-        if (!parent) return Result.err(new Error('次のラウンドのIDを読み切りました'));
-        pair[0].setParentID(parent);
-        pair[1].setParentID(parent);
+          match.setChildMatches({
+            match1: children[0],
+            match2: children[1],
+          });
+        }
+        // 最後のラウンドでない場合、親試合を設定
+        if (round < roundCount - 1) {
+          const parent = nextRoundMatches!.at(i / 2);
+          if (!parent) {
+            return Result.err(new Error('次のラウンドの試合がありません'));
+          }
+          match.setParentID(parent.getID());
+        }
       }
     }
 
-    return Result.ok([...matches.entries()].map((v) => v[1]).flat());
+    return Result.ok([...matches.values()].flat());
   }
 
   // ファクトリー関数
