@@ -1,5 +1,4 @@
 import { Result } from '@mikuroxina/mini-fn';
-import { config } from 'config';
 import { afterEach, describe, expect, it } from 'vitest';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
@@ -14,7 +13,7 @@ describe('GenerateMainMatchService', () => {
   const service = new GenerateMainMatchService(
     mainMatchRepository,
     idGenerator,
-    config.match.main.requiredTeams
+    {elementary: 4}
   );
 
   afterEach(() => {
