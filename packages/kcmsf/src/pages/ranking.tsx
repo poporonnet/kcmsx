@@ -1,15 +1,18 @@
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import {
+  Center,
   Checkbox,
   Flex,
   Stack,
   Table,
   Text,
   Title,
-  useMantineTheme,
 } from "@mantine/core";
+import { useListState } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
+import { IconGripVertical } from "@tabler/icons-react";
 import { config } from "config";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
@@ -35,10 +38,26 @@ export const Ranking = () => {
   const [selectedTeams, setSelectedTeams] = useState<
     Map<RankingRecord["teamID"], RankingRecord>
   >(new Map());
+  const [
+    rankingOrder,
+    { setState: setRankingOrder, reorder: reorderRankingOrder },
+  ] = useListState<number>([]);
+
   const navigate = useNavigate();
 
   const [isAutoReload, setIsAutoReload] = useState(true);
   const [latestFetchTime, setLatestFetchTime] = useState<Date>();
+
+  const requiredTeams = useMemo(() => {
+    const requiredTeamsConfig = config.match.main.requiredTeams;
+    const isKeyofRequiredTeams = (
+      key: string
+    ): key is keyof typeof requiredTeamsConfig => key in requiredTeamsConfig;
+
+    return isKeyofRequiredTeams(departmentType)
+      ? requiredTeamsConfig[departmentType]
+      : undefined;
+  }, [departmentType]);
 
   const generateMainMatch = useCallback(
     async (team1ID: string, team2ID: string) => {
@@ -75,7 +94,9 @@ export const Ranking = () => {
   useEffect(() => {
     const now = new Date();
     setLatestFetchTime(now);
-  }, [ranking]);
+    setRankingOrder([...new Array(ranking?.length ?? 0)].map((_, i) => i));
+    setSelectedTeams(new Map());
+  }, [ranking, setRankingOrder]);
 
   useInterval(refetch, 10000, { active: isAutoReload });
 
@@ -111,52 +132,48 @@ export const Ranking = () => {
               onChange={(e) => setIsAutoReload(e.currentTarget.checked)}
             />
           </Flex>
-          <Table
-            striped
-            withTableBorder
-            stickyHeader
-            stickyHeaderOffset={60}
-            horizontalSpacing="lg"
-            highlightOnHover={matchType == "pre"}
-            style={{ fontSize: "1rem" }}
-            flex={1}
+          <DragDropContext
+            onDragEnd={({ destination, source }) => {
+              reorderRankingOrder({
+                from: source.index,
+                to: destination?.index ?? source.index,
+              });
+            }}
           >
-            <Table.Thead>
-              <Table.Tr>
-                <Table.Th ta="center">順位</Table.Th>
-                <Table.Th ta="center">チーム名</Table.Th>
-                <Table.Th ta="center">合計得点</Table.Th>
-                <Table.Th ta="center">ベストタイム</Table.Th>
-                {matchType == "pre" && (
-                  <Table.Th ta="center">本戦出場</Table.Th>
-                )}
-              </Table.Tr>
-            </Table.Thead>
-            <Table.Tbody>
-              {ranking?.map((record) => (
-                <RankingColumn
-                  record={record}
-                  selectable={matchType == "pre"}
-                  selected={selectedTeams.has(record.teamID)}
-                  onSelect={() => {
-                    if (selectedTeams.has(record.teamID))
-                      selectedTeams.delete(record.teamID);
-                    else if (selectedTeams.size < 2)
-                      selectedTeams.set(record.teamID, record);
-                    else return;
+            {ranking && (
+              <RankingTable
+                ranking={ranking}
+                rankingOrder={rankingOrder}
+                selectable={matchType == "pre"}
+                isSelected={(record) => selectedTeams.has(record.teamID)}
+                onSelect={(record) => {
+                  setIsAutoReload(false);
 
-                    setSelectedTeams(new Map(selectedTeams));
-                  }}
-                  key={record.teamID}
-                />
-              ))}
-            </Table.Tbody>
-          </Table>
+                  if (selectedTeams.has(record.teamID))
+                    selectedTeams.delete(record.teamID);
+                  else if (!requiredTeams || selectedTeams.size < requiredTeams)
+                    selectedTeams.set(record.teamID, record);
+                  else return;
+
+                  setSelectedTeams(new Map(selectedTeams));
+                }}
+              />
+            )}
+          </DragDropContext>
         </Stack>
         {matchType == "pre" && (
           <GenerateMainMatchCard
-            requiredTeamCount={2}
-            selectedTeams={[...selectedTeams.values()]}
+            requiredTeamCount={requiredTeams}
+            selectedTeams={
+              ranking
+                ? rankingOrder
+                    .map((order) => ranking.at(order))
+                    .filter(
+                      (record): record is RankingRecord =>
+                        !!record && selectedTeams.has(record.teamID)
+                    )
+                : []
+            }
             departmentType={departmentType}
             generate={generateMainMatch}
           />
@@ -166,43 +183,159 @@ export const Ranking = () => {
   );
 };
 
-const RankingColumn = ({
+const RankingTable = ({
+  ranking,
+  rankingOrder,
+  selectable,
+  isSelected,
+  onSelect,
+}: {
+  ranking: RankingRecord[];
+  rankingOrder: number[];
+  selectable?: boolean;
+  isSelected?: (record: RankingRecord) => boolean;
+  onSelect?: (record: RankingRecord) => void;
+}) => (
+  <Table
+    striped
+    withTableBorder
+    stickyHeader
+    stickyHeaderOffset={60}
+    horizontalSpacing="lg"
+    highlightOnHover={selectable}
+    style={{ fontSize: "1rem" }}
+    flex={1}
+  >
+    <Table.Thead>
+      <Table.Tr>
+        <Table.Th ta="center">順位</Table.Th>
+        <Table.Th ta="center">チーム名</Table.Th>
+        <Table.Th ta="center">合計得点</Table.Th>
+        <Table.Th ta="center">ベストタイム</Table.Th>
+        {selectable && <Table.Th ta="center">本戦出場順</Table.Th>}
+      </Table.Tr>
+    </Table.Thead>
+    <Droppable droppableId="ranking" direction="vertical">
+      {(provided) => (
+        <Table.Tbody {...provided.droppableProps} ref={provided.innerRef}>
+          <RankingRows
+            {...{ ranking, rankingOrder, selectable, isSelected, onSelect }}
+          />
+          {provided.placeholder}
+        </Table.Tbody>
+      )}
+    </Droppable>
+  </Table>
+);
+
+const RankingRows = ({
+  ranking,
+  rankingOrder,
+  selectable,
+  isSelected,
+  onSelect,
+}: {
+  ranking: RankingRecord[];
+  rankingOrder: number[];
+  selectable?: boolean;
+  isSelected?: (record: RankingRecord) => boolean;
+  onSelect?: (record: RankingRecord) => void;
+}) => {
+  const selectionIndexMap = useMemo(
+    () =>
+      new Map(
+        rankingOrder
+          .map((order, index) => [ranking.at(order), index] as const)
+          .filter(([record]) => record && isSelected?.(record))
+          .map(([, index], selectionIndex) => [index, selectionIndex] as const)
+      ),
+    [ranking, rankingOrder, isSelected]
+  );
+
+  return rankingOrder.map((order, index) => {
+    const record = ranking.at(order);
+    return (
+      record && (
+        <RankingRow
+          index={index}
+          record={record}
+          selectable={selectable}
+          selectionIndex={selectionIndexMap.get(index)}
+          selected={isSelected?.(record)}
+          onSelect={() => onSelect?.(record)}
+          key={record.teamID}
+        />
+      )
+    );
+  });
+};
+
+const RankingRow = ({
+  index,
   record,
   selectable,
+  selectionIndex,
   selected,
   onSelect,
 }: {
+  index: number;
   record: RankingRecord;
   selectable?: boolean;
+  selectionIndex?: number;
   selected?: boolean;
   onSelect?: () => void;
-}) => {
-  const theme = useMantineTheme();
-
-  return (
-    <Table.Tr
-      key={record.teamID}
-      onClick={selectable ? onSelect : undefined}
-      bg={selected ? theme.colors.blue[1] : undefined}
-      style={{
-        cursor: selectable ? "pointer" : "default",
-      }}
-    >
-      <Table.Td>{record.rank}</Table.Td>
-      <Table.Td ta="left">{record.teamName}</Table.Td>
-      <Table.Td>{record.points}</Table.Td>
-      <Table.Td>
-        {record.goalTimeSeconds != null
-          ? parseSeconds(record.goalTimeSeconds)
-          : "-"}
-      </Table.Td>
-      {selectable && (
+}) => (
+  <Draggable
+    draggableId={`draggable-${record.teamID}`}
+    index={index}
+    isDragDisabled={!selected}
+  >
+    {(provided) => (
+      <Table.Tr
+        onClick={selectable ? onSelect : undefined}
+        bg={selected ? "blue.1" : undefined}
+        h="fit-content"
+        style={{
+          cursor: selectable ? "pointer" : "default",
+        }}
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+      >
+        <Table.Td>{record.rank}</Table.Td>
+        <Table.Td ta="left">{record.teamName}</Table.Td>
+        <Table.Td>{record.points}</Table.Td>
         <Table.Td>
-          <Flex justify="center">
-            <Checkbox checked={selected} readOnly />
-          </Flex>
+          {record.goalTimeSeconds != null
+            ? parseSeconds(record.goalTimeSeconds)
+            : "-"}
         </Table.Td>
-      )}
-    </Table.Tr>
-  );
-};
+        {selectable && (
+          <>
+            <Table.Td>
+              <Flex justify="center" align="center" gap="xs">
+                <Checkbox
+                  checked={selected}
+                  readOnly
+                  {...(selectionIndex != null && {
+                    icon: (props) => (
+                      <Center {...props}>{selectionIndex + 1}</Center>
+                    ),
+                  })}
+                />
+              </Flex>
+            </Table.Td>
+            <Table.Td w="fit-content" p={0} pr="xs">
+              <Center
+                {...provided.dragHandleProps}
+                c={selected ? "dark" : "gray"}
+                style={{ fontSizeAdjust: "ch-width" }}
+              >
+                <IconGripVertical />
+              </Center>
+            </Table.Td>
+          </>
+        )}
+      </Table.Tr>
+    )}
+  </Draggable>
+);
