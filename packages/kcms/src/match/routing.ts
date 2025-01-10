@@ -20,6 +20,7 @@ import {
   PostMatchRunResultParamsSchema,
   PostMatchRunResultRequestSchema,
   PostSetMatchWinnerParamsSchema,
+  PostWinnerIDRequestSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
