@@ -30,11 +30,15 @@ export class GenerateMainMatchService {
     }
 
     const pairRes = this.generateMatchPair(teamIDs);
-    if (Result.isErr(pairRes)) {
-      return pairRes;
-    }
-    // @ts-expect-error TS2589(flatが動的に行われるので型計算できない)
-    const pair: [TeamID, TeamID][] = Result.unwrap(pairRes).flat(Math.log2(teamIDs.length) - 2);
+    const pair = ((id: TeamID[]): [TeamID, TeamID][] => {
+      const res: [TeamID, TeamID][] = [];
+      // note: shift()は破壊的な操作なので、idをfor文の条件に使うと予期しない動作をする
+      const teamCount = id.length;
+      for (let i = 0; i < teamCount; i += 2) {
+        res.push([id.shift()!, id.shift()!]);
+      }
+      return res;
+    })(pairRes);
 
     const matchesRes = this.generateTournament(departmentType, pair);
     if (Result.isErr(matchesRes)) {
@@ -56,15 +60,13 @@ export class GenerateMainMatchService {
    * @param teams 予選順位でソートされたチームID
    * @returns 生成されたペアのリスト
    */
-  private generateMatchPair(
-    teams: TeamID[] | MatchPair[] | MatchPair
-  ): Result.Result<Error, MatchPair> {
-    if (teams.length === 2) return Result.ok(teams as MatchPair);
+  private generateMatchPair(teams: TeamID[] | MatchPair[] | MatchPair): TeamID[] {
+    if (teams.length === 2) return teams as TeamID[];
 
     const pairs = new Array(teams.length / 2)
       .fill(null)
       .map((_, i) => [teams[i], teams[teams.length - 1 - i]] as MatchPair);
-    return this.generateMatchPair(pairs);
+    return this.generateMatchPair(pairs).flat();
   }
 
   /**
@@ -74,11 +76,6 @@ export class GenerateMainMatchService {
     departmentType: DepartmentType,
     firstRoundMatches: [TeamID, TeamID][]
   ): Result.Result<Error, MainMatch[]> {
-    // FIXME: n=2のときは特別処理している([1,2]として与えられるが、下の処理に影響するので[[1,2]]に変換する)
-    if (firstRoundMatches.flat().length === 2) {
-      firstRoundMatches = [[firstRoundMatches[0][0], firstRoundMatches[1][0]]];
-    }
-
     // K: トーナメントのラウンド数(0が決勝) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
     // 現在のラウンド数(0だとlog_2が-Infinityになるため1からスタート)
@@ -98,7 +95,7 @@ export class GenerateMainMatchService {
       config.match.main.course[departmentType].map((v) => [v, 1])
     );
     let courseIndex = 0;
-    for (let i = firstRoundMatches.length * 2 - 1; i !== 0; i--) {
+    for (let i = firstRoundMatches.length * 2 - 1; i > 0; i--) {
       if (Math.floor(Math.log2(i)) != round) {
         round = Math.floor(Math.log2(i));
         courseIndex = 0;

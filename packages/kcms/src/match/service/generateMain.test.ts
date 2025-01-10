@@ -10,11 +10,7 @@ describe('GenerateMainMatchService', () => {
     BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
   );
   const mainMatchRepository = new DummyMainMatchRepository([]);
-  const service = new GenerateMainMatchService(
-    mainMatchRepository,
-    idGenerator,
-    {elementary: 4}
-  );
+  const service = new GenerateMainMatchService(mainMatchRepository, idGenerator, { elementary: 4 });
 
   afterEach(() => {
     mainMatchRepository.clear();
@@ -68,6 +64,7 @@ describe('GenerateMainMatchService', () => {
     expect(actual.length).toStrictEqual(8 - 1);
     const matchNumbers = actual.map((m) => `${m.getCourseIndex()}-${m.getMatchIndex()}`);
     expect(matchNumbers).toStrictEqual(['1-1', '2-1', '3-1', '1-2', '1-3', '2-2', '1-4']);
+    console.log(actual);
   });
 
   it('親が存在しない試合は1つだけ生成される', async () => {
