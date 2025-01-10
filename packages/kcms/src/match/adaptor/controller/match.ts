@@ -6,6 +6,7 @@ import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { FetchRunResultService } from '../../service/fetchRunResult';
+import { FetchTournamentService, Tournament } from '../../service/fetchTournament';
 import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
@@ -16,6 +17,7 @@ import {
   GetMatchRunResultResponseSchema,
   GetMatchTypeResponseSchema,
   GetRankingResponseSchema,
+  GetTournamentResponseSchema,
   MainSchema,
   PostMatchGenerateManualResponseSchema,
   PostMatchGenerateResponseSchema,
@@ -32,7 +34,8 @@ export class MatchController {
     private readonly generatePreMatchService: GeneratePreMatchService,
     private readonly generateRankingService: GenerateRankingService,
     private readonly fetchRunResultService: FetchRunResultService,
-    private readonly generateMainMatchService: GenerateMainMatchService
+    private readonly generateMainMatchService: GenerateMainMatchService,
+    private readonly fetchTournamentService: FetchTournamentService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -367,5 +370,46 @@ export class MatchController {
         })
       )
     );
+  }
+
+  async getTournament(
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, z.infer<typeof GetTournamentResponseSchema>>> {
+    const teamsRes = await this.fetchTeamService.findAll();
+    if (Result.isErr(teamsRes)) return teamsRes;
+
+    const teamMap = new Map(Result.unwrap(teamsRes).map((v) => [v.getID(), v]));
+    const tournamentRes = await this.fetchTournamentService.handle(departmentType);
+    if (Result.isErr(tournamentRes)) return tournamentRes;
+
+    const tournament = Result.unwrap(tournamentRes);
+
+    const buildTournament = (
+      tournament: Tournament
+    ): z.infer<typeof GetTournamentResponseSchema> => {
+      const match = tournament.match;
+      const teamID1 = match.getTeamID1();
+      const teamID2 = match.getTeamID2();
+
+      return {
+        id: match.getID(),
+        matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+        matchType: 'main',
+        departmentType: match.getDepartmentType(),
+        team1: teamID1 && {
+          id: teamID1,
+          teamName: teamMap.get(teamID1)!.getTeamName(),
+        },
+        team2: teamID2 && {
+          id: teamID2,
+          teamName: teamMap.get(teamID2)!.getTeamName(),
+        },
+        winnerID: match.getWinnerID() ?? '',
+        childMatch1: tournament.childMatch1 && buildTournament(tournament.childMatch1),
+        childMatch2: tournament.childMatch2 && buildTournament(tournament.childMatch2),
+      };
+    };
+
+    return Result.ok(buildTournament(tournament));
   }
 }
