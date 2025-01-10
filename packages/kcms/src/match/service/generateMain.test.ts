@@ -64,7 +64,6 @@ describe('GenerateMainMatchService', () => {
     expect(actual.length).toStrictEqual(8 - 1);
     const matchNumbers = actual.map((m) => `${m.getCourseIndex()}-${m.getMatchIndex()}`);
     expect(matchNumbers).toStrictEqual(['1-1', '2-1', '3-1', '1-2', '1-3', '2-2', '1-4']);
-    console.log(actual);
   });
 
   it('親が存在しない試合は1つだけ生成される', async () => {
