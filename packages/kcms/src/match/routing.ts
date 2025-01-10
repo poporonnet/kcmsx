@@ -19,6 +19,7 @@ import {
   PostMatchGenerateResponseSchema,
   PostMatchRunResultParamsSchema,
   PostMatchRunResultRequestSchema,
+  PostSetMatchWinnerParamsSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -159,6 +160,32 @@ export const PostMatchGenerateManualRoute = createRoute({
         },
       },
       description: 'Generate match table',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const PostMatchSetWinnerIDRoute = createRoute({
+  method: 'post',
+  path: '/math/main/{matchID}/winner',
+  request: {
+    params: PostSetMatchWinnerParamsSchema,
+    body: {
+      content: {
+        'application/json': { schema: PostWinnerIDRequestSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'OK',
     },
     400: {
       content: {
