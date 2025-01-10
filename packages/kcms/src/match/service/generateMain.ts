@@ -78,7 +78,7 @@ export class GenerateMainMatchService {
   ): Result.Result<Error, MainMatch[]> {
     // K: トーナメントのラウンド数(0が決勝) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
-    // 現在のラウンド数(0だとlog_2が-Infinityになるため1からスタート)
+    // 現在のラウンド数
     let round = Math.floor(Math.log2(firstRoundMatches.length));
     /*
       試合を生成
@@ -95,7 +95,9 @@ export class GenerateMainMatchService {
       config.match.main.course[departmentType].map((v) => [v, 1])
     );
     let courseIndex = 0;
-    for (let i = firstRoundMatches.length * 2 - 1; i > 0; i--) {
+
+    const teamCount = firstRoundMatches.length * 2;
+    for (let i = teamCount - 1; i > 0; i--) {
       if (Math.floor(Math.log2(i)) != round) {
         round = Math.floor(Math.log2(i));
         courseIndex = 0;
