@@ -4,8 +4,7 @@ import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
 import { ChildMatches, MainMatch, MainMatchID } from '../model/main';
 import { MainMatchRepository } from '../model/repository';
-
-type MatchPair = [TeamID, TeamID] | [MatchPair, MatchPair];
+import { eachSlice } from '../utility/eachSlice';
 
 export class GenerateMainMatchService {
   constructor(
@@ -29,18 +28,9 @@ export class GenerateMainMatchService {
       return Result.err(new Error('必要なチーム数に一致しません'));
     }
 
-    const pairRes = this.generateMatchPair(teamIDs);
-    const pair = ((id: TeamID[]): [TeamID, TeamID][] => {
-      const res: [TeamID, TeamID][] = [];
-      // note: shift()は破壊的な操作なので、idをfor文の条件に使うと予期しない動作をする
-      const teamCount = id.length;
-      for (let i = 0; i < teamCount; i += 2) {
-        res.push([id.shift()!, id.shift()!]);
-      }
-      return res;
-    })(pairRes);
+    const pairs = this.generateMatchPair(teamIDs);
 
-    const matchesRes = this.generateTournament(departmentType, pair);
+    const matchesRes = this.generateTournament(departmentType, pairs);
     if (Result.isErr(matchesRes)) {
       return matchesRes;
     }
@@ -60,13 +50,25 @@ export class GenerateMainMatchService {
    * @param teams 予選順位でソートされたチームID
    * @returns 生成されたペアのリスト
    */
-  private generateMatchPair(teams: TeamID[] | MatchPair[] | MatchPair): TeamID[] {
-    if (teams.length === 2) return teams as TeamID[];
+  private generateMatchPair(teams: TeamID[]): [TeamID, TeamID][] {
+    const matchPermutation = this.generateMatchPairInternal(teams.map((team) => [team]));
 
-    const pairs = new Array(teams.length / 2)
+    return eachSlice(matchPermutation, 2) as [TeamID, TeamID][];
+  }
+
+  /**
+   * {@link generateMatchPair}の内部実装 常に深さ2を保ったまま再帰する
+   *
+   * @param teams グルーピングされたチームのリスト
+   * @returns 生成されたチーム順のリスト
+   */
+  private generateMatchPairInternal(teams: TeamID[][]): TeamID[] {
+    if (teams.length === 2) return teams.flat();
+
+    const groupedTeams = new Array(teams.length / 2)
       .fill(null)
-      .map((_, i) => [teams[i], teams[teams.length - 1 - i]] as MatchPair);
-    return this.generateMatchPair(pairs).flat();
+      .map((_, i) => [...teams[i].flat(), ...teams[teams.length - 1 - i].flat()]);
+    return this.generateMatchPairInternal(groupedTeams);
   }
 
   /**
