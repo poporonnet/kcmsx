@@ -15,13 +15,14 @@
     "start": "serve -p 4173 -s dist/"
   },
   "dependencies": {
+    "@hello-pangea/dnd": "^17.0.0",
     "@mantine/carousel": "^7.3.1",
     "@mantine/core": "^7.3.1",
     "@mantine/dropzone": "^7.11.2",
     "@mantine/hooks": "^7.3.1",
     "@mantine/notifications": "7.15.2",
     "@mikuroxina/mini-fn": "^6.0.0",
-    "@tabler/icons-react": "3.26.0",
+    "@tabler/icons-react": "3.27.1",
     "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",

@@ -22,7 +22,7 @@ export const GenerateMainMatchCard = ({
   departmentType,
   generate,
 }: {
-  requiredTeamCount: number;
+  requiredTeamCount?: number;
   selectedTeams: RankingRecord[];
   departmentType: DepartmentType;
   generate: (team1ID: string, team2ID: string) => Promise<void>;
@@ -34,7 +34,8 @@ export const GenerateMainMatchCard = ({
     refetch,
   } = useFetch<MainMatch[]>(`${import.meta.env.VITE_API_URL}/match/main`);
 
-  const remainingTeamCount = requiredTeamCount - selectedTeams.length;
+  const remainingTeamCount =
+    requiredTeamCount != null ? requiredTeamCount - selectedTeams.length : 0;
   const processedMainMatch = useMemo(
     () =>
       mainMatches?.filter((match) => match.departmentType == departmentType),
@@ -106,7 +107,7 @@ const GenerableBody = ({
 }) => (
   <>
     現在選択しているチーム:
-    <List withPadding flex={1} ta="left">
+    <List withPadding flex={1} ta="left" type="ordered">
       {selectedTeams.map(({ teamID, teamName }) => (
         <List.Item key={teamID}>{teamName}</List.Item>
       ))}
