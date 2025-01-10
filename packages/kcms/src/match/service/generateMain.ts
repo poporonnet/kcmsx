@@ -5,6 +5,8 @@ import { TeamID } from '../../team/models/team';
 import { ChildMatches, MainMatch, MainMatchID } from '../model/main';
 import { MainMatchRepository } from '../model/repository';
 
+type MatchPair = [TeamID, TeamID] | [MatchPair, MatchPair];
+
 export class GenerateMainMatchService {
   constructor(
     private readonly mainMatchRepository: MainMatchRepository,
@@ -30,7 +32,9 @@ export class GenerateMainMatchService {
     if (Result.isErr(pairRes)) {
       return pairRes;
     }
-    const pair = Result.unwrap(pairRes);
+    // @ts-expect-error TS2589(flatが動的に行われるので型計算できない)
+    const pair: [TeamID, TeamID][] = Result.unwrap(pairRes).flat(Math.log2(teamIDs.length) - 2);
+    
 
     const matchesRes = this.generateTournament(departmentType, pair);
     if (Result.isErr(matchesRes)) {
@@ -53,52 +57,14 @@ export class GenerateMainMatchService {
    * @returns 生成されたペアのリスト
    */
   private generateMatchPair(
-    teams: TeamID[]
-  ): Result.Result<Error, [TeamID | undefined, TeamID | undefined][]> {
-    if (teams.length === 2) {
-      return Result.ok([[teams[0], teams[1]]] as [TeamID | undefined, TeamID | undefined][]);
-    }
+    teams: TeamID[] | MatchPair[] | MatchPair
+  ): Result.Result<Error, MatchPair> {
+    if (teams.length === 2) return Result.ok(teams as MatchPair);
 
-    // 1. 4つのグループに分ける
-    const splited: [TeamID[], TeamID[], TeamID[], TeamID[]] = [[], [], [], []];
-    const chunkSize = Math.floor(teams.length / 4);
-    let start = 0;
-    for (let i = 0; i < 4; i++) {
-      const size = chunkSize + (i < teams.length % 4 ? 1 : 0);
-      splited[i] = teams.slice(start, start + size);
-      start += size;
-    }
-    /**
-     * 2. 4つのグループを以下のように組み合わせる
-     * グループ1-グループ4
-     * グループ2-グループ3
-     */
-    const pairLeft: TeamID[] = [...splited[0], ...splited[1]];
-    const pairRight: TeamID[] = [...splited[3], ...splited[2]];
-    const ungroupedPair: [TeamID, TeamID][] = [];
-    for (let i = 0; i < pairLeft.length; i++) {
-      ungroupedPair.push([pairLeft[i], pairRight[i]]);
-    }
-    /*
-     * 3. 順位で並べてグルーピングする
-     * グループ数: n/4
-     */
-    const groupNum = ((n: number) => {
-      if (n === 4) return 2;
-      if (n === 2) return 1;
-      return n / 4;
-    })(teams.length);
-
-    const groupedPair: Map<number, [TeamID, TeamID][]> = new Map();
-    for (let i = 0; i < ungroupedPair.length; i++) {
-      const groupIndex = i % groupNum;
-      if (!groupedPair.has(groupIndex)) {
-        groupedPair.set(groupIndex, []);
-      }
-      groupedPair.get(groupIndex)!.push(ungroupedPair[i]);
-    }
-
-    return Result.ok([...groupedPair.values()].flat());
+    const pairs = new Array(teams.length / 2)
+      .fill(null)
+      .map((_, i) => [teams[i], teams[teams.length - 1 - i]] as MatchPair);
+    return this.generateMatchPair(pairs);
   }
 
   /**
@@ -106,8 +72,14 @@ export class GenerateMainMatchService {
    */
   private generateTournament(
     departmentType: DepartmentType,
-    firstRoundMatches: [TeamID | undefined, TeamID | undefined][]
+    firstRoundMatches: [TeamID, TeamID][]
   ): Result.Result<Error, MainMatch[]> {
+    // FIXME: n=2のときは特別処理している([1,2]として与えられるが、下の処理に影響するので[[1,2]]に変換する)
+    if ((firstRoundMatches.flat()).length === 2) {
+      firstRoundMatches = [[firstRoundMatches[0][0], firstRoundMatches[1][0]]];
+    }
+    console.log("f",firstRoundMatches);
+
     // K: トーナメントのラウンド数(0が決勝) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
     // 現在のラウンド数(0だとlog_2が0になるため1からスタート)
