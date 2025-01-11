@@ -37,10 +37,10 @@ export class SetMainMatchWinnerService {
     }
     const parentMatch = Option.unwrap(parentMatchRes);
 
-    const childMatches = parentMatch.getChildMatches();
-    // none: 親の子は必ず存在するのでnon-null assertionを使う
+    const parentChildMatches = parentMatch.getChildMatches()!;
+    // note: 親の子は必ず存在するのでnon-null assertionを使う
     const otherMatch =
-      childMatches!.match1.getID() === matchID ? childMatches!.match2 : childMatches!.match1;
+      parentChildMatches.match1.getID() === matchID ? parentChildMatches.match2 : parentChildMatches.match1;
 
     // もう片方の試合が終了していない場合は終了
     const otherWinnerID = otherMatch.getWinnerID();
@@ -51,7 +51,7 @@ export class SetMainMatchWinnerService {
     // もう片方も終わっているなら、親試合のチームにそれぞれの勝者を設定する
     try {
       // 自分が左側の場合
-      if (matchID === childMatches!.match1.getID()) {
+      if (matchID === parentChildMatches.match1.getID()) {
         parentMatch.setTeams(winnerID, otherWinnerID);
       } else {
         parentMatch.setTeams(otherWinnerID, winnerID);

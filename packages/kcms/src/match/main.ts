@@ -25,7 +25,7 @@ import {
   PostMatchGenerateManualRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
-  PostMatchSetWinnerIDRoute,
+  PostMatchWinnerIDRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchRunResultService } from './service/fetchRunResult';
@@ -136,7 +136,7 @@ matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
   return c.json(res[1], 200);
 });
 
-matchHandler.openapi(PostMatchSetWinnerIDRoute, async (c) => {
+matchHandler.openapi(PostMatchWinnerIDRoute, async (c) => {
   const { matchID } = c.req.valid('param');
   const req = c.req.valid('json');
 

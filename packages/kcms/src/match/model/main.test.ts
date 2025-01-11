@@ -277,15 +277,7 @@ describe('MainMatch', () => {
       departmentType: config.departmentTypes[0],
       teamID1: undefined,
       teamID2: undefined,
-      runResults: [...Array(4)].map((_, i) => {
-        return RunResult.new({
-          id: String(i) as RunResultID,
-          goalTimeSeconds: i * 10,
-          points: 10 + i,
-          teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
-          finishState: 'FINISHED',
-        });
-      }),
+      runResults: [],
       parentMatchID: '10' as MainMatchID,
       childMatches: undefined,
     };
