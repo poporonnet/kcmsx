@@ -99,9 +99,9 @@ const MainMatchColum = (props: {
 }) => {
   const loserID =
     props.match.winnerID !== ""
-      ? props.match.team1.id == props.match.winnerID
-        ? props.match.team2.id
-        : props.match.team1.id
+      ? props.match.team1?.id == props.match.winnerID
+        ? (props.match.team2?.id ?? "")
+        : (props.match.team1?.id ?? "")
       : "";
 
   return (

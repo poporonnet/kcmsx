@@ -16,6 +16,7 @@ import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
+import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
@@ -23,6 +24,7 @@ import {
   StatusButtonProps,
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
@@ -49,12 +51,18 @@ export const MatchList = () => {
   );
   const [selectedCourt, setSelectedCourt] = useState<CourtFilter>("all");
   const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
+  const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
+    config.departmentTypes[0]
+  );
 
   const processedMatches = useMemo<Match[]>(
     () =>
       matches
         ? Cat.cat(matches)
             .feed((matches) => matches[matchType])
+            .feed((matches) =>
+              matches.filter((match) => match.departmentType == departmentType)
+            )
             .feed((matches) =>
               selectedCourt == "all"
                 ? matches
@@ -64,7 +72,7 @@ export const MatchList = () => {
                   )
             ).value
         : [],
-    [matches, matchType, selectedCourt]
+    [matches, matchType, departmentType, selectedCourt]
   );
 
   const generateMatch = useCallback(
@@ -95,6 +103,10 @@ export const MatchList = () => {
         <MatchSegmentedControl
           matchType={matchType}
           setMatchType={setMatchType}
+        />
+        <DepartmentSegmentedControl
+          departmentType={departmentType}
+          setDepartmentType={setDepartmentType}
         />
       </LabeledSegmentedControls>
       {!loading && matches && matches[matchType].length > 0 && (
