@@ -120,7 +120,7 @@ export const MatchResult = ({
       <Divider w="100%" my="xs" />
       <Button
         component={Link}
-        to="/matchlist"
+        to={`/matchlist?match_type=${match.matchType}&department_type=${match.departmentType}`}
         leftSection={<IconArrowBack />}
         variant="outline"
       >
