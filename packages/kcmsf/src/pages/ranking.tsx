@@ -60,10 +60,9 @@ export const Ranking = () => {
   }, [departmentType]);
 
   const generateMainMatch = useCallback(
-    async (team1ID: string, team2ID: string) => {
+    async (teamIDs: string[]) => {
       const req: GeneratePreMatchManualRequest = {
-        team1ID,
-        team2ID,
+        teamIDs,
       };
 
       const res = await fetch(
