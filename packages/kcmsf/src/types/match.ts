@@ -41,8 +41,8 @@ export type PreMatch = MatchBase &
  */
 export type MainMatch = MatchBase &
   MatchTypeRecord<"main"> & {
-    team1: BriefTeam;
-    team2: BriefTeam;
+    team1?: BriefTeam;
+    team2?: BriefTeam;
     winnerID: string;
   };
 
@@ -65,8 +65,8 @@ export type ShortPreMatch = MatchBase & {
  * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortMainMatch = MatchBase & {
-  team1ID: string;
-  team2ID: string;
+  team1ID?: string;
+  team2ID?: string;
   winnerID: string;
 };
 
