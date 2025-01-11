@@ -58,8 +58,7 @@ export class DummyRepository implements TeamRepository {
       const maxEntryCode = [...this.data.values()].reduce(
         (acc, cur) => {
           const cur_code = cur.getEntryCode() ?? 0;
-          if (cur_code > acc.EntryCode
-          ) {
+          if (cur_code > acc.EntryCode) {
             acc.EntryCode = cur_code;
           }
           return acc;

@@ -1,15 +1,15 @@
-import { beforeEach, describe, expect, it } from "vitest";
-import { TestEntryData } from "../../testData/entry";
-import { EntryCodeService } from "./entryCode";
-import { Result } from "@mikuroxina/mini-fn";
-import { DummyRepository } from "../adaptor/repository/dummyRepository";
+import { Result } from '@mikuroxina/mini-fn';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { TestEntryData } from '../../testData/entry';
+import { DummyRepository } from '../adaptor/repository/dummyRepository';
+import { EntryCodeService } from './entryCode';
 
-describe("EntryCodeService", () => {
+describe('EntryCodeService', () => {
   const teamRepository = new DummyRepository();
   beforeEach(() => {
     teamRepository.reset([TestEntryData.Entered(), TestEntryData.NotEntered()]);
-  })
-  it("エントリー時にエントリーコードが連番で割り振られる", async () => {
+  });
+  it('エントリー時にエントリーコードが連番で割り振られる', async () => {
     const service = new EntryCodeService(teamRepository);
     const teamID = TestEntryData.NotEntered().getID();
     const res = await service.assign(teamID);
@@ -26,7 +26,7 @@ describe("EntryCodeService", () => {
     expect(Result.isOk(res3)).toBe(true);
     expect(Result.unwrap(res3).getEntryCode()).toBe(2);
   });
-  it("エントリー済みのチームにはエントリーコードが割り振られない", async () => {
+  it('エントリー済みのチームにはエントリーコードが割り振られない', async () => {
     const service = new EntryCodeService(teamRepository);
     const teamID = TestEntryData.Entered().getID();
     // 1回目の割り当て
