@@ -107,14 +107,16 @@ teamHandler.openapi(DeleteTeamRoute, async (c) => {
  */
 teamHandler.openapi(PostEntryTeamRoute, async (c) => {
   const { teamID } = c.req.valid('param');
-  const entry_res = await controller.enter(teamID as TeamID);
-  if (Result.isErr(entry_res)) {
-    return c.json({ description: errorToCode(Result.unwrapErr(entry_res)) }, 400);
+  const entryRes = await controller.enter(teamID as TeamID);
+  if (Result.isErr(entryRes)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(entryRes)) }, 400);
   }
-  const entry_code_res = await controller.assignEntryCode(teamID as TeamID);
-  if (Result.isErr(entry_code_res)) {
-    return c.json({ description: errorToCode(Result.unwrapErr(entry_code_res)) }, 400);
+
+  const entryCodeRes = await controller.setEntryCode(teamID as TeamID);
+  if (Result.isErr(entryCodeRes)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(entryCodeRes)) }, 400);
   }
+
   return new Response(null, { status: 200 });
 });
 /**

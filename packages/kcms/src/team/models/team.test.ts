@@ -68,7 +68,7 @@ describe('正しくインスタンスを生成できる', () => {
     expect(team.getIsEntered()).toBe(false);
   });
 
-  it('エントリーコードを発行できる', () => {
+  it('エントリーコードを設定できる', () => {
     const team = Team.new({
       id: '1' as TeamID,
       teamName: 'team1',
@@ -76,7 +76,8 @@ describe('正しくインスタンスを生成できる', () => {
       departmentType: config.departments[0].type,
       robotType: 'leg',
     });
-    team.assignEntryCode(1);
+    team.enter();
+    team.setEntryCode(1);
     expect(team.getEntryCode()).toBe(1);
   });
 });

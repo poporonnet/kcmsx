@@ -116,8 +116,8 @@ export class TeamController {
     return Result.ok(undefined);
   }
 
-  async assignEntryCode(id: TeamID): Promise<Result.Result<Error, void>> {
-    const res = await this.entryCode.assign(id);
+  async setEntryCode(id: TeamID): Promise<Result.Result<Error, void>> {
+    const res = await this.entryCode.setEntryCode(id);
     if (Result.isErr(res)) {
       return res;
     }

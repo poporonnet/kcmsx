@@ -1,38 +1,49 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { DummyMainMatchRepository } from '../../match/adaptor/dummy/mainMatchRepository';
+import { DummyPreMatchRepository } from '../../match/adaptor/dummy/preMatchRepository';
+import { GetMatchService } from '../../match/service/get';
 import { TestEntryData } from '../../testData/entry';
 import { DummyRepository } from '../adaptor/repository/dummyRepository';
+import { TeamID } from '../models/team';
+import { EntryService } from './entry';
 import { EntryCodeService } from './entryCode';
 
 describe('EntryCodeService', () => {
   const teamRepository = new DummyRepository();
+  const preMatchRepository = new DummyPreMatchRepository();
+  const mainMatchRepository = new DummyMainMatchRepository();
+  const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+  const entryService = new EntryService(teamRepository, getMatchService);
+  const entryCodeService = new EntryCodeService(teamRepository);
+
   beforeEach(() => {
     teamRepository.reset([TestEntryData.Entered(), TestEntryData.NotEntered()]);
   });
+
   it('エントリー時にエントリーコードが連番で割り振られる', async () => {
-    const service = new EntryCodeService(teamRepository);
-    const teamID = TestEntryData.NotEntered().getID();
-    const res = await service.assign(teamID);
+    const teamID = '6' as TeamID;
+    await entryService.enter(teamID);
+    const res = await entryCodeService.setEntryCode(teamID);
+
     expect(Result.isOk(res)).toBe(true);
     expect(Result.unwrap(res).getEntryCode()).toBe(1);
 
-    const teamID2 = TestEntryData.Entered().getID();
-    const res2 = await service.assign(teamID2);
+    const teamID2 = '7' as TeamID;
+    await entryService.enter(teamID2);
+    const res2 = await entryCodeService.setEntryCode(teamID2);
     expect(Result.isOk(res2)).toBe(true);
     expect(Result.unwrap(res2).getEntryCode()).toBe(2);
-
-    const teamID3 = TestEntryData.Entered().getID();
-    const res3 = await service.assign(teamID3);
-    expect(Result.isOk(res3)).toBe(true);
-    expect(Result.unwrap(res3).getEntryCode()).toBe(2);
   });
+
   it('エントリー済みのチームにはエントリーコードが割り振られない', async () => {
     const service = new EntryCodeService(teamRepository);
     const teamID = TestEntryData.Entered().getID();
+    await entryService.enter(teamID);
     // 1回目の割り当て
-    await service.assign(teamID);
+    await entryCodeService.setEntryCode(teamID);
     // 2回目の割り当て
-    const res = await service.assign(teamID);
+    const res = await service.setEntryCode(teamID);
     expect(Result.isOk(res)).toBe(true);
     expect(Result.unwrap(res).getEntryCode()).toBe(1);
   });

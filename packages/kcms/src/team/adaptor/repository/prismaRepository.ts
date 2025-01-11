@@ -106,17 +106,4 @@ export class PrismaTeamRepository implements TeamRepository {
       return Result.err(e as Error);
     }
   }
-
-  async getMaxEntryCode(): Promise<Result.Result<Error, number>> {
-    try {
-      const maxEntryCode = await this.client.team.aggregate({
-        _max: {
-          entryCode: true,
-        },
-      });
-      return Result.ok(maxEntryCode._max.entryCode ?? 0);
-    } catch (e) {
-      return Result.err(e as Error);
-    }
-  }
 }

@@ -1,3 +1,4 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType, RobotType } from 'config';
 import { SnowflakeID } from '../../id/main.js';
 
@@ -106,8 +107,17 @@ export class Team {
    * ゼッケン番号を付与する
    * @param entryCode ゼッケン番号
    */
-  assignEntryCode(entryCode: number) {
+  setEntryCode(entryCode: number): Result.Result<Error, void> {
+    if (!this.isEntered) {
+      return Result.err(new Error('Already has entry code'));
+    }
+
+    if (this.entryCode !== undefined) {
+      return Result.ok(undefined);
+    }
+
     this.entryCode = entryCode;
+    return Result.ok(undefined);
   }
 
   public static new(arg: Omit<TeamCreateArgs, 'isEntered' | 'entryCode'>): Team {
