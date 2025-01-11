@@ -1,4 +1,4 @@
-import { Button, Flex, Text } from "@mantine/core";
+import { Button, Divider, Flex, Space, Text } from "@mantine/core";
 import { IconArrowBack } from "@tabler/icons-react";
 import { MatchInfo } from "config";
 import { Link } from "react-router-dom";
@@ -19,7 +19,7 @@ export const MatchResult = ({
   return (
     <Flex
       h="100%"
-      w="30rem"
+      miw="40rem"
       direction="column"
       gap="md"
       align="center"
@@ -31,31 +31,30 @@ export const MatchResult = ({
         rightTeamName={matchInfo.teams.right?.teamName}
         leftTeamName={matchInfo.teams.left?.teamName}
       />
-      <Text size="2rem">得点</Text>
       <MatchPointCard
-        leftTeamPoint={team1Result === undefined ? 0 : team1Result.points}
-        rightTeamPoint={team2Result === undefined ? 0 : team2Result.points}
+        leftTeamPoint={team1Result?.points ?? 0}
+        rightTeamPoint={team2Result?.points ?? 0}
       />
-      <Text size="1.5rem">ゴールタイム</Text>
-      <Flex align="center" justify="center" pb="sm" gap="lg">
-        <Text size="2rem" c="blue" flex={1} style={{ whiteSpace: "nowrap" }}>
+      <Space />
+      <Text size="1.5rem">ベストタイム</Text>
+      <Flex align="center" justify="center" pb="sm" gap="lg" w="90%">
+        <Text size="2rem" c="blue" flex={1}>
           {team1Result === undefined
-            ? "-"
+            ? ""
             : team1Result.goalTimeSeconds === Infinity
               ? "フィニッシュ"
               : parseSeconds(team1Result.goalTimeSeconds)}
         </Text>
-        <Text size="2rem" flex="none">
-          -
-        </Text>
-        <Text size="2rem" c="red" flex={1} style={{ whiteSpace: "nowrap" }}>
+        <Text size="2rem">-</Text>
+        <Text size="2rem" c="red" flex={1}>
           {team2Result === undefined
-            ? "-"
+            ? ""
             : team2Result.goalTimeSeconds === Infinity
               ? "フィニッシュ"
               : parseSeconds(team2Result.goalTimeSeconds)}
         </Text>
       </Flex>
+      <Divider w="100%" my="xs" />
       <Button
         component={Link}
         to="/matchlist"

@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Paper, Text } from "@mantine/core";
+import { Button, Divider, Flex, Text } from "@mantine/core";
 import { IconRotate } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
@@ -8,7 +8,7 @@ import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
-import { MatchResult } from "../components/matchResult";
+import { MatchResult } from "../components/MatchResult";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
 import { useMatchInfo } from "../hooks/useMatchInfo";
@@ -39,17 +39,18 @@ export const Match = () => {
   );
   const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
   return (
-    <>
+    <Flex
+      h="100%"
+      direction="column"
+      gap="md"
+      align="center"
+      justify="center"
+      w="100%"
+    >
       {match && matchInfo && matchStatus === "end" ? (
         <MatchResult match={match} matchInfo={matchInfo} />
       ) : (
-        <Flex
-          h="100%"
-          direction="column"
-          gap="md"
-          align="center"
-          justify="center"
-        >
+        <>
           {match && matchInfo && (
             <MatchNameCard
               matchType={matchInfo.matchType}
@@ -66,7 +67,7 @@ export const Match = () => {
           <Button
             w="100%"
             h="auto"
-            pb="sm"
+            p="xs"
             variant="filled"
             color={
               timerState == "finished" ? "pink" : isRunning ? "teal" : "gray"
@@ -75,8 +76,18 @@ export const Match = () => {
           >
             <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
           </Button>
-          <Paper w="100%" withBorder>
-            <Flex align="center" justify="center">
+          <MatchPointCard
+            rightTeamPoint={
+              isExhibition || matchInfo?.teams.right
+                ? matchJudge.rightTeam.point.point()
+                : 0
+            }
+            leftTeamPoint={
+              isExhibition || matchInfo?.teams.left
+                ? matchJudge.leftTeam.point.point()
+                : 0
+            }
+            leftSection={
               <Button
                 flex={1}
                 variant="transparent"
@@ -88,18 +99,8 @@ export const Match = () => {
               >
                 リセット
               </Button>
-              <MatchPointCard
-                rightTeamPoint={
-                  isExhibition || matchInfo?.teams.right
-                    ? matchJudge.rightTeam.point.point()
-                    : 0
-                }
-                leftTeamPoint={
-                  isExhibition || matchInfo?.teams.left
-                    ? matchJudge.leftTeam.point.point()
-                    : 0
-                }
-              />
+            }
+            rightSection={
               <Button
                 flex={1}
                 variant="transparent"
@@ -111,8 +112,9 @@ export const Match = () => {
               >
                 リセット
               </Button>
-            </Flex>
-          </Paper>
+            }
+          />
+
           <Divider w="100%" />
           {matchJudge && (
             <Flex direction="row" gap="2rem" align="center" justify="center">
@@ -174,8 +176,8 @@ export const Match = () => {
               }}
             />
           )}
-        </Flex>
+        </>
       )}
-    </>
+    </Flex>
   );
 };
