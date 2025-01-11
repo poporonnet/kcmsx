@@ -40,7 +40,9 @@ export class SetMainMatchWinnerService {
     const parentChildMatches = parentMatch.getChildMatches()!;
     // note: 親の子は必ず存在するのでnon-null assertionを使う
     const otherMatch =
-      parentChildMatches.match1.getID() === matchID ? parentChildMatches.match2 : parentChildMatches.match1;
+      parentChildMatches.match1.getID() === matchID
+        ? parentChildMatches.match2
+        : parentChildMatches.match1;
 
     // もう片方の試合が終了していない場合は終了
     const otherWinnerID = otherMatch.getWinnerID();
