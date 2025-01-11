@@ -13,12 +13,14 @@ export const useTournamentData = (
       const previousNode2 = node.childMatch2
         ? convertTournamentData(node.childMatch2)
         : undefined;
-      const getRootTeamName = ({ attributes }: TournamentData): string =>
-        attributes.type == "match"
-          ? attributes.winnerID == attributes.team1ID
-            ? attributes.team1Name
-            : attributes.team2Name
-          : attributes.teamName;
+      const getRootTeamName = ({ attributes }: TournamentData): string => {
+        if (attributes.type == "team") return attributes.teamName;
+        if (!attributes.winnerID) return "";
+
+        return attributes.winnerID == attributes.team1ID
+          ? attributes.team1Name
+          : attributes.team2Name;
+      };
       const getTeamNode = (team: (typeof node)["team1"]): TournamentData => ({
         name: team?.id ?? "",
         attributes: {

@@ -19,7 +19,7 @@ import { parseSeconds } from "../utils/time";
 export const Match = () => {
   const { id, matchType } = useParams<{ id: string; matchType: MatchType }>();
   const isExhibition = !id || !matchType;
-  const { match, matchInfo } = useMatchInfo(id, matchType);
+  const { match, matchInfo, refetch } = useMatchInfo(id, matchType);
   const matchJudge = useJudge(matchInfo);
   const matchTimeSec = config.match[matchInfo?.matchType || "pre"].limitSeconds;
   const {
@@ -48,7 +48,13 @@ export const Match = () => {
       w="100%"
     >
       {match && matchInfo && matchStatus === "end" ? (
-        <MatchResult match={match} matchInfo={matchInfo} />
+        <MatchResult
+          match={match}
+          matchInfo={matchInfo}
+          onSelectWinner={async (isSucceed) => {
+            if (isSucceed) await refetch();
+          }}
+        />
       ) : (
         <>
           {match && matchInfo && (
@@ -170,9 +176,7 @@ export const Match = () => {
               onSubmit={(isSucceeded) => {
                 if (!isSucceeded) return;
 
-                navigate(`/matchlist?match_type=${matchType}`, {
-                  viewTransition: true,
-                });
+                navigate(0);
               }}
             />
           )}
