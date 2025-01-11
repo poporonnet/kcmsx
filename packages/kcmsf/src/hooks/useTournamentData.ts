@@ -2,7 +2,9 @@ import { useCallback, useMemo } from "react";
 import { Tournament, TournamentNode } from "../types/tournament";
 import { TournamentData } from "../types/tournamentData";
 
-export const useTournamentData = (tournament: Tournament): TournamentData => {
+export const useTournamentData = (
+  tournament?: Tournament
+): TournamentData | undefined => {
   const convertTournamentData = useCallback(
     (node: TournamentNode): TournamentData => {
       const previousNode1 = node.childMatch1
@@ -55,7 +57,7 @@ export const useTournamentData = (tournament: Tournament): TournamentData => {
   );
 
   const tournamentData = useMemo(
-    () => convertTournamentData(tournament),
+    () => tournament && convertTournamentData(tournament),
     [tournament, convertTournamentData]
   );
 
