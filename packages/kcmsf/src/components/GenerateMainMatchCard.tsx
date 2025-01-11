@@ -25,7 +25,7 @@ export const GenerateMainMatchCard = ({
   requiredTeamCount?: number;
   selectedTeams: RankingRecord[];
   departmentType: DepartmentType;
-  generate: (team1ID: string, team2ID: string) => Promise<void>;
+  generate: (teamIDs: string[]) => Promise<void>;
 }) => {
   const {
     data: mainMatches,
@@ -103,7 +103,7 @@ const GenerableBody = ({
 }: {
   selectedTeams: RankingRecord[];
   remainingTeamCount: number;
-  generate: (team1ID: string, team2ID: string) => Promise<void>;
+  generate: (teamIDs: string[]) => Promise<void>;
 }) => (
   <>
     現在選択しているチーム:
@@ -119,9 +119,7 @@ const GenerableBody = ({
       </Text>
     )}
     <GenerateMatchButton
-      generate={() =>
-        generate(selectedTeams[0].teamID, selectedTeams[1].teamID)
-      }
+      generate={() => generate(selectedTeams.map(({ teamID }) => teamID))}
       disabled={remainingTeamCount > 0}
       modalTitle="本戦試合表生成確認"
       modalDetail={
