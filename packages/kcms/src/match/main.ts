@@ -1,6 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
 import { apiReference } from '@scalar/hono-api-reference';
+import { config } from 'config';
 import { prismaClient } from '../adaptor';
 import { SnowflakeIDGenerator } from '../id/main';
 import { errorToCode } from '../team/adaptor/errors';
@@ -58,7 +59,11 @@ const generatePreMatchService = new GeneratePreMatchService(
 );
 const generateRankingService = new GenerateRankingService(preMatchRepository, mainMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
-const generateMainMatchService = new GenerateMainMatchService(mainMatchRepository, idGenerator);
+const generateMainMatchService = new GenerateMainMatchService(
+  mainMatchRepository,
+  idGenerator,
+  config.match.main.requiredTeams
+);
 const fetchTournamentService = new FetchTournamentService(getMatchService);
 const matchController = new MatchController(
   getMatchService,
@@ -119,7 +124,7 @@ matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
   const { departmentType } = c.req.valid('param');
   const req = c.req.valid('json');
 
-  const res = await matchController.generateMatchManual(departmentType, req.team1ID, req.team2ID);
+  const res = await matchController.generateMatchManual(departmentType, req.teamIDs);
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
   }

@@ -131,8 +131,7 @@ export const PostMatchGenerateManualParamsSchema = z.object({
   departmentType: DepartmentTypeSchema,
 });
 export const PostMatchGenerateManualRequestSchema = z.object({
-  team1ID: z.string().openapi({ example: '45098607' }),
-  team2ID: z.string().openapi({ example: '2230392' }),
+  teamIDs: z.array(z.string().openapi({ example: '45098607' })).min(2),
 });
 export const PostMatchGenerateManualResponseSchema = z.array(ShortMainSchema);
 

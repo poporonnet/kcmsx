@@ -128,29 +128,24 @@ export class MatchController {
 
   async generateMatchManual(
     departmentType: DepartmentType,
-    team1ID: string,
-    team2ID: string
+    teamIDs: string[]
   ): Promise<Result.Result<Error, z.infer<typeof PostMatchGenerateManualResponseSchema>>> {
-    const res = await this.generateMainMatchService.handle(
-      departmentType,
-      team1ID as TeamID,
-      team2ID as TeamID
-    );
+    const res = await this.generateMainMatchService.handle(departmentType, teamIDs as TeamID[]);
     if (Result.isErr(res)) return res;
 
     const match = Result.unwrap(res);
-    return Result.ok<z.infer<typeof ShortMainSchema>[]>([
-      {
-        id: match.getID(),
-        matchCode: `${match.getCourseIndex()}-${match.getMatchIndex()}`,
+    return Result.ok<z.infer<typeof ShortMainSchema>[]>(
+      match.map((v) => ({
+        id: v.getID(),
+        matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
         matchType: 'main',
-        departmentType,
-        team1ID: match.getTeamID1(),
-        team2ID: match.getTeamID2(),
+        departmentType: v.getDepartmentType(),
+        team1ID: v.getTeamID1(),
+        team2ID: v.getTeamID2(),
         runResults: [],
-        winnerID: match.getWinnerID() ?? '',
-      },
-    ]);
+        winnerID: v.getWinnerID() ?? '',
+      }))
+    );
   }
 
   async getMatchByID<T extends MatchType>(
