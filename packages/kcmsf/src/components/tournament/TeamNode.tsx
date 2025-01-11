@@ -23,7 +23,11 @@ export const TeamNode = ({
     <text
       textAnchor="middle"
       dominantBaseline="central"
-      style={{ fill: "black", strokeWidth: 0, fontSize: "0.75rem" }}
+      style={{
+        fill: "black",
+        strokeWidth: 0,
+        fontSize: `min(${(width / attributes.teamName.length) * 0.9}px, 1rem)`,
+      }}
     >
       {attributes.teamName}
     </text>
