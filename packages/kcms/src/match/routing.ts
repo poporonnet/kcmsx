@@ -10,6 +10,8 @@ import {
   GetMatchTypeResponseSchema,
   GetRankingParamsSchema,
   GetRankingResponseSchema,
+  GetTournamentParamsSchema,
+  GetTournamentResponseSchema,
   PostMatchGenerateManualParamsSchema,
   PostMatchGenerateManualRequestSchema,
   PostMatchGenerateManualResponseSchema,
@@ -207,6 +209,32 @@ export const GetRankingRoute = createRoute({
         },
       },
       description: 'Get Ranking',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetTournamentRoute = createRoute({
+  method: 'get',
+  path: '/match/main/{departmentType}/tournament',
+  request: {
+    params: GetTournamentParamsSchema,
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetTournamentResponseSchema,
+        },
+      },
+      description: 'Get main tournament',
     },
     400: {
       content: {

@@ -7,6 +7,7 @@ import {
   ShortPreMatch,
 } from "../match";
 import { CreateRunResultArgs, RunResult } from "../runResult";
+import { Tournament } from "../tournament";
 
 /**
  * `GET /match`のレスポンス
@@ -50,3 +51,8 @@ export type GetMatchRunResultResponse = RunResult[];
  * `POST /match/{matchType}/{matchID}/run_result`のリクエスト
  */
 export type PostMatchRunResultRequest = CreateRunResultArgs[];
+
+/**
+ * `GET /match/main/{departmentType}/tournament`のレスポンス
+ */
+export type GetTournament = Tournament;
