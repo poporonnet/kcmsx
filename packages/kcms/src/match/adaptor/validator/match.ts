@@ -161,7 +161,6 @@ export const GetRankingResponseSchema = z.array(
 );
 
 export const GetTournamentParamsSchema = z.object({
-  matchType: MatchTypeSchema,
   departmentType: DepartmentTypeSchema,
 });
 
