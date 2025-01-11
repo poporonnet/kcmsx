@@ -50,7 +50,12 @@ export class SetMainMatchWinnerService {
 
     // もう片方も終わっているなら、親試合のチームにそれぞれの勝者を設定する
     try {
-      parentMatch.setTeams(winnerID, otherWinnerID);
+      // 自分が左側の場合
+      if (matchID === childMatches!.match1.getID()) {
+        parentMatch.setTeams(winnerID, otherWinnerID);
+      } else {
+        parentMatch.setTeams(otherWinnerID, winnerID);
+      }
     } catch (e) {
       return Result.err(e as unknown as Error);
     }
