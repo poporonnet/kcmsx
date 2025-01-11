@@ -53,6 +53,25 @@ export class DummyRepository implements TeamRepository {
     return Result.ok(team);
   }
 
+  async getMaxEntryCode(): Promise<Result.Result<Error, number>> {
+    try {
+      const maxEntryCode = [...this.data.values()].reduce(
+        (acc, cur) => {
+          const cur_code = cur.getEntryCode() ?? 0;
+          if (cur_code > acc.EntryCode
+          ) {
+            acc.EntryCode = cur_code;
+          }
+          return acc;
+        },
+        { EntryCode: 0 }
+      );
+      return Result.ok(maxEntryCode.EntryCode);
+    } catch (e) {
+      return Result.err(e as Error);
+    }
+  }
+
   reset(data: Team[] = []) {
     this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), v]));
   }

@@ -18,6 +18,7 @@ export class PrismaTeamRepository implements TeamRepository {
       robotType: data.robotType as RobotType,
       clubName: data.clubName ?? undefined,
       isEntered: data.isEntered,
+      entryCode: data.entryCode ?? undefined,
     });
   }
 
@@ -97,9 +98,23 @@ export class PrismaTeamRepository implements TeamRepository {
         },
         data: {
           isEntered: team.getIsEntered(),
+          entryCode: team.getEntryCode(),
         },
       });
       return Result.ok(this.deserialize(res));
+    } catch (e) {
+      return Result.err(e as Error);
+    }
+  }
+
+  async getMaxEntryCode(): Promise<Result.Result<Error, number>> {
+    try {
+      const maxEntryCode = await this.client.team.aggregate({
+        _max: {
+          entryCode: true,
+        },
+      });
+      return Result.ok(maxEntryCode._max.entryCode ?? 0);
     } catch (e) {
       return Result.err(e as Error);
     }

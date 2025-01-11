@@ -14,6 +14,10 @@ export interface TeamCreateArgs {
    * 当日参加するかどうか (エントリーしたかどうか)
    */
   isEntered: boolean;
+  /**
+   * ゼッケン番号
+   */
+  entryCode?: number;
 }
 
 export class Team {
@@ -24,6 +28,7 @@ export class Team {
   private readonly robotType: RobotType;
   private readonly clubName?: string;
   private isEntered: boolean;
+  private entryCode: number | undefined;
 
   private constructor(
     id: TeamID,
@@ -32,7 +37,8 @@ export class Team {
     departmentType: DepartmentType,
     robotType: RobotType,
     isEntered: boolean,
-    clubName?: string
+    clubName?: string,
+    entryCode?: number
   ) {
     this.id = id;
     this.teamName = teamName;
@@ -41,6 +47,7 @@ export class Team {
     this.isEntered = isEntered;
     this.departmentType = departmentType;
     this.robotType = robotType;
+    this.entryCode = entryCode;
   }
 
   getID(): TeamID {
@@ -88,7 +95,22 @@ export class Team {
     this.isEntered = false;
   }
 
-  public static new(arg: Omit<TeamCreateArgs, 'isEntered'>): Team {
+  /**
+   * ゼッケン番号を取得
+   */
+  getEntryCode(): number | undefined {
+    return this.entryCode;
+  }
+
+  /**
+   * ゼッケン番号を付与する
+   * @param entryCode ゼッケン番号
+   */
+  assignEntryCode(entryCode: number) {
+    this.entryCode = entryCode;
+  }
+
+  public static new(arg: Omit<TeamCreateArgs, 'isEntered' | 'entryCode'>): Team {
     return new Team(
       arg.id,
       arg.teamName,
@@ -96,7 +118,8 @@ export class Team {
       arg.departmentType,
       arg.robotType,
       false,
-      arg.clubName
+      arg.clubName,
+      undefined
     );
   }
 
@@ -108,7 +131,8 @@ export class Team {
       arg.departmentType,
       arg.robotType,
       arg.isEntered,
-      arg.clubName
+      arg.clubName,
+      arg.entryCode
     );
   }
 }

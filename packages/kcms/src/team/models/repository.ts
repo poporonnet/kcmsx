@@ -50,4 +50,11 @@ export interface TeamRepository {
    * @return 成功時: Team, 失敗時: Error
    */
   update(team: Team): Promise<Result.Result<Error, Team>>;
+
+  /**
+   * @description
+   * 付与されているゼッケン番号の最大値を取得
+   * @return まだ誰にも付与されていない時: 0, 出ない：
+   */
+  getMaxEntryCode(): Promise<Result.Result<Error, number>>;
 }
