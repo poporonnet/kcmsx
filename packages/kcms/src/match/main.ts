@@ -21,12 +21,14 @@ import {
   GetMatchRunResultRoute,
   GetMatchTypeRoute,
   GetRankingRoute,
+  GetTournamentRoute,
   PostMatchGenerateManualRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchRunResultService } from './service/fetchRunResult';
+import { FetchTournamentService } from './service/fetchTournament';
 import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
@@ -62,13 +64,15 @@ const generateMainMatchService = new GenerateMainMatchService(
   idGenerator,
   config.match.main.requiredTeams
 );
+const fetchTournamentService = new FetchTournamentService(getMatchService);
 const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
   generatePreMatchService,
   generateRankingService,
   fetchRunResultService,
-  generateMainMatchService
+  generateMainMatchService,
+  fetchTournamentService
 );
 export const matchHandler = new OpenAPIHono();
 
@@ -169,6 +173,17 @@ matchHandler.openapi(GetMatchRunResultRoute, async (c) => {
     matchType,
     matchID as MainMatchID | PreMatchID
   );
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.openapi(GetTournamentRoute, async (c) => {
+  const { departmentType } = c.req.valid('param');
+
+  const res = await matchController.getTournament(departmentType);
   if (Result.isErr(res)) {
     const error = Result.unwrapErr(res);
     return c.json({ description: error.message }, 400);

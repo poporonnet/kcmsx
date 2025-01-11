@@ -37,11 +37,13 @@ export const useMatchInfo = (
       matchRes.matchType == "main" && matchRes.runResults.length >= 2;
 
     const leftTeamID =
-      matchRes.matchType == "main" ? matchRes.team1.id : matchRes.leftTeam?.id;
+      matchRes.matchType == "main" ? matchRes.team1?.id : matchRes.leftTeam?.id;
     const leftTeam = leftTeamID ? await fetchTeam(leftTeamID) : undefined;
 
     const rightTeamID =
-      matchRes.matchType == "main" ? matchRes.team2.id : matchRes.rightTeam?.id;
+      matchRes.matchType == "main"
+        ? matchRes.team2?.id
+        : matchRes.rightTeam?.id;
     const rightTeam = rightTeamID ? await fetchTeam(rightTeamID) : undefined;
 
     const leftTeamInfo: TeamInfo | undefined = leftTeam
