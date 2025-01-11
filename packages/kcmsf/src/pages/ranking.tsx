@@ -86,7 +86,9 @@ export const Ranking = () => {
       });
 
       if (isSucceeded)
-        navigate(`/matchlist?match_type=main&department_type=${departmentType}`);
+        navigate(
+          `/matchlist?match_type=main&department_type=${departmentType}`
+        );
     },
     [departmentType, navigate]
   );
