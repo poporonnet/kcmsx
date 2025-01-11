@@ -81,6 +81,5 @@ export type ShortMatch = ShortPreMatch | ShortMainMatch;
  * @description `POST /match/main/{departmentType}/generate/manual`のみで使われる
  */
 export type CreateMainMatchManualArgs = {
-  team1ID: string;
-  team2ID: string;
+  teamIDs: string[];
 };
