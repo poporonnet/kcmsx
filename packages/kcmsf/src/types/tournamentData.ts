@@ -1,10 +1,9 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Tournament } from "./tournament";
 
 /**
  * トーナメントノードの種類
  */
-type DataType = Tournament["type"];
+type DataType = "team" | "match";
 
 /**
  * トーナメントデータの種類にかかわる情報
