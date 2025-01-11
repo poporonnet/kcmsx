@@ -16,7 +16,7 @@ export class SetMainMatchWinnerService {
     try {
       match.setWinnerID(winnerID);
     } catch (e) {
-      return Result.err(e as unknown as Error);
+      return Result.err(e as Error);
     }
 
     const matchUpdateRes = await this.mainMatchRepository.update(match);
@@ -57,7 +57,7 @@ export class SetMainMatchWinnerService {
         parentMatch.setTeams(otherWinnerID, winnerID);
       }
     } catch (e) {
-      return Result.err(e as unknown as Error);
+      return Result.err(e as Error);
     }
 
     const parentMatchUpdateRes = await this.mainMatchRepository.update(parentMatch);
