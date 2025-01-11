@@ -175,7 +175,7 @@ export const PostMatchGenerateManualRoute = createRoute({
 
 export const PostMatchSetWinnerIDRoute = createRoute({
   method: 'post',
-  path: '/math/main/{matchID}/winner',
+  path: '/match/main/{matchID}/winner',
   request: {
     params: PostSetMatchWinnerParamsSchema,
     body: {

@@ -11,6 +11,7 @@ import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
 import { GetMatchService } from '../../service/get';
+import { SetMainMatchWinnerService } from '../../service/setMainWinner';
 import {
   GetMatchIDResponseSchema,
   GetMatchResponseSchema,
@@ -35,7 +36,8 @@ export class MatchController {
     private readonly generateRankingService: GenerateRankingService,
     private readonly fetchRunResultService: FetchRunResultService,
     private readonly generateMainMatchService: GenerateMainMatchService,
-    private readonly fetchTournamentService: FetchTournamentService
+    private readonly fetchTournamentService: FetchTournamentService,
+    private readonly setMainMatchWinnerService: SetMainMatchWinnerService
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
@@ -146,6 +148,16 @@ export class MatchController {
         winnerID: v.getWinnerID() ?? '',
       }))
     );
+  }
+
+  async setWinner(matchID: string, winnerID: string): Promise<Result.Result<Error, void>> {
+    const res = await this.setMainMatchWinnerService.handle(
+      matchID as MainMatchID,
+      winnerID as TeamID
+    );
+    if (Result.isErr(res)) return res;
+
+    return Result.ok(undefined);
   }
 
   async getMatchByID<T extends MatchType>(
