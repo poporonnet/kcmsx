@@ -15,7 +15,7 @@ export const useMatchInfo = (
     async (teamID: string): Promise<GetTeamResponse> => {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/team/${teamID}`,
-        { method: "GET" }
+        { method: "GET", credentials: "include" }
       );
       return (await res.json()) as GetTeamResponse;
     },
@@ -27,7 +27,7 @@ export const useMatchInfo = (
 
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
-      { method: "GET" }
+      { method: "GET", credentials: "include" }
     );
     if (!res.ok) return;
 
@@ -37,11 +37,13 @@ export const useMatchInfo = (
       matchRes.matchType == "main" && matchRes.runResults.length >= 2;
 
     const leftTeamID =
-      matchRes.matchType == "main" ? matchRes.team1.id : matchRes.leftTeam?.id;
+      matchRes.matchType == "main" ? matchRes.team1?.id : matchRes.leftTeam?.id;
     const leftTeam = leftTeamID ? await fetchTeam(leftTeamID) : undefined;
 
     const rightTeamID =
-      matchRes.matchType == "main" ? matchRes.team2.id : matchRes.rightTeam?.id;
+      matchRes.matchType == "main"
+        ? matchRes.team2?.id
+        : matchRes.rightTeam?.id;
     const rightTeam = rightTeamID ? await fetchTeam(rightTeamID) : undefined;
 
     const leftTeamInfo: TeamInfo | undefined = leftTeam

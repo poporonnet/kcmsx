@@ -3,7 +3,7 @@ import { createConfig } from "./utility/createConfig";
 
 export const config = createConfig(
   {
-    contestName: "第1回 どじょうすくいロボコン",
+    contestName: "第2回 Matz葉がにロボコン",
     robots: [
       {
         type: "leg",
@@ -23,29 +23,31 @@ export const config = createConfig(
       {
         type: "open",
         name: "オープン部門",
-        robotTypes: ["leg"],
+        robotTypes: ["leg", "wheel"],
       },
     ],
-    matches: [
-      {
-        type: "pre",
+    match: {
+      pre: {
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: 2,
-          open: 1,
+          elementary: [1, 2],
+          open: [1, 2],
         },
       },
-      {
-        type: "main",
+      main: {
         name: "本戦",
         limitSeconds: 180,
         course: {
-          elementary: 2,
-          open: 1,
+          elementary: [1, 2],
+          open: [1, 2],
+        },
+        requiredTeams: {
+          elementary: 4,
+          open: 4,
         },
       },
-    ],
+    },
     rules: [
       {
         name: "multiWalk",
@@ -106,7 +108,7 @@ export const config = createConfig(
       },
       {
         name: "bringRareBall",
-        label: "激レアメタルの数",
+        label: "激レア雲粒子の数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,

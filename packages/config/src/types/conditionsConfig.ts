@@ -9,11 +9,11 @@ import { DerivedPointState, RuleBaseList, RuleCondition } from "./rule";
 export type ConditionsConfig<
   Robots extends RobotConfig[],
   RuleBases extends RuleBaseList,
-  Matches extends MatchConfig[],
+  Match extends MatchConfig,
   Departments extends DepartmentConfig<Robots>[],
 > = {
   [K in RuleBases[number]["name"]]?: RuleCondition<
-    Matches[number]["type"],
+    keyof Match extends string ? keyof Match : never,
     Robots[number]["type"],
     Departments[number]["type"],
     DerivedPointState<RuleBases[number]>

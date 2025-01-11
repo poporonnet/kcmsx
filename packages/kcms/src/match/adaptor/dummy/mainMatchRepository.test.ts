@@ -20,9 +20,9 @@ describe('DummyMainMatchRepository', () => {
       courseIndex: 0,
       matchIndex: 91,
       departmentType: config.departmentTypes[0],
-      teamId1: '91' as TeamID,
-      teamId2: '92' as TeamID,
-      winnerId: '91' as TeamID,
+      teamID1: '91' as TeamID,
+      teamID2: '92' as TeamID,
+      winnerID: '91' as TeamID,
       runResults: [
         RunResult.new({
           id: '90' as RunResultID,
@@ -39,6 +39,8 @@ describe('DummyMainMatchRepository', () => {
           finishState: 'FINISHED',
         }),
       ],
+      parentMatchID: '999' as MainMatchID,
+      childMatches: undefined,
     });
     const res = await repository.create(match);
 
@@ -56,9 +58,9 @@ describe('DummyMainMatchRepository', () => {
       courseIndex: 0,
       matchIndex: 1,
       departmentType: config.departmentTypes[0],
-      teamId1: '1' as TeamID,
-      teamId2: '2' as TeamID,
-      winnerId: '1' as TeamID,
+      teamID1: '1' as TeamID,
+      teamID2: '2' as TeamID,
+      winnerID: '1' as TeamID,
       runResults: [
         RunResult.new({
           id: '10' as RunResultID,
@@ -75,6 +77,8 @@ describe('DummyMainMatchRepository', () => {
           finishState: 'FINISHED',
         }),
       ],
+      parentMatchID: '999' as MainMatchID,
+      childMatches: undefined,
     });
     const res = await repository.update(match);
     expect(Result.isErr(res)).toBe(false);

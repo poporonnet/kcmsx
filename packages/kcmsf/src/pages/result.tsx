@@ -98,20 +98,20 @@ const MainMatchColum = (props: {
   teamData: Map<string, string>;
 }) => {
   const loserID =
-    props.match.winnerId !== ""
-      ? props.match.team1.id == props.match.winnerId
-        ? props.match.team2.id
-        : props.match.team1.id
+    props.match.winnerID !== ""
+      ? props.match.team1?.id == props.match.winnerID
+        ? (props.match.team2?.id ?? "")
+        : (props.match.team1?.id ?? "")
       : "";
 
   return (
     <>
       <Table.Td className="td">
-        {props.teamData.get(props.match.winnerId)}
+        {props.teamData.get(props.match.winnerID)}
       </Table.Td>
       <Table.Td className="td">
         {props.match.runResults
-          .filter((result) => result.teamID === props.match.winnerId)
+          .filter((result) => result.teamID === props.match.winnerID)
           .reduce((sum, result) => sum + result.points, 0)}
         -
         {props.match.runResults

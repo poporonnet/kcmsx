@@ -1,8 +1,8 @@
 import { createRoute } from '@hono/zod-openapi';
 import {
   CommonErrorSchema,
-  GetMatchIdParamsSchema,
-  GetMatchIdResponseSchema,
+  GetMatchIDParamsSchema,
+  GetMatchIDResponseSchema,
   GetMatchResponseSchema,
   GetMatchRunResultParamsSchema,
   GetMatchRunResultResponseSchema,
@@ -10,6 +10,8 @@ import {
   GetMatchTypeResponseSchema,
   GetRankingParamsSchema,
   GetRankingResponseSchema,
+  GetTournamentParamsSchema,
+  GetTournamentResponseSchema,
   PostMatchGenerateManualParamsSchema,
   PostMatchGenerateManualRequestSchema,
   PostMatchGenerateManualResponseSchema,
@@ -66,15 +68,15 @@ export const GetMatchTypeRoute = createRoute({
   },
 });
 
-export const GetMatchIdRoute = createRoute({
+export const GetMatchIDRoute = createRoute({
   method: 'get',
   path: '/match/{matchType}/{matchID}',
-  request: { params: GetMatchIdParamsSchema },
+  request: { params: GetMatchIDParamsSchema },
   responses: {
     200: {
       content: {
         'application/json': {
-          schema: GetMatchIdResponseSchema,
+          schema: GetMatchIDResponseSchema,
         },
       },
       description: 'Retrieve a match by matchID',
@@ -207,6 +209,32 @@ export const GetRankingRoute = createRoute({
         },
       },
       description: 'Get Ranking',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetTournamentRoute = createRoute({
+  method: 'get',
+  path: '/match/main/{departmentType}/tournament',
+  request: {
+    params: GetTournamentParamsSchema,
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetTournamentResponseSchema,
+        },
+      },
+      description: 'Get main tournament',
     },
     400: {
       content: {

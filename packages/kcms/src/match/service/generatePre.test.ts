@@ -41,11 +41,11 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
-    for (let i = 0; i < config.match.pre.course.elementary; i++) {
+    for (let i = 0; i < config.match.pre.course.elementary.length; i++) {
       const course = res.filter((v) => v.getCourseIndex() === i + 1);
       const pair = course.map((v) => [
-        testTeamData.get(v.getTeamId1() ?? ('' as TeamID))?.getTeamName(),
-        testTeamData.get(v.getTeamId2() ?? ('' as TeamID))?.getTeamName(),
+        testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
+        testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
       ]);
       expect(pair).toStrictEqual(expectedTeamPair[i]);
     }

@@ -11,8 +11,8 @@ export const testCreateRunResultPreData = [
     courseIndex: 0,
     matchIndex: 1,
     departmentType: config.departments[0].type,
-    teamId1: '1' as TeamID,
-    teamId2: '2' as TeamID,
+    teamID1: '1' as TeamID,
+    teamID2: '2' as TeamID,
     runResults: [],
   }),
   PreMatch.new({
@@ -20,8 +20,8 @@ export const testCreateRunResultPreData = [
     courseIndex: 0,
     matchIndex: 2,
     departmentType: config.departments[0].type,
-    teamId1: '2' as TeamID,
-    teamId2: '1' as TeamID,
+    teamID1: '2' as TeamID,
+    teamID2: '1' as TeamID,
     runResults: [],
   }),
   PreMatch.new({
@@ -29,8 +29,8 @@ export const testCreateRunResultPreData = [
     courseIndex: 0,
     matchIndex: 3,
     departmentType: config.departments[0].type,
-    teamId1: '3' as TeamID,
-    teamId2: '4' as TeamID,
+    teamID1: '3' as TeamID,
+    teamID2: '4' as TeamID,
     runResults: [],
   }),
 ];
@@ -40,10 +40,12 @@ export const testCreateRunResultMainData = [
     courseIndex: 1,
     matchIndex: 1,
     departmentType: config.departmentTypes[0],
-    teamId1: '91' as TeamID,
-    teamId2: '92' as TeamID,
-    winnerId: '91' as TeamID,
+    teamID1: '91' as TeamID,
+    teamID2: '92' as TeamID,
+    winnerID: '91' as TeamID,
     runResults: [],
+    parentMatchID: '999' as MainMatchID,
+    childMatches: undefined,
   }),
 ];
 // ランキング生成用の試合データ
@@ -62,8 +64,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 1,
     departmentType: config.departments[0].type,
-    teamId1: '1' as TeamID,
-    teamId2: '2' as TeamID,
+    teamID1: '1' as TeamID,
+    teamID2: '2' as TeamID,
     runResults: [
       RunResult.new({
         id: '10' as RunResultID,
@@ -86,8 +88,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 2,
     departmentType: config.departments[0].type,
-    teamId1: '2' as TeamID,
-    teamId2: '1' as TeamID,
+    teamID1: '2' as TeamID,
+    teamID2: '1' as TeamID,
     runResults: [
       RunResult.new({
         id: '12' as RunResultID,
@@ -111,8 +113,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 3,
     departmentType: config.departments[0].type,
-    teamId1: '3' as TeamID,
-    teamId2: '4' as TeamID,
+    teamID1: '3' as TeamID,
+    teamID2: '4' as TeamID,
     runResults: [
       RunResult.new({
         id: '14' as RunResultID,
@@ -135,8 +137,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 4,
     departmentType: config.departments[0].type,
-    teamId1: '4' as TeamID,
-    teamId2: '3' as TeamID,
+    teamID1: '4' as TeamID,
+    teamID2: '3' as TeamID,
     runResults: [
       RunResult.new({
         id: '16' as RunResultID,
@@ -160,8 +162,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 5,
     departmentType: config.departments[0].type,
-    teamId1: '5' as TeamID,
-    teamId2: '6' as TeamID,
+    teamID1: '5' as TeamID,
+    teamID2: '6' as TeamID,
     runResults: [
       RunResult.new({
         id: '18' as RunResultID,
@@ -184,8 +186,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 6,
     departmentType: config.departments[0].type,
-    teamId1: '6' as TeamID,
-    teamId2: '5' as TeamID,
+    teamID1: '6' as TeamID,
+    teamID2: '5' as TeamID,
     runResults: [
       RunResult.new({
         id: '20' as RunResultID,
@@ -209,8 +211,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 7,
     departmentType: config.departments[0].type,
-    teamId1: '7' as TeamID,
-    teamId2: '8' as TeamID,
+    teamID1: '7' as TeamID,
+    teamID2: '8' as TeamID,
     runResults: [
       RunResult.new({
         id: '22' as RunResultID,
@@ -233,8 +235,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 8,
     departmentType: config.departments[0].type,
-    teamId1: '8' as TeamID,
-    teamId2: '7' as TeamID,
+    teamID1: '8' as TeamID,
+    teamID2: '7' as TeamID,
     runResults: [],
   }),
 
@@ -243,8 +245,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 9,
     departmentType: config.departments[0].type,
-    teamId1: '9' as TeamID,
-    teamId2: undefined,
+    teamID1: '9' as TeamID,
+    teamID2: undefined,
     runResults: [
       RunResult.new({
         id: '26' as RunResultID,
@@ -260,8 +262,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 10,
     departmentType: config.departments[0].type,
-    teamId1: '9' as TeamID,
-    teamId2: undefined,
+    teamID1: '9' as TeamID,
+    teamID2: undefined,
     runResults: [
       RunResult.new({
         id: '27' as RunResultID,
@@ -278,8 +280,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 11,
     departmentType: config.departments[0].type,
-    teamId1: '10' as TeamID,
-    teamId2: '11' as TeamID,
+    teamID1: '10' as TeamID,
+    teamID2: '11' as TeamID,
     runResults: [],
   }),
   PreMatch.new({
@@ -287,8 +289,8 @@ export const testRankingPreMatchData = [
     courseIndex: 0,
     matchIndex: 12,
     departmentType: config.departments[0].type,
-    teamId1: '11' as TeamID,
-    teamId2: '10' as TeamID,
+    teamID1: '11' as TeamID,
+    teamID2: '10' as TeamID,
     runResults: [],
   }),
 ];
@@ -304,9 +306,9 @@ export const testRankingMainMatchData = [
     courseIndex: 1,
     matchIndex: 1,
     departmentType: config.departmentTypes[0],
-    teamId1: '91' as TeamID,
-    teamId2: '92' as TeamID,
-    winnerId: '91' as TeamID,
+    teamID1: '91' as TeamID,
+    teamID2: '92' as TeamID,
+    winnerID: '91' as TeamID,
     runResults: [
       RunResult.new({
         id: '80' as RunResultID,
@@ -337,5 +339,7 @@ export const testRankingMainMatchData = [
         finishState: 'GOAL',
       }),
     ],
+    parentMatchID: '999' as MainMatchID,
+    childMatches: undefined,
   }),
 ];

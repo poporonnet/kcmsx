@@ -18,9 +18,9 @@ export interface CreatePreMatchArgs {
   /** @description 部門 */
   departmentType: DepartmentType;
   /** @description チーム1のID 左を走るチーム */
-  teamId1?: TeamID;
+  teamID1?: TeamID;
   /** @description チーム2のID 右を走るチーム */
-  teamId2?: TeamID;
+  teamID2?: TeamID;
   /** @description 走行結果 */
   runResults: RunResult[];
 }
@@ -33,16 +33,16 @@ export class PreMatch {
   private readonly courseIndex: number;
   private readonly matchIndex: number;
   private readonly departmentType: DepartmentType;
-  private readonly teamId1?: TeamID;
-  private readonly teamId2?: TeamID;
+  private readonly teamID1?: TeamID;
+  private readonly teamID2?: TeamID;
   private runResults: RunResult[];
 
   private constructor(args: CreatePreMatchArgs) {
     this.id = args.id;
     this.courseIndex = args.courseIndex;
     this.matchIndex = args.matchIndex;
-    this.teamId1 = args.teamId1;
-    this.teamId2 = args.teamId2;
+    this.teamID1 = args.teamID1;
+    this.teamID2 = args.teamID2;
     this.runResults = args.runResults;
     this.departmentType = args.departmentType;
   }
@@ -51,7 +51,7 @@ export class PreMatch {
     return new PreMatch(args);
   }
 
-  getId(): PreMatchID {
+  getID(): PreMatchID {
     return this.id;
   }
 
@@ -63,12 +63,12 @@ export class PreMatch {
     return this.matchIndex;
   }
 
-  getTeamId1(): TeamID | undefined {
-    return this.teamId1;
+  getTeamID1(): TeamID | undefined {
+    return this.teamID1;
   }
 
-  getTeamId2(): TeamID | undefined {
-    return this.teamId2;
+  getTeamID2(): TeamID | undefined {
+    return this.teamID2;
   }
 
   getRunResults(): RunResult[] {
@@ -90,10 +90,10 @@ export class PreMatch {
     }
     if (
       !runResults.every(
-        (result) => result.getTeamId() === this.teamId1 || result.getTeamId() === this.teamId2
+        (result) => result.getTeamID() === this.teamID1 || result.getTeamID() === this.teamID2
       )
     ) {
-      throw new Error('RunResult teamId must be teamId1 or teamId2');
+      throw new Error('RunResult teamID must be teamID1 or teamID2');
     }
     this.runResults.push(...runResults);
   }

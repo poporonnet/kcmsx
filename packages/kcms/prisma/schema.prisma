@@ -38,13 +38,22 @@ model MainMatch {
   courseIndex    Int    @map("course_index")
   matchIndex     Int    @map("match_index")
 
-  leftTeamId  String? @map("left_team_id")
-  leftTeam    Team?   @relation("main_left_team", fields: [leftTeamId], references: [id])
-  rightTeamId String? @map("right_team_id")
-  rightTeam   Team?   @relation("main_right_team", fields: [rightTeamId], references: [id])
+  leftTeamID  String? @map("left_team_id")
+  leftTeam    Team?   @relation("main_left_team", fields: [leftTeamID], references: [id])
+  rightTeamID String? @map("right_team_id")
+  rightTeam   Team?   @relation("main_right_team", fields: [rightTeamID], references: [id])
+
+  childLeft   MainMatch? @relation("parent1", fields: [childLeftID], references: [id])
+  childLeftID String?    @unique @map("child_left_id")
+
+  childRight   MainMatch? @relation("parent2", fields: [childRightID], references: [id])
+  childRightID String?    @unique @map("child_right_id")
+
+  parent1 MainMatch? @relation("parent1")
+  parent2 MainMatch? @relation("parent2")
 
   // NOTE: アプリケーション側を信用するのでここはリレーションを作らないことにした (PreMatchも同様)
-  winnerTeamId String? @map("winner_team_id")
+  winnerTeamID String? @map("winner_team_id")
 
   runResult RunResult[]
 
@@ -76,10 +85,10 @@ model RunResult {
   team   Team   @relation(fields: [teamID], references: [id])
   teamID String @map("team_id")
 
-  mainMatch   MainMatch? @relation(fields: [mainMatchId], references: [id])
-  mainMatchId String?    @map("main_match_id")
-  preMatch    PreMatch?  @relation(fields: [preMatchId], references: [id])
-  preMatchId  String?    @map("pre_match_id")
+  mainMatch   MainMatch? @relation(fields: [mainMatchID], references: [id])
+  mainMatchID String?    @map("main_match_id")
+  preMatch    PreMatch?  @relation(fields: [preMatchID], references: [id])
+  preMatchID  String?    @map("pre_match_id")
 
   @@map("run_result")
 }

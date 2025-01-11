@@ -22,10 +22,10 @@ export const GenerateMainMatchCard = ({
   departmentType,
   generate,
 }: {
-  requiredTeamCount: number;
+  requiredTeamCount?: number;
   selectedTeams: RankingRecord[];
   departmentType: DepartmentType;
-  generate: (team1ID: string, team2ID: string) => Promise<void>;
+  generate: (teamIDs: string[]) => Promise<void>;
 }) => {
   const {
     data: mainMatches,
@@ -34,7 +34,8 @@ export const GenerateMainMatchCard = ({
     refetch,
   } = useFetch<MainMatch[]>(`${import.meta.env.VITE_API_URL}/match/main`);
 
-  const remainingTeamCount = requiredTeamCount - selectedTeams.length;
+  const remainingTeamCount =
+    requiredTeamCount != null ? requiredTeamCount - selectedTeams.length : 0;
   const processedMainMatch = useMemo(
     () =>
       mainMatches?.filter((match) => match.departmentType == departmentType),
@@ -102,11 +103,11 @@ const GenerableBody = ({
 }: {
   selectedTeams: RankingRecord[];
   remainingTeamCount: number;
-  generate: (team1ID: string, team2ID: string) => Promise<void>;
+  generate: (teamIDs: string[]) => Promise<void>;
 }) => (
   <>
     現在選択しているチーム:
-    <List withPadding flex={1} ta="left">
+    <List withPadding flex={1} ta="left" type="ordered">
       {selectedTeams.map(({ teamID, teamName }) => (
         <List.Item key={teamID}>{teamName}</List.Item>
       ))}
@@ -118,9 +119,7 @@ const GenerableBody = ({
       </Text>
     )}
     <GenerateMatchButton
-      generate={() =>
-        generate(selectedTeams[0].teamID, selectedTeams[1].teamID)
-      }
+      generate={() => generate(selectedTeams.map(({ teamID }) => teamID))}
       disabled={remainingTeamCount > 0}
       modalTitle="本戦試合表生成確認"
       modalDetail={

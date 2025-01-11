@@ -37,7 +37,7 @@ export const MainSchema = z.object({
   departmentType: z.enum(config.departmentTypes).openapi({ example: config.departments[0].type }),
   team1: BriefTeamSchema,
   team2: BriefTeamSchema,
-  winnerId: z.string().openapi({ example: '45098607' }),
+  winnerID: z.string().openapi({ example: '45098607' }),
   runResults: z.array(RunResultSchema).max(4),
 });
 
@@ -70,7 +70,7 @@ const MatchTypeSchema = z.enum(pick(config.matches, 'type')).openapi({
   example: config.matches[1].type,
 });
 
-const MatchIdSchema = z.string().openapi({
+const MatchIDSchema = z.string().openapi({
   param: {
     name: 'matchID',
     in: 'path',
@@ -86,24 +86,35 @@ const DepartmentTypeSchema = z.enum(pick(config.departments, 'type')).openapi({
   example: config.departments[0].type,
 });
 
+// 再帰的スキーマのため型定義が必要
+type Tournament = Omit<z.infer<typeof MainSchema>, 'runResults'> & {
+  childMatch1?: Tournament;
+  childMatch2?: Tournament;
+};
+
+const TournamentSchema: z.ZodType<Tournament> = MainSchema.omit({ runResults: true }).extend({
+  childMatch1: z.lazy(() => TournamentSchema.optional()),
+  childMatch2: z.lazy(() => TournamentSchema.optional()),
+});
+
 export const GetMatchTypeParamsSchema = z.object({
   matchType: MatchTypeSchema,
 });
 
 export const GetMatchTypeResponseSchema = z.array(PreSchema.or(MainSchema));
 
-export const GetMatchIdParamsSchema = z.object({
+export const GetMatchIDParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  matchID: MatchIdSchema,
+  matchID: MatchIDSchema,
 });
 
-export const GetMatchIdResponseSchema = PreSchema.or(MainSchema);
+export const GetMatchIDResponseSchema = PreSchema.or(MainSchema);
 
 export const GetMatchRunResultResponseSchema = z.array(RunResultSchema).max(4);
 
 export const GetMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
-  matchID: MatchIdSchema,
+  matchID: MatchIDSchema,
 });
 
 export const PostMatchGenerateParamsSchema = z.object({
@@ -120,8 +131,7 @@ export const PostMatchGenerateManualParamsSchema = z.object({
   departmentType: DepartmentTypeSchema,
 });
 export const PostMatchGenerateManualRequestSchema = z.object({
-  team1ID: z.string().openapi({ example: '45098607' }),
-  team2ID: z.string().openapi({ example: '2230392' }),
+  teamIDs: z.array(z.string().openapi({ example: '45098607' })).min(2),
 });
 export const PostMatchGenerateManualResponseSchema = z.array(ShortMainSchema);
 
@@ -149,3 +159,9 @@ export const GetRankingResponseSchema = z.array(
     goalTimeSeconds: z.number().nullable().openapi({ example: 30 }),
   })
 );
+
+export const GetTournamentParamsSchema = z.object({
+  departmentType: DepartmentTypeSchema,
+});
+
+export const GetTournamentResponseSchema = TournamentSchema;

@@ -38,13 +38,12 @@ export type PreMatch = MatchBase &
 
 /**
  * 本戦のマッチ
- * @todo `winnerId`のプロパティ名が誤っている (`winnerID`)
  */
 export type MainMatch = MatchBase &
   MatchTypeRecord<"main"> & {
-    team1: BriefTeam;
-    team2: BriefTeam;
-    winnerId: string; // TODO: スキーマの修正漏れ
+    team1?: BriefTeam;
+    team2?: BriefTeam;
+    winnerID: string;
   };
 
 /**
@@ -66,9 +65,9 @@ export type ShortPreMatch = MatchBase & {
  * @description `POST /match/{matchType}/{departmentType}/generate`のみで使われる
  */
 export type ShortMainMatch = MatchBase & {
-  team1ID: string;
-  team2ID: string;
-  winnerId: string;
+  team1ID?: string;
+  team2ID?: string;
+  winnerID: string;
 };
 
 /**
@@ -82,6 +81,5 @@ export type ShortMatch = ShortPreMatch | ShortMainMatch;
  * @description `POST /match/main/{departmentType}/generate/manual`のみで使われる
  */
 export type CreateMainMatchManualArgs = {
-  team1ID: string;
-  team2ID: string;
+  teamIDs: string[];
 };

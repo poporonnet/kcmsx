@@ -20,7 +20,7 @@ type TeamResult = {
 };
 
 type APIPostRunResults = {
-  teamID: string; // `teamId`でないことに注意
+  teamID: string;
   points: number;
   goalTimeSeconds: number | null;
   finishState: "goal" | "finished";
@@ -64,6 +64,7 @@ export const MatchSubmit = ({
       {
         method: "post",
         body: JSON.stringify(runResults),
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

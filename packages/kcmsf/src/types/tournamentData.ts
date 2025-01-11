@@ -1,10 +1,9 @@
 import { RawNodeDatum } from "react-d3-tree";
-import { Tournament } from "./tournament";
 
 /**
  * トーナメントノードの種類
  */
-type DataType = Tournament["type"];
+type DataType = "team" | "match";
 
 /**
  * トーナメントデータの種類にかかわる情報
@@ -16,16 +15,16 @@ type DataTypeRecord<Type extends DataType> = { type: Type };
  */
 export type TournamentAttributes<Type extends DataType> = Type extends "match"
   ? {
-      matchId: string;
+      matchID: string;
       matchCode: string;
-      team1Id: string;
+      team1ID: string;
       team1Name: string;
-      team2Id: string;
+      team2ID: string;
       team2Name: string;
-      winnerId?: string;
+      winnerID?: string;
     } & DataTypeRecord<"match">
   : {
-      teamId: string;
+      teamID: string;
       teamName: string;
     } & DataTypeRecord<"team">;
 

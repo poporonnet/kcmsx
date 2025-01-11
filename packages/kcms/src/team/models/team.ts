@@ -43,7 +43,7 @@ export class Team {
     this.robotType = robotType;
   }
 
-  getId(): TeamID {
+  getID(): TeamID {
     return this.id;
   }
 

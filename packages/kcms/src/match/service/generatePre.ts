@@ -40,8 +40,8 @@ export class GeneratePreMatchService {
           courseIndex: courseIndex + 1,
           matchIndex: matchIndex + 1,
           departmentType: (pair[0] || pair[1]!).getDepartmentType(),
-          teamId1: pair[0]?.getId(),
-          teamId2: pair[1]?.getId(),
+          teamID1: pair[0]?.getID(),
+          teamID2: pair[1]?.getID(),
           runResults: [],
         });
         return Result.ok(match);
@@ -64,7 +64,7 @@ export class GeneratePreMatchService {
   async makePairs(departmentType: DepartmentType): Promise<(Team | undefined)[][][]> {
     // 多言語環境でソート可能にするためにcollatorを使う
     const collator = new Intl.Collator('ja');
-    const courseCount = config.match['pre'].course[departmentType];
+    const courseCount = config.match.pre.course[departmentType].length;
 
     // エントリー済みのチームを取得
     const teamRes = await this.fetchTeam.findAll();
@@ -83,7 +83,7 @@ export class GeneratePreMatchService {
     // コースの数でスライスする
     // 初期化時に必要な個数作っておく
     const slicedTeams: Team[][] = new Array(
-      Math.ceil(teams.length / config.match['pre'].course[departmentType])
+      Math.ceil(teams.length / config.match.pre.course[departmentType].length)
     ).fill([]);
     for (let i = 0; i < Math.ceil(teams.length / courseCount); i++) {
       // コース数
