@@ -118,6 +118,9 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
           departmentType: match.getDepartmentType(),
           leftTeamID: match.getTeamID1(),
           rightTeamID: match.getTeamID2(),
+          // note: childLeft/childRightに値を入れると自動的に子試合のparentIDが更新されるので手動更新はしない(他の同様のコードも同様)
+          childLeftID: match.getChildMatches()?.match1.getID(),
+          childRightID: match.getChildMatches()?.match2.getID(),
         },
       });
 
@@ -138,6 +141,8 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
             departmentType: v.getDepartmentType(),
             leftTeamID: v.getTeamID1(),
             rightTeamID: v.getTeamID2(),
+            childLeftID: v.getChildMatches()?.match1.getID(),
+            childRightID: v.getChildMatches()?.match2.getID(),
           };
         }),
       });
@@ -233,6 +238,8 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
           leftTeamID: match.getTeamID1(),
           rightTeamID: match.getTeamID2(),
           winnerTeamID: match.getWinnerID(),
+          childLeftID: match.getChildMatches()?.match1.getID(),
+          childRightID: match.getChildMatches()?.match2.getID(),
           runResult: {
             updateMany: updatableRunResults.map((v) => ({
               where: {
