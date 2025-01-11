@@ -1,5 +1,5 @@
 import { Flex, Paper, Text } from "@mantine/core";
-import { MatchInfo } from "config";
+import { config, MatchInfo } from "config";
 
 export const MatchNameCard = ({
   matchType,
@@ -20,7 +20,7 @@ export const MatchNameCard = ({
         {leftTeamName}
       </Text>
       <Flex direction="column" align="center" justify="center" c="dark">
-        {matchType === "main" ? "本選" : "予選"}
+        {config.match[matchType].name}
         {<Text size="2rem">#{matchCode}</Text>}
         {description}
       </Flex>
