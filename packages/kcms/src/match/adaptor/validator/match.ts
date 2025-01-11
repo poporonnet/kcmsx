@@ -116,6 +116,13 @@ export const PostMatchGenerateResponseSchema = z.union([
   ShortMainSchema.array(),
 ]);
 
+export const PostPreMatchGenerateResponseSchema = z.array(
+  z.object({
+    departmentType: DepartmentTypeSchema,
+    matches: ShortPreSchema.array(),
+  })
+);
+
 export const PostMatchGenerateManualParamsSchema = z.object({
   departmentType: DepartmentTypeSchema,
 });

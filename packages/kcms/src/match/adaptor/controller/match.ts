@@ -6,6 +6,7 @@ import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { FetchRunResultService } from '../../service/fetchRunResult';
+import { GenerateAllPreMatchService } from '../../service/generateAllPre';
 import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
@@ -19,6 +20,7 @@ import {
   MainSchema,
   PostMatchGenerateManualResponseSchema,
   PostMatchGenerateResponseSchema,
+  PostPreMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
   ShortMainSchema,
@@ -30,6 +32,7 @@ export class MatchController {
     private readonly getMatchService: GetMatchService,
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
+    private readonly generateAllPreMatchService: GenerateAllPreMatchService,
     private readonly generateRankingService: GenerateRankingService,
     private readonly fetchRunResultService: FetchRunResultService,
     private readonly generateMainMatchService: GenerateMainMatchService
@@ -121,6 +124,36 @@ export class MatchController {
         };
       })
     );
+  }
+
+  async generateAllPreMatch(): Promise<
+    Result.Result<Error, z.infer<typeof PostPreMatchGenerateResponseSchema>>
+  > {
+    const data = [];
+    const res = await this.generateAllPreMatchService.handle();
+    for (const e of res.keys()) {
+      const matches = res.get(e);
+      if (matches) {
+        if (Result.isErr(matches)) return matches;
+        const createMatches = Result.unwrap(matches).map((v): z.infer<typeof ShortPreSchema> => {
+          return {
+            id: v.getID(),
+            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            matchType: 'pre',
+            departmentType: v.getDepartmentType(),
+            leftTeamID: v.getTeamID1(),
+            rightTeamID: v.getTeamID2(),
+            runResults: [],
+          };
+        });
+        data.push({
+          departmentType: e,
+          matches: createMatches,
+        });
+      }
+    }
+
+    return Result.ok(data);
   }
 
   async generateMatchManual(

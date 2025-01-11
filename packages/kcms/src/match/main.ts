@@ -24,9 +24,11 @@ import {
   PostMatchGenerateManualRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
+  PostPreMatchGenerateRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchRunResultService } from './service/fetchRunResult';
+import { GenerateAllPreMatchService } from './service/generateAllPre';
 import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
@@ -55,6 +57,13 @@ const generatePreMatchService = new GeneratePreMatchService(
   idGenerator,
   preMatchRepository
 );
+
+const generateAllPreMatchService = new GenerateAllPreMatchService(
+  fetchTeamService,
+  idGenerator,
+  preMatchRepository
+);
+
 const generateRankingService = new GenerateRankingService(preMatchRepository, mainMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
 const generateMainMatchService = new GenerateMainMatchService(
@@ -66,6 +75,7 @@ const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
   generatePreMatchService,
+  generateAllPreMatchService,
   generateRankingService,
   fetchRunResultService,
   generateMainMatchService
@@ -106,6 +116,15 @@ matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
   const { matchType, departmentType } = c.req.valid('param');
 
   const res = await matchController.generateMatch(matchType, departmentType);
+  if (Result.isErr(res)) {
+    return c.json({ description: res[1].message }, 400);
+  }
+
+  return c.json(res[1], 200);
+});
+
+matchHandler.openapi(PostPreMatchGenerateRoute, async (c) => {
+  const res = await matchController.generateAllPreMatch();
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
   }

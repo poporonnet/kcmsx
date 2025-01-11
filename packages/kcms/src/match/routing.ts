@@ -17,6 +17,7 @@ import {
   PostMatchGenerateResponseSchema,
   PostMatchRunResultParamsSchema,
   PostMatchRunResultRequestSchema,
+  PostPreMatchGenerateResponseSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -123,6 +124,29 @@ export const PostMatchGenerateRoute = createRoute({
       content: {
         'application/json': {
           schema: PostMatchGenerateResponseSchema,
+        },
+      },
+      description: 'Generate match table',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const PostPreMatchGenerateRoute = createRoute({
+  method: 'post',
+  path: '/match/pre',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: PostPreMatchGenerateResponseSchema,
         },
       },
       description: 'Generate match table',
