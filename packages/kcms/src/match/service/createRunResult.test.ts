@@ -78,7 +78,7 @@ describe('CreateRunResult', () => {
     expect(results[0].isFinished()).toBe(false);
   });
 
-  const testMainMatchData = [
+  const testMainMatchData = () => [
     MainMatch.new({
       id: '900' as MainMatchID,
       courseIndex: 1,
@@ -94,7 +94,7 @@ describe('CreateRunResult', () => {
   ];
 
   // 91: 17pts,60s / 92: 17pts,80s -> 91が勝者
-  const testRunResultData: Omit<CreateRunResultArgs, 'id'>[] = [
+  const testRunResultData = (): Omit<CreateRunResultArgs, 'id'>[] => [
     {
       teamID: '91' as TeamID,
       points: 12,
@@ -122,7 +122,7 @@ describe('CreateRunResult', () => {
   ];
 
   it('Main: 得点が高い方を勝者にする', async () => {
-    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData);
+    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
@@ -131,18 +131,18 @@ describe('CreateRunResult', () => {
       dummyPreMatchRepository,
       dummyMainMatchRepository
     );
-
+    const runResults = testRunResultData();
     // 91: 13+5pts,60s / 92: 10+7pts,80s -> 91が勝者
-    testRunResultData[0].points = 13;
+    runResults[0].points = 13;
 
-    await service.handle('main', '900' as MainMatchID, testRunResultData);
+    await service.handle('main', '900' as MainMatchID, runResults);
     const matchRes = await dummyMainMatchRepository.findByID('900' as MainMatchID);
     const match = Option.unwrap(matchRes);
     expect(match.getWinnerID()).toBe('91');
   });
 
   it('Main: 同点ならベストタイムが早い方を勝者にする', async () => {
-    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData);
+    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
@@ -153,14 +153,14 @@ describe('CreateRunResult', () => {
     );
 
     // 91: 17pts,60s / 92: 17pts,80s -> 91が勝者
-    await service.handle('main', '900' as MainMatchID, testRunResultData);
+    await service.handle('main', '900' as MainMatchID, testRunResultData());
     const matchRes = await dummyMainMatchRepository.findByID('900' as MainMatchID);
     const match = Option.unwrap(matchRes);
     expect(match.getWinnerID()).toBe('91');
   });
 
   it('Main: 同点でベストタイムも同じなら、何もしない', async () => {
-    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData);
+    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
@@ -169,18 +169,18 @@ describe('CreateRunResult', () => {
       dummyPreMatchRepository,
       dummyMainMatchRepository
     );
-
+    const runResults = testRunResultData();
     // 91: 17pts,60s / 92: 17pts,60s -> 何もしない
-    testRunResultData[3].goalTimeSeconds = 60;
+    runResults[3].goalTimeSeconds = 60;
 
-    await service.handle('main', '900' as MainMatchID, testRunResultData);
+    await service.handle('main', '900' as MainMatchID, runResults);
     const matchRes = await dummyMainMatchRepository.findByID('900' as MainMatchID);
     const match = Option.unwrap(matchRes);
     expect(match.getWinnerID()).toBe(undefined);
   });
 
   it('Main: まだ試合が終わってないなら何もしない', async () => {
-    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData);
+    const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
@@ -189,11 +189,8 @@ describe('CreateRunResult', () => {
       dummyPreMatchRepository,
       dummyMainMatchRepository
     );
-
-    await service.handle('main', '900' as MainMatchID, [
-      testRunResultData[0],
-      testRunResultData[1],
-    ]);
+    const runResults = testRunResultData();
+    await service.handle('main', '900' as MainMatchID, [runResults[0], runResults[1]]);
     const matchRes = await dummyMainMatchRepository.findByID('900' as MainMatchID);
     const match = Option.unwrap(matchRes);
     expect(match.getWinnerID()).toBe(undefined);
