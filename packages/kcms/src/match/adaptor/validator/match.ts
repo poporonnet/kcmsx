@@ -140,6 +140,10 @@ export const PostMatchRunResultParamsSchema = z.object({
   matchID: z.string().openapi({ example: '320984' }),
 });
 
+export const PostMatchWinnerIDParamsSchema = z.object({
+  matchID: z.string().openapi({ example: '320984' }),
+});
+
 export const PostMatchRunResultRequestSchema = z
   .array(RunResultSchema.omit({ id: true }))
   .max(4)
@@ -165,3 +169,7 @@ export const GetTournamentParamsSchema = z.object({
 });
 
 export const GetTournamentResponseSchema = TournamentSchema;
+
+export const PostMatchWinnerIDRequestSchema = z.object({
+  winnerID: z.string().openapi({ example: '31415926535' }),
+});
