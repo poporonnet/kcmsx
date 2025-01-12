@@ -56,3 +56,10 @@ export type PostMatchRunResultRequest = CreateRunResultArgs[];
  * `GET /match/main/{departmentType}/tournament`のレスポンス
  */
 export type GetTournament = Tournament;
+
+/**
+ * `POST /match/main/{matchID}/winner`のリクエスト
+ */
+export type PostMatchWinnerRequest = {
+  winnerID: string;
+};
