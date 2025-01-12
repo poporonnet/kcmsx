@@ -19,8 +19,8 @@ import {
   PostMatchGenerateResponseSchema,
   PostMatchRunResultParamsSchema,
   PostMatchRunResultRequestSchema,
-  PostSetMatchWinnerParamsSchema,
-  PostWinnerIDRequestSchema,
+  PostMatchWinnerIDParamsSchema,
+  PostMatchWinnerIDRequestSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -173,14 +173,14 @@ export const PostMatchGenerateManualRoute = createRoute({
   },
 });
 
-export const PostMatchSetWinnerIDRoute = createRoute({
+export const PostMatchWinnerIDRoute = createRoute({
   method: 'post',
   path: '/match/main/{matchID}/winner',
   request: {
-    params: PostSetMatchWinnerParamsSchema,
+    params: PostMatchWinnerIDParamsSchema,
     body: {
       content: {
-        'application/json': { schema: PostWinnerIDRequestSchema },
+        'application/json': { schema: PostMatchWinnerIDRequestSchema },
       },
     },
   },
