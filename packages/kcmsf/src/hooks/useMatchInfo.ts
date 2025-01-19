@@ -7,7 +7,7 @@ import { Match } from "../types/match";
 export const useMatchInfo = (
   id?: string,
   matchType?: MatchType
-): { match?: Match; matchInfo?: MatchInfo } => {
+): { match?: Match; matchInfo?: MatchInfo; refetch: () => Promise<void> } => {
   const [match, setMatch] = useState<Match>();
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
 
@@ -87,5 +87,5 @@ export const useMatchInfo = (
     fetchMatchInfo();
   }, [fetchMatchInfo]);
 
-  return { match, matchInfo };
+  return { match, matchInfo, refetch: fetchMatchInfo };
 };

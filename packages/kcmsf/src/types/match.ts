@@ -5,7 +5,7 @@ import { RunResult } from "./runResult";
  * idとチーム名を持つチーム情報
  * @todo Teamとチーム名のプロパティ名が異なる (`name` - `teamName`)
  */
-type BriefTeam = {
+export type BriefTeam = {
   id: string;
   teamName: string;
 };

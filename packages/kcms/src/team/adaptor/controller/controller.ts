@@ -4,6 +4,7 @@ import { TeamID } from '../../models/team';
 import { CreateTeamService } from '../../service/createTeam';
 import { DeleteTeamService } from '../../service/delete';
 import { EntryService } from '../../service/entry';
+import { EntryCodeService } from '../../service/entryCode';
 import { FetchTeamService } from '../../service/fetchTeam';
 import {
   GetTeamResponseSchema,
@@ -17,7 +18,8 @@ export class TeamController {
     private readonly createTeam: CreateTeamService,
     private readonly findTeam: FetchTeamService,
     private readonly deleteTeam: DeleteTeamService,
-    private readonly entry: EntryService
+    private readonly entry: EntryService,
+    private readonly entryCode: EntryCodeService
   ) {}
 
   async create(
@@ -69,7 +71,7 @@ export class TeamController {
           name: v.getTeamName(),
           members: v.getMembers() as [string, ...string[]],
           clubName: v.getClubName() ?? '',
-          entryCode: '',
+          entryCode: v.getEntryCode()?.toString() ?? '',
           robotType: v.getRobotType(),
           departmentType: v.getDepartmentType(),
           isEntered: v.getIsEntered(),
@@ -90,7 +92,7 @@ export class TeamController {
       name: team.getTeamName(),
       members: team.getMembers() as [string, ...string[]],
       clubName: team.getClubName() ?? '',
-      entryCode: '',
+      entryCode: team.getEntryCode()?.toString() ?? '',
       robotType: team.getRobotType(),
       departmentType: team.getDepartmentType(),
       isEntered: team.getIsEntered(),
@@ -113,6 +115,15 @@ export class TeamController {
     }
     return Result.ok(undefined);
   }
+
+  async setEntryCode(id: TeamID): Promise<Result.Result<Error, void>> {
+    const res = await this.entryCode.setEntryCode(id);
+    if (Result.isErr(res)) {
+      return res;
+    }
+    return Result.ok(undefined);
+  }
+
   async cancel(id: TeamID): Promise<Result.Result<Error, void>> {
     const res = await this.entry.cancel(id);
     if (Result.isErr(res)) {

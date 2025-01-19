@@ -18,6 +18,7 @@ export class PrismaTeamRepository implements TeamRepository {
       robotType: data.robotType as RobotType,
       clubName: data.clubName ?? undefined,
       isEntered: data.isEntered,
+      entryCode: data.entryCode ?? undefined,
     });
   }
 
@@ -97,6 +98,7 @@ export class PrismaTeamRepository implements TeamRepository {
         },
         data: {
           isEntered: team.getIsEntered(),
+          entryCode: team.getEntryCode(),
         },
       });
       return Result.ok(this.deserialize(res));

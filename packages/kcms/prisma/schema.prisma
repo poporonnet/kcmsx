@@ -21,6 +21,7 @@ model Team {
   department String
   clubName   String? @map("club_name")
   isEntered  Boolean @map("is_entered")
+  entryCode  Int?    @map("entry_code")
 
   runResult RunResult[]
 
