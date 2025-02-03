@@ -89,7 +89,7 @@ app.get(
     await setSignedCookie(c, cookieKey, token, cookieSecret, {
       path: '/',
       httpOnly: true,
-      secure: true,
+      secure: nodeEnv === 'production',
       maxAge: cookieMaxAge,
       expires: new Date((nowSeconds + cookieMaxAge) * 1000),
       sameSite: 'strict',
