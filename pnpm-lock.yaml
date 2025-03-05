@@ -63,7 +63,7 @@ importers:
         version: 5.22.0(prisma@5.22.0)
       '@scalar/hono-api-reference':
         specifier: ^0.5.152
-        version: 0.5.177(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)
+        version: 0.5.178(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)
       config:
         specifier: workspace:^
         version: link:../config
@@ -1549,12 +1549,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scalar/api-client@2.2.53':
-    resolution: {integrity: sha512-09NuJjDCbYA/gz4TizWeAxXa3vhwZddquTkFwTrHFfMzSfkLkTNHOIdT01V26BtZCs4pghxtebRORxefQiah9A==}
+  '@scalar/api-client@2.2.54':
+    resolution: {integrity: sha512-cUwJ1eJCmjxXDZ12Mhjn8N1UaDfY9WkFYYpSyzOeQNMSuo9/wRdJq4soyHm9meeT6x91usiidopGHJBLi8L3rQ==}
     engines: {node: '>=18'}
 
-  '@scalar/api-reference@1.25.124':
-    resolution: {integrity: sha512-FETW/QVAL/S0p1y+eUdoy4EOrBqmmhIdGipBrn14ixMB30hSSekxNcKCabje7f0w48xX/pauqemEc3geAen/+Q==}
+  '@scalar/api-reference@1.25.125':
+    resolution: {integrity: sha512-/aq4VtFbx9DKRQL9woywIawhp82aryy4w5onZAz/6ELxfN6Cn1jFKhgV4nCi9kRgErNkhFT0PbjDO/e14QZWwg==}
     engines: {node: '>=18'}
 
   '@scalar/code-highlight@0.0.23':
@@ -1569,8 +1569,8 @@ packages:
     resolution: {integrity: sha512-EQW9N1+mDORhsbjdtCI3XDvmUKsuKw1uf6r3kT1Mm2zQKT+rWwA0ChsAkEN6OG62C0YumMuXpH71h1seAWptxw==}
     engines: {node: '>=18'}
 
-  '@scalar/hono-api-reference@0.5.177':
-    resolution: {integrity: sha512-W0pI4HECxq0ee0mnpMMJda5WSUdliUqJ05DU3X3x7iSZDjF8GyssiCHgPaNuTRHYAfnxxdkEPJbFjUOL0nRQYw==}
+  '@scalar/hono-api-reference@0.5.178':
+    resolution: {integrity: sha512-P2687nYs1Iki0DwgN9y/D2oQbUPDTUVotQNB1gqw9sucPUvPLOXVYOnxQujdsQvMnQcHSE3eajEaU+7h1W9baA==}
     engines: {node: '>=18'}
     peerDependencies:
       hono: ^4.0.0
@@ -5515,7 +5515,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.34.9':
     optional: true
 
-  '@scalar/api-client@2.2.53(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
+  '@scalar/api-client@2.2.54(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
     dependencies:
       '@headlessui/tailwindcss': 0.2.2(tailwindcss@4.0.9)
       '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.8.2))
@@ -5566,11 +5566,11 @@ snapshots:
       - typescript
       - universal-cookie
 
-  '@scalar/api-reference@1.25.124(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
+  '@scalar/api-reference@1.25.125(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
     dependencies:
       '@floating-ui/vue': 1.1.6(vue@3.5.13(typescript@5.8.2))
       '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.8.2))
-      '@scalar/api-client': 2.2.53(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
+      '@scalar/api-client': 2.2.54(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
       '@scalar/code-highlight': 0.0.23
       '@scalar/components': 0.13.27(typescript@5.8.2)
       '@scalar/oas-utils': 0.2.109(@hyperjump/browser@1.2.0)
@@ -5653,9 +5653,9 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@scalar/hono-api-reference@0.5.177(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)':
+  '@scalar/hono-api-reference@0.5.178(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)':
     dependencies:
-      '@scalar/api-reference': 1.25.124(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
+      '@scalar/api-reference': 1.25.125(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
       '@scalar/types': 0.0.36
       hono: 4.7.2
     transitivePeerDependencies:
