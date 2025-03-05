@@ -51,10 +51,10 @@ importers:
         version: 1.13.8(hono@4.6.19)
       '@hono/zod-openapi':
         specifier: ^0.18.0
-        version: 0.18.3(hono@4.6.19)(zod@3.24.1)
+        version: 0.18.3(hono@4.6.19)(zod@3.24.2)
       '@hono/zod-validator':
         specifier: ^0.4.0
-        version: 0.4.3(hono@4.6.19)(zod@3.24.1)
+        version: 0.4.3(hono@4.6.19)(zod@3.24.2)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
         version: 6.7.0
@@ -78,7 +78,7 @@ importers:
         version: 5.7.3
       zod:
         specifier: ^3.22.4
-        version: 3.24.1
+        version: 3.24.2
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -257,7 +257,7 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.4.0
-        version: 0.4.3(hono@4.6.19)(zod@3.24.1)
+        version: 0.4.3(hono@4.6.19)(zod@3.24.2)
       config:
         specifier: workspace:^
         version: link:../config
@@ -266,7 +266,7 @@ importers:
         version: 4.6.19
       zod:
         specifier: ^3.22.4
-        version: 3.24.1
+        version: 3.24.2
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240529.0
@@ -4485,8 +4485,8 @@ packages:
   zhead@2.2.4:
     resolution: {integrity: sha512-8F0OI5dpWIA5IGG5NHUg9staDwz/ZPxZtvGVf01j7vHqSyZ0raHY+78atOVxRqb73AotX22uV1pXt3gYSstGag==}
 
-  zod@3.24.1:
-    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
+  zod@3.24.2:
+    resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -4508,10 +4508,10 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
 
-  '@asteasolutions/zod-to-openapi@7.2.0(zod@3.24.1)':
+  '@asteasolutions/zod-to-openapi@7.2.0(zod@3.24.2)':
     dependencies:
       openapi3-ts: 4.4.0
-      zod: 3.24.1
+      zod: 3.24.2
 
   '@babel/code-frame@7.26.2':
     dependencies:
@@ -5201,17 +5201,17 @@ snapshots:
     dependencies:
       hono: 4.6.19
 
-  '@hono/zod-openapi@0.18.3(hono@4.6.19)(zod@3.24.1)':
+  '@hono/zod-openapi@0.18.3(hono@4.6.19)(zod@3.24.2)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.24.1)
-      '@hono/zod-validator': 0.4.3(hono@4.6.19)(zod@3.24.1)
+      '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.24.2)
+      '@hono/zod-validator': 0.4.3(hono@4.6.19)(zod@3.24.2)
       hono: 4.6.19
-      zod: 3.24.1
+      zod: 3.24.2
 
-  '@hono/zod-validator@0.4.3(hono@4.6.19)(zod@3.24.1)':
+  '@hono/zod-validator@0.4.3(hono@4.6.19)(zod@3.24.2)':
     dependencies:
       hono: 4.6.19
-      zod: 3.24.1
+      zod: 3.24.2
 
   '@humanfs/core@0.19.1': {}
 
@@ -5588,7 +5588,7 @@ snapshots:
       vue-router: 4.5.0(vue@3.5.13(typescript@5.7.3))
       whatwg-mimetype: 4.0.0
       yaml: 2.7.0
-      zod: 3.24.1
+      zod: 3.24.2
     transitivePeerDependencies:
       - '@hyperjump/browser'
       - '@vue/composition-api'
@@ -5740,7 +5740,7 @@ snapshots:
       microdiff: 1.5.0
       nanoid: 5.1.2
       yaml: 2.7.0
-      zod: 3.24.1
+      zod: 3.24.2
     transitivePeerDependencies:
       - '@hyperjump/browser'
 
@@ -5813,7 +5813,7 @@ snapshots:
       '@scalar/use-toasts': 0.7.9(typescript@5.7.3)
       '@vueuse/core': 10.11.1(vue@3.5.13(typescript@5.7.3))
       vue: 3.5.13(typescript@5.7.3)
-      zod: 3.24.1
+      zod: 3.24.2
     transitivePeerDependencies:
       - '@vue/composition-api'
       - typescript
@@ -7956,7 +7956,7 @@ snapshots:
       workerd: 1.20250124.0
       ws: 8.18.0
       youch: 3.3.4
-      zod: 3.24.1
+      zod: 3.24.2
     transitivePeerDependencies:
       - bufferutil
       - supports-color
@@ -9153,6 +9153,6 @@ snapshots:
 
   zhead@2.2.4: {}
 
-  zod@3.24.1: {}
+  zod@3.24.2: {}
 
   zwitch@2.0.4: {}
