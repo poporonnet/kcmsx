@@ -48,22 +48,22 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.3.3
-        version: 1.13.8(hono@4.6.19)
+        version: 1.13.8(hono@4.7.2)
       '@hono/zod-openapi':
         specifier: ^0.19.0
-        version: 0.19.2(hono@4.6.19)(zod@3.24.2)
+        version: 0.19.2(hono@4.7.2)(zod@3.24.2)
       '@hono/zod-validator':
         specifier: ^0.4.0
-        version: 0.4.3(hono@4.6.19)(zod@3.24.2)
+        version: 0.4.3(hono@4.7.2)(zod@3.24.2)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
-        version: 6.7.0
+        version: 6.8.0
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
       '@scalar/hono-api-reference':
         specifier: ^0.5.152
-        version: 0.5.177(@hyperjump/browser@1.2.0)(hono@4.6.19)(tailwindcss@4.0.9)(typescript@5.7.3)
+        version: 0.5.177(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.7.3)
       config:
         specifier: workspace:^
         version: link:../config
@@ -72,7 +72,7 @@ importers:
         version: 0.25.0
       hono:
         specifier: ^4.0.0
-        version: 4.6.19
+        version: 4.7.2
       typescript:
         specifier: ^5.3.2
         version: 5.7.3
@@ -145,10 +145,10 @@ importers:
         version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@19.0.0))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.17.1(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
-        version: 6.7.0
+        version: 6.8.0
       '@tabler/icons-react':
-        specifier: 3.29.0
-        version: 3.29.0(react@19.0.0)
+        specifier: 3.30.0
+        version: 3.30.0(react@19.0.0)
       config:
         specifier: workspace:^
         version: link:../config
@@ -169,7 +169,7 @@ importers:
         version: 19.0.0(react@19.0.0)
       react-router-dom:
         specifier: ^7.0.0
-        version: 7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-timer-hook:
         specifier: ^3.0.7
         version: 3.0.8(react@19.0.0)
@@ -257,13 +257,13 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.4.0
-        version: 0.4.3(hono@4.6.19)(zod@3.24.2)
+        version: 0.4.3(hono@4.7.2)(zod@3.24.2)
       config:
         specifier: workspace:^
         version: link:../config
       hono:
         specifier: ^4.5.4
-        version: 4.6.19
+        version: 4.7.2
       zod:
         specifier: ^3.22.4
         version: 3.24.2
@@ -1195,8 +1195,8 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
-  '@mikuroxina/mini-fn@6.7.0':
-    resolution: {integrity: sha512-MHXlDpiJYIomov57vgCSAdTZbNMVGHoNTbEeZJtShDrWmohuqsIQ2ZBu0GXZ6Co/fowQw16hMti/PM0vXiFDTQ==}
+  '@mikuroxina/mini-fn@6.8.0':
+    resolution: {integrity: sha512-F2zCVBwIKERxuEyQGjxlzQjmrQ2oHOQSdnYJP2LKfcZivGq5n0IziJUiBHipduItSbsYH59cKexVBwSl//O6gQ==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -1506,13 +1506,13 @@ packages:
   '@swc/types@0.1.17':
     resolution: {integrity: sha512-V5gRru+aD8YVyCOMAjMpWR1Ui577DD5KSJsHP8RAxopAH22jFz6GZd/qxqjO6MJHQhcsjvjOFXyDhyLQUnMveQ==}
 
-  '@tabler/icons-react@3.29.0':
-    resolution: {integrity: sha512-jaa3b3j91CplY7TPgx/Gj/e+PcOnQgYiK6c5qtp1P0ytfKM5WPc1qtXyRLE3NcYlfxS2Pcst4YGy1vUML7SjbQ==}
+  '@tabler/icons-react@3.30.0':
+    resolution: {integrity: sha512-9KZ9D1UNAyjlLkkYp2HBPHdf6lAJ2aelDqh8YYAnnmLF3xwprWKxxW8+zw5jlI0IwdfN4XFFuzqePkaw+DpIOg==}
     peerDependencies:
       react: '>= 16'
 
-  '@tabler/icons@3.29.0':
-    resolution: {integrity: sha512-VWNINymdmhay3MDvWVREmRwuWLSrX3YiInKvs5L4AHRF4bAfJabLlEReE0BW/XFsBt22ff8/C8Eam/LXlF97mA==}
+  '@tabler/icons@3.30.0':
+    resolution: {integrity: sha512-c8OKLM48l00u9TFbh2qhSODMONIzML8ajtCyq95rW8vzkWcBrKRPM61tdkThz2j4kd5u17srPGIjqdeRUZdfdw==}
 
   '@tanstack/virtual-core@3.13.2':
     resolution: {integrity: sha512-Qzz4EgzMbO5gKrmqUondCjiHcuu4B1ftHb0pjCut661lXZdGoHeze9f/M8iwsK1t5LGR6aNuNGU7mxkowaW6RQ==}
@@ -2681,8 +2681,8 @@ packages:
   highlightjs-vue@1.0.0:
     resolution: {integrity: sha512-PDEfEF102G23vHmPhLyPboFCD+BkMGu+GuJe2d9/eH4FsCwvgBpnc9n0pGE+ffKdph38s6foEZiEjdgHdzp+IA==}
 
-  hono@4.6.19:
-    resolution: {integrity: sha512-Xw5DwU2cewEsQ1DkDCdy6aBJkEBARl5loovoL1gL3/gw81RdaPbXrNJYp3LoQpzpJ7ECC/1OFi/vn3UZTLHFEw==}
+  hono@4.7.2:
+    resolution: {integrity: sha512-8V5XxoOF6SI12jkHkzX/6aLBMU5GEF5g387EjVSQipS0DlxWgWGSMeEayY3CRBjtTUQYwLHx9JYouWqKzy2Vng==}
     engines: {node: '>=16.9.0'}
 
   hookable@5.5.3:
@@ -3431,15 +3431,15 @@ packages:
       '@types/react':
         optional: true
 
-  react-router-dom@7.1.3:
-    resolution: {integrity: sha512-qQGTE+77hleBzv9SIUIkGRvuFBQGagW+TQKy53UTZAO/3+YFNBYvRsNIZ1GT17yHbc63FylMOdS+m3oUriF1GA==}
+  react-router-dom@7.2.0:
+    resolution: {integrity: sha512-cU7lTxETGtQRQbafJubvZKHEn5izNABxZhBY0Jlzdv0gqQhCPQt2J8aN5ZPjS6mQOXn5NnirWNh+FpE8TTYN0Q==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
-  react-router@7.1.3:
-    resolution: {integrity: sha512-EezYymLY6Guk/zLQ2vRA8WvdUhWFEj5fcE3RfWihhxXBW7+cd1LsIiA3lmx+KCmneAGQuyBv820o44L2+TtkSA==}
+  react-router@7.2.0:
+    resolution: {integrity: sha512-fXyqzPgCPZbqhrk7k3hPcCpYIlQ2ugIXDboHUzhJISFVy2DEPsmHgN588MyGmkIOv3jDgNfUE3kJi83L28s/LQ==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       react: '>=18'
@@ -4813,20 +4813,20 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@hono/node-server@1.13.8(hono@4.6.19)':
+  '@hono/node-server@1.13.8(hono@4.7.2)':
     dependencies:
-      hono: 4.6.19
+      hono: 4.7.2
 
-  '@hono/zod-openapi@0.19.2(hono@4.6.19)(zod@3.24.2)':
+  '@hono/zod-openapi@0.19.2(hono@4.7.2)(zod@3.24.2)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 7.2.0(zod@3.24.2)
-      '@hono/zod-validator': 0.4.3(hono@4.6.19)(zod@3.24.2)
-      hono: 4.6.19
+      '@hono/zod-validator': 0.4.3(hono@4.7.2)(zod@3.24.2)
+      hono: 4.7.2
       zod: 3.24.2
 
-  '@hono/zod-validator@0.4.3(hono@4.6.19)(zod@3.24.2)':
+  '@hono/zod-validator@0.4.3(hono@4.7.2)(zod@3.24.2)':
     dependencies:
-      hono: 4.6.19
+      hono: 4.7.2
       zod: 3.24.2
 
   '@humanfs/core@0.19.1': {}
@@ -5005,7 +5005,7 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@mikuroxina/mini-fn@6.7.0': {}
+  '@mikuroxina/mini-fn@6.8.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
@@ -5252,11 +5252,11 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@scalar/hono-api-reference@0.5.177(@hyperjump/browser@1.2.0)(hono@4.6.19)(tailwindcss@4.0.9)(typescript@5.7.3)':
+  '@scalar/hono-api-reference@0.5.177(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.7.3)':
     dependencies:
       '@scalar/api-reference': 1.25.124(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.7.3)
       '@scalar/types': 0.0.36
-      hono: 4.6.19
+      hono: 4.7.2
     transitivePeerDependencies:
       - '@hyperjump/browser'
       - '@vue/composition-api'
@@ -5449,12 +5449,12 @@ snapshots:
     dependencies:
       '@swc/counter': 0.1.3
 
-  '@tabler/icons-react@3.29.0(react@19.0.0)':
+  '@tabler/icons-react@3.30.0(react@19.0.0)':
     dependencies:
-      '@tabler/icons': 3.29.0
+      '@tabler/icons': 3.30.0
       react: 19.0.0
 
-  '@tabler/icons@3.29.0': {}
+  '@tabler/icons@3.30.0': {}
 
   '@tanstack/virtual-core@3.13.2': {}
 
@@ -6846,7 +6846,7 @@ snapshots:
 
   highlightjs-vue@1.0.0: {}
 
-  hono@4.6.19: {}
+  hono@4.7.2: {}
 
   hookable@5.5.3: {}
 
@@ -7724,13 +7724,13 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.10
 
-  react-router-dom@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-router-dom@7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
-      react-router: 7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      react-router: 7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
 
-  react-router@7.1.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  react-router@7.2.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@types/cookie': 0.6.0
       cookie: 1.0.2
