@@ -36,10 +36,10 @@ importers:
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3)(vitest@3.0.7)
       prettier:
         specifier: ^3.3.3
-        version: 3.4.2
+        version: 3.5.2
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.1.0(prettier@3.4.2)(typescript@5.7.3)
+        version: 4.1.0(prettier@3.5.2)(typescript@5.7.3)
       vitest:
         specifier: ^3.0.0
         version: 3.0.7(@types/debug@4.1.12)(@types/node@22.10.7)(@vitest/ui@3.0.7)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
@@ -109,10 +109,10 @@ importers:
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3)(vitest@3.0.7)
       prettier:
         specifier: ^3.1.0
-        version: 3.4.2
+        version: 3.5.2
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.1.0(prettier@3.4.2)(typescript@5.7.3)
+        version: 4.1.0(prettier@3.5.2)(typescript@5.7.3)
       prisma:
         specifier: ^5.20.0
         version: 5.22.0
@@ -236,10 +236,10 @@ importers:
         version: 7.0.1(postcss@8.5.3)
       prettier:
         specifier: 3.4.2
-        version: 3.4.2
+        version: 3.5.2
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.1.0(prettier@3.4.2)(typescript@5.7.3)
+        version: 4.1.0(prettier@3.5.2)(typescript@5.7.3)
       serve:
         specifier: ^14.2.4
         version: 14.2.4
@@ -273,7 +273,7 @@ importers:
         version: 4.20250303.0
       prettier:
         specifier: ^3.3.3
-        version: 3.4.2
+        version: 3.5.2
       wrangler:
         specifier: ^3.71.0
         version: 3.106.0(@cloudflare/workers-types@4.20250303.0)
@@ -3306,8 +3306,8 @@ packages:
       vue-tsc:
         optional: true
 
-  prettier@3.4.2:
-    resolution: {integrity: sha512-e9MewbtFo+Fevyuxn/4rrcDAaq0IYxPGLvObpQjiZBMAzB9IGmzlnG9RZy3FFas+eBMu2vA0CszMeduow5dIuQ==}
+  prettier@3.5.2:
+    resolution: {integrity: sha512-lc6npv5PH7hVqozBR7lkBNOGXV9vMwROAPlumdBkX0wTbbzPu/U1hk5yL8p2pt4Xoc+2mkT8t/sow2YrV/M5qg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -7590,12 +7590,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-organize-imports@4.1.0(prettier@3.4.2)(typescript@5.7.3):
+  prettier-plugin-organize-imports@4.1.0(prettier@3.5.2)(typescript@5.7.3):
     dependencies:
-      prettier: 3.4.2
+      prettier: 3.5.2
       typescript: 5.7.3
 
-  prettier@3.4.2: {}
+  prettier@3.5.2: {}
 
   pretty-bytes@6.1.1: {}
 
