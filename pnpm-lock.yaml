@@ -57,7 +57,7 @@ importers:
         version: 0.4.3(hono@4.6.19)(zod@3.24.2)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
-        version: 6.7.0
+        version: 6.8.0
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -145,7 +145,7 @@ importers:
         version: 7.16.1(@mantine/core@7.16.1(@mantine/hooks@7.16.1(react@19.0.0))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.16.1(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mikuroxina/mini-fn':
         specifier: ^6.0.0
-        version: 6.7.0
+        version: 6.8.0
       '@tabler/icons-react':
         specifier: 3.29.0
         version: 3.29.0(react@19.0.0)
@@ -1195,8 +1195,8 @@ packages:
   '@marijn/find-cluster-break@1.0.2':
     resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
-  '@mikuroxina/mini-fn@6.7.0':
-    resolution: {integrity: sha512-MHXlDpiJYIomov57vgCSAdTZbNMVGHoNTbEeZJtShDrWmohuqsIQ2ZBu0GXZ6Co/fowQw16hMti/PM0vXiFDTQ==}
+  '@mikuroxina/mini-fn@6.8.0':
+    resolution: {integrity: sha512-F2zCVBwIKERxuEyQGjxlzQjmrQ2oHOQSdnYJP2LKfcZivGq5n0IziJUiBHipduItSbsYH59cKexVBwSl//O6gQ==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -5005,7 +5005,7 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.2': {}
 
-  '@mikuroxina/mini-fn@6.7.0': {}
+  '@mikuroxina/mini-fn@6.8.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
