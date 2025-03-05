@@ -29,8 +29,8 @@ importers:
         specifier: 9.19.0
         version: 9.19.0
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@9.19.0)
+        specifier: ^10.0.0
+        version: 10.0.2(eslint@9.19.0)
       eslint-plugin-vitest:
         specifier: ^0.5.0
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3)(vitest@2.1.9(@types/node@22.10.7)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3)))
@@ -102,8 +102,8 @@ importers:
         specifier: ^9.0.0
         version: 9.19.0
       eslint-config-prettier:
-        specifier: ^9.1.0
-        version: 9.1.0(eslint@9.19.0)
+        specifier: ^10.0.0
+        version: 10.0.2(eslint@9.19.0)
       eslint-plugin-vitest:
         specifier: ^0.5.0
         version: 0.5.4(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3))(eslint@9.19.0)(typescript@5.7.3)(vitest@2.1.9(@types/node@20.17.22)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3)))
@@ -2622,8 +2622,8 @@ packages:
     resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
     engines: {node: '>=12'}
 
-  eslint-config-prettier@9.1.0:
-    resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
+  eslint-config-prettier@10.0.2:
+    resolution: {integrity: sha512-1105/17ZIMjmCOJOPNfVdbXafLCLj3hPmkmB7dLgt7XsQ/zkxSuDerE/xgO3RxoHysR1N1whmquY0lSn2O0VLg==}
     hasBin: true
     peerDependencies:
       eslint: '>=7.0.0'
@@ -6946,7 +6946,7 @@ snapshots:
 
   escape-string-regexp@5.0.0: {}
 
-  eslint-config-prettier@9.1.0(eslint@9.19.0):
+  eslint-config-prettier@10.0.2(eslint@9.19.0):
     dependencies:
       eslint: 9.19.0
 
