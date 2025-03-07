@@ -63,7 +63,7 @@ importers:
         version: 5.22.0(prisma@5.22.0)
       '@scalar/hono-api-reference':
         specifier: ^0.5.152
-        version: 0.5.179(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)
+        version: 0.5.180(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)
       config:
         specifier: workspace:^
         version: link:../config
@@ -1549,12 +1549,12 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@scalar/api-client@2.2.55':
-    resolution: {integrity: sha512-8icQpf8oiPTJgYCom2wKg/U4UwTrkMUXtssynX2WknbdROb09gpvEiYsBg3VQBZY/rEw0PeLvz7+JO8OYLwAOg==}
+  '@scalar/api-client@2.2.56':
+    resolution: {integrity: sha512-ilY0geYUg90xVameaQ3IJm1/gO9MOmvcQEm98/IfizoYJ5P9aFnXphwEvR+K0xeSD6QYXdaz4ir5UB31Jkuueg==}
     engines: {node: '>=18'}
 
-  '@scalar/api-reference@1.25.126':
-    resolution: {integrity: sha512-Z8zfUeaenJrumhnQIKWuNzup3WsEbsLZdSgIPFtETRKPFyLGB8/qruboMbua0xo7NuytAit0FCMvK3u42DvTUQ==}
+  '@scalar/api-reference@1.25.127':
+    resolution: {integrity: sha512-wDCDhkskVdAUbRdHB4LuFkR45nhbe3PW4yeXgkaWZqJOsh6/kpq+cgLVX4nET1lcHhnjYGWppBtqRx2fclXDjQ==}
     engines: {node: '>=18'}
 
   '@scalar/code-highlight@0.0.23':
@@ -1569,8 +1569,8 @@ packages:
     resolution: {integrity: sha512-EQW9N1+mDORhsbjdtCI3XDvmUKsuKw1uf6r3kT1Mm2zQKT+rWwA0ChsAkEN6OG62C0YumMuXpH71h1seAWptxw==}
     engines: {node: '>=18'}
 
-  '@scalar/hono-api-reference@0.5.179':
-    resolution: {integrity: sha512-75TYi++hJvW8IGoK6F9+MY063odu2P701Sf+HZoej2FYcxZVUI7e8mHpVxaaqZmWqml65wVjWhnr8S39/9xjHg==}
+  '@scalar/hono-api-reference@0.5.180':
+    resolution: {integrity: sha512-gDvJX4ohgQ1WpVFQmjwoYyeWMQlsBiTSa62UH+s9KVguT0kolZGk34LaYrxjwil2l10WVPoMHxGgnaZsu/wioQ==}
     engines: {node: '>=18'}
     peerDependencies:
       hono: ^4.0.0
@@ -2442,8 +2442,8 @@ packages:
   decimal.js@10.4.3:
     resolution: {integrity: sha512-VBBaLc1MgL5XpzgIP7ny5Z6Nx3UrRkIViUkPUdtl9aya5amy3De1gsUUSB1g3+3sExYNjCAsAznmukyxCb1GRA==}
 
-  decode-named-character-reference@1.0.2:
-    resolution: {integrity: sha512-O8x12RzrUF8xyVcY0KJowWsmaJxQbmy0/EtnNtHRpsOcT7dFk5W598coHqBVpmWo1oQQfsCqfCmkZN5DJrZVdg==}
+  decode-named-character-reference@1.1.0:
+    resolution: {integrity: sha512-Wy+JTSbFThEOXQIR2L6mxJvEs+veIzpmqD7ynWxMXGpnk3smkHQOp6forLdHsKpAMW9iJpaBBIxz285t1n1C3w==}
 
   deep-eql@5.0.2:
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
@@ -3353,8 +3353,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@5.1.2:
-    resolution: {integrity: sha512-b+CiXQCNMUGe0Ri64S9SXFcP9hogjAJ2Rd6GdVxhPLRm7mhGaM7VgOvCAJ1ZshfHbqVDI3uqTI5C8/GaKuLI7g==}
+  nanoid@5.1.3:
+    resolution: {integrity: sha512-zAbEOEr7u2CbxwoMRlz/pNSpRP0FdAU4pRaYunCdEezWohXFs+a0Xw7RfkKaezMsmSM1vttcLthJtwRnVtOfHQ==}
     engines: {node: ^18 || >=20}
     hasBin: true
 
@@ -5510,7 +5510,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.34.9':
     optional: true
 
-  '@scalar/api-client@2.2.55(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
+  '@scalar/api-client@2.2.56(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
     dependencies:
       '@headlessui/tailwindcss': 0.2.2(tailwindcss@4.0.9)
       '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.8.2))
@@ -5535,7 +5535,7 @@ snapshots:
       focus-trap: 7.6.4
       fuse.js: 7.1.0
       microdiff: 1.5.0
-      nanoid: 5.1.2
+      nanoid: 5.1.3
       pretty-bytes: 6.1.1
       pretty-ms: 8.0.0
       shell-quote: 1.8.2
@@ -5561,11 +5561,11 @@ snapshots:
       - typescript
       - universal-cookie
 
-  '@scalar/api-reference@1.25.126(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
+  '@scalar/api-reference@1.25.127(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)':
     dependencies:
       '@floating-ui/vue': 1.1.6(vue@3.5.13(typescript@5.8.2))
       '@headlessui/vue': 1.7.23(vue@3.5.13(typescript@5.8.2))
-      '@scalar/api-client': 2.2.55(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
+      '@scalar/api-client': 2.2.56(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
       '@scalar/code-highlight': 0.0.23
       '@scalar/components': 0.13.28(typescript@5.8.2)
       '@scalar/oas-utils': 0.2.110(@hyperjump/browser@1.2.0)
@@ -5580,7 +5580,7 @@ snapshots:
       '@vueuse/core': 10.11.1(vue@3.5.13(typescript@5.8.2))
       fuse.js: 7.1.0
       github-slugger: 2.0.0
-      nanoid: 5.1.2
+      nanoid: 5.1.3
       vue: 3.5.13(typescript@5.8.2)
     transitivePeerDependencies:
       - '@hyperjump/browser'
@@ -5632,7 +5632,7 @@ snapshots:
       '@scalar/use-toasts': 0.7.9(typescript@5.8.2)
       '@vueuse/core': 10.11.1(vue@3.5.13(typescript@5.8.2))
       cva: 1.0.0-beta.2(typescript@5.8.2)
-      nanoid: 5.1.2
+      nanoid: 5.1.3
       pretty-bytes: 6.1.1
       radix-vue: 1.9.17(vue@3.5.13(typescript@5.8.2))
       tailwind-merge: 2.6.0
@@ -5648,9 +5648,9 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@scalar/hono-api-reference@0.5.179(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)':
+  '@scalar/hono-api-reference@0.5.180(@hyperjump/browser@1.2.0)(hono@4.7.2)(tailwindcss@4.0.9)(typescript@5.8.2)':
     dependencies:
-      '@scalar/api-reference': 1.25.126(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
+      '@scalar/api-reference': 1.25.127(@hyperjump/browser@1.2.0)(tailwindcss@4.0.9)(typescript@5.8.2)
       '@scalar/types': 0.0.36
       hono: 4.7.2
     transitivePeerDependencies:
@@ -5693,7 +5693,7 @@ snapshots:
       '@scalar/types': 0.0.36
       flatted: 3.3.3
       microdiff: 1.5.0
-      nanoid: 5.1.2
+      nanoid: 5.1.3
       yaml: 2.7.0
       zod: 3.24.2
     transitivePeerDependencies:
@@ -5775,7 +5775,7 @@ snapshots:
 
   '@scalar/use-toasts@0.7.9(typescript@5.8.2)':
     dependencies:
-      nanoid: 5.1.2
+      nanoid: 5.1.3
       vue: 3.5.13(typescript@5.8.2)
       vue-sonner: 1.3.0
     transitivePeerDependencies:
@@ -6655,7 +6655,7 @@ snapshots:
 
   decimal.js@10.4.3: {}
 
-  decode-named-character-reference@1.0.2:
+  decode-named-character-reference@1.1.0:
     dependencies:
       character-entities: 2.0.2
 
@@ -7487,7 +7487,7 @@ snapshots:
     dependencies:
       '@types/mdast': 4.0.4
       '@types/unist': 3.0.3
-      decode-named-character-reference: 1.0.2
+      decode-named-character-reference: 1.1.0
       devlop: 1.1.0
       mdast-util-to-string: 4.0.0
       micromark: 4.0.2
@@ -7600,7 +7600,7 @@ snapshots:
 
   micromark-core-commonmark@2.0.3:
     dependencies:
-      decode-named-character-reference: 1.0.2
+      decode-named-character-reference: 1.1.0
       devlop: 1.1.0
       micromark-factory-destination: 2.0.1
       micromark-factory-label: 2.0.1
@@ -7733,7 +7733,7 @@ snapshots:
 
   micromark-util-decode-string@2.0.1:
     dependencies:
-      decode-named-character-reference: 1.0.2
+      decode-named-character-reference: 1.1.0
       micromark-util-character: 2.1.1
       micromark-util-decode-numeric-character-reference: 2.0.2
       micromark-util-symbol: 2.0.1
@@ -7771,7 +7771,7 @@ snapshots:
     dependencies:
       '@types/debug': 4.1.12
       debug: 4.4.0
-      decode-named-character-reference: 1.0.2
+      decode-named-character-reference: 1.1.0
       devlop: 1.1.0
       micromark-core-commonmark: 2.0.3
       micromark-factory-space: 2.0.1
@@ -7858,7 +7858,7 @@ snapshots:
 
   nanoid@3.3.8: {}
 
-  nanoid@5.1.2: {}
+  nanoid@5.1.3: {}
 
   natural-compare@1.4.0: {}
 
@@ -8046,7 +8046,7 @@ snapshots:
       aria-hidden: 1.2.4
       defu: 6.1.4
       fast-deep-equal: 3.1.3
-      nanoid: 5.1.2
+      nanoid: 5.1.3
       vue: 3.5.13(typescript@5.8.2)
     transitivePeerDependencies:
       - '@vue/composition-api'
