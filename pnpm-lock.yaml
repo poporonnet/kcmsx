@@ -56,8 +56,8 @@ importers:
         specifier: ^0.4.0
         version: 0.4.3(hono@4.7.4)(zod@3.24.2)
       '@mikuroxina/mini-fn':
-        specifier: ^6.0.0
-        version: 6.8.0
+        specifier: ^7.0.0
+        version: 7.0.0
       '@prisma/client':
         specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -144,8 +144,8 @@ importers:
         specifier: 7.17.1
         version: 7.17.1(@mantine/core@7.17.1(@mantine/hooks@7.17.1(react@19.0.0))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(@mantine/hooks@7.17.1(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@mikuroxina/mini-fn':
-        specifier: ^6.0.0
-        version: 6.8.0
+        specifier: ^7.0.0
+        version: 7.0.0
       '@tabler/icons-react':
         specifier: 3.31.0
         version: 3.31.0(react@19.0.0)
@@ -1054,8 +1054,8 @@ packages:
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mikuroxina/mini-fn@6.8.0':
-    resolution: {integrity: sha512-F2zCVBwIKERxuEyQGjxlzQjmrQ2oHOQSdnYJP2LKfcZivGq5n0IziJUiBHipduItSbsYH59cKexVBwSl//O6gQ==}
+  '@mikuroxina/mini-fn@7.0.0':
+    resolution: {integrity: sha512-31RvUgwmaiLqw5BXAJ7aB5NU2t99A+/OAVY3G49eymoeXywUEtnl06UQjCQUBxGxDVq9P6+jqQbPeSJzAU513Q==}
 
   '@nodelib/fs.scandir@2.1.5':
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -3971,7 +3971,7 @@ snapshots:
     dependencies:
       react: 19.0.0
 
-  '@mikuroxina/mini-fn@6.8.0': {}
+  '@mikuroxina/mini-fn@7.0.0': {}
 
   '@nodelib/fs.scandir@2.1.5':
     dependencies:
