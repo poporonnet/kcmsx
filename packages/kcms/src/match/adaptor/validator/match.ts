@@ -86,6 +86,17 @@ const DepartmentTypeSchema = z.enum(pick(config.departments, 'type')).openapi({
   example: config.departments[0].type,
 });
 
+// 再帰的スキーマのため型定義が必要
+type Tournament = Omit<z.infer<typeof MainSchema>, 'runResults'> & {
+  childMatch1?: Tournament;
+  childMatch2?: Tournament;
+};
+
+const TournamentSchema: z.ZodType<Tournament> = MainSchema.omit({ runResults: true }).extend({
+  childMatch1: z.lazy(() => TournamentSchema.optional()),
+  childMatch2: z.lazy(() => TournamentSchema.optional()),
+});
+
 export const GetMatchTypeParamsSchema = z.object({
   matchType: MatchTypeSchema,
 });
@@ -120,13 +131,16 @@ export const PostMatchGenerateManualParamsSchema = z.object({
   departmentType: DepartmentTypeSchema,
 });
 export const PostMatchGenerateManualRequestSchema = z.object({
-  team1ID: z.string().openapi({ example: '45098607' }),
-  team2ID: z.string().openapi({ example: '2230392' }),
+  teamIDs: z.array(z.string().openapi({ example: '45098607' })).min(2),
 });
 export const PostMatchGenerateManualResponseSchema = z.array(ShortMainSchema);
 
 export const PostMatchRunResultParamsSchema = z.object({
   matchType: MatchTypeSchema,
+  matchID: z.string().openapi({ example: '320984' }),
+});
+
+export const PostMatchWinnerIDParamsSchema = z.object({
   matchID: z.string().openapi({ example: '320984' }),
 });
 
@@ -149,3 +163,13 @@ export const GetRankingResponseSchema = z.array(
     goalTimeSeconds: z.number().nullable().openapi({ example: 30 }),
   })
 );
+
+export const GetTournamentParamsSchema = z.object({
+  departmentType: DepartmentTypeSchema,
+});
+
+export const GetTournamentResponseSchema = TournamentSchema;
+
+export const PostMatchWinnerIDRequestSchema = z.object({
+  winnerID: z.string().openapi({ example: '31415926535' }),
+});

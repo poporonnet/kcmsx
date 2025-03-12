@@ -10,6 +10,8 @@ import {
   GetMatchTypeResponseSchema,
   GetRankingParamsSchema,
   GetRankingResponseSchema,
+  GetTournamentParamsSchema,
+  GetTournamentResponseSchema,
   PostMatchGenerateManualParamsSchema,
   PostMatchGenerateManualRequestSchema,
   PostMatchGenerateManualResponseSchema,
@@ -17,6 +19,8 @@ import {
   PostMatchGenerateResponseSchema,
   PostMatchRunResultParamsSchema,
   PostMatchRunResultRequestSchema,
+  PostMatchWinnerIDParamsSchema,
+  PostMatchWinnerIDRequestSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -169,6 +173,32 @@ export const PostMatchGenerateManualRoute = createRoute({
   },
 });
 
+export const PostMatchWinnerIDRoute = createRoute({
+  method: 'post',
+  path: '/match/main/{matchID}/winner',
+  request: {
+    params: PostMatchWinnerIDParamsSchema,
+    body: {
+      content: {
+        'application/json': { schema: PostMatchWinnerIDRequestSchema },
+      },
+    },
+  },
+  responses: {
+    200: {
+      description: 'OK',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
 export const PostMatchRunResultRoute = createRoute({
   method: 'post',
   path: '/match/{matchType}/{matchID}/run_result',
@@ -207,6 +237,32 @@ export const GetRankingRoute = createRoute({
         },
       },
       description: 'Get Ranking',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetTournamentRoute = createRoute({
+  method: 'get',
+  path: '/match/main/{departmentType}/tournament',
+  request: {
+    params: GetTournamentParamsSchema,
+  },
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetTournamentResponseSchema,
+        },
+      },
+      description: 'Get main tournament',
     },
     400: {
       content: {

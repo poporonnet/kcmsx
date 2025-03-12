@@ -67,4 +67,17 @@ describe('正しくインスタンスを生成できる', () => {
 
     expect(team.getIsEntered()).toBe(false);
   });
+
+  it('エントリーコードを設定できる', () => {
+    const team = Team.new({
+      id: '1' as TeamID,
+      teamName: 'team1',
+      members: ['山田太郎', 'テスト大介'],
+      departmentType: config.departments[0].type,
+      robotType: 'leg',
+    });
+    team.enter();
+    team.setEntryCode(1);
+    expect(team.getEntryCode()).toBe(1);
+  });
 });
