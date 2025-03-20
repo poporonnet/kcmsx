@@ -218,8 +218,6 @@ matchHandler.doc('/openapi/match.json', {
 matchHandler.get(
   '/reference/match',
   apiReference({
-    spec: {
-      url: '/openapi/match.json',
-    },
+    url: '/openapi/match.json',
   })
 );
