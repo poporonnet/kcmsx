@@ -92,10 +92,19 @@ type Tournament = Omit<z.infer<typeof MainSchema>, 'runResults'> & {
   childMatch2?: Tournament;
 };
 
-const TournamentSchema: z.ZodType<Tournament> = MainSchema.omit({ runResults: true }).extend({
-  childMatch1: z.lazy(() => TournamentSchema.optional()),
-  childMatch2: z.lazy(() => TournamentSchema.optional()),
-});
+// 再帰的スキーマのためOpenAPI向けにrefが必要
+const tournamentRefID = 'Tournament';
+const tournamentRef = `#/components/schemas/${tournamentRefID}`;
+const TournamentSchema: z.ZodType<Tournament> = MainSchema.omit({ runResults: true })
+  .extend({
+    childMatch1: z
+      .lazy(() => TournamentSchema.optional())
+      .openapi({ type: 'object', items: { $ref: tournamentRef } }),
+    childMatch2: z
+      .lazy(() => TournamentSchema.optional())
+      .openapi({ type: 'object', items: { $ref: tournamentRef } }),
+  })
+  .openapi(tournamentRefID);
 
 export const GetMatchTypeParamsSchema = z.object({
   matchType: MatchTypeSchema,
