@@ -142,8 +142,6 @@ teamHandler.doc('/openapi/team.json', {
 teamHandler.get(
   '/reference/team',
   apiReference({
-    spec: {
-      url: '/openapi/team.json',
-    },
+    url: '/openapi/team.json',
   })
 );
