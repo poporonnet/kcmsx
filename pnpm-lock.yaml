@@ -4864,7 +4864,7 @@ snapshots:
       std-env: 3.8.1
       test-exclude: 7.0.1
       tinyrainbow: 2.0.0
-      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@20.17.28)(@vitest/ui@3.0.9)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
+      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@22.10.7)(@vitest/ui@3.0.9)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -4919,7 +4919,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.12
       tinyrainbow: 2.0.0
-      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@20.17.28)(@vitest/ui@3.0.9)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
+      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@22.10.7)(@vitest/ui@3.0.9)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
 
   '@vitest/utils@3.0.9':
     dependencies:
@@ -5415,7 +5415,7 @@ snapshots:
       eslint: 9.23.0
     optionalDependencies:
       '@typescript-eslint/eslint-plugin': 8.28.0(@typescript-eslint/parser@8.28.0(eslint@9.23.0)(typescript@5.8.2))(eslint@9.23.0)(typescript@5.8.2)
-      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@20.17.28)(@vitest/ui@3.0.9)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
+      vitest: 3.0.9(@types/debug@4.1.12)(@types/node@22.10.7)(@vitest/ui@3.0.9)(jsdom@26.0.0)(sugarss@4.0.1(postcss@8.5.3))(tsx@4.19.3)(yaml@2.7.0)
     transitivePeerDependencies:
       - supports-color
       - typescript
