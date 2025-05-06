@@ -1,9 +1,10 @@
 # 開発者向けガイド
 ## Getting Started
 ### 事前に準備するもの
-- [Node.js](https://nodejs.org/en/) v22(その時のstableを使用してください)
-- [pnpm](https://pnpm.io/ja/) 9.9
+- [Node.js](https://nodejs.org/en/) LTSバージョンを使用してください
+- [pnpm](https://pnpm.io/ja/)
 - [Git](https://git-scm.com/downloads)
+- [bun](https://bun.sh/)
 
 ## インストール
 ```
@@ -22,16 +23,10 @@ pnpm dev:frontend
 http://localhost:5173 をブラウザで開いて使用できます。
 
 ### バックエンド
+バックエンドの起動には事前にセットアップを行なっておく必要があります。
 
-> [!IMPORTANT]
-> 現在バックエンドのkcmsは開発中のため、定義されているAPIを完全にサポートしていません。そのため、しばらくはこのmockをバックエンドサーバーとして用います
+[バックエンドの環境構築](../packages/kcms/README.md)
 
-```
-pnpm dev:mock
-```
-エントリーポイントは、[http://localhost:8787](https://localhost:8787)以下になります。
-
-### 開発中のバックエンドを起動する方法
 ```
 pnpm dev:backend
 ```
@@ -54,11 +49,10 @@ kcmsxは、モノレポを採用しており、packagesフォルダの中に、�
 - [config](./packages/config/) kcmsx各種パッケージのための共通の設定ファイルを記述するパッケージ
 - [kcms](./packages/kcms/) バックエンド
 - [kcmsf](./packages/kcmsf/) フロントエンド
-- [mock](./packages/mock/) バックエンドが完成するまでの代わりのモック
+- [mock](./packages/mock/) バックエンドが完成するまで暫定で使われていたmock
 
 ## [APIリファレンス](./api.md)
-バックエンドが提供するAPIの定義。一応mockが対応してます。
-
+バックエンドが提供するAPIの定義。
 
 # ブランチ/コミット/Issue/Pull Request命名規則
 プルリクエスト、コミット、Issueの名前は以下のようにしてください。
@@ -102,6 +96,12 @@ kcmsxは、モノレポを採用しており、packagesフォルダの中に、�
 ![自動テストが失敗した例](./gh-action-test.png)
 
 テストが落ちたら`Details`からログが確認できるので、原因を調べて修正してください。
+
+Cloudflareのビルドが落ちた場合、現状ログに関してはPoporon Networkのメンバーしか確認できないようになっています。
+ビルドログの確認をしたい場合は、いずれかのメンバーにコンタクトをとって相談してください。
+
+https://poporon.org/#Members
+
 #### コンフリクト
 また、コンフリクトが発生した場合、以下の表示がされています。こちらについても修正してください。
 
