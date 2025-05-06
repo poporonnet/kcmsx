@@ -1,5 +1,4 @@
 # kcmsx
-
 ご当地ロボコン 大会運営支援ツール
 
 - [開発者用ガイドはこちら](./docs/development.md)
