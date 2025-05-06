@@ -1,8 +1,8 @@
 # 開発者向けガイド
 ## Getting Started
 ### 事前に準備するもの
-- [Node.js](https://nodejs.org/en/) v22(その時のstableを使用してください)
-- [pnpm](https://pnpm.io/ja/) 9.9
+- [Node.js](https://nodejs.org/en/) LTSバージョンを使用してください
+- [pnpm](https://pnpm.io/ja/)
 - [Git](https://git-scm.com/downloads)
 - [bun](https://bun.sh/)
 
