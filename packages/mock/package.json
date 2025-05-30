@@ -6,7 +6,7 @@
     "format": "prettier . --write"
   },
   "dependencies": {
-    "@hono/zod-validator": "^0.5.0",
+    "@hono/zod-validator": "^0.6.0",
     "config": "workspace:^",
     "hono": "^4.5.4",
     "zod": "^3.22.4"
