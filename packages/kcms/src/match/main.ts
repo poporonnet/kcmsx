@@ -44,10 +44,12 @@ const teamRepository = new PrismaTeamRepository(prismaClient);
 
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
+const setMainWinnerService = new SetMainMatchWinnerService(mainMatchRepository);
 const createRunResultService = new CreateRunResultService(
   idGenerator,
   preMatchRepository,
-  mainMatchRepository
+  mainMatchRepository,
+  setMainWinnerService
 );
 const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
@@ -67,7 +69,6 @@ const generateMainMatchService = new GenerateMainMatchService(
   config.match.main.requiredTeams
 );
 const fetchTournamentService = new FetchTournamentService(getMatchService);
-const setWinnerService = new SetMainMatchWinnerService(mainMatchRepository);
 const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
@@ -76,7 +77,7 @@ const matchController = new MatchController(
   fetchRunResultService,
   generateMainMatchService,
   fetchTournamentService,
-  setWinnerService
+  setMainWinnerService
 );
 export const matchHandler = new OpenAPIHono();
 
