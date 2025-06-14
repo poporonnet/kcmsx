@@ -10,6 +10,7 @@ import { MainMatch, MainMatchID } from '../model/main';
 import { PreMatchID } from '../model/pre';
 import { CreateRunResultArgs } from '../model/runResult';
 import { CreateRunResultService } from './createRunResult';
+import { SetMainMatchWinnerService } from './setMainWinner';
 describe('CreateRunResult', () => {
   const id = '264543141888004096';
   const dummyPreMatchRepository = new DummyPreMatchRepository(testCreateRunResultPreData);
@@ -19,10 +20,12 @@ describe('CreateRunResult', () => {
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
+    const setMainWinnerService = new SetMainMatchWinnerService(dummyMainMatchRepository);
     const service = new CreateRunResultService(
       generator,
       dummyPreMatchRepository,
-      dummyMainMatchRepository
+      dummyMainMatchRepository,
+      setMainWinnerService
     );
     const runResult: Omit<CreateRunResultArgs, 'id'>[] = [
       {
@@ -46,10 +49,12 @@ describe('CreateRunResult', () => {
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
+    const setMainWinnerService = new SetMainMatchWinnerService(dummyMainMatchRepository);
     const service = new CreateRunResultService(
       generator,
       dummyPreMatchRepository,
-      dummyMainMatchRepository
+      dummyMainMatchRepository,
+      setMainWinnerService
     );
     const id = '264543141888004096';
 
@@ -123,13 +128,15 @@ describe('CreateRunResult', () => {
 
   it('Main: 得点が高い方を勝者にする', async () => {
     const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
+    const setMainWinnerService = new SetMainMatchWinnerService(dummyMainMatchRepository);
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
     const service = new CreateRunResultService(
       generator,
       dummyPreMatchRepository,
-      dummyMainMatchRepository
+      dummyMainMatchRepository,
+      setMainWinnerService
     );
     const runResults = testRunResultData();
     // 91: 13+5pts,60s / 92: 10+7pts,80s -> 91が勝者
@@ -143,13 +150,15 @@ describe('CreateRunResult', () => {
 
   it('Main: 同点ならベストタイムが早い方を勝者にする', async () => {
     const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
+    const setMainWinnerService = new SetMainMatchWinnerService(dummyMainMatchRepository);
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
     const service = new CreateRunResultService(
       generator,
       dummyPreMatchRepository,
-      dummyMainMatchRepository
+      dummyMainMatchRepository,
+      setMainWinnerService
     );
 
     // 91: 17pts,60s / 92: 17pts,80s -> 91が勝者
@@ -161,13 +170,15 @@ describe('CreateRunResult', () => {
 
   it('Main: 同点でベストタイムも同じなら、何もしない', async () => {
     const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
+    const setMainWinnerService = new SetMainMatchWinnerService(dummyMainMatchRepository);
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
     const service = new CreateRunResultService(
       generator,
       dummyPreMatchRepository,
-      dummyMainMatchRepository
+      dummyMainMatchRepository,
+      setMainWinnerService
     );
     const runResults = testRunResultData();
     // 91: 17pts,60s / 92: 17pts,60s -> 何もしない
@@ -181,13 +192,15 @@ describe('CreateRunResult', () => {
 
   it('Main: まだ試合が終わってないなら何もしない', async () => {
     const dummyMainMatchRepository = new DummyMainMatchRepository(testMainMatchData());
+    const setMainWinnerService = new SetMainMatchWinnerService(dummyMainMatchRepository);
     const generator = new SnowflakeIDGenerator(1, () =>
       BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
     );
     const service = new CreateRunResultService(
       generator,
       dummyPreMatchRepository,
-      dummyMainMatchRepository
+      dummyMainMatchRepository,
+      setMainWinnerService
     );
     const runResults = testRunResultData();
     await service.handle('main', '900' as MainMatchID, [runResults[0], runResults[1]]);
