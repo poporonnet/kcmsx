@@ -13,6 +13,7 @@ export const Register = () => {
   const [category, setCategory] = useState<DepartmentType>(
     config.departments[0].type
   );
+
   const [member, setMember] = useState<[string, string]>(["", ""]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -73,18 +74,20 @@ export const Register = () => {
           label="メンバーの名前(1人目)"
           placeholder="メンバー(1人目)を入力してください"
           value={member[0]}
-          onChange={(event) =>
-            setMember((prev) => [event.currentTarget.value, prev[1]])
-          }
+          onChange={(event) => {
+            const member1 = event.currentTarget.value;
+            setMember((prev) => [member1, prev[1]]);
+          }}
         />
         <TextInput
           mt={"md"}
           label="メンバーの名前(2人目)"
           placeholder="メンバー(2人目)を入力してください"
           value={member[1]}
-          onChange={(event) =>
-            setMember((prev) => [prev[0], event.currentTarget.value])
-          }
+          onChange={(event) => {
+            const member2 = event.currentTarget.value;
+            setMember((prev) => [prev[0], member2]);
+          }}
         />
         <SegmentedControl
           mt={"md"}
