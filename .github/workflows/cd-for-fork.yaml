@@ -1,0 +1,46 @@
+name: CD for Fork
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  deployments: write
+
+env:
+  PROJECT_NAME: kaniwriter
+
+jobs:
+  preview_for_fork:
+    if: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
+    name: Preview Deploy for Fork
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/kcmsf
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - run: npm install -g --force corepack
+      - run: corepack enable
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm build
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ env.PROJECT_NAME }}
