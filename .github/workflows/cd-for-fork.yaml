@@ -10,7 +10,7 @@ permissions:
   deployments: write
 
 env:
-  PROJECT_NAME: kaniwriter
+  PROJECT_NAME: kcmsx
 
 jobs:
   preview_for_fork:
