@@ -13,7 +13,6 @@ export const Register = () => {
   const [category, setCategory] = useState<DepartmentType>(
     config.departments[0].type
   );
-
   const [member, setMember] = useState<[string, string]>(["", ""]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
