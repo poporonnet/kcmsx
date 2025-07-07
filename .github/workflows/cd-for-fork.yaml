@@ -1,8 +1,15 @@
 name: CD for Fork
 
 on:
-  pull_request:
+  pull_request_target: # must read https://securitylab.github.com/resources/github-actions-preventing-pwn-requests/
   workflow_dispatch:
+    inputs:
+      cloudflare_api_token:
+        description: Cloudflare API Token
+        required: true
+      cloudflare_account_id:
+        description: Cloudflare Account Id
+        required: true
 
 permissions:
   contents: read
@@ -14,6 +21,7 @@ env:
 
 jobs:
   preview_for_fork:
+    environment: Preview for Fork # require review to run
     if: ${{ github.event.pull_request.head.repo.full_name != github.repository }}
     name: Preview Deploy for Fork
     runs-on: ubuntu-latest
@@ -41,6 +49,6 @@ jobs:
       - name: Deploy
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN || inputs.cloudflare_api_token }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || inputs.cloudflare_account_id }}
           command: pages deploy dist --project-name=${{ env.PROJECT_NAME }}
