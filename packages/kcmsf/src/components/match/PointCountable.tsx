@@ -1,5 +1,5 @@
 import { ActionIcon, Group, MantineColor, Text } from "@mantine/core";
-import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { IconSquareMinusFilled, IconMinus, IconSquarePlus, IconPlus } from "@tabler/icons-react";
 import { useCallback } from "react";
 
 interface Props {
@@ -42,7 +42,7 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !decrementable}
         bg="white"
       >
-        <IconMinus style={{ width: "100%", height: "100%" }} />
+        <IconSquareMinusFilled  style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
       <Text w="auto" size="xl" style={{ flexGrow: 1 }}>
         {value}
@@ -55,7 +55,7 @@ export const PointCountable = (props: Props) => {
         disabled={props.disabled || !incrementable}
         bg="white"
       >
-        <IconPlus style={{ width: "100%", height: "100%" }} />
+        <IconSquarePlus style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
     </Group>
   );
