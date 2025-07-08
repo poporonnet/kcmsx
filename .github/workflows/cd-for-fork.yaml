@@ -51,4 +51,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN || inputs.cloudflare_api_token }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || inputs.cloudflare_account_id }}
-          command: pages deploy ./dist --project-name=${{ env.PROJECT_NAME }}
+          command: pages deploy packages/kcmsf/dist --project-name=${{ env.PROJECT_NAME }}
