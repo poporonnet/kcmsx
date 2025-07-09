@@ -45,7 +45,10 @@ export const Teams = () => {
 
   const comparer: Comparer = useMemo(
     () => ({
-      entryCode: (a, b) => a.localeCompare(b),
+      entryCode: (a, b) =>
+        a.localeCompare(b, undefined, {
+          numeric: true,
+        }),
       name: (a, b) => a.localeCompare(b),
       clubName: (a, b) => a.localeCompare(b),
       robotType: (a, b) => a.localeCompare(b),
