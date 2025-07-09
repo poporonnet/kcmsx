@@ -48,7 +48,6 @@ export const Teams = () => {
       entryCode: (a, b) =>
         a.localeCompare(b, undefined, {
           numeric: true,
-          sensitivity: "base",
         }),
       name: (a, b) => a.localeCompare(b),
       clubName: (a, b) => a.localeCompare(b),
