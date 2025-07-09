@@ -48,13 +48,13 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.3.3
-        version: 1.15.0(hono@4.8.3)
+        version: 1.15.0(hono@4.8.4)
       '@hono/zod-openapi':
         specifier: ^0.19.0
-        version: 0.19.9(hono@4.8.3)(zod@3.25.71)
+        version: 0.19.9(hono@4.8.4)(zod@3.25.74)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.0(hono@4.8.3)(zod@3.25.71)
+        version: 0.7.0(hono@4.8.4)(zod@3.25.74)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.0.0
@@ -63,7 +63,7 @@ importers:
         version: 5.22.0(prisma@5.22.0)
       '@scalar/hono-api-reference':
         specifier: ^0.9.0
-        version: 0.9.7(hono@4.8.3)
+        version: 0.9.7(hono@4.8.4)
       config:
         specifier: workspace:^
         version: link:../config
@@ -72,13 +72,13 @@ importers:
         version: 0.25.5
       hono:
         specifier: ^4.0.0
-        version: 4.8.3
+        version: 4.8.4
       typescript:
         specifier: ^5.3.2
         version: 5.8.3
       zod:
         specifier: ^3.22.4
-        version: 3.25.71
+        version: 3.25.74
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -257,26 +257,26 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.0(hono@4.8.3)(zod@3.25.71)
+        version: 0.7.0(hono@4.8.4)(zod@3.25.74)
       config:
         specifier: workspace:^
         version: link:../config
       hono:
         specifier: ^4.5.4
-        version: 4.8.3
+        version: 4.8.4
       zod:
         specifier: ^3.22.4
-        version: 3.25.71
+        version: 3.25.74
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240529.0
-        version: 4.20250704.0
+        version: 4.20250705.0
       prettier:
         specifier: ^3.3.3
         version: 3.6.2
       wrangler:
         specifier: ^4.0.0
-        version: 4.23.0(@cloudflare/workers-types@4.20250704.0)
+        version: 4.23.0(@cloudflare/workers-types@4.20250705.0)
 
 packages:
 
@@ -447,8 +447,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workers-types@4.20250704.0':
-    resolution: {integrity: sha512-KR8XwXVnJdbSStdmmkkqE0ac5UCrRT+HyFnpt/VcVMzEVeAiZfH0VAcYXasMs842CE1BsdbQG0FboVV9EmyMpQ==}
+  '@cloudflare/workers-types@4.20250705.0':
+    resolution: {integrity: sha512-+eKIUEW0loB+CCgkfpa6UCTacnn3YOCllLpLbKfwR0qdoIfzmeOpadqY/W6ZSi/9v0tpQqTPB80tkhu7a7Cyug==}
 
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -2293,8 +2293,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.8.3:
-    resolution: {integrity: sha512-jYZ6ZtfWjzBdh8H/0CIFfCBHaFL75k+KMzaM177hrWWm2TWL39YMYaJgB74uK/niRc866NMlH9B8uCvIo284WQ==}
+  hono@4.8.4:
+    resolution: {integrity: sha512-KOIBp1+iUs0HrKztM4EHiB2UtzZDTBihDtOF5K6+WaJjCPeaW4Q92R8j63jOhvJI5+tZSMuKD9REVEXXY9illg==}
     engines: {node: '>=16.9.0'}
 
   html-encoding-sniffer@4.0.0:
@@ -3465,8 +3465,8 @@ packages:
   zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
 
-  zod@3.25.71:
-    resolution: {integrity: sha512-BsBc/NPk7h8WsUWYWYL+BajcJPY8YhjelaWu2NMLuzgraKAz4Lb4/6K11g9jpuDetjMiqhZ6YaexFLOC0Ogi3Q==}
+  zod@3.25.74:
+    resolution: {integrity: sha512-J8poo92VuhKjNknViHRAIuuN6li/EwFbAC8OedzI8uxpEPGiXHGQu9wemIAioIpqgfB4SySaJhdk0mH5Y4ICBg==}
 
 snapshots:
 
@@ -3485,10 +3485,10 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
 
-  '@asteasolutions/zod-to-openapi@7.3.4(zod@3.25.71)':
+  '@asteasolutions/zod-to-openapi@7.3.4(zod@3.25.74)':
     dependencies:
       openapi3-ts: 4.5.0
-      zod: 3.25.71
+      zod: 3.25.74
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -3652,7 +3652,7 @@ snapshots:
   '@cloudflare/workerd-windows-64@1.20250617.0':
     optional: true
 
-  '@cloudflare/workers-types@4.20250704.0': {}
+  '@cloudflare/workers-types@4.20250705.0': {}
 
   '@cspotcode/source-map-support@0.8.1':
     dependencies:
@@ -3924,22 +3924,22 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@hono/node-server@1.15.0(hono@4.8.3)':
+  '@hono/node-server@1.15.0(hono@4.8.4)':
     dependencies:
-      hono: 4.8.3
+      hono: 4.8.4
 
-  '@hono/zod-openapi@0.19.9(hono@4.8.3)(zod@3.25.71)':
+  '@hono/zod-openapi@0.19.9(hono@4.8.4)(zod@3.25.74)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.3.4(zod@3.25.71)
-      '@hono/zod-validator': 0.7.0(hono@4.8.3)(zod@3.25.71)
-      hono: 4.8.3
+      '@asteasolutions/zod-to-openapi': 7.3.4(zod@3.25.74)
+      '@hono/zod-validator': 0.7.0(hono@4.8.4)(zod@3.25.74)
+      hono: 4.8.4
       openapi3-ts: 4.5.0
-      zod: 3.25.71
+      zod: 3.25.74
 
-  '@hono/zod-validator@0.7.0(hono@4.8.3)(zod@3.25.71)':
+  '@hono/zod-validator@0.7.0(hono@4.8.4)(zod@3.25.74)':
     dependencies:
-      hono: 4.8.3
-      zod: 3.25.71
+      hono: 4.8.4
+      zod: 3.25.74
 
   '@humanfs/core@0.19.1': {}
 
@@ -4279,10 +4279,10 @@ snapshots:
     dependencies:
       '@scalar/types': 0.2.5
 
-  '@scalar/hono-api-reference@0.9.7(hono@4.8.3)':
+  '@scalar/hono-api-reference@0.9.7(hono@4.8.4)':
     dependencies:
       '@scalar/core': 0.3.5
-      hono: 4.8.3
+      hono: 4.8.4
 
   '@scalar/openapi-types@0.3.4':
     dependencies:
@@ -5317,7 +5317,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.8.3: {}
+  hono@4.8.4: {}
 
   html-encoding-sniffer@4.0.0:
     dependencies:
@@ -6375,7 +6375,7 @@ snapshots:
       '@cloudflare/workerd-linux-arm64': 1.20250617.0
       '@cloudflare/workerd-windows-64': 1.20250617.0
 
-  wrangler@4.23.0(@cloudflare/workers-types@4.20250704.0):
+  wrangler@4.23.0(@cloudflare/workers-types@4.20250705.0):
     dependencies:
       '@cloudflare/kv-asset-handler': 0.4.0
       '@cloudflare/unenv-preset': 2.3.3(unenv@2.0.0-rc.17)(workerd@1.20250617.0)
@@ -6386,7 +6386,7 @@ snapshots:
       unenv: 2.0.0-rc.17
       workerd: 1.20250617.0
     optionalDependencies:
-      '@cloudflare/workers-types': 4.20250704.0
+      '@cloudflare/workers-types': 4.20250705.0
       fsevents: 2.3.3
     transitivePeerDependencies:
       - bufferutil
@@ -6426,4 +6426,4 @@ snapshots:
 
   zod@3.24.1: {}
 
-  zod@3.25.71: {}
+  zod@3.25.74: {}
