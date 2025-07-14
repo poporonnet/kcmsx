@@ -1,5 +1,5 @@
 import { Button, Divider, Flex, Text } from "@mantine/core";
-import { IconRotate } from "@tabler/icons-react";
+import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo } from "react";
@@ -69,13 +69,23 @@ export const Match = () => {
             <MatchNameCard
               matchType={matchInfo.matchType}
               matchCode={match.matchCode}
-              description={
-                match.matchType === "main"
-                  ? `${match.runResults.length == 0 ? 1 : 2}試合目`
-                  : ""
+              rightTeamName={rightDisplayedTeam.info?.teamName}
+              leftTeamName={leftDisplayedTeam.info?.teamName}
+              centerSection={
+                <>
+                  {match.matchType === "main" &&
+                    `${match.runResults.length == 0 ? 1 : 2}試合目`}
+                  <Button
+                    onClick={flip}
+                    variant="subtle"
+                    size="compact-sm"
+                    color="violet"
+                    leftSection={<IconSwitchHorizontal size={14} />}
+                  >
+                    左右を反転
+                  </Button>
+                </>
               }
-              rightTeamName={matchInfo.teams.right?.teamName}
-              leftTeamName={matchInfo.teams.left?.teamName}
             />
           )}
           <Button
