@@ -23,19 +23,27 @@ export const useDisplayedTeam = (
   const [isFlipped, setFlipped] = useState(false);
   const flip = useCallback(() => setFlipped((prev) => !prev), []);
 
-  const teams = useMemo((): [DisplayedTeam, DisplayedTeam] => {
-    const left: DisplayedTeam = {
+  const leftTeam = useMemo(
+    (): DisplayedTeam => ({
       info: matchInfo?.teams.left,
       judge: matchJudge.leftTeam,
       goal: (goalTimeSec) => matchJudge.goalLeftTeam(goalTimeSec),
-    };
-    const right: DisplayedTeam = {
+    }),
+    [matchInfo, matchJudge]
+  );
+  const rightTeam = useMemo(
+    (): DisplayedTeam => ({
       info: matchInfo?.teams.right,
       judge: matchJudge.rightTeam,
       goal: (goalTimeSec) => matchJudge.goalRightTeam(goalTimeSec),
-    };
-    return isFlipped ? [right, left] : [left, right];
-  }, [matchInfo, matchJudge, isFlipped]);
+    }),
+    [matchInfo, matchJudge]
+  );
+  const teams = useMemo(
+    (): [DisplayedTeam, DisplayedTeam] =>
+      isFlipped ? [rightTeam, leftTeam] : [leftTeam, rightTeam],
+    [isFlipped]
+  );
 
   return { teams, isFlipped, flip };
 };
