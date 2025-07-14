@@ -42,7 +42,7 @@ export const useDisplayedTeam = (
   const teams = useMemo(
     (): [DisplayedTeam, DisplayedTeam] =>
       isFlipped ? [rightTeam, leftTeam] : [leftTeam, rightTeam],
-    [isFlipped]
+    [isFlipped, rightTeam, leftTeam]
   );
 
   return { teams, isFlipped, flip };
