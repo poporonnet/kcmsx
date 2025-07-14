@@ -1,6 +1,6 @@
 import { RouterProvider } from "react-router-dom";
 
-import { MantineProvider } from "@mantine/core";
+import { createTheme, MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
@@ -9,8 +9,11 @@ import { AuthProvider } from "./components/AuthProvider.tsx";
 import { router } from "./routes/router.tsx";
 
 const App = () => {
+  const theme = createTheme({
+  fontFamily: '"Noto Sans JP", "sans-serif"'
+});
   return (
-    <MantineProvider>
+    <MantineProvider theme={theme}>
       <AuthProvider>
         <Notifications />
         <RouterProvider router={router} />
