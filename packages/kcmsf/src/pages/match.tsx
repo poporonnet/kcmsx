@@ -9,6 +9,7 @@ import { MatchPointCard } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
+import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
 import { useMatchInfo } from "../hooks/useMatchInfo";
@@ -30,14 +31,21 @@ export const Match = () => {
   } = useMatchTimer(matchInfo?.matchType || "pre");
   const forceReload = useForceReload();
   const navigate = useNavigate();
+  const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
+
+  const {
+    teams: [leftDisplayedTeam, rightDisplayedTeam],
+    flip,
+  } = useDisplayedTeam(matchInfo, matchJudge);
+
   const onClickReset = useCallback(
     (side: Side) => {
-      matchJudge.team(side).reset();
+      (side == "left" ? leftDisplayedTeam : rightDisplayedTeam).judge.reset();
       forceReload();
     },
     [matchJudge, forceReload]
   );
-  const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
+
   return (
     <Flex
       h="100%"
@@ -84,13 +92,13 @@ export const Match = () => {
           </Button>
           <MatchPointCard
             rightTeamPoint={
-              isExhibition || matchInfo?.teams.right
-                ? matchJudge.rightTeam.point.point()
+              isExhibition || rightDisplayedTeam.info
+                ? rightDisplayedTeam.judge.point.point()
                 : 0
             }
             leftTeamPoint={
-              isExhibition || matchInfo?.teams.left
-                ? matchJudge.leftTeam.point.point()
+              isExhibition || leftDisplayedTeam.info
+                ? leftDisplayedTeam.judge.point.point()
                 : 0
             }
             leftSection={
@@ -122,33 +130,35 @@ export const Match = () => {
           />
 
           <Divider w="100%" />
-          {matchJudge && (
-            <Flex direction="row" gap="2rem" align="center" justify="center">
-              <PointControls
-                color="blue"
-                team={matchJudge.leftTeam}
-                onChange={forceReload}
-                onGoal={(done) =>
-                  matchJudge.goalLeftTeam(
-                    done ? matchTimeSec - totalSeconds : undefined
-                  )
-                }
-                disabled={!isExhibition && !matchInfo?.teams.left}
-              />
-              <Divider orientation="vertical" />
-              <PointControls
-                color="red"
-                team={matchJudge.rightTeam}
-                onChange={forceReload}
-                onGoal={(done) =>
-                  matchJudge.goalRightTeam(
-                    done ? matchTimeSec - totalSeconds : undefined
-                  )
-                }
-                disabled={!isExhibition && !matchInfo?.teams.right}
-              />
-            </Flex>
-          )}
+
+          <Flex direction="row" gap="2rem" align="center" justify="center">
+            <PointControls
+              color="blue"
+              team={leftDisplayedTeam.judge}
+              onChange={forceReload}
+              onGoal={(done) =>
+                leftDisplayedTeam.goal(
+                  done ? matchTimeSec - totalSeconds : undefined
+                )
+              }
+              disabled={!isExhibition && !leftDisplayedTeam.info}
+            />
+
+            <Divider orientation="vertical" />
+
+            <PointControls
+              color="red"
+              team={rightDisplayedTeam.judge}
+              onChange={forceReload}
+              onGoal={(done) =>
+                rightDisplayedTeam.goal(
+                  done ? matchTimeSec - totalSeconds : undefined
+                )
+              }
+              disabled={!isExhibition && !rightDisplayedTeam.info}
+            />
+          </Flex>
+
           {!isExhibition && matchInfo && matchJudge && (
             <MatchSubmit
               matchInfo={matchInfo}
