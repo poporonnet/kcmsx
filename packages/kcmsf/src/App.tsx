@@ -10,8 +10,10 @@ import { router } from "./routes/router.tsx";
 
 const App = () => {
   const theme = createTheme({
-    fontFamily: '"Noto Sans JP", "sans-serif"',
+    fontFamily:
+      "Inter, system-ui, Avenir, Helvetica, Arial, Noto Sans JP, sans-serif",
   });
+
   return (
     <MantineProvider theme={theme}>
       <AuthProvider>
