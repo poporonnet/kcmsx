@@ -65,9 +65,10 @@ export class CreateRunResultService {
       const match = Option.unwrap(matchRes);
       try {
         match.appendRunResults(runResults);
+        await this.mainMatchRepository.update(match);
         const winnerRes = this.decideWinner(match);
         if (Option.isSome(winnerRes)) {
-          this.setMainWinner.handle(match.getID(), Option.unwrap(winnerRes));
+          await this.setMainWinner.handle(match.getID(), Option.unwrap(winnerRes));
         }
       } catch (e) {
         return Result.err(e as Error);
