@@ -11,7 +11,7 @@ import { router } from "./routes/router.tsx";
 const App = () => {
   const theme = createTheme({
     fontFamily:
-      "Inter, system-ui, Avenir, Helvetica, Arial, Noto Sans JP, sans-serif",
+      "Segoe UI, Inter, Avenir, Helvetica, Arial, Noto Sans JP, sans-serif",
   });
 
   return (
