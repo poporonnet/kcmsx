@@ -8,12 +8,12 @@ import "./App.css";
 import { AuthProvider } from "./components/AuthProvider.tsx";
 import { router } from "./routes/router.tsx";
 
-const App = () => {
-  const theme = createTheme({
-    fontFamily:
-      "Segoe UI, Inter, Avenir, Helvetica, Arial, Noto Sans JP, sans-serif",
-  });
+const theme = createTheme({
+  fontFamily:
+    "Segoe UI, Inter, Avenir, Helvetica, Arial, Noto Sans JP, sans-serif",
+});
 
+const App = () => {
   return (
     <MantineProvider theme={theme}>
       <AuthProvider>
