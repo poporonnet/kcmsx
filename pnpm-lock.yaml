@@ -51,10 +51,10 @@ importers:
         version: 1.17.1(hono@4.8.10)
       '@hono/zod-openapi':
         specifier: ^0.19.0
-        version: 0.19.10(hono@4.8.10)(zod@3.25.76)
+        version: 0.19.10(hono@4.8.10)(zod@4.0.14)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.2(hono@4.8.10)(zod@3.25.76)
+        version: 0.7.2(hono@4.8.10)(zod@4.0.14)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.0.0
@@ -77,8 +77,8 @@ importers:
         specifier: ^5.3.2
         version: 5.8.3
       zod:
-        specifier: ^3.22.4
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.0.14
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -257,7 +257,7 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.2(hono@4.8.10)(zod@3.25.76)
+        version: 0.7.2(hono@4.8.10)(zod@4.0.14)
       config:
         specifier: workspace:^
         version: link:../config
@@ -265,8 +265,8 @@ importers:
         specifier: ^4.5.4
         version: 4.8.10
       zod:
-        specifier: ^3.22.4
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.0.14
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240529.0
@@ -3458,8 +3458,8 @@ packages:
   zod@3.24.1:
     resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
 
-  zod@3.25.76:
-    resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
+  zod@4.0.14:
+    resolution: {integrity: sha512-nGFJTnJN6cM2v9kXL+SOBq3AtjQby3Mv5ySGFof5UGRHrRioSJ5iG680cYNjE/yWk671nROcpPj4hAS8nyLhSw==}
 
 snapshots:
 
@@ -3478,10 +3478,10 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
 
-  '@asteasolutions/zod-to-openapi@7.3.4(zod@3.25.76)':
+  '@asteasolutions/zod-to-openapi@7.3.4(zod@4.0.14)':
     dependencies:
       openapi3-ts: 4.5.0
-      zod: 3.25.76
+      zod: 4.0.14
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -3921,18 +3921,18 @@ snapshots:
     dependencies:
       hono: 4.8.10
 
-  '@hono/zod-openapi@0.19.10(hono@4.8.10)(zod@3.25.76)':
+  '@hono/zod-openapi@0.19.10(hono@4.8.10)(zod@4.0.14)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 7.3.4(zod@3.25.76)
-      '@hono/zod-validator': 0.7.2(hono@4.8.10)(zod@3.25.76)
+      '@asteasolutions/zod-to-openapi': 7.3.4(zod@4.0.14)
+      '@hono/zod-validator': 0.7.2(hono@4.8.10)(zod@4.0.14)
       hono: 4.8.10
       openapi3-ts: 4.5.0
-      zod: 3.25.76
+      zod: 4.0.14
 
-  '@hono/zod-validator@0.7.2(hono@4.8.10)(zod@3.25.76)':
+  '@hono/zod-validator@0.7.2(hono@4.8.10)(zod@4.0.14)':
     dependencies:
       hono: 4.8.10
-      zod: 3.25.76
+      zod: 4.0.14
 
   '@humanfs/core@0.19.1': {}
 
@@ -6421,4 +6421,4 @@ snapshots:
 
   zod@3.24.1: {}
 
-  zod@3.25.76: {}
+  zod@4.0.14: {}
