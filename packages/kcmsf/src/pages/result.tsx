@@ -42,27 +42,23 @@ export const Result = () => {
   );
 
   return (
-    <>
-      <Flex
-        direction="column"
-        align="center"
-        justify="center"
-        gap="{20}"
-        mb={"2rem"}
-      >
-        <LabeledSegmentedControls>
-          <DepartmentSegmentedControl
-            departmentType={departmentType}
-            setDepartmentType={setDepartmentType}
-          />
-        </LabeledSegmentedControls>
-      </Flex>
-      <Flex direction="column" gap={20}>
-        <Title order={3}>{config.department[departmentType].name}</Title>
-        <MainResultTable matches={mainMatches} teamNames={teamNames} />
-        <PreResultTable matches={preMatches} />
-      </Flex>
-    </>
+    <Flex
+      direction="column"
+      align="center"
+      justify="center"
+      gap="{20}"
+      mb={"2rem"}
+    >
+      <LabeledSegmentedControls>
+        <DepartmentSegmentedControl
+          departmentType={departmentType}
+          setDepartmentType={setDepartmentType}
+        />
+      </LabeledSegmentedControls>
+      <Title order={3}>{config.department[departmentType].name}</Title>
+      <MainResultTable matches={mainMatches} teamNames={teamNames} />
+      <PreResultTable matches={preMatches} />
+    </Flex>
   );
 };
 
