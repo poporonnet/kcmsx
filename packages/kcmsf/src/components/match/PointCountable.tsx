@@ -35,12 +35,12 @@ export const PointCountable = (props: Props) => {
         {props.children}:
       </Text>
       <ActionIcon
-        size="xl"
-        variant="transparent"
+        size="2.5rem"
+        variant="filled"
         onClick={decrement}
-        c={!props.disabled && decrementable ? props.color : undefined}
+        color={!props.disabled && decrementable ? props.color : undefined}
         disabled={props.disabled || !decrementable}
-        bg="white"
+        radius="md"
       >
         <IconMinus style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
@@ -48,12 +48,12 @@ export const PointCountable = (props: Props) => {
         {value}
       </Text>
       <ActionIcon
-        size="xl"
-        variant="transparent"
+        size="2.5rem"
+        variant="filled"
         onClick={increment}
-        c={!props.disabled && incrementable ? props.color : undefined}
+        color={!props.disabled && incrementable ? props.color : undefined}
         disabled={props.disabled || !incrementable}
-        bg="white"
+        radius="md"
       >
         <IconPlus style={{ width: "100%", height: "100%" }} />
       </ActionIcon>
