@@ -8,26 +8,38 @@ export const MatchNameCard = ({
   rightTeamName,
   leftTeamName,
   centerSection,
+  side,
 }: {
   matchType: MatchInfo["matchType"];
   matchCode: string;
   rightTeamName?: string;
   leftTeamName?: string;
   centerSection?: ReactNode;
+  side: string[];
 }) => (
   <Paper w="100%" p="xs" withBorder>
     <Flex direction="row" align="center" justify="center">
-      <Text size="2rem" c="blue" flex={1}>
-        {leftTeamName}
-      </Text>
+      <Flex direction="column" flex={1}>
+        <Text size="1rem" c="blue" mb="xs">
+          {side[0] == "right" ? "右チーム" : "左チーム"}
+        </Text>
+        <Text size="2rem" c="blue">
+          {leftTeamName}
+        </Text>
+      </Flex>
       <Flex direction="column" align="center" justify="center" c="dark">
         {config.match[matchType].name}
         {<Text size="2rem">#{matchCode}</Text>}
         {centerSection}
       </Flex>
-      <Text size="2rem" c="red" flex={1}>
-        {rightTeamName}
-      </Text>
+      <Flex direction="column" flex={1}>
+        <Text size="1rem" c="red" mb="xs">
+          {side[1] == "right" ? "右チーム" : "左チーム"}
+        </Text>
+        <Text size="2rem" c="red">
+          {rightTeamName}
+        </Text>
+      </Flex>
     </Flex>
   </Paper>
 );

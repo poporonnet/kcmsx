@@ -13,6 +13,7 @@ type DisplayedTeam = {
 type UseDisplayedTeamReturnValue = {
   teams: [DisplayedTeam, DisplayedTeam];
   isFlipped: boolean;
+  displayedSide: [Side, Side];
   flip: () => void;
 };
 
@@ -44,6 +45,9 @@ export const useDisplayedTeam = (
       isFlipped ? [rightTeam, leftTeam] : [leftTeam, rightTeam],
     [isFlipped, rightTeam, leftTeam]
   );
-
-  return { teams, isFlipped, flip };
+  const displayedSide = useMemo(
+    (): [Side, Side] => (isFlipped ? ["right", "left"] : ["left", "right"]),
+    [isFlipped]
+  );
+  return { teams, isFlipped, displayedSide, flip };
 };
