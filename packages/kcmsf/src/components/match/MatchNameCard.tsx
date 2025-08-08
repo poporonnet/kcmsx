@@ -21,7 +21,7 @@ export const MatchNameCard = ({
     <Flex direction="row" align="center" justify="center">
       <Flex direction="column" flex={1}>
         <Text size="1rem" c="blue" mb="xs">
-          {side && side[0] === "right" ? "右チーム" : "左チーム"}
+          {side && side[0]}
         </Text>
         <Text size="2rem" c="blue">
           {leftTeamName}
@@ -34,7 +34,7 @@ export const MatchNameCard = ({
       </Flex>
       <Flex direction="column" flex={1}>
         <Text size="1rem" c="red" mb="xs">
-          {side && side[1] === "right" ? "右チーム" : "左チーム"}
+          {side && side[1]}
         </Text>
         <Text size="2rem" c="red">
           {rightTeamName}
