@@ -13,13 +13,13 @@ type DisplayedTeam = {
 type UseDisplayedTeamReturnValue = {
   teams: [DisplayedTeam, DisplayedTeam];
   isFlipped: boolean;
-  displayedSide:[string,string];
+  displayedSide: [string, string];
   flip: () => void;
 };
 
 export const useDisplayedTeam = (
   matchInfo: MatchInfo | undefined,
-  matchJudge: Judge,
+  matchJudge: Judge
 ): UseDisplayedTeamReturnValue => {
   const [isFlipped, setFlipped] = useState(false);
   const flip = useCallback(() => setFlipped((prev) => !prev), []);
