@@ -35,6 +35,7 @@ export const Match = () => {
 
   const {
     teams: [leftDisplayedTeam, rightDisplayedTeam],
+    displayedSide: displayedSide,
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
@@ -45,7 +46,6 @@ export const Match = () => {
     },
     [matchJudge, forceReload]
   );
-
   return (
     <Flex
       h="100%"
@@ -86,6 +86,7 @@ export const Match = () => {
                   </Button>
                 </>
               }
+              side={displayedSide}
             />
           )}
           <Button
