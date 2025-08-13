@@ -13,7 +13,7 @@ jobs:
 
       - run: npm i -g --force corepack
       - run: corepack enable
-      - name: Setup Nodejs v20
+      - name: Setup Nodejs
         uses: actions/setup-node@v4
         with:
           node-version: 22
