@@ -8,21 +8,21 @@ export const MatchNameCard = ({
   rightTeamName,
   leftTeamName,
   centerSection,
-  side,
+  leftTeamCourceName,
+  rightTeamCourceName,
 }: {
   matchType: MatchInfo["matchType"];
   matchCode: string;
   rightTeamName?: string;
   leftTeamName?: string;
   centerSection?: ReactNode;
-  side?: string[];
+  leftTeamCourceName?: string;
+  rightTeamCourceName?: string;
 }) => (
   <Paper w="100%" p="xs" withBorder>
     <Flex direction="row" align="center" justify="center">
-      <Flex direction="column" flex={1}>
-        <Text size="1rem" c="blue" mb="xs">
-          {side && side[0]}
-        </Text>
+      <Flex direction="column" flex={1} gap="xs">
+        <Text c="blue">{leftTeamCourceName}</Text>
         <Text size="2rem" c="blue">
           {leftTeamName}
         </Text>
@@ -32,10 +32,8 @@ export const MatchNameCard = ({
         {<Text size="2rem">#{matchCode}</Text>}
         {centerSection}
       </Flex>
-      <Flex direction="column" flex={1}>
-        <Text size="1rem" c="red" mb="xs">
-          {side && side[1]}
-        </Text>
+      <Flex direction="column" flex={1} gap="xs">
+        <Text c="red">{rightTeamCourceName}</Text>
         <Text size="2rem" c="red">
           {rightTeamName}
         </Text>
