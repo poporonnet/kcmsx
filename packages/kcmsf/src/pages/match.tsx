@@ -35,7 +35,7 @@ export const Match = () => {
 
   const {
     teams: [leftDisplayedTeam, rightDisplayedTeam],
-    displayedCourceName: [leftDisplayedCourceName, rightDisplayedCourceName],
+    displayedcourseName: [leftDisplayedcourseName, rightDisplayedcourseName],
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
@@ -86,8 +86,8 @@ export const Match = () => {
                   </Button>
                 </>
               }
-              leftTeamCourceName={leftDisplayedCourceName}
-              rightTeamCourceName={rightDisplayedCourceName}
+              leftTeamcourseName={leftDisplayedcourseName}
+              rightTeamcourseName={rightDisplayedcourseName}
             />
           )}
           <Button
