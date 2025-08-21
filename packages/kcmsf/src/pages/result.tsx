@@ -45,9 +45,7 @@ export const Result = () => {
     <Flex
       direction="column"
       align="center"
-      justify="center"
-      gap="{20}"
-      mb={"2rem"}
+      gap={20}
     >
       <LabeledSegmentedControls>
         <DepartmentSegmentedControl
