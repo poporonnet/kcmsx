@@ -51,10 +51,10 @@ importers:
         version: 1.19.0(hono@4.9.4)
       '@hono/zod-openapi':
         specifier: ^1.0.0
-        version: 1.1.0(hono@4.9.4)(zod@3.25.76)
+        version: 1.1.0(hono@4.9.4)(zod@4.1.1)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.2(hono@4.9.4)(zod@3.25.76)
+        version: 0.7.2(hono@4.9.4)(zod@4.1.1)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.0.0
@@ -77,8 +77,8 @@ importers:
         specifier: ^5.3.2
         version: 5.9.2
       zod:
-        specifier: ^3.22.4
-        version: 3.25.76
+        specifier: ^4.0.0
+        version: 4.1.1
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -3486,6 +3486,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.1.1:
+    resolution: {integrity: sha512-SgMZK/h8Tigt9nnKkfJMvB/mKjiJXaX26xegP4sa+0wHIFVFWVlsQGdhklDmuargBD3Hsi3rsQRIzwJIhTPJHA==}
+
 snapshots:
 
   '@adobe/css-tools@4.4.4': {}
@@ -3503,10 +3506,10 @@ snapshots:
       '@csstools/css-tokenizer': 3.0.3
       lru-cache: 10.4.3
 
-  '@asteasolutions/zod-to-openapi@8.1.0(zod@3.25.76)':
+  '@asteasolutions/zod-to-openapi@8.1.0(zod@4.1.1)':
     dependencies:
       openapi3-ts: 4.5.0
-      zod: 3.25.76
+      zod: 4.1.1
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -3952,18 +3955,23 @@ snapshots:
     dependencies:
       hono: 4.9.4
 
-  '@hono/zod-openapi@1.1.0(hono@4.9.4)(zod@3.25.76)':
+  '@hono/zod-openapi@1.1.0(hono@4.9.4)(zod@4.1.1)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 8.1.0(zod@3.25.76)
-      '@hono/zod-validator': 0.7.2(hono@4.9.4)(zod@3.25.76)
+      '@asteasolutions/zod-to-openapi': 8.1.0(zod@4.1.1)
+      '@hono/zod-validator': 0.7.2(hono@4.9.4)(zod@4.1.1)
       hono: 4.9.4
       openapi3-ts: 4.5.0
-      zod: 3.25.76
+      zod: 4.1.1
 
   '@hono/zod-validator@0.7.2(hono@4.9.4)(zod@3.25.76)':
     dependencies:
       hono: 4.9.4
       zod: 3.25.76
+
+  '@hono/zod-validator@0.7.2(hono@4.9.4)(zod@4.1.1)':
+    dependencies:
+      hono: 4.9.4
+      zod: 4.1.1
 
   '@humanfs/core@0.19.1': {}
 
@@ -6462,3 +6470,5 @@ snapshots:
   zod@3.24.1: {}
 
   zod@3.25.76: {}
+
+  zod@4.1.1: {}
