@@ -1,4 +1,11 @@
-import { Box, Button, Group, SegmentedControl, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  SegmentedControl,
+  Stack,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, RobotType } from "config";
 import { useState } from "react";
@@ -51,7 +58,8 @@ export const Register = () => {
   }
 
   return (
-    <Box maw={620} mx={"auto"}>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">参加者登録</Title>
       <form onSubmit={submit}>
         <TextInput
           mt={"md"}
@@ -115,6 +123,6 @@ export const Register = () => {
           </Button>
         </Group>
       </form>
-    </Box>
+    </Stack>
   );
 };

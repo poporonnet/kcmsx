@@ -4,6 +4,7 @@ import {
   Flex,
   Loader,
   Space,
+  Stack,
   Table,
   Text,
   Title,
@@ -166,9 +167,8 @@ export const Teams = () => {
   }, [setTeams, teamsRes]);
 
   return (
-    <Flex direction="column" align="center" justify="center">
+    <Stack w="fit-content" align="center" gap="md">
       <Title m="md">チーム一覧</Title>
-      <Space h={20} />
       {processedTeams ? (
         <>
           <Flex w="100%" justify="right">
@@ -176,7 +176,6 @@ export const Teams = () => {
               フィルターをリセット
             </Button>
           </Flex>
-          <Space h={10} />
           <TeamTable
             teams={processedTeams}
             sortState={sortState}
@@ -191,7 +190,7 @@ export const Teams = () => {
       ) : (
         <Loader m="xl" />
       )}
-    </Flex>
+    </Stack>
   );
 };
 

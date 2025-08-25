@@ -1,4 +1,4 @@
-import { Flex, Select, Table, Title } from "@mantine/core";
+import { Select, Stack, Table, Title } from "@mantine/core";
 import { DepartmentType, config } from "config";
 import { useMemo } from "react";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
@@ -38,7 +38,8 @@ export const Result = () => {
   );
 
   return (
-    <>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">試合結果</Title>
       <Select
         label="部門"
         data={config.departments.map((element) => ({
@@ -49,12 +50,12 @@ export const Result = () => {
         defaultValue={config.departments[0].type}
         onChange={(value) => value && setDepartment(value as DepartmentType)}
       />
-      <Flex direction="column" gap={20}>
+      <Stack gap={20}>
         <Title order={3}>{config.department[department].name}</Title>
         <MainResultTable matches={mainMatches} teamNames={teamNames} />
         <PreResultTable matches={preMatches} />
-      </Flex>
-    </>
+      </Stack>
+    </Stack>
   );
 };
 
