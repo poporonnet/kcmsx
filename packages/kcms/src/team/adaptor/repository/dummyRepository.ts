@@ -1,16 +1,17 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { TeamRepository } from '../../models/repository';
 import { Team, TeamID } from '../../models/team';
+import { cloneTeam } from '../../models/utility/cloneTeam';
 
 export class DummyRepository implements TeamRepository {
   private data: Map<TeamID, Team>;
 
   constructor(data: Team[] = []) {
-    this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), v]));
+    this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), cloneTeam(v)]));
   }
 
   async create(team: Team): Promise<Result.Result<Error, Team>> {
-    const res = this.data.set(team.getID(), team);
+    const res = this.data.set(team.getID(), cloneTeam(team));
     if (!res) {
       return Result.err(new Error('Team not found'));
     }
@@ -23,7 +24,7 @@ export class DummyRepository implements TeamRepository {
     if (!team) {
       return Option.none();
     }
-    return Option.some(team);
+    return Option.some(cloneTeam(team));
   }
 
   async findByID(id: string): Promise<Option.Option<Team>> {
@@ -31,11 +32,11 @@ export class DummyRepository implements TeamRepository {
     if (!team) {
       return Option.none();
     }
-    return Option.some(team);
+    return Option.some(cloneTeam(team));
   }
 
   async findAll(): Promise<Result.Result<Error, Team[]>> {
-    return Result.ok([...this.data.values()]);
+    return Result.ok([...this.data.values()].map(cloneTeam));
   }
 
   async delete(id: TeamID): Promise<Option.Option<Error>> {
@@ -49,11 +50,11 @@ export class DummyRepository implements TeamRepository {
       return Result.err(new Error('Team not found'));
     }
 
-    this.data.set(team.getID(), team);
+    this.data.set(team.getID(), cloneTeam(team));
     return Result.ok(team);
   }
 
   reset(data: Team[] = []) {
-    this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), v]));
+    this.data = new Map<TeamID, Team>(data.map((v) => [v.getID(), cloneTeam(v)]));
   }
 }
