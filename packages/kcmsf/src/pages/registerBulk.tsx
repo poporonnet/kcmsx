@@ -1,4 +1,13 @@
-import { Box, Button, Group, Paper, rem, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Group,
+  Paper,
+  rem,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import {
@@ -106,8 +115,8 @@ export const RegisterBulk = () => {
   };
 
   return (
-    <>
-      <Title>一括登録</Title>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">一括登録</Title>
       {csvData ? (
         <>
           <p>この内容で登録します</p>
@@ -193,6 +202,6 @@ export const RegisterBulk = () => {
         </Paper>
       )}
       <CsvExample />
-    </>
+    </Stack>
   );
 };

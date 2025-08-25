@@ -3,7 +3,7 @@ import { RouterNavLink } from "../components/RouterNavLink";
 
 export const Home = () => {
   return (
-    <Stack gap="md">
+    <Stack w="fit-content" align="center" gap="md">
       <Title m="md">Home</Title>
       <Stack gap={0} w="15rem">
         <NavLink label="チーム" color="dark" variant="subtle" defaultOpened>
