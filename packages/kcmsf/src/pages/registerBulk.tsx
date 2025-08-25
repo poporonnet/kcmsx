@@ -116,7 +116,7 @@ export const RegisterBulk = () => {
 
   return (
     <Stack w="fit-content" align="center" gap="md">
-      <Title m="md">一括エントリー</Title>
+      <Title m="md">一括登録</Title>
       {csvData ? (
         <>
           <p>この内容で登録します</p>
