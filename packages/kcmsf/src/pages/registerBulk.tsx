@@ -107,7 +107,7 @@ export const RegisterBulk = () => {
 
   return (
     <>
-      <Title>一括エントリー</Title>
+      <Title>一括登録</Title>
       {csvData ? (
         <>
           <p>この内容で登録します</p>
