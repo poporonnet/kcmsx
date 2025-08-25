@@ -59,7 +59,7 @@ export const Register = () => {
 
   return (
     <Stack w="fit-content" align="center" gap="md">
-      <Title m="md">参加者登録</Title>
+      <Title m="md">チーム登録</Title>
       <form onSubmit={submit}>
         <TextInput
           mt={"md"}
