@@ -1,4 +1,4 @@
-import { Flex, Table, Title } from "@mantine/core";
+import { Stack, Table, Title } from "@mantine/core";
 import { config } from "config";
 import { useMemo } from "react";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
@@ -42,7 +42,8 @@ export const Result = () => {
   );
 
   return (
-    <Flex direction="column" align="center" gap={20}>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">試合結果</Title>
       <LabeledSegmentedControls>
         <DepartmentSegmentedControl
           departmentType={departmentType}
@@ -52,7 +53,7 @@ export const Result = () => {
       <Title order={3}>{config.department[departmentType].name}</Title>
       <MainResultTable matches={mainMatches} teamNames={teamNames} />
       <PreResultTable matches={preMatches} />
-    </Flex>
+    </Stack>
   );
 };
 
