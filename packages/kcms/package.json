@@ -24,7 +24,7 @@
     "@hono/zod-openapi": "^0.19.0",
     "@hono/zod-validator": "^0.7.0",
     "@mikuroxina/mini-fn": "^7.0.0",
-    "@prisma/client": "5.22.0",
+    "@prisma/client": "6.14.0",
     "@scalar/hono-api-reference": "^0.9.0",
     "config": "workspace:^",
     "esbuild": "^0.25.0",
@@ -44,9 +44,9 @@
     "eslint-plugin-vitest": "^0.5.0",
     "prettier": "^3.1.0",
     "prettier-plugin-organize-imports": "^4.0.0",
-    "prisma": "^5.20.0",
+    "prisma": "^6.0.0",
     "tsx": "^4.6.2",
     "vitest": "^3.0.0"
   },
-  "packageManager": "pnpm@10.14.0+sha512.ad27a79641b49c3e481a16a805baa71817a04bbe06a38d17e60e2eaee83f6a146c6a688125f5792e48dd5ba30e7da52a5cda4c3992b9ccf333f9ce223af84748"
+  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
 }

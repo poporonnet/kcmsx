@@ -97,8 +97,8 @@ export const MatchList = () => {
   );
 
   return (
-    <Stack justify="center" align="center" gap="md" w="fit-content">
-      <Title m="1rem">試合表</Title>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">試合表</Title>
       <LabeledSegmentedControls>
         <MatchSegmentedControl
           matchType={matchType}

@@ -18,7 +18,7 @@ export const Tournament = () => {
   const navigate = useNavigate();
 
   return (
-    <Stack gap="md" flex={1} justify="center" align="center">
+    <Stack w="fit-content" align="center" gap="md" flex={1}>
       <Title m="md">本戦トーナメント</Title>
       <LabeledSegmentedControls>
         <DepartmentSegmentedControl
