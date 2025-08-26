@@ -74,4 +74,14 @@ export class RunResult {
   public isFinished(): boolean {
     return this.finishState === 'FINISHED';
   }
+
+  public static reconstruct(args: CreateRunResultArgs): RunResult {
+    return new RunResult({
+      id: args.id,
+      teamID: args.teamID,
+      points: args.points,
+      goalTimeSeconds: args.goalTimeSeconds,
+      finishState: args.finishState,
+    });
+  }
 }
