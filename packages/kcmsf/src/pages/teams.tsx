@@ -195,7 +195,7 @@ export const Teams = () => {
       {loading && (
         <>
           <Text>ロード中</Text>
-          <Loader m="xl" />
+          <Loader size={40} />
         </>
       )}
       {error && (
