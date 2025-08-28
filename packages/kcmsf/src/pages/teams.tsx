@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from "@mantine/core";
 import { Cat } from "@mikuroxina/mini-fn";
+import { IconRefresh } from "@tabler/icons-react";
 import { config } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter } from "../components/Filter";
@@ -34,9 +35,12 @@ type SortState = {
 type FilterState = Partial<Team>;
 
 export const Teams = () => {
-  const { data: teamsRes } = useFetch<GetTeamsResponse>(
-    `${import.meta.env.VITE_API_URL}/team`
-  );
+  const {
+    data: teamsRes,
+    loading,
+    error,
+    refetch,
+  } = useFetch<GetTeamsResponse>(`${import.meta.env.VITE_API_URL}/team`);
   const [teams, setTeams] = useState<Map<string, Team>>();
   const [sortState, setSortState] = useState<SortState>({
     key: "entryCode",
@@ -169,7 +173,7 @@ export const Teams = () => {
   return (
     <Stack w="fit-content" align="center" gap="md">
       <Title m="md">チーム一覧</Title>
-      {processedTeams ? (
+      {!loading && processedTeams && (
         <>
           <Flex w="100%" justify="right">
             <Button onClick={() => setFilterState({})} variant="outline">
@@ -187,8 +191,23 @@ export const Teams = () => {
             entry={entry}
           />
         </>
-      ) : (
-        <Loader m="xl" />
+      )}
+      {loading && (
+        <>
+          <Text>ロード中</Text>
+          <Loader m="xl" />
+        </>
+      )}
+      {error && (
+        <>
+          <Text c={"red"} fw={700}>
+            サーバーからのフェッチに失敗しました。
+          </Text>
+          <Button mt={"2rem"} onClick={refetch}>
+            <IconRefresh stroke={2} />
+            再読み込み
+          </Button>
+        </>
       )}
     </Stack>
   );
