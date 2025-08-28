@@ -144,11 +144,14 @@ export const MatchList = () => {
       )}
       {error && (
         <>
-          <Text c={"red"} fw={700}>
+          <Text c="red" fw={700}>
             サーバーからのフェッチに失敗しました。
           </Text>
-          <Button mt={"2rem"} onClick={refetch}>
-            <IconRefresh stroke={2} />
+          <Button
+            mt="2rem"
+            onClick={refetch}
+            leftSection={<IconRefresh stroke={2} />}
+          >
             再読み込み
           </Button>
         </>
