@@ -17,8 +17,8 @@ describe("header component", () => {
       </AppShell>
     );
 
-    expect(screen.getByText("参加者一覧")).toHaveAttribute("href", "/team");
-    expect(screen.getByText("参加者登録")).toHaveAttribute("href", "/register");
+    expect(screen.getByText("チーム一覧")).toHaveAttribute("href", "/team");
+    expect(screen.getByText("チーム登録")).toHaveAttribute("href", "/register");
     expect(screen.getByText("一括登録")).toHaveAttribute(
       "href",
       "/register/bulk"
