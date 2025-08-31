@@ -67,7 +67,7 @@ export class EntryService {
    * 試合表が生成されているかを確認する
    */
   private async isEntryModifiable(): Promise<Result.Result<Error, void>> {
-    const matchRes = await this.preMatch.findAllPreMatch();
+    const matchRes = await this.preMatch.fetchAllPreMatch();
     if (Result.isOk(matchRes) && Result.unwrap(matchRes).length > 0) {
       return Result.err(new Error('Cannot modify entry now'));
     }

@@ -13,7 +13,7 @@ export class FetchTournamentService {
   constructor(private readonly getMatch: GetMatchService) {}
 
   async handle(departmentType: DepartmentType): Promise<Result.Result<Error, Tournament>> {
-    const mainRes = await this.getMatch.findAllMainMatch();
+    const mainRes = await this.getMatch.fetchAllMainMatch();
     if (Result.isErr(mainRes)) {
       return mainRes;
     }

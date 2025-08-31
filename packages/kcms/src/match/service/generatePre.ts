@@ -67,7 +67,7 @@ export class GeneratePreMatchService {
     const courseCount = config.match.pre.course[departmentType].length;
 
     // エントリー済みのチームを取得
-    const teamRes = await this.fetchTeam.findAll();
+    const teamRes = await this.fetchTeam.fetchAll();
     if (Result.isErr(teamRes)) {
       return [];
     }
