@@ -51,6 +51,10 @@ export class PreMatch {
     return new PreMatch(args);
   }
 
+  public static reconstruct(args: CreatePreMatchArgs) {
+    return new PreMatch(args);
+  }
+
   getID(): PreMatchID {
     return this.id;
   }

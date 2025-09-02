@@ -28,11 +28,17 @@ describe('clonePreMatch', () => {
     const cloned = clonePreMatch(from);
 
     expect(from).toStrictEqual(cloned);
+    expect(from.getRunResults()).toStrictEqual(cloned.getRunResults());
   });
 
   it('正しいインスタンスを複製できる - 参照が異なる', () => {
     const cloned = clonePreMatch(from);
+    const cloneRunResult = cloned.getRunResults();
 
     expect(from).not.toBe(cloned);
+    expect(from.getRunResults()).not.toBe(cloned.getRunResults());
+    from.getRunResults().forEach((runResult, i) => {
+      expect(runResult).not.toBe(cloneRunResult[i]);
+    });
   });
 });
