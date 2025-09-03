@@ -33,12 +33,12 @@ describe('clonePreMatch', () => {
 
   it('正しいインスタンスを複製できる - 参照が異なる', () => {
     const cloned = clonePreMatch(from);
-    const cloneRunResult = cloned.getRunResults();
+    const clonedRunResults = cloned.getRunResults();
 
     expect(from).not.toBe(cloned);
-    expect(from.getRunResults()).not.toBe(cloned.getRunResults());
+    expect(from.getRunResults()).not.toBe(clonedRunResults);
     from.getRunResults().forEach((runResult, i) => {
-      expect(runResult).not.toBe(cloneRunResult[i]);
+      expect(runResult).not.toBe(clonedRunResults[i]);
     });
   });
 });
