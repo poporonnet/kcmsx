@@ -5,12 +5,12 @@ import { Team, TeamID } from '../../../team/models/team';
 import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
+import { FetchMatchService } from '../../service/fetch';
 import { FetchRunResultService } from '../../service/fetchRunResult';
 import { FetchTournamentService, Tournament } from '../../service/fetchTournament';
 import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
-import { GetMatchService } from '../../service/get';
 import { SetMainMatchWinnerService } from '../../service/setMainWinner';
 import {
   GetMatchIDResponseSchema,
@@ -30,7 +30,7 @@ import {
 
 export class MatchController {
   constructor(
-    private readonly getMatchService: GetMatchService,
+    private readonly getMatchService: FetchMatchService,
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
     private readonly generateRankingService: GenerateRankingService,

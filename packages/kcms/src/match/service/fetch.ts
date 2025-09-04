@@ -4,7 +4,7 @@ import { PreMatch, PreMatchID } from '../model/pre.js';
 import { MainMatchRepository, PreMatchRepository } from '../model/repository.js';
 
 // ToDo: 試合の走行結果の取得を実装する (別Serviceにしても良いかもしれない)
-export class GetMatchService {
+export class FetchMatchService {
   constructor(
     private readonly preMatchRepository: PreMatchRepository,
     private readonly mainMatchRepository: MainMatchRepository

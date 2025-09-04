@@ -1,7 +1,7 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { DepartmentType } from 'config';
 import { MainMatch, MainMatchID } from '../model/main';
-import { GetMatchService } from './get';
+import { FetchMatchService } from './fetch';
 
 export type Tournament = {
   match: MainMatch;
@@ -10,7 +10,7 @@ export type Tournament = {
 };
 
 export class FetchTournamentService {
-  constructor(private readonly getMatch: GetMatchService) {}
+  constructor(private readonly getMatch: FetchMatchService) {}
 
   async handle(departmentType: DepartmentType): Promise<Result.Result<Error, Tournament>> {
     const mainRes = await this.getMatch.fetchAllMainMatch();

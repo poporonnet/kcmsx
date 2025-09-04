@@ -4,13 +4,13 @@ import { testRankingPreMatchData } from '../../testData/match.js';
 import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository.js';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository.js';
 import { PreMatchID } from '../model/pre.js';
-import { GetMatchService } from './get.js';
+import { FetchMatchService } from './fetch.js';
 
 describe('GetMatchService', () => {
   const mainMatchRepository = new DummyMainMatchRepository();
   const preMatchRepository = new DummyPreMatchRepository();
 
-  const service = new GetMatchService(preMatchRepository, mainMatchRepository);
+  const service = new FetchMatchService(preMatchRepository, mainMatchRepository);
 
   beforeEach(() => {
     preMatchRepository.clear(testRankingPreMatchData);

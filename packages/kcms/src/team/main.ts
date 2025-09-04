@@ -20,7 +20,7 @@ import { apiReference } from '@scalar/hono-api-reference';
 import { SnowflakeIDGenerator } from '../id/main';
 import { PrismaMainMatchRepository } from '../match/adaptor/prisma/mainMatchRepository';
 import { PrismaPreMatchRepository } from '../match/adaptor/prisma/preMatchRepository';
-import { GetMatchService } from '../match/service/get';
+import { FetchMatchService } from '../match/service/fetch';
 import { CreateTeamService } from './service/createTeam';
 import { DeleteTeamService } from './service/delete';
 import { EntryService } from './service/entry';
@@ -35,7 +35,7 @@ const mainMatchRepository = new PrismaMainMatchRepository(prismaClient);
 
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
-const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+const getMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
 
 const fetchTeamService = new FetchTeamService(teamRepository);
 const createTeamService = new CreateTeamService(teamRepository, idGenerator);

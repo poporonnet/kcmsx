@@ -1,5 +1,5 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { GetMatchService } from '../../match/service/get';
+import { FetchMatchService } from '../../match/service/fetch';
 import { TeamRepository } from '../models/repository';
 import { Team, TeamID } from '../models/team';
 
@@ -9,7 +9,7 @@ import { Team, TeamID } from '../models/team';
 export class EntryService {
   constructor(
     private readonly teamRepository: TeamRepository,
-    private readonly preMatch: GetMatchService
+    private readonly preMatch: FetchMatchService
   ) {}
 
   /**
