@@ -103,8 +103,8 @@ export const Ranking = () => {
   useInterval(refetch, 10000, { active: isAutoReload });
 
   return (
-    <Flex direction="column" align="center" justify="center" gap="md">
-      <Title mt="md">ランキング</Title>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">ランキング</Title>
       <LabeledSegmentedControls>
         <MatchSegmentedControl
           matchType={matchType}
@@ -181,7 +181,7 @@ export const Ranking = () => {
           />
         )}
       </Flex>
-    </Flex>
+    </Stack>
   );
 };
 

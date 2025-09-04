@@ -97,8 +97,8 @@ export const MatchList = () => {
   );
 
   return (
-    <Stack justify="center" align="center" gap="md" w="fit-content">
-      <Title m="1rem">試合表</Title>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">試合表</Title>
       <LabeledSegmentedControls>
         <MatchSegmentedControl
           matchType={matchType}
@@ -144,11 +144,14 @@ export const MatchList = () => {
       )}
       {error && (
         <>
-          <Text c={"red"} fw={700}>
+          <Text c="red" fw={700}>
             サーバーからのフェッチに失敗しました。
           </Text>
-          <Button mt={"2rem"} onClick={refetch}>
-            <IconRefresh stroke={2} />
+          <Button
+            mt="2rem"
+            onClick={refetch}
+            leftSection={<IconRefresh stroke={2} />}
+          >
             再読み込み
           </Button>
         </>
