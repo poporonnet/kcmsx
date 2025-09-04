@@ -35,8 +35,8 @@ export class MainMatch {
   private readonly courseIndex: number;
   private readonly matchIndex: number;
   private readonly departmentType: DepartmentType;
-  private readonly teamID1?: TeamID;
-  private readonly teamID2?: TeamID;
+  private teamID1?: TeamID;
+  private teamID2?: TeamID;
 
   /**
    * トーナメントで自分より後に行われる1試合のID\
@@ -95,8 +95,31 @@ export class MainMatch {
     return this.teamID1;
   }
 
+  setTeamID1(teamID: TeamID) {
+    if (this.teamID1 !== undefined) {
+      throw new Error('TeamID1 is already set');
+    }
+    this.teamID1 = teamID;
+  }
+
   getTeamID2(): TeamID | undefined {
     return this.teamID2;
+  }
+
+  setTeamID2(teamID: TeamID) {
+    if (this.teamID2 !== undefined) {
+      throw new Error('TeamID2 is already set');
+    }
+    this.teamID2 = teamID;
+  }
+
+  setTeams(teamID1: TeamID, teamID2: TeamID) {
+    // すでにチームがセットされている場合はエラー
+    if (this.teamID1 || this.teamID2) {
+      throw new Error('Teams are already set');
+    }
+    this.teamID1 = teamID1;
+    this.teamID2 = teamID2;
   }
 
   getWinnerID(): TeamID | undefined {

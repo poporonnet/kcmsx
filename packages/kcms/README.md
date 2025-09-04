@@ -1,7 +1,6 @@
 # kcms
 
-Matz葉がにロボコン 大会運営支援ツール  
-[フロントエンドはこちら](https://github.com/poporonnet/kcmsf)
+[フロントエンドはこちら](../kcmsf/README.md)
 
 ## 開発者向け情報
 

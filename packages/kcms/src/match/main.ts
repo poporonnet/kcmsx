@@ -1,6 +1,7 @@
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { Result } from '@mikuroxina/mini-fn';
 import { apiReference } from '@scalar/hono-api-reference';
+import { config } from 'config';
 import { prismaClient } from '../adaptor';
 import { SnowflakeIDGenerator } from '../id/main';
 import { errorToCode } from '../team/adaptor/errors';
@@ -20,18 +21,22 @@ import {
   GetMatchRunResultRoute,
   GetMatchTypeRoute,
   GetRankingRoute,
+  GetTournamentRoute,
   PostMatchGenerateManualRoute,
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
+  PostMatchWinnerIDRoute,
   PostPreMatchGenerateRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchRunResultService } from './service/fetchRunResult';
 import { GenerateAllPreMatchService } from './service/generateAllPre';
+import { FetchTournamentService } from './service/fetchTournament';
 import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
 import { GetMatchService } from './service/get';
+import { SetMainMatchWinnerService } from './service/setMainWinner';
 import { upcase } from './utility/upcase';
 
 // Repositories
@@ -41,10 +46,12 @@ const teamRepository = new PrismaTeamRepository(prismaClient);
 
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
+const setMainWinnerService = new SetMainMatchWinnerService(mainMatchRepository);
 const createRunResultService = new CreateRunResultService(
   idGenerator,
   preMatchRepository,
-  mainMatchRepository
+  mainMatchRepository,
+  setMainWinnerService
 );
 const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
@@ -65,7 +72,12 @@ const generateAllPreMatchService = new GenerateAllPreMatchService(
 
 const generateRankingService = new GenerateRankingService(preMatchRepository, mainMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
-const generateMainMatchService = new GenerateMainMatchService(mainMatchRepository, idGenerator);
+const generateMainMatchService = new GenerateMainMatchService(
+  mainMatchRepository,
+  idGenerator,
+  config.match.main.requiredTeams
+);
+const fetchTournamentService = new FetchTournamentService(getMatchService);
 const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
@@ -73,7 +85,9 @@ const matchController = new MatchController(
   generateAllPreMatchService,
   generateRankingService,
   fetchRunResultService,
-  generateMainMatchService
+  generateMainMatchService,
+  fetchTournamentService,
+  setMainWinnerService
 );
 export const matchHandler = new OpenAPIHono();
 
@@ -134,12 +148,24 @@ matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
   const { departmentType } = c.req.valid('param');
   const req = c.req.valid('json');
 
-  const res = await matchController.generateMatchManual(departmentType, req.team1ID, req.team2ID);
+  const res = await matchController.generateMatchManual(departmentType, req.teamIDs);
   if (Result.isErr(res)) {
     return c.json({ description: res[1].message }, 400);
   }
 
   return c.json(res[1], 200);
+});
+
+matchHandler.openapi(PostMatchWinnerIDRoute, async (c) => {
+  const { matchID } = c.req.valid('param');
+  const req = c.req.valid('json');
+
+  const res = await matchController.setWinner(matchID, req.winnerID);
+  if (Result.isErr(res)) {
+    return c.json({ description: res[1].message }, 400);
+  }
+
+  return c.json(200);
 });
 
 matchHandler.openapi(GetMatchIDRoute, async (c) => {
@@ -190,6 +216,17 @@ matchHandler.openapi(GetMatchRunResultRoute, async (c) => {
   return c.json(Result.unwrap(res), 200);
 });
 
+matchHandler.openapi(GetTournamentRoute, async (c) => {
+  const { departmentType } = c.req.valid('param');
+
+  const res = await matchController.getTournament(departmentType);
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
+
 matchHandler.doc('/openapi/match.json', {
   openapi: '3.0.0',
   info: {
@@ -201,8 +238,6 @@ matchHandler.doc('/openapi/match.json', {
 matchHandler.get(
   '/reference/match',
   apiReference({
-    spec: {
-      url: '/openapi/match.json',
-    },
+    url: '/openapi/match.json',
   })
 );

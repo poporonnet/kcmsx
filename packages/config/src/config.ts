@@ -31,19 +31,20 @@ export const config = createConfig(
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: [1, 2, 3],
-          open: [],
+          elementary: [1, 2],
+          open: [1, 2],
         },
       },
       main: {
         name: "本戦",
         limitSeconds: 180,
         course: {
-          elementary: [1, 2, 3],
-          open: [1],
+          elementary: [1, 2],
+          open: [1, 2],
         },
         requiredTeams: {
           elementary: 4,
+          open: 4,
         },
       },
     },
@@ -107,7 +108,7 @@ export const config = createConfig(
       },
       {
         name: "bringRareBall",
-        label: "激レアメタルの数",
+        label: "激レア雲粒子の数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,

@@ -9,13 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
+      - run: npm i -g --force corepack
       - run: corepack enable
-      - name: Setup Nodejs v20
+      - name: Setup Nodejs
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "pnpm"
 
       - name: Install packages
@@ -36,7 +37,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup bun
         uses: oven-sh/setup-bun@v2
@@ -61,7 +62,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Setup bun
         uses: oven-sh/setup-bun@v2
         with:

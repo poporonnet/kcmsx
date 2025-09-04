@@ -24,6 +24,7 @@ import { GetMatchService } from '../match/service/get';
 import { CreateTeamService } from './service/createTeam';
 import { DeleteTeamService } from './service/delete';
 import { EntryService } from './service/entry';
+import { EntryCodeService } from './service/entryCode';
 import { FetchTeamService } from './service/fetchTeam';
 
 export const teamHandler = new OpenAPIHono();
@@ -40,12 +41,14 @@ const fetchTeamService = new FetchTeamService(teamRepository);
 const createTeamService = new CreateTeamService(teamRepository, idGenerator);
 const deleteTeamService = new DeleteTeamService(teamRepository);
 const entryService = new EntryService(teamRepository, getMatchService);
+const entryCodeService = new EntryCodeService(teamRepository);
 
 export const controller = new TeamController(
   createTeamService,
   fetchTeamService,
   deleteTeamService,
-  entryService
+  entryService,
+  entryCodeService
 );
 
 /**
@@ -56,7 +59,6 @@ teamHandler.openapi(GetTeamsRoute, async (c) => {
   if (Result.isErr(res)) {
     return c.json({ description: errorToCode(res[1]) }, 400);
   }
-
   return c.json(Result.unwrap(res), 200);
 });
 
@@ -101,12 +103,18 @@ teamHandler.openapi(DeleteTeamRoute, async (c) => {
 
 /**
  * エントリーする (POST /team/{teamID}/entry)
+ * 初回のエントリー時にゼッケン番号を割り当てる
  */
 teamHandler.openapi(PostEntryTeamRoute, async (c) => {
   const { teamID } = c.req.valid('param');
-  const res = await controller.enter(teamID as TeamID);
-  if (Result.isErr(res)) {
-    return c.json({ description: errorToCode(Result.unwrapErr(res)) }, 400);
+  const entryRes = await controller.enter(teamID as TeamID);
+  if (Result.isErr(entryRes)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(entryRes)) }, 400);
+  }
+
+  const entryCodeRes = await controller.setEntryCode(teamID as TeamID);
+  if (Result.isErr(entryCodeRes)) {
+    return c.json({ description: errorToCode(Result.unwrapErr(entryCodeRes)) }, 400);
   }
 
   return new Response(null, { status: 200 });
@@ -134,8 +142,6 @@ teamHandler.doc('/openapi/team.json', {
 teamHandler.get(
   '/reference/team',
   apiReference({
-    spec: {
-      url: '/openapi/team.json',
-    },
+    url: '/openapi/team.json',
   })
 );

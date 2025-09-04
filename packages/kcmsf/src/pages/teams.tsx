@@ -4,12 +4,14 @@ import {
   Flex,
   Loader,
   Space,
+  Stack,
   Table,
   Text,
   Title,
   Tooltip,
 } from "@mantine/core";
 import { Cat } from "@mikuroxina/mini-fn";
+import { IconRefresh } from "@tabler/icons-react";
 import { config } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Filter } from "../components/Filter";
@@ -33,9 +35,12 @@ type SortState = {
 type FilterState = Partial<Team>;
 
 export const Teams = () => {
-  const { data: teamsRes } = useFetch<GetTeamsResponse>(
-    `${import.meta.env.VITE_API_URL}/team`
-  );
+  const {
+    data: teamsRes,
+    loading,
+    error,
+    refetch,
+  } = useFetch<GetTeamsResponse>(`${import.meta.env.VITE_API_URL}/team`);
   const [teams, setTeams] = useState<Map<string, Team>>();
   const [sortState, setSortState] = useState<SortState>({
     key: "entryCode",
@@ -45,7 +50,10 @@ export const Teams = () => {
 
   const comparer: Comparer = useMemo(
     () => ({
-      entryCode: (a, b) => a.localeCompare(b),
+      entryCode: (a, b) =>
+        a.localeCompare(b, undefined, {
+          numeric: true,
+        }),
       name: (a, b) => a.localeCompare(b),
       clubName: (a, b) => a.localeCompare(b),
       robotType: (a, b) => a.localeCompare(b),
@@ -163,17 +171,15 @@ export const Teams = () => {
   }, [setTeams, teamsRes]);
 
   return (
-    <Flex direction="column" align="center" justify="center">
+    <Stack w="fit-content" align="center" gap="md">
       <Title m="md">チーム一覧</Title>
-      <Space h={20} />
-      {processedTeams ? (
+      {!loading && processedTeams && (
         <>
           <Flex w="100%" justify="right">
             <Button onClick={() => setFilterState({})} variant="outline">
               フィルターをリセット
             </Button>
           </Flex>
-          <Space h={10} />
           <TeamTable
             teams={processedTeams}
             sortState={sortState}
@@ -185,10 +191,28 @@ export const Teams = () => {
             entry={entry}
           />
         </>
-      ) : (
-        <Loader m="xl" />
       )}
-    </Flex>
+      {loading && (
+        <>
+          <Text>ロード中</Text>
+          <Loader size={40} />
+        </>
+      )}
+      {error && (
+        <>
+          <Text c="red" fw={700}>
+            サーバーからのフェッチに失敗しました。
+          </Text>
+          <Button
+            mt="2rem"
+            onClick={refetch}
+            leftSection={<IconRefresh stroke={2} />}
+          >
+            再読み込み
+          </Button>
+        </>
+      )}
+    </Stack>
   );
 };
 

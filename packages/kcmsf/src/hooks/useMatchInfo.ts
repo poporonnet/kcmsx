@@ -7,7 +7,7 @@ import { Match } from "../types/match";
 export const useMatchInfo = (
   id?: string,
   matchType?: MatchType
-): { match?: Match; matchInfo?: MatchInfo } => {
+): { match?: Match; matchInfo?: MatchInfo; refetch: () => Promise<void> } => {
   const [match, setMatch] = useState<Match>();
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
 
@@ -37,11 +37,13 @@ export const useMatchInfo = (
       matchRes.matchType == "main" && matchRes.runResults.length >= 2;
 
     const leftTeamID =
-      matchRes.matchType == "main" ? matchRes.team1.id : matchRes.leftTeam?.id;
+      matchRes.matchType == "main" ? matchRes.team1?.id : matchRes.leftTeam?.id;
     const leftTeam = leftTeamID ? await fetchTeam(leftTeamID) : undefined;
 
     const rightTeamID =
-      matchRes.matchType == "main" ? matchRes.team2.id : matchRes.rightTeam?.id;
+      matchRes.matchType == "main"
+        ? matchRes.team2?.id
+        : matchRes.rightTeam?.id;
     const rightTeam = rightTeamID ? await fetchTeam(rightTeamID) : undefined;
 
     const leftTeamInfo: TeamInfo | undefined = leftTeam
@@ -85,5 +87,5 @@ export const useMatchInfo = (
     fetchMatchInfo();
   }, [fetchMatchInfo]);
 
-  return { match, matchInfo };
+  return { match, matchInfo, refetch: fetchMatchInfo };
 };

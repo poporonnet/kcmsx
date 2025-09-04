@@ -42,7 +42,7 @@ export const Login = ({
         setFailed(!res);
       }
     },
-    [login]
+    [login, startLoad, finishLoad]
   );
 
   return (

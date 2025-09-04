@@ -1,21 +1,22 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { PreMatch, PreMatchID } from '../../model/pre.js';
 import { PreMatchRepository } from '../../model/repository.js';
+import { clonePreMatch } from '../../utility/clonePreMatch.js';
 
 export class DummyPreMatchRepository implements PreMatchRepository {
   private data: PreMatch[];
 
   constructor(data: PreMatch[] = []) {
-    this.data = data;
+    this.data = data.map(clonePreMatch);
   }
 
   public async create(match: PreMatch): Promise<Result.Result<Error, void>> {
-    this.data.push(match);
+    this.data.push(clonePreMatch(match));
     return Result.ok(undefined);
   }
 
   public async createBulk(matches: PreMatch[]): Promise<Result.Result<Error, void>> {
-    this.data.push(...matches);
+    this.data.push(...matches.map(clonePreMatch));
     return Result.ok(undefined);
   }
 
@@ -24,17 +25,17 @@ export class DummyPreMatchRepository implements PreMatchRepository {
     if (!match) {
       return Option.none();
     }
-    return Option.some(match);
+    return Option.some(clonePreMatch(match));
   }
 
   public async update(match: PreMatch): Promise<Result.Result<Error, void>> {
     const i = this.data.findIndex((m) => m.getID() === match.getID());
-    this.data[i] = match;
+    this.data[i] = clonePreMatch(match);
     return Result.ok(undefined);
   }
 
   public async findAll(): Promise<Result.Result<Error, PreMatch[]>> {
-    return Result.ok(this.data);
+    return Result.ok(this.data.map(clonePreMatch));
   }
 
   /**
@@ -42,6 +43,6 @@ export class DummyPreMatchRepository implements PreMatchRepository {
    * @param data
    */
   public clear(data: PreMatch[] = []) {
-    this.data = data;
+    this.data = data.map(clonePreMatch);
   }
 }

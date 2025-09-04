@@ -1,4 +1,11 @@
-import { Box, Button, Group, SegmentedControl, TextInput } from "@mantine/core";
+import {
+  Button,
+  Group,
+  SegmentedControl,
+  Stack,
+  TextInput,
+  Title,
+} from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { config, DepartmentType, RobotType } from "config";
 import { useState } from "react";
@@ -13,6 +20,7 @@ export const Register = () => {
   const [category, setCategory] = useState<DepartmentType>(
     config.departments[0].type
   );
+
   const [member, setMember] = useState<[string, string]>(["", ""]);
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
@@ -50,7 +58,8 @@ export const Register = () => {
   }
 
   return (
-    <Box maw={620} mx={"auto"}>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">チーム登録</Title>
       <form onSubmit={submit}>
         <TextInput
           mt={"md"}
@@ -73,18 +82,20 @@ export const Register = () => {
           label="メンバーの名前(1人目)"
           placeholder="メンバー(1人目)を入力してください"
           value={member[0]}
-          onChange={(event) =>
-            setMember((prev) => [event.currentTarget.value, prev[1]])
-          }
+          onChange={(event) => {
+            const member1 = event.currentTarget.value;
+            setMember((prev) => [member1, prev[1]]);
+          }}
         />
         <TextInput
           mt={"md"}
           label="メンバーの名前(2人目)"
           placeholder="メンバー(2人目)を入力してください"
           value={member[1]}
-          onChange={(event) =>
-            setMember((prev) => [prev[0], event.currentTarget.value])
-          }
+          onChange={(event) => {
+            const member2 = event.currentTarget.value;
+            setMember((prev) => [prev[0], member2]);
+          }}
         />
         <SegmentedControl
           mt={"md"}
@@ -112,6 +123,6 @@ export const Register = () => {
           </Button>
         </Group>
       </form>
-    </Box>
+    </Stack>
   );
 };
