@@ -30,7 +30,6 @@ import {
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchRunResultService } from './service/fetchRunResult';
-import { GenerateAllPreMatchService } from './service/generateAllPre';
 import { FetchTournamentService } from './service/fetchTournament';
 import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
@@ -64,12 +63,6 @@ const generatePreMatchService = new GeneratePreMatchService(
   preMatchRepository
 );
 
-const generateAllPreMatchService = new GenerateAllPreMatchService(
-  fetchTeamService,
-  idGenerator,
-  preMatchRepository
-);
-
 const generateRankingService = new GenerateRankingService(preMatchRepository, mainMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
 const generateMainMatchService = new GenerateMainMatchService(
@@ -82,7 +75,6 @@ const matchController = new MatchController(
   getMatchService,
   fetchTeamService,
   generatePreMatchService,
-  generateAllPreMatchService,
   generateRankingService,
   fetchRunResultService,
   generateMainMatchService,

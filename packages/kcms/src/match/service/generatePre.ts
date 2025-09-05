@@ -13,16 +13,52 @@ export class GeneratePreMatchService {
     private readonly preMatchRepository: PreMatchRepository
   ) {}
 
-  async handle(departmentType: DepartmentType): Promise<Result.Result<Error, PreMatch[]>> {
+  async generateByDepartment(
+    departmentType: DepartmentType
+  ): Promise<Result.Result<Error, PreMatch[]>> {
     if (!config.match.pre.course[departmentType]) {
       return Result.err(new Error('DepartmentType is not defined'));
     }
     const pair = await this.makePairs(departmentType);
-    return await this.makeMatches(pair);
+    const match = await this.makeMatches(pair);
+
+    const res = await this.preMatchRepository.createBulk(Result.unwrap(match));
+    if (Result.isErr(res)) {
+      return res;
+    }
+
+    return match;
+  }
+
+  async generateAll(): Promise<Result.Result<Error, Map<DepartmentType, PreMatch[]>>> {
+    const matches = new Map<DepartmentType, PreMatch[]>();
+    let globalMatchIndex = 0;
+
+    for (const d of config.departmentTypes) {
+      const pair = await this.makePairs(d);
+      const match = await this.makeMatches(pair, globalMatchIndex);
+      if (Result.isErr(match)) {
+        return match;
+      }
+
+      const deptMatches = Result.unwrap(match);
+      globalMatchIndex += deptMatches.length;
+
+      matches.set(d, deptMatches);
+    }
+
+    const allMatches = [...matches.values()].flat();
+    const res = await this.preMatchRepository.createBulk(allMatches);
+    if (Result.isErr(res)) {
+      return res;
+    }
+
+    return Result.ok(matches);
   }
 
   private async makeMatches(
-    data: (Team | undefined)[][][]
+    data: (Team | undefined)[][][],
+    globalMatchIndex: number = 0
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
 
@@ -38,7 +74,7 @@ export class GeneratePreMatchService {
           id: Result.unwrap(id),
           // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
           courseIndex: courseIndex + 1,
-          matchIndex: matchIndex + 1,
+          matchIndex: globalMatchIndex + matchIndex + 1,
           departmentType: (pair[0] || pair[1]!).getDepartmentType(),
           teamID1: pair[0]?.getID(),
           teamID2: pair[1]?.getID(),
@@ -49,11 +85,6 @@ export class GeneratePreMatchService {
     });
     const flatten = generated.flat();
     const match = flatten.filter((v) => Result.isOk(v)).map((v) => Result.unwrap(v));
-
-    const res = await this.preMatchRepository.createBulk(match);
-    if (Result.isErr(res)) {
-      return res;
-    }
 
     return Result.ok(match);
   }

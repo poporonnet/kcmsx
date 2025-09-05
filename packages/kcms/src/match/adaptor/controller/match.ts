@@ -6,7 +6,6 @@ import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
 import { FetchRunResultService } from '../../service/fetchRunResult';
-import { GenerateAllPreMatchService } from '../../service/generateAllPre';
 import { FetchTournamentService, Tournament } from '../../service/fetchTournament';
 import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
@@ -35,7 +34,6 @@ export class MatchController {
     private readonly getMatchService: GetMatchService,
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
-    private readonly generateAllPreMatchService: GenerateAllPreMatchService,
     private readonly generateRankingService: GenerateRankingService,
     private readonly fetchRunResultService: FetchRunResultService,
     private readonly generateMainMatchService: GenerateMainMatchService,
@@ -112,7 +110,7 @@ export class MatchController {
       return Result.err(new Error('Not implemented'));
     }
 
-    const res = await this.generatePreMatchService.handle(departmentType);
+    const res = await this.generatePreMatchService.generateByDepartment(departmentType);
     if (Result.isErr(res)) return res;
     const matches = Result.unwrap(res);
 
@@ -135,12 +133,15 @@ export class MatchController {
     Result.Result<Error, z.infer<typeof PostPreMatchGenerateResponseSchema>>
   > {
     const data = [];
-    const res = await this.generateAllPreMatchService.handle();
-    for (const e of res.keys()) {
-      const matches = res.get(e);
+    const res = await this.generatePreMatchService.generateAll();
+    if (Result.isErr(res)) {
+      return res;
+    }
+    const Matches = Result.unwrap(res);
+    for (const e of Matches.keys()) {
+      const matches = Matches.get(e);
       if (matches) {
-        if (Result.isErr(matches)) return matches;
-        const createMatches = Result.unwrap(matches).map((v): z.infer<typeof ShortPreSchema> => {
+        const createMatches = matches.map((v): z.infer<typeof ShortPreSchema> => {
           return {
             id: v.getID(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,

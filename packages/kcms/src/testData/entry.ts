@@ -85,5 +85,16 @@ export const testTeamData: Map<TeamID, Team> = new Map<TeamID, Team>(
     testDataGenerator({ clubName: 'C', teamName: '2', department: 'elementary', isEntered: true }),
     testDataGenerator({ teamName: '1', department: 'elementary', isEntered: true }), // N1
     testDataGenerator({ teamName: '2', department: 'elementary', isEntered: true }), // N2
+    testDataGenerator({ clubName: 'A', teamName: '1', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'A', teamName: '2', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'A', teamName: '3', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'A', teamName: '4', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'B', teamName: '1', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'B', teamName: '2', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'B', teamName: '3', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'C', teamName: '1', department: 'open', isEntered: true }),
+    testDataGenerator({ clubName: 'C', teamName: '2', department: 'open', isEntered: true }),
+    testDataGenerator({ teamName: '1', department: 'open', isEntered: true }), // N1
+    testDataGenerator({ teamName: '2', department: 'open', isEntered: true }), // N2
   ].map((v) => [v.getID(), v])
 );

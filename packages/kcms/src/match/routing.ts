@@ -19,9 +19,9 @@ import {
   PostMatchGenerateResponseSchema,
   PostMatchRunResultParamsSchema,
   PostMatchRunResultRequestSchema,
-  PostPreMatchGenerateResponseSchema,
   PostMatchWinnerIDParamsSchema,
   PostMatchWinnerIDRequestSchema,
+  PostPreMatchGenerateResponseSchema,
 } from '../match/adaptor/validator/match';
 
 export const GetMatchRoute = createRoute({
@@ -145,7 +145,7 @@ export const PostMatchGenerateRoute = createRoute({
 
 export const PostPreMatchGenerateRoute = createRoute({
   method: 'post',
-  path: '/match/pre',
+  path: '/match/pre/generate',
   responses: {
     200: {
       content: {
