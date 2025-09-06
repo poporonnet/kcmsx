@@ -36,8 +36,8 @@ describe('GeneratePreMatchService', () => {
     ],
   ];
 
-  it('正しく予選対戦表を生成できる', async () => {
-    const generated = await generateService.handle('elementary');
+  it('正しく予選対戦表を生成できる - 部門ごと', async () => {
+    const generated = await generateService.generateByDepartment('elementary');
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
@@ -48,6 +48,24 @@ describe('GeneratePreMatchService', () => {
         testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
       ]);
       expect(pair).toStrictEqual(expectedTeamPair[i]);
+    }
+  });
+
+  it('正しく予選対戦表を生成できる - すべての部門', async () => {
+    const generated = await generateService.generateAll();
+    expect(Result.isOk(generated)).toBe(true);
+    const res = Result.unwrap(generated);
+
+    for (const d of res.keys()) {
+      const matches = res.get(d);
+      for (let i = 0; i < config.match.pre.course[d].length; i++) {
+        const course = matches!.filter((v) => v.getCourseIndex() === i + 1);
+        const pair = course.map((v) => [
+          testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
+          testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
+        ]);
+        expect(pair).toStrictEqual(expectedTeamPair[i]);
+      }
     }
   });
 });
