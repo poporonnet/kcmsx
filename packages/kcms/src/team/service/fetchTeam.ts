@@ -9,11 +9,11 @@ export class FetchTeamService {
     this.repository = repository;
   }
 
-  async findAll(): Promise<Result.Result<Error, Team[]>> {
+  async fetchAll(): Promise<Result.Result<Error, Team[]>> {
     return await this.repository.findAll();
   }
 
-  async findByID(id: TeamID): Promise<Result.Result<Error, Team>> {
+  async fetchByID(id: TeamID): Promise<Result.Result<Error, Team>> {
     const res = await this.repository.findByID(id);
     if (Option.isNone(res)) {
       return Result.err(new Error('Not found'));
@@ -22,7 +22,7 @@ export class FetchTeamService {
     return Result.ok(Option.unwrap(res));
   }
 
-  async findByTeamName(name: string): Promise<Result.Result<Error, Team>> {
+  async fetchByTeamName(name: string): Promise<Result.Result<Error, Team>> {
     const res = await this.repository.findByTeamName(name);
     if (Option.isNone(res)) {
       return Result.err(new Error('Not found'));

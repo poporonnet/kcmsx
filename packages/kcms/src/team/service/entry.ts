@@ -1,5 +1,5 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { GetMatchService } from '../../match/service/get';
+import { FetchMatchService } from '../../match/service/fetch';
 import { TeamRepository } from '../models/repository';
 import { Team, TeamID } from '../models/team';
 
@@ -9,7 +9,7 @@ import { Team, TeamID } from '../models/team';
 export class EntryService {
   constructor(
     private readonly teamRepository: TeamRepository,
-    private readonly preMatch: GetMatchService
+    private readonly preMatch: FetchMatchService
   ) {}
 
   /**
@@ -67,7 +67,7 @@ export class EntryService {
    * 試合表が生成されているかを確認する
    */
   private async isEntryModifiable(): Promise<Result.Result<Error, void>> {
-    const matchRes = await this.preMatch.findAllPreMatch();
+    const matchRes = await this.preMatch.fetchAllPreMatch();
     if (Result.isOk(matchRes) && Result.unwrap(matchRes).length > 0) {
       return Result.err(new Error('Cannot modify entry now'));
     }

@@ -2,7 +2,7 @@ import { Result } from '@mikuroxina/mini-fn';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { DummyMainMatchRepository } from '../../match/adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from '../../match/adaptor/dummy/preMatchRepository';
-import { GetMatchService } from '../../match/service/get';
+import { FetchMatchService } from '../../match/service/fetch';
 import { TestEntryData } from '../../testData/entry';
 import { DummyRepository } from '../adaptor/repository/dummyRepository';
 import { TeamID } from '../models/team';
@@ -13,7 +13,7 @@ describe('EntryCodeService', () => {
   const teamRepository = new DummyRepository();
   const preMatchRepository = new DummyPreMatchRepository();
   const mainMatchRepository = new DummyMainMatchRepository();
-  const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+  const getMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
   const entryService = new EntryService(teamRepository, getMatchService);
   const entryCodeService = new EntryCodeService(teamRepository);
 
