@@ -194,9 +194,9 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
   <Table.Thead>
     <Table.Tr>
       <Table.Th ta="center">試合番号</Table.Th>
-      <Table.Th ta="center">コート番号</Table.Th>
-      <Table.Th>{matchType == "pre" ? "左チーム" : "チーム1"}</Table.Th>
-      <Table.Th>{matchType == "pre" ? "右チーム" : "チーム2"}</Table.Th>
+      <Table.Th ta="center">コース番号</Table.Th>
+      <Table.Th>{matchType == "pre" ? "左コース" : "チーム1"}</Table.Th>
+      <Table.Th>{matchType == "pre" ? "右コース" : "チーム2"}</Table.Th>
       <Table.Th ta="center">状態</Table.Th>
     </Table.Tr>
   </Table.Thead>
