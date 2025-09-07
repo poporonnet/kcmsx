@@ -137,10 +137,10 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
       <Table striped withTableBorder miw="40rem">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ textAlign: "center" }}>左チーム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>左コース</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>右コース</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
           </Table.Tr>
