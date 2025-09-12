@@ -22,6 +22,7 @@ import {
   MainSchema,
   PostMatchGenerateManualResponseSchema,
   PostMatchGenerateResponseSchema,
+  PostPreMatchGenerateResponseSchema,
   PreSchema,
   RunResultSchema,
   ShortMainSchema,
@@ -109,7 +110,7 @@ export class MatchController {
       return Result.err(new Error('Not implemented'));
     }
 
-    const res = await this.generatePreMatchService.handle(departmentType);
+    const res = await this.generatePreMatchService.generateByDepartment(departmentType);
     if (Result.isErr(res)) return res;
     const matches = Result.unwrap(res);
 
@@ -126,6 +127,39 @@ export class MatchController {
         };
       })
     );
+  }
+
+  async generateAllPreMatch(): Promise<
+    Result.Result<Error, z.infer<typeof PostPreMatchGenerateResponseSchema>>
+  > {
+    const data = [];
+    const res = await this.generatePreMatchService.generateAll();
+    if (Result.isErr(res)) {
+      return res;
+    }
+    const Matches = Result.unwrap(res);
+    for (const e of Matches.keys()) {
+      const matches = Matches.get(e);
+      if (matches) {
+        const createMatches = matches.map((v): z.infer<typeof ShortPreSchema> => {
+          return {
+            id: v.getID(),
+            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+            matchType: 'pre',
+            departmentType: v.getDepartmentType(),
+            leftTeamID: v.getTeamID1(),
+            rightTeamID: v.getTeamID2(),
+            runResults: [],
+          };
+        });
+        data.push({
+          departmentType: e,
+          matches: createMatches,
+        });
+      }
+    }
+
+    return Result.ok(data);
   }
 
   async generateMatchManual(
