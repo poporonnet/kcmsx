@@ -132,17 +132,16 @@ export class MatchController {
   async generateAllPreMatch(): Promise<
     Result.Result<Error, z.infer<typeof PostPreMatchGenerateResponseSchema>>
   > {
-    const data = [];
     const res = await this.generatePreMatchService.generateAll();
     if (Result.isErr(res)) {
       return res;
     }
-    const Matches = Result.unwrap(res);
-    for (const e of Matches.keys()) {
-      const matches = Matches.get(e);
-      if (matches) {
-        const createMatches = matches.map((v): z.infer<typeof ShortPreSchema> => {
-          return {
+    const allMatches = Result.unwrap(res);
+    return Result.ok(
+      [...allMatches.entries()].map(([departmentType, matches]) => ({
+        departmentType,
+        matches: matches.map(
+          (v): z.infer<typeof ShortPreSchema> => ({
             id: v.getID(),
             matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
             matchType: 'pre',
@@ -150,16 +149,10 @@ export class MatchController {
             leftTeamID: v.getTeamID1(),
             rightTeamID: v.getTeamID2(),
             runResults: [],
-          };
-        });
-        data.push({
-          departmentType: e,
-          matches: createMatches,
-        });
-      }
-    }
-
-    return Result.ok(data);
+          })
+        ),
+      }))
+    );
   }
 
   async generateMatchManual(

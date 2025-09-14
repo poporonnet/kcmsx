@@ -19,32 +19,36 @@ export class GeneratePreMatchService {
     if (!config.match.pre.course[departmentType]) {
       return Result.err(new Error('DepartmentType is not defined'));
     }
-    const pair = await this.makePairs(departmentType);
-    const match = await this.makeMatches(pair);
+    const pairs = await this.makePairs(departmentType);
+    const matchRes = await this.makeMatches(pairs);
+    if (Result.isErr(matchRes)) {
+      return matchRes;
+    }
 
-    const res = await this.preMatchRepository.createBulk(Result.unwrap(match));
+    const match = Result.unwrap(matchRes);
+    const res = await this.preMatchRepository.createBulk(match);
     if (Result.isErr(res)) {
       return res;
     }
 
-    return match;
+    return Result.ok(match);
   }
 
   async generateAll(): Promise<Result.Result<Error, Map<DepartmentType, PreMatch[]>>> {
     const matches = new Map<DepartmentType, PreMatch[]>();
-    let globalMatchIndex = 0;
+    let matchIndexOffset = 0;
 
-    for (const d of config.departmentTypes) {
-      const pair = await this.makePairs(d);
-      const match = await this.makeMatches(pair, globalMatchIndex);
-      if (Result.isErr(match)) {
-        return match;
+    for (const departmentType of config.departmentTypes) {
+      const pairs = await this.makePairs(departmentType);
+      const matchRes = await this.makeMatches(pairs, matchIndexOffset);
+      if (Result.isErr(matchRes)) {
+        return matchRes;
       }
 
-      const deptMatches = Result.unwrap(match);
-      globalMatchIndex += deptMatches.length;
+      const deptMatches = Result.unwrap(matchRes);
+      matchIndexOffset += deptMatches.length;
 
-      matches.set(d, deptMatches);
+      matches.set(departmentType, deptMatches);
     }
 
     const allMatches = [...matches.values()].flat();
@@ -58,7 +62,7 @@ export class GeneratePreMatchService {
 
   private async makeMatches(
     data: (Team | undefined)[][][],
-    globalMatchIndex: number = 0
+    matchIndexOffset: number = 0
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
 
@@ -74,7 +78,7 @@ export class GeneratePreMatchService {
           id: Result.unwrap(id),
           // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
           courseIndex: courseIndex + 1,
-          matchIndex: globalMatchIndex + matchIndex + 1,
+          matchIndex: matchIndexOffset + matchIndex + 1,
           departmentType: (pair[0] || pair[1]!).getDepartmentType(),
           teamID1: pair[0]?.getID(),
           teamID2: pair[1]?.getID(),

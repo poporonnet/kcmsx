@@ -1,6 +1,6 @@
-import { Result } from '@mikuroxina/mini-fn';
+import { Option, Result } from '@mikuroxina/mini-fn';
 import { config } from 'config';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
 import { TeamID } from '../../team/models/team';
@@ -36,6 +36,10 @@ describe('GeneratePreMatchService', () => {
     ],
   ];
 
+  afterEach(() => {
+    preMatchRepository.clear();
+  });
+
   it('正しく予選対戦表を生成できる - 部門ごと', async () => {
     const generated = await generateService.generateByDepartment('elementary');
     expect(Result.isOk(generated)).toBe(true);
@@ -43,12 +47,22 @@ describe('GeneratePreMatchService', () => {
 
     for (let i = 0; i < config.match.pre.course.elementary.length; i++) {
       const course = res.filter((v) => v.getCourseIndex() === i + 1);
-      const pair = course.map((v) => [
+      const pairs = course.map((v) => [
         testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
         testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
       ]);
-      expect(pair).toStrictEqual(expectedTeamPair[i]);
+      expect(pairs).toStrictEqual(expectedTeamPair[i]);
     }
+
+    await Promise.all(
+      res.map(async (createdMatch) => {
+        const res = await preMatchRepository.findByID(createdMatch.getID());
+        expect(res).toSatisfy(Option.isSome);
+
+        const match = Option.unwrap(res);
+        expect(match).toStrictEqual(createdMatch);
+      })
+    );
   });
 
   it('正しく予選対戦表を生成できる - すべての部門', async () => {
@@ -56,16 +70,48 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
-    for (const d of res.keys()) {
-      const matches = res.get(d);
-      for (let i = 0; i < config.match.pre.course[d].length; i++) {
-        const course = matches!.filter((v) => v.getCourseIndex() === i + 1);
-        const pair = course.map((v) => [
+    for (const [departmentType, createdMatches] of res) {
+      for (let i = 0; i < config.match.pre.course[departmentType].length; i++) {
+        const course = createdMatches!.filter((v) => v.getCourseIndex() === i + 1);
+        const pairs = course.map((v) => [
           testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
           testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
         ]);
-        expect(pair).toStrictEqual(expectedTeamPair[i]);
+        expect(pairs).toStrictEqual(expectedTeamPair[i]);
       }
     }
+
+    await Promise.all(
+      [...res.values()].flat().map(async (createdMatch) => {
+        const res = await preMatchRepository.findByID(createdMatch.getID());
+        expect(res).toSatisfy(Option.isSome);
+
+        const match = Option.unwrap(res);
+        expect(match).toStrictEqual(createdMatch);
+      })
+    );
+  });
+
+  it('どちらかが不足していると全体が失敗する', async () => {
+    const testTeams = [...testTeamData.values()].filter(
+      (team) => team.getDepartmentType() !== 'elementary'
+    );
+    const teamRepository = new DummyRepository(testTeams);
+    const fetchService = new FetchTeamService(teamRepository);
+    const generator = new SnowflakeIDGenerator(1, () =>
+      BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
+    );
+    const preMatchRepository = new DummyPreMatchRepository();
+    const generateService = new GeneratePreMatchService(
+      fetchService,
+      generator,
+      preMatchRepository
+    );
+
+    const generated = await generateService.generateAll();
+    expect(Result.isErr(generated)).toBe(true);
+
+    const res = await preMatchRepository.findAll();
+    expect(res).toStrictEqual([]);
   });
 });
