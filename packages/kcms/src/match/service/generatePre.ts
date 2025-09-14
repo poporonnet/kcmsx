@@ -66,6 +66,11 @@ export class GeneratePreMatchService {
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
 
+    // ペアが空ならエラー
+    if (data.length <= 0) {
+      return Result.err(new Error('pair is Empty'));
+    }
+
     // コースごとに生成
     const generated = data.map((course, courseIndex) => {
       // ペアをもとに試合を生成
@@ -109,6 +114,10 @@ export class GeneratePreMatchService {
     const team = Result.unwrap(teamRes).filter(
       (v) => v.getIsEntered() && v.getDepartmentType() === departmentType
     );
+
+    if (team.length <= 0) {
+      return [];
+    }
 
     // チームをクラブ名でソートする (ToDo: クラブ名がない場合にどこの位置に動かすかを決める必要がありそう
     const teams = team.sort((a, b) =>

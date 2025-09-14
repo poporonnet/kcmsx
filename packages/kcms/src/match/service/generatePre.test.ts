@@ -112,6 +112,6 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isErr(generated)).toBe(true);
 
     const res = await preMatchRepository.findAll();
-    expect(res).toStrictEqual([]);
+    expect(Result.unwrap(res)).toStrictEqual([]);
   });
 });
