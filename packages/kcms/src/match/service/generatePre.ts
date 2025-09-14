@@ -13,6 +13,8 @@ export class GeneratePreMatchService {
     private readonly preMatchRepository: PreMatchRepository
   ) {}
 
+  private readonly matchIndexOffset = new Map<number, number>();
+
   async generateByDepartment(
     departmentType: DepartmentType
   ): Promise<Result.Result<Error, PreMatch[]>> {
@@ -20,7 +22,7 @@ export class GeneratePreMatchService {
       return Result.err(new Error('DepartmentType is not defined'));
     }
     const pairs = await this.makePairs(departmentType);
-    const matchRes = await this.makeMatches(pairs);
+    const matchRes = await this.makeMatches(pairs, departmentType);
     if (Result.isErr(matchRes)) {
       return matchRes;
     }
@@ -36,18 +38,15 @@ export class GeneratePreMatchService {
 
   async generateAll(): Promise<Result.Result<Error, Map<DepartmentType, PreMatch[]>>> {
     const matches = new Map<DepartmentType, PreMatch[]>();
-    let matchIndexOffset = 0;
 
     for (const departmentType of config.departmentTypes) {
       const pairs = await this.makePairs(departmentType);
-      const matchRes = await this.makeMatches(pairs, matchIndexOffset);
+      const matchRes = await this.makeMatches(pairs, departmentType);
       if (Result.isErr(matchRes)) {
         return matchRes;
       }
 
       const deptMatches = Result.unwrap(matchRes);
-      matchIndexOffset += deptMatches.length;
-
       matches.set(departmentType, deptMatches);
     }
 
@@ -62,7 +61,7 @@ export class GeneratePreMatchService {
 
   private async makeMatches(
     data: (Team | undefined)[][][],
-    matchIndexOffset: number = 0
+    departmentType: DepartmentType
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
 
@@ -73,22 +72,31 @@ export class GeneratePreMatchService {
 
     // コースごとに生成
     const generated = data.map((course, courseIndex) => {
+      const courseNumber = config.match.pre.course[departmentType][courseIndex];
+      if (this.matchIndexOffset.get(courseNumber) === undefined) {
+        this.matchIndexOffset.set(courseNumber, 0);
+      }
+
       // ペアをもとに試合を生成
-      return course.map((pair, matchIndex): Result.Result<Error, PreMatch> => {
+      return course.map((pair, courseIndex): Result.Result<Error, PreMatch> => {
         const id = this.idGenerator.generate<PreMatch>();
         if (Result.isErr(id)) {
           return id;
         }
+
+        const matchIndex = this.matchIndexOffset.get(courseNumber)! + 1;
         const match = PreMatch.new({
           id: Result.unwrap(id),
           // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
           courseIndex: courseIndex + 1,
-          matchIndex: matchIndexOffset + matchIndex + 1,
+          matchIndex: matchIndex,
           departmentType: (pair[0] || pair[1]!).getDepartmentType(),
           teamID1: pair[0]?.getID(),
           teamID2: pair[1]?.getID(),
           runResults: [],
         });
+
+        this.matchIndexOffset.set(courseNumber, matchIndex);
         return Result.ok(match);
       });
     });
