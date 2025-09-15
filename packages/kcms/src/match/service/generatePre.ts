@@ -78,7 +78,7 @@ export class GeneratePreMatchService {
       }
 
       // ペアをもとに試合を生成
-      return course.map((pair, courseIndex): Result.Result<Error, PreMatch> => {
+      return course.map((pair): Result.Result<Error, PreMatch> => {
         const id = this.idGenerator.generate<PreMatch>();
         if (Result.isErr(id)) {
           return id;
