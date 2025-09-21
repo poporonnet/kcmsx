@@ -51,7 +51,7 @@ importers:
         version: 1.19.3(hono@4.9.7)
       '@hono/zod-openapi':
         specifier: ^1.0.0
-        version: 1.1.1(hono@4.9.7)(zod@4.1.9)
+        version: 1.1.2(hono@4.9.7)(zod@4.1.9)
       '@hono/zod-validator':
         specifier: ^0.7.0
         version: 0.7.3(hono@4.9.7)(zod@4.1.9)
@@ -882,8 +882,8 @@ packages:
     peerDependencies:
       hono: ^4
 
-  '@hono/zod-openapi@1.1.1':
-    resolution: {integrity: sha512-0IF/IqhO8ZgVHjf4MplkLqWbqctnijTJSh6yaGIcf4tQumDMbXRWHOBwHhZAIbMXlvej64Nst+CxE25qo6Pu8g==}
+  '@hono/zod-openapi@1.1.2':
+    resolution: {integrity: sha512-XqfK6cdEMo7Nz7N4rYgfndvQDPGf1T4TzZnG2dEqx5aIiSN4MNIC/73xy1KhUo7pGSKlf9fKL9VOtOkRUNHu6w==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       hono: '>=4.3.6'
@@ -4072,7 +4072,7 @@ snapshots:
     dependencies:
       hono: 4.9.7
 
-  '@hono/zod-openapi@1.1.1(hono@4.9.7)(zod@4.1.9)':
+  '@hono/zod-openapi@1.1.2(hono@4.9.7)(zod@4.1.9)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 8.1.0(zod@4.1.9)
       '@hono/zod-validator': 0.7.3(hono@4.9.7)(zod@4.1.9)
