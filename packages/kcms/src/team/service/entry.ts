@@ -19,17 +19,20 @@ export class EntryService {
    */
   async enter(teamID: TeamID): Promise<Result.Result<Error, Team>> {
     const teamRes = await this.teamRepository.findByID(teamID);
+
     if (Option.isNone(teamRes)) {
       return Result.err(new Error('Team not found'));
     }
 
     const isEntryModifiable = await this.isEntryModifiable();
+    console.log(isEntryModifiable);
     if (Result.isErr(isEntryModifiable)) {
       return isEntryModifiable;
     }
 
     const team = Option.unwrap(teamRes);
     team.enter();
+    console.log(team);
     const res = await this.teamRepository.update(team);
     if (Result.isErr(res)) {
       return Result.err(res[1]);

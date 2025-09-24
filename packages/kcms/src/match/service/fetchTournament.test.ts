@@ -14,8 +14,8 @@ describe('FetchTournamentService', () => {
   );
   const preMatchRepository = new DummyPreMatchRepository([]);
   const mainMatchRepository = new DummyMainMatchRepository([]);
-  const getMatch = new FetchMatchService(preMatchRepository, mainMatchRepository);
-  const fetchTournament = new FetchTournamentService(getMatch);
+  const fetchMatch = new FetchMatchService(preMatchRepository, mainMatchRepository);
+  const fetchTournament = new FetchTournamentService(fetchMatch);
   const teamIDs = (size: number) => [...Array(size).keys()].map((i) => `${i + 1}` as TeamID);
 
   afterEach(() => {

@@ -12,8 +12,8 @@ describe('EntryService', () => {
   const teamRepository = new DummyRepository();
   const preMatchRepository = new DummyPreMatchRepository();
   const mainMatchRepository = new DummyMainMatchRepository();
-  const getMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
-  const service = new EntryService(teamRepository, getMatchService);
+  const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
+  const service = new EntryService(teamRepository, fetchMatchService);
 
   const enteredTeamID = TestEntryData.Entered().getID();
   const notEnteredTeamID = TestEntryData.NotEntered().getID();

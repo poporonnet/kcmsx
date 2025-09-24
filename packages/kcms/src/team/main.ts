@@ -35,12 +35,12 @@ const mainMatchRepository = new PrismaMainMatchRepository(prismaClient);
 
 const idGenerator = new SnowflakeIDGenerator(1, () => BigInt(new Date().getTime()));
 
-const getMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
+const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
 
 const fetchTeamService = new FetchTeamService(teamRepository);
 const createTeamService = new CreateTeamService(teamRepository, idGenerator);
 const deleteTeamService = new DeleteTeamService(teamRepository);
-const entryService = new EntryService(teamRepository, getMatchService);
+const entryService = new EntryService(teamRepository, fetchMatchService);
 const entryCodeService = new EntryCodeService(teamRepository);
 
 export const controller = new TeamController(
