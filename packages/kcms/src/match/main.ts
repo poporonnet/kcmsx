@@ -51,7 +51,7 @@ const createRunResultService = new CreateRunResultService(
   mainMatchRepository,
   setMainWinnerService
 );
-const getMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
+const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
 
 export const controller = new Controller(createRunResultService);
@@ -68,9 +68,9 @@ const generateMainMatchService = new GenerateMainMatchService(
   idGenerator,
   config.match.main.requiredTeams
 );
-const fetchTournamentService = new FetchTournamentService(getMatchService);
+const fetchTournamentService = new FetchTournamentService(fetchMatchService);
 const matchController = new MatchController(
-  getMatchService,
+  fetchMatchService,
   fetchTeamService,
   generatePreMatchService,
   generateRankingService,

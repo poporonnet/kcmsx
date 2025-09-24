@@ -6,7 +6,7 @@ import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository.js'
 import { PreMatchID } from '../model/pre.js';
 import { FetchMatchService } from './fetch.js';
 
-describe('GetMatchService', () => {
+describe('FetchMatchService', () => {
   const mainMatchRepository = new DummyMainMatchRepository();
   const preMatchRepository = new DummyPreMatchRepository();
 

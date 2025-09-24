@@ -31,7 +31,7 @@ import {
 export class MatchController {
   constructor(
     private readonly getMatchService: FetchMatchService,
-    private readonly fetchTeamService: FetchTeamService,
+    private readonly getTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
     private readonly generateRankingService: GenerateRankingService,
     private readonly fetchRunResultService: FetchRunResultService,
@@ -45,7 +45,7 @@ export class MatchController {
     if (Result.isErr(matchesRes)) return matchesRes;
     const match = Result.unwrap(matchesRes);
 
-    const teamsRes = await this.fetchTeamService.fetchAll();
+    const teamsRes = await this.getTeamService.fetchAll();
     if (Result.isErr(teamsRes)) return teamsRes;
     const teams = Result.unwrap(teamsRes);
 
@@ -172,7 +172,7 @@ export class MatchController {
       teamID: TeamID | undefined
     ): Promise<{ id: string; teamName: string } | undefined> => {
       if (!teamID) return undefined;
-      const teamRes = await this.fetchTeamService.fetchByID(teamID);
+      const teamRes = await this.getTeamService.fetchByID(teamID);
       if (Result.isErr(teamRes)) return undefined;
       const team = Result.unwrap(teamRes);
       return {
@@ -238,7 +238,7 @@ export class MatchController {
       for (const teamID of teamIDs) {
         if (!teamID) continue;
 
-        const teamRes = await this.fetchTeamService.fetchByID(teamID);
+        const teamRes = await this.getTeamService.fetchByID(teamID);
         if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
         teamsMap.set(team.getID(), team);
@@ -286,7 +286,7 @@ export class MatchController {
       for (const teamID of teamIDs) {
         if (!teamID) continue;
 
-        const teamRes = await this.fetchTeamService.fetchByID(teamID);
+        const teamRes = await this.getTeamService.fetchByID(teamID);
         if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
         teamsMap.set(team.getID(), team);
@@ -341,7 +341,7 @@ export class MatchController {
     const ranking = Result.unwrap(rankingRes);
 
     // NOTE: 一つずつ取得しても良いが、エラーの扱いが煩雑になるので簡単化のために*一時的に*全て取得するようにした
-    const teamsRes = await this.fetchTeamService.fetchAll();
+    const teamsRes = await this.getTeamService.fetchAll();
     if (Result.isErr(teamsRes)) return teamsRes;
     const teamsMap = new Map<TeamID, Team>(Result.unwrap(teamsRes).map((v) => [v.getID(), v]));
 
@@ -378,7 +378,7 @@ export class MatchController {
   async getTournament(
     departmentType: DepartmentType
   ): Promise<Result.Result<Error, z.infer<typeof GetTournamentResponseSchema>>> {
-    const teamsRes = await this.fetchTeamService.fetchAll();
+    const teamsRes = await this.getTeamService.fetchAll();
     if (Result.isErr(teamsRes)) return teamsRes;
 
     const teamMap = new Map(Result.unwrap(teamsRes).map((v) => [v.getID(), v]));
