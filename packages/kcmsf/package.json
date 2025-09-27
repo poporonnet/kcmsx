@@ -20,9 +20,9 @@
     "@mantine/core": "^8.0.0",
     "@mantine/dropzone": "^8.0.0",
     "@mantine/hooks": "^8.0.0",
-    "@mantine/notifications": "8.2.8",
+    "@mantine/notifications": "8.3.1",
     "@mikuroxina/mini-fn": "^7.0.0",
-    "@tabler/icons-react": "3.34.1",
+    "@tabler/icons-react": "3.35.0",
     "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
@@ -45,11 +45,11 @@
     "@vitejs/plugin-react-swc": "^4.0.0",
     "@vitest/coverage-v8": "^3.0.0",
     "@vitest/ui": "^3.0.0",
-    "eslint": "9.34.0",
+    "eslint": "9.36.0",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.4",
     "globals": "^16.0.0",
-    "jsdom": "^26.0.0",
+    "jsdom": "^27.0.0",
     "postcss": "^8.4.32",
     "postcss-preset-mantine": "^1.11.1",
     "postcss-simple-vars": "^7.0.1",
@@ -60,5 +60,5 @@
     "vite": "^7.0.0",
     "vitest": "^3.0.0"
   },
-  "packageManager": "pnpm@10.15.0+sha512.486ebc259d3e999a4e8691ce03b5cac4a71cbeca39372a9b762cb500cfdf0873e2cb16abe3d951b1ee2cf012503f027b98b6584e4df22524e0c7450d9ec7aa7b"
+  "packageManager": "pnpm@10.17.0+sha512.fce8a3dd29a4ed2ec566fb53efbb04d8c44a0f05bc6f24a73046910fb9c3ce7afa35a0980500668fa3573345bd644644fa98338fa168235c80f4aa17aa17fbef"
 }
