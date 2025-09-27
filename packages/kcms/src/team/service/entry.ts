@@ -25,14 +25,14 @@ export class EntryService {
     }
 
     const isEntryModifiable = await this.isEntryModifiable();
-    console.log(isEntryModifiable);
+
     if (Result.isErr(isEntryModifiable)) {
       return isEntryModifiable;
     }
 
     const team = Option.unwrap(teamRes);
     team.enter();
-    console.log(team);
+
     const res = await this.teamRepository.update(team);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
