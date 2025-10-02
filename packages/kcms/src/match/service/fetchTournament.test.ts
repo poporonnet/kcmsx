@@ -4,9 +4,9 @@ import { SnowflakeIDGenerator } from '../../id/main';
 import { TeamID } from '../../team/models/team';
 import { DummyMainMatchRepository } from '../adaptor/dummy/mainMatchRepository';
 import { DummyPreMatchRepository } from '../adaptor/dummy/preMatchRepository';
+import { FetchMatchService } from './fetch';
 import { FetchTournamentService, Tournament } from './fetchTournament';
 import { GenerateMainMatchService } from './generateMain';
-import { GetMatchService } from './get';
 
 describe('FetchTournamentService', () => {
   const idGenerator = new SnowflakeIDGenerator(1, () =>
@@ -14,8 +14,8 @@ describe('FetchTournamentService', () => {
   );
   const preMatchRepository = new DummyPreMatchRepository([]);
   const mainMatchRepository = new DummyMainMatchRepository([]);
-  const getMatch = new GetMatchService(preMatchRepository, mainMatchRepository);
-  const fetchTournament = new FetchTournamentService(getMatch);
+  const fetchMatch = new FetchMatchService(preMatchRepository, mainMatchRepository);
+  const fetchTournament = new FetchTournamentService(fetchMatch);
   const teamIDs = (size: number) => [...Array(size).keys()].map((i) => `${i + 1}` as TeamID);
 
   afterEach(() => {

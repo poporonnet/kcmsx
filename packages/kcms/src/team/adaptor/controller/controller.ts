@@ -58,7 +58,7 @@ export class TeamController {
   }
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetTeamsResponseSchema>>> {
-    const res = await this.findTeam.findAll();
+    const res = await this.findTeam.fetchAll();
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
@@ -81,7 +81,7 @@ export class TeamController {
   }
 
   async getByID(id: TeamID): Promise<Result.Result<Error, z.infer<typeof GetTeamResponseSchema>>> {
-    const res = await this.findTeam.findByID(id);
+    const res = await this.findTeam.fetchByID(id);
     if (Result.isErr(res)) {
       return Result.err(res[1]);
     }
