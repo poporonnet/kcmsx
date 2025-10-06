@@ -11,6 +11,7 @@ interface Props {
   onChange: (value: Parameters<Rule["point"]>[0]) => void;
   children: React.ReactNode;
   disabled?: boolean;
+  unclickable?: boolean;
 }
 
 export const PointControl = (props: Props) => (
@@ -20,6 +21,7 @@ export const PointControl = (props: Props) => (
         value={props.team.point.state[props.rule.name]}
         color={props.color}
         onChange={(active) => {
+          if (props.unclickable) return;
           if (props.rule.type !== "single") return; // type narrowing
 
           props.team.point.state[props.rule.name] = active;
@@ -39,6 +41,7 @@ export const PointControl = (props: Props) => (
         color={props.color}
         validate={props.rule.validate}
         onChange={(count) => {
+          if (props.unclickable) return;
           if (props.rule.type !== "countable") return; // type narrowing
 
           props.team.point.state[props.rule.name] = count;
