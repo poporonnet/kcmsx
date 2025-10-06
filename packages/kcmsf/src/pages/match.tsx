@@ -56,7 +56,8 @@ export const Match = () => {
   // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
   useInterval(
     () => sendTimerUpdated({ totalSeconds, isRunning, state: timerState }),
-    500
+    500,
+    { active: matchStatus != "end" }
   );
 
   return (
