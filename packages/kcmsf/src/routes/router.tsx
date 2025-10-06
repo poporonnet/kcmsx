@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { Home } from "../pages/home.tsx";
 import { Match } from "../pages/match.tsx";
 import { MatchList } from "../pages/matchList.tsx";
+import { MatchView } from "../pages/matchView.tsx";
 import { Ranking } from "../pages/ranking.tsx";
 import { Register } from "../pages/register.tsx";
 import { RegisterBulk } from "../pages/registerBulk.tsx";
@@ -43,7 +44,16 @@ export const router = createBrowserRouter(
         },
         {
           path: "match/:matchType/:id",
-          element: <Match />,
+          children: [
+            {
+              index: true,
+              element: <Match />,
+            },
+            {
+              path: "view",
+              element: <MatchView />,
+            },
+          ],
         },
         {
           path: "matchlist",
