@@ -3,10 +3,10 @@ import { useEffect, useRef } from "react";
 export const useWebSocket = (
   url: string,
   listener: {
-    onOpen?: (event: Event) => any;
-    onMessage?: (event: MessageEvent) => any;
-    onError?: (event: Event) => any;
-    onClose?: (event: CloseEvent) => any;
+    onOpen?: (event: Event) => void;
+    onMessage?: (event: MessageEvent) => void;
+    onError?: (event: Event) => void;
+    onClose?: (event: CloseEvent) => void;
   },
   protocols?: string
 ) => {
