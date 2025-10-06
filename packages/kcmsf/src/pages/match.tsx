@@ -47,7 +47,7 @@ export const Match = () => {
       (side == "left" ? leftDisplayedTeam : rightDisplayedTeam).judge.reset();
       forceReload();
     },
-    [matchJudge, forceReload, leftDisplayedTeam, rightDisplayedTeam]
+    [forceReload, leftDisplayedTeam, rightDisplayedTeam]
   );
 
   const { sendTeamUpdated, sendTimerUpdated, sendMatchEnded } =

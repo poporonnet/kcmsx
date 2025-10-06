@@ -24,7 +24,7 @@ export const useMatchEventSender = (
       };
       wsRef.current?.send(JSON.stringify(event));
     },
-    []
+    [wsRef]
   );
   const sendTimerUpdated = useCallback(
     (data: Omit<MatchEventTimerUpdated, "type">) => {
@@ -34,14 +34,14 @@ export const useMatchEventSender = (
       };
       wsRef.current?.send(JSON.stringify(event));
     },
-    []
+    [wsRef]
   );
   const sendMatchEnded = useCallback(() => {
     const event: MatchEventMatchEnded = {
       type: "MATCH_ENDED",
     };
     wsRef.current?.send(JSON.stringify(event));
-  }, []);
+  }, [wsRef]);
 
   return { sendTeamUpdated, sendTimerUpdated, sendMatchEnded };
 };

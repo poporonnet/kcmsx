@@ -30,7 +30,7 @@ export const useWebSocket = (
 
       wsRef.current?.close();
     };
-  }, []);
+  }, [url, listener, protocols]);
 
   return wsRef;
 };

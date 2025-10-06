@@ -59,7 +59,7 @@ export const MatchView = () => {
           throw new Error("Unknown match event:", { cause: event });
       }
     },
-    [matchJudge]
+    [matchJudge, forceReload, id, matchType, navigate]
   );
 
   useMatchEventListener(matchType, id, onMatchEvent);
