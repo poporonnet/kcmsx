@@ -44,7 +44,7 @@ export const Match = () => {
       (side == "left" ? leftDisplayedTeam : rightDisplayedTeam).judge.reset();
       forceReload();
     },
-    [matchJudge, forceReload]
+    [matchJudge, forceReload, leftDisplayedTeam, rightDisplayedTeam]
   );
   return (
     <Flex
