@@ -3,7 +3,8 @@ import { useCallback, useState } from "react";
 import { useTimer } from "react-timer-hook";
 import { expiryTimestamp } from "../utils/time";
 
-type TimerState = "initial" | "counting" | "finished";
+// FIXME: 型情報を適切な場所に置く
+export type TimerState = "initial" | "counting" | "finished";
 
 export const useMatchTimer = (
   matchType: MatchType
