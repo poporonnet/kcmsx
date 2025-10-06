@@ -40,18 +40,20 @@ export const MatchView = () => {
   const onMatchEvent = useCallback(
     (event: MatchEvent) => {
       switch (event.type) {
-        case "TIMER_UPDATED":
+        case "TIMER_UPDATED": {
           const { isRunning, state, totalSeconds } = event;
           if (isRunning != null) setIsRunning(isRunning);
           if (state != null) setTimerState(state);
           if (totalSeconds != null) setTotalSeconds(totalSeconds);
           break;
-        case "TEAM_UPDATED":
+        }
+        case "TEAM_UPDATED": {
           const { side, pointState, goalTimeSeconds } = event;
           matchJudge.team(side).point.reset(pointState);
           matchJudge.goal(side, goalTimeSeconds);
           forceReload();
           break;
+        }
         case "MATCH_ENDED":
           navigate(`/match/${matchType}/${id}`);
           break;
