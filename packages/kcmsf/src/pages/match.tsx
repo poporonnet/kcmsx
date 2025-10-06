@@ -11,7 +11,9 @@ import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
+import { useInterval } from "../hooks/useInterval";
 import { useJudge } from "../hooks/useJudge";
+import { useMatchEventSender } from "../hooks/useMatchEventSender";
 import { useMatchInfo } from "../hooks/useMatchInfo";
 import { useMatchTimer } from "../hooks/useMatchTimer";
 import { getMatchStatus } from "../utils/matchStatus";
@@ -34,6 +36,7 @@ export const Match = () => {
   const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
 
   const {
+    isFlipped,
     teams: [leftDisplayedTeam, rightDisplayedTeam],
     displayedCourseName: [leftDisplayedCourseName, rightDisplayedCourseName],
     flip,
@@ -46,6 +49,16 @@ export const Match = () => {
     },
     [matchJudge, forceReload, leftDisplayedTeam, rightDisplayedTeam]
   );
+
+  const { sendTeamUpdated, sendTimerUpdated, sendMatchEnded } =
+    useMatchEventSender(matchType, id);
+
+  // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
+  useInterval(
+    () => sendTimerUpdated({ totalSeconds, isRunning, state: timerState }),
+    500
+  );
+
   return (
     <Flex
       h="100%"
@@ -121,7 +134,14 @@ export const Match = () => {
                 leftSection={<IconRotate />}
                 size="xl"
                 fw="normal"
-                onClick={() => onClickReset("left")}
+                onClick={() => {
+                  onClickReset("left");
+                  sendTeamUpdated({
+                    side: isFlipped ? "right" : "left",
+                    pointState: leftDisplayedTeam.judge.point.state,
+                    goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }}
               >
                 リセット
               </Button>
@@ -134,7 +154,14 @@ export const Match = () => {
                 leftSection={<IconRotate />}
                 size="xl"
                 fw="normal"
-                onClick={() => onClickReset("right")}
+                onClick={() => {
+                  onClickReset("right");
+                  sendTeamUpdated({
+                    side: isFlipped ? "left" : "right",
+                    pointState: rightDisplayedTeam.judge.point.state,
+                    goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }}
               >
                 リセット
               </Button>
@@ -147,12 +174,24 @@ export const Match = () => {
             <PointControls
               color="blue"
               team={leftDisplayedTeam.judge}
-              onChange={forceReload}
-              onGoal={(done) =>
+              onChange={() => {
+                sendTeamUpdated({
+                  side: isFlipped ? "right" : "left",
+                  pointState: leftDisplayedTeam.judge.point.state,
+                  goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+                });
+                forceReload();
+              }}
+              onGoal={(done) => {
                 leftDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
-                )
-              }
+                );
+                sendTeamUpdated({
+                  side: isFlipped ? "right" : "left",
+                  pointState: leftDisplayedTeam.judge.point.state,
+                  goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+                });
+              }}
               disabled={!isExhibition && !leftDisplayedTeam.info}
             />
 
@@ -161,12 +200,24 @@ export const Match = () => {
             <PointControls
               color="red"
               team={rightDisplayedTeam.judge}
-              onChange={forceReload}
-              onGoal={(done) =>
+              onChange={() => {
+                sendTeamUpdated({
+                  side: isFlipped ? "left" : "right",
+                  pointState: rightDisplayedTeam.judge.point.state,
+                  goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+                });
+                forceReload();
+              }}
+              onGoal={(done) => {
                 rightDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
-                )
-              }
+                );
+                sendTeamUpdated({
+                  side: isFlipped ? "left" : "right",
+                  pointState: rightDisplayedTeam.judge.point.state,
+                  goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+                });
+              }}
               disabled={!isExhibition && !rightDisplayedTeam.info}
             />
           </Flex>
@@ -198,6 +249,7 @@ export const Match = () => {
               onSubmit={(isSucceeded) => {
                 if (!isSucceeded) return;
 
+                sendMatchEnded();
                 navigate(0);
               }}
             />
