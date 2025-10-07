@@ -11,26 +11,35 @@ export const useWebSocket = (
   protocols?: string
 ) => {
   const wsRef = useRef<WebSocket>(undefined);
+  const listenerRef = useRef(listener);
 
   useEffect(() => {
-    const { onOpen, onMessage, onError, onClose } = listener;
+    const onOpen = (event: Event) => listenerRef.current.onOpen?.(event);
+    const onMessage = (event: MessageEvent) =>
+      listenerRef.current.onMessage?.(event);
+    const onError = (event: Event) => listenerRef.current.onError?.(event);
+    const onClose = (event: CloseEvent) => listenerRef.current.onClose?.(event);
 
     wsRef.current = new WebSocket(url, protocols);
 
-    if (onOpen) wsRef.current.addEventListener("open", onOpen);
-    if (onMessage) wsRef.current.addEventListener("message", onMessage);
-    if (onError) wsRef.current.addEventListener("error", onError);
-    if (onClose) wsRef.current.addEventListener("close", onClose);
+    wsRef.current.addEventListener("open", onOpen);
+    wsRef.current.addEventListener("message", onMessage);
+    wsRef.current.addEventListener("error", onError);
+    wsRef.current.addEventListener("close", onClose);
 
     return () => {
-      if (onOpen) wsRef.current?.removeEventListener("open", onOpen);
-      if (onMessage) wsRef.current?.removeEventListener("message", onMessage);
-      if (onError) wsRef.current?.removeEventListener("error", onError);
-      if (onClose) wsRef.current?.removeEventListener("close", onClose);
+      wsRef.current?.removeEventListener("open", onOpen);
+      wsRef.current?.removeEventListener("message", onMessage);
+      wsRef.current?.removeEventListener("error", onError);
+      wsRef.current?.removeEventListener("close", onClose);
 
       wsRef.current?.close();
     };
-  }, [url, listener, protocols]);
+  }, [url, protocols]);
+
+  useEffect(() => {
+    listenerRef.current = listener;
+  }, [listener]);
 
   return wsRef;
 };
