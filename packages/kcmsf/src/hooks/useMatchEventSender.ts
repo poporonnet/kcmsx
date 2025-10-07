@@ -1,10 +1,6 @@
 import { MatchType } from "config";
 import { useCallback } from "react";
-import {
-  MatchEventMatchEnded,
-  MatchEventTeamUpdated,
-  MatchEventTimerUpdated,
-} from "../types/matchWs";
+import { MatchEvent } from "../types/matchWs";
 import { useWebSocket } from "./useWebSocket";
 
 export const useMatchEventSender = (
@@ -16,32 +12,10 @@ export const useMatchEventSender = (
     {}
   );
 
-  const sendTeamUpdated = useCallback(
-    (data: Omit<MatchEventTeamUpdated, "type">) => {
-      const event: MatchEventTeamUpdated = {
-        type: "TEAM_UPDATED",
-        ...data,
-      };
-      wsRef.current?.send(JSON.stringify(event));
-    },
+  const send = useCallback(
+    (event: MatchEvent) => wsRef.current?.send(JSON.stringify(event)),
     [wsRef]
   );
-  const sendTimerUpdated = useCallback(
-    (data: Omit<MatchEventTimerUpdated, "type">) => {
-      const event: MatchEventTimerUpdated = {
-        type: "TIMER_UPDATED",
-        ...data,
-      };
-      wsRef.current?.send(JSON.stringify(event));
-    },
-    [wsRef]
-  );
-  const sendMatchEnded = useCallback(() => {
-    const event: MatchEventMatchEnded = {
-      type: "MATCH_ENDED",
-    };
-    wsRef.current?.send(JSON.stringify(event));
-  }, [wsRef]);
 
-  return { sendTeamUpdated, sendTimerUpdated, sendMatchEnded };
+  return send;
 };

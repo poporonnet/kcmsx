@@ -50,12 +50,17 @@ export const Match = () => {
     [forceReload, leftDisplayedTeam, rightDisplayedTeam]
   );
 
-  const { sendTeamUpdated, sendTimerUpdated, sendMatchEnded } =
-    useMatchEventSender(matchType, id);
+  const sendMatchEvent = useMatchEventSender(matchType, id);
 
   // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
   useInterval(
-    () => sendTimerUpdated({ totalSeconds, isRunning, state: timerState }),
+    () =>
+      sendMatchEvent({
+        type: "TIMER_UPDATED",
+        totalSeconds,
+        isRunning,
+        state: timerState,
+      }),
     500,
     { active: matchStatus != "end" }
   );
@@ -137,9 +142,14 @@ export const Match = () => {
                 fw="normal"
                 onClick={() => {
                   onClickReset("left");
-                  sendTeamUpdated({
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
                     side: isFlipped ? "right" : "left",
                     pointState: leftDisplayedTeam.judge.point.state,
+                  });
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    side: isFlipped ? "right" : "left",
                     goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
                   });
                 }}
@@ -157,9 +167,14 @@ export const Match = () => {
                 fw="normal"
                 onClick={() => {
                   onClickReset("right");
-                  sendTeamUpdated({
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
                     side: isFlipped ? "left" : "right",
                     pointState: rightDisplayedTeam.judge.point.state,
+                  });
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    side: isFlipped ? "left" : "right",
                     goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
                   });
                 }}
@@ -176,7 +191,8 @@ export const Match = () => {
               color="blue"
               team={leftDisplayedTeam.judge}
               onChange={() => {
-                sendTeamUpdated({
+                sendMatchEvent({
+                  type: "TEAM_POINT_STATE_UPDATED",
                   side: isFlipped ? "right" : "left",
                   pointState: leftDisplayedTeam.judge.point.state,
                   goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
@@ -202,7 +218,8 @@ export const Match = () => {
               color="red"
               team={rightDisplayedTeam.judge}
               onChange={() => {
-                sendTeamUpdated({
+                sendMatchEvent({
+                  type: "TEAM_POINT_STATE_UPDATED",
                   side: isFlipped ? "left" : "right",
                   pointState: rightDisplayedTeam.judge.point.state,
                   goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
@@ -250,7 +267,7 @@ export const Match = () => {
               onSubmit={(isSucceeded) => {
                 if (!isSucceeded) return;
 
-                sendMatchEnded();
+                sendMatchEvent({ type: "MATCH_ENDED" });
                 navigate(0);
               }}
             />
