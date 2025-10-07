@@ -46,9 +46,8 @@ export class MatchWebSocketController {
     const matchRes = await this.getMatch.findByID(matchId);
     if (Result.isErr(matchRes)) return matchRes;
 
-    const livingMatch = this.livingMatches.get(matchId) ?? {
+    const livingMatch: LivingMatch = this.livingMatches.get(matchId) ?? {
       id: matchId,
-      state: {},
       eventTarget: new EventTarget(),
     };
     if (!this.livingMatches.has(matchId)) this.livingMatches.set(matchId, livingMatch);
