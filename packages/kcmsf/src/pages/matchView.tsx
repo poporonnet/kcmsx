@@ -1,5 +1,5 @@
-import { Button, Divider, Flex, Text } from "@mantine/core";
-import { IconSwitchHorizontal } from "@tabler/icons-react";
+import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
+import { IconDeviceTv, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -93,6 +93,13 @@ export const MatchView = () => {
             <>
               {match.matchType === "main" &&
                 `${match.runResults.length == 0 ? 1 : 2}試合目`}
+              <Badge
+                size="lg"
+                color="green"
+                leftSection={<IconDeviceTv size={18} />}
+              >
+                観戦中
+              </Badge>
               <Button
                 onClick={flip}
                 variant="subtle"
