@@ -78,80 +78,76 @@ export const MatchView = () => {
       justify="center"
       w="100%"
     >
-      <>
-        {match && matchInfo && (
-          <MatchNameCard
-            matchType={matchInfo.matchType}
-            matchCode={match.matchCode}
-            rightTeamName={rightDisplayedTeam.info?.teamName}
-            leftTeamName={leftDisplayedTeam.info?.teamName}
-            centerSection={
-              <>
-                {match.matchType === "main" &&
-                  `${match.runResults.length == 0 ? 1 : 2}試合目`}
-                <Button
-                  onClick={flip}
-                  variant="subtle"
-                  size="compact-sm"
-                  color="violet"
-                  leftSection={<IconSwitchHorizontal size={14} />}
-                >
-                  左右を反転
-                </Button>
-              </>
-            }
-            leftTeamCourseName={leftDisplayedCourseName}
-            rightTeamCourseName={rightDisplayedCourseName}
-          />
-        )}
-        <Button
-          w="100%"
-          h="auto"
-          p="xs"
-          variant="filled"
-          color={
-            timerState == "finished" ? "pink" : isRunning ? "teal" : "gray"
+      {match && matchInfo && (
+        <MatchNameCard
+          matchType={matchInfo.matchType}
+          matchCode={match.matchCode}
+          rightTeamName={rightDisplayedTeam.info?.teamName}
+          leftTeamName={leftDisplayedTeam.info?.teamName}
+          centerSection={
+            <>
+              {match.matchType === "main" &&
+                `${match.runResults.length == 0 ? 1 : 2}試合目`}
+              <Button
+                onClick={flip}
+                variant="subtle"
+                size="compact-sm"
+                color="violet"
+                leftSection={<IconSwitchHorizontal size={14} />}
+              >
+                左右を反転
+              </Button>
+            </>
           }
-        >
-          <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
-        </Button>
-        <MatchPointCard
-          rightTeamPoint={
-            isExhibition || rightDisplayedTeam.info
-              ? rightDisplayedTeam.judge.point.point()
-              : 0
-          }
-          leftTeamPoint={
-            isExhibition || leftDisplayedTeam.info
-              ? leftDisplayedTeam.judge.point.point()
-              : 0
-          }
+          leftTeamCourseName={leftDisplayedCourseName}
+          rightTeamCourseName={rightDisplayedCourseName}
+        />
+      )}
+      <Button
+        w="100%"
+        h="auto"
+        p="xs"
+        variant="filled"
+        color={timerState == "finished" ? "pink" : isRunning ? "teal" : "gray"}
+      >
+        <Text size="5rem">{parseSeconds(totalSeconds)}</Text>
+      </Button>
+      <MatchPointCard
+        rightTeamPoint={
+          isExhibition || rightDisplayedTeam.info
+            ? rightDisplayedTeam.judge.point.point()
+            : 0
+        }
+        leftTeamPoint={
+          isExhibition || leftDisplayedTeam.info
+            ? leftDisplayedTeam.judge.point.point()
+            : 0
+        }
+      />
+
+      <Divider w="100%" />
+
+      <Flex direction="row" gap="2rem" align="center" justify="center">
+        <PointControls
+          color="blue"
+          team={leftDisplayedTeam.judge}
+          onChange={() => {}}
+          onGoal={() => {}}
+          disabled={!isExhibition && !leftDisplayedTeam.info}
+          unclickable
         />
 
-        <Divider w="100%" />
+        <Divider orientation="vertical" />
 
-        <Flex direction="row" gap="2rem" align="center" justify="center">
-          <PointControls
-            color="blue"
-            team={leftDisplayedTeam.judge}
-            onChange={() => {}}
-            onGoal={() => {}}
-            disabled={!isExhibition && !leftDisplayedTeam.info}
-            unclickable
-          />
-
-          <Divider orientation="vertical" />
-
-          <PointControls
-            color="red"
-            team={rightDisplayedTeam.judge}
-            onChange={() => {}}
-            onGoal={() => {}}
-            disabled={!isExhibition && !rightDisplayedTeam.info}
-            unclickable
-          />
-        </Flex>
-      </>
+        <PointControls
+          color="red"
+          team={rightDisplayedTeam.judge}
+          onChange={() => {}}
+          onGoal={() => {}}
+          disabled={!isExhibition && !rightDisplayedTeam.info}
+          unclickable
+        />
+      </Flex>
     </Flex>
   );
 };
