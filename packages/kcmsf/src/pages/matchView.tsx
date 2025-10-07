@@ -47,9 +47,14 @@ export const MatchView = () => {
           if (totalSeconds != null) setTotalSeconds(totalSeconds);
           break;
         }
-        case "TEAM_UPDATED": {
-          const { side, pointState, goalTimeSeconds } = event;
+        case "TEAM_POINT_STATE_UPDATED": {
+          const { side, pointState } = event;
           matchJudge.team(side).point.reset(pointState);
+          forceReload();
+          break;
+        }
+        case "TEAM_GOAL_TIME_UPDATED": {
+          const { side, goalTimeSeconds } = event;
           matchJudge.goal(side, goalTimeSeconds);
           forceReload();
           break;

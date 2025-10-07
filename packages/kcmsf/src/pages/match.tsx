@@ -195,7 +195,6 @@ export const Match = () => {
                   type: "TEAM_POINT_STATE_UPDATED",
                   side: isFlipped ? "right" : "left",
                   pointState: leftDisplayedTeam.judge.point.state,
-                  goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
                 });
                 forceReload();
               }}
@@ -203,9 +202,9 @@ export const Match = () => {
                 leftDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
                 );
-                sendTeamUpdated({
+                sendMatchEvent({
+                  type: "TEAM_GOAL_TIME_UPDATED",
                   side: isFlipped ? "right" : "left",
-                  pointState: leftDisplayedTeam.judge.point.state,
                   goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
                 });
               }}
@@ -222,7 +221,6 @@ export const Match = () => {
                   type: "TEAM_POINT_STATE_UPDATED",
                   side: isFlipped ? "left" : "right",
                   pointState: rightDisplayedTeam.judge.point.state,
-                  goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
                 });
                 forceReload();
               }}
@@ -230,9 +228,9 @@ export const Match = () => {
                 rightDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
                 );
-                sendTeamUpdated({
+                sendMatchEvent({
+                  type: "TEAM_GOAL_TIME_UPDATED",
                   side: isFlipped ? "left" : "right",
-                  pointState: rightDisplayedTeam.judge.point.state,
                   goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
                 });
               }}
