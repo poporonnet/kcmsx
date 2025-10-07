@@ -1,5 +1,4 @@
 import { PointState } from "config";
-import { Side } from "config/src/types/matchInfo";
 import { TimerState } from "../hooks/useMatchTimer";
 
 export type MatchEventType =
@@ -12,13 +11,13 @@ type _RestrictMatchEvent<T extends { type: MatchEventType }> = T;
 
 export type MatchEventTeamPointStateUpdated = _RestrictMatchEvent<{
   type: "TEAM_POINT_STATE_UPDATED";
-  side: Side;
+  teamId: string;
   pointState: PointState;
 }>;
 
 export type MatchEventTeamGoalTimeUpdated = _RestrictMatchEvent<{
   type: "TEAM_GOAL_TIME_UPDATED";
-  side: Side;
+  teamId: string;
   goalTimeSeconds: number | undefined;
 }>;
 

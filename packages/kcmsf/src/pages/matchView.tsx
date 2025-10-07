@@ -1,6 +1,7 @@
 import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
 import { IconDeviceTv, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
+import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
@@ -39,6 +40,13 @@ export const MatchView = () => {
 
   const onMatchEvent = useCallback(
     (event: MatchEvent) => {
+      const getSide = (teamId: string): Side => {
+        if (matchInfo?.teams.left?.id === teamId) return "left";
+        if (matchInfo?.teams.right?.id === teamId) return "right";
+
+        throw new Error("TeamId not matched");
+      };
+
       switch (event.type) {
         case "TIMER_UPDATED": {
           const { isRunning, state, totalSeconds } = event;
@@ -48,14 +56,14 @@ export const MatchView = () => {
           break;
         }
         case "TEAM_POINT_STATE_UPDATED": {
-          const { side, pointState } = event;
-          matchJudge.team(side).point.reset(pointState);
+          const { teamId, pointState } = event;
+          matchJudge.team(getSide(teamId)).point.reset(pointState);
           forceReload();
           break;
         }
         case "TEAM_GOAL_TIME_UPDATED": {
-          const { side, goalTimeSeconds } = event;
-          matchJudge.goal(side, goalTimeSeconds);
+          const { teamId, goalTimeSeconds } = event;
+          matchJudge.goal(getSide(teamId), goalTimeSeconds);
           forceReload();
           break;
         }

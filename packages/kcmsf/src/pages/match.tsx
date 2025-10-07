@@ -36,21 +36,33 @@ export const Match = () => {
   const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
 
   const {
-    isFlipped,
     teams: [leftDisplayedTeam, rightDisplayedTeam],
     displayedCourseName: [leftDisplayedCourseName, rightDisplayedCourseName],
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
+  const sendMatchEvent = useMatchEventSender(matchType, id);
+
   const onClickReset = useCallback(
     (side: Side) => {
-      (side == "left" ? leftDisplayedTeam : rightDisplayedTeam).judge.reset();
+      const team = side == "left" ? leftDisplayedTeam : rightDisplayedTeam;
+      team.judge.reset();
+      if (team.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: team.info.id,
+          pointState: team.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: team.info.id,
+          goalTimeSeconds: team.judge.goalTimeSeconds,
+        });
+      }
       forceReload();
     },
-    [forceReload, leftDisplayedTeam, rightDisplayedTeam]
+    [forceReload, leftDisplayedTeam, rightDisplayedTeam, sendMatchEvent]
   );
-
-  const sendMatchEvent = useMatchEventSender(matchType, id);
 
   // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
   useInterval(
@@ -140,19 +152,7 @@ export const Match = () => {
                 leftSection={<IconRotate />}
                 size="xl"
                 fw="normal"
-                onClick={() => {
-                  onClickReset("left");
-                  sendMatchEvent({
-                    type: "TEAM_POINT_STATE_UPDATED",
-                    side: isFlipped ? "right" : "left",
-                    pointState: leftDisplayedTeam.judge.point.state,
-                  });
-                  sendMatchEvent({
-                    type: "TEAM_GOAL_TIME_UPDATED",
-                    side: isFlipped ? "right" : "left",
-                    goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
-                  });
-                }}
+                onClick={() => onClickReset("left")}
               >
                 リセット
               </Button>
@@ -165,19 +165,7 @@ export const Match = () => {
                 leftSection={<IconRotate />}
                 size="xl"
                 fw="normal"
-                onClick={() => {
-                  onClickReset("right");
-                  sendMatchEvent({
-                    type: "TEAM_POINT_STATE_UPDATED",
-                    side: isFlipped ? "left" : "right",
-                    pointState: rightDisplayedTeam.judge.point.state,
-                  });
-                  sendMatchEvent({
-                    type: "TEAM_GOAL_TIME_UPDATED",
-                    side: isFlipped ? "left" : "right",
-                    goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
-                  });
-                }}
+                onClick={() => onClickReset("right")}
               >
                 リセット
               </Button>
@@ -191,22 +179,26 @@ export const Match = () => {
               color="blue"
               team={leftDisplayedTeam.judge}
               onChange={() => {
-                sendMatchEvent({
-                  type: "TEAM_POINT_STATE_UPDATED",
-                  side: isFlipped ? "right" : "left",
-                  pointState: leftDisplayedTeam.judge.point.state,
-                });
+                if (leftDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
+                    teamId: leftDisplayedTeam.info.id,
+                    pointState: leftDisplayedTeam.judge.point.state,
+                  });
+                }
                 forceReload();
               }}
               onGoal={(done) => {
                 leftDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
                 );
-                sendMatchEvent({
-                  type: "TEAM_GOAL_TIME_UPDATED",
-                  side: isFlipped ? "right" : "left",
-                  goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
-                });
+                if (leftDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    teamId: leftDisplayedTeam.info.id,
+                    goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }
               }}
               disabled={!isExhibition && !leftDisplayedTeam.info}
             />
@@ -217,22 +209,26 @@ export const Match = () => {
               color="red"
               team={rightDisplayedTeam.judge}
               onChange={() => {
-                sendMatchEvent({
-                  type: "TEAM_POINT_STATE_UPDATED",
-                  side: isFlipped ? "left" : "right",
-                  pointState: rightDisplayedTeam.judge.point.state,
-                });
+                if (rightDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
+                    teamId: rightDisplayedTeam.info.id,
+                    pointState: rightDisplayedTeam.judge.point.state,
+                  });
+                }
                 forceReload();
               }}
               onGoal={(done) => {
                 rightDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
                 );
-                sendMatchEvent({
-                  type: "TEAM_GOAL_TIME_UPDATED",
-                  side: isFlipped ? "left" : "right",
-                  goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
-                });
+                if (rightDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    teamId: rightDisplayedTeam.info.id,
+                    goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }
               }}
               disabled={!isExhibition && !rightDisplayedTeam.info}
             />
