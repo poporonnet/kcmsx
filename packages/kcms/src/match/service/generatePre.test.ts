@@ -81,7 +81,7 @@ describe('GeneratePreMatchService', () => {
 
     for (const [departmentType, createdMatches] of res) {
       for (let i = 0; i < config.match.pre.course[departmentType].length; i++) {
-        const course = createdMatches!.filter((v) => v.getCourseIndex() === i + 1);
+        const course = createdMatches.filter((v) => v.getCourseIndex() === i + 1);
         const pairs = course.map((v) => [
           testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
           testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
@@ -94,7 +94,6 @@ describe('GeneratePreMatchService', () => {
 
     await Promise.all(
       allMatches.map(async (createdMatch) => {
-        createdMatch.getMatchIndex();
         const res = await preMatchRepository.findByID(createdMatch.getID());
         expect(res).toSatisfy(Option.isSome);
 
@@ -103,13 +102,15 @@ describe('GeneratePreMatchService', () => {
       })
     );
 
+    // 部門をまたいでコースごとにmatchIndexが連番になっていることを確認
     const matchesByCourse = new Map<number, PreMatch[]>();
     for (const match of allMatches) {
       const courseIndex = match.getCourseIndex();
+      const matches = matchesByCourse.get(courseIndex) ?? [];
+      matches.push(match);
       if (!matchesByCourse.has(courseIndex)) {
-        matchesByCourse.set(courseIndex, []);
+        matchesByCourse.set(courseIndex, matches);
       }
-      matchesByCourse.get(courseIndex)!.push(match);
     }
     for (const matches of matchesByCourse.values()) {
       const index = matches.map((match) => match.getMatchIndex()).sort((a, b) => a - b);
