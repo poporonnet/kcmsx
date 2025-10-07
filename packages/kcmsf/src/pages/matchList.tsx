@@ -14,7 +14,7 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
@@ -246,20 +246,18 @@ const MatchColumn = ({ match }: { match: Match }) => {
         </Center>
       </Table.Td>
       <Table.Td>
-        <Center>
-          <Button
-            component="a"
-            href={`/match/${match.matchType}/${match.id}/view`}
-            variant="outline"
-            color="green"
-            radius="lg"
-            size="xs"
-            disabled={matchStatus === "end"}
-            onClick={(event) => event.stopPropagation()}
-          >
-            <Text fw={700}>観戦する</Text>
-          </Button>
-        </Center>
+        <Button
+          component={Link}
+          to={`/match/${match.matchType}/${match.id}/view`}
+          variant="outline"
+          color="green"
+          radius="lg"
+          size="xs"
+          disabled={matchStatus === "end"}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <Text fw={700}>観戦する</Text>
+        </Button>
       </Table.Td>
     </Table.Tr>
   );
