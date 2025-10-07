@@ -68,7 +68,9 @@ export const MatchView = () => {
           break;
         }
         case "MATCH_ENDED":
-          navigate(`/match/${matchType}/${id}`);
+          // 予選ならリロード後にリダイレクトが発火
+          // 本戦1試合目ならリロードのみ、2試合目ならリロード後にリダイレクトが発火
+          navigate(0);
           break;
         default:
           throw new Error("Unknown match event:", { cause: event });
