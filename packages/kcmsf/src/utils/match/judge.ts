@@ -54,4 +54,12 @@ export class Judge {
   goalRightTeam(goalTimeSec: number | undefined) {
     this._setGoalTimeSecRight(goalTimeSec);
   }
+
+  goal(side: keyof MatchInfo["teams"], goalTimeSec: number | undefined) {
+    if (side === "left") {
+      this.goalLeftTeam(goalTimeSec);
+    } else {
+      this.goalRightTeam(goalTimeSec);
+    }
+  }
 }

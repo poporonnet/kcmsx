@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useReducer } from "react";
 
 export const useForceReload = () => {
-  const setID = useState(0)[1];
-  return () => setID((prev) => prev + 1);
+  return useReducer((prev) => prev + 1, 0)[1];
 };

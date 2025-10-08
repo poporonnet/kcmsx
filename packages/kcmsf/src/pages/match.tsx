@@ -11,7 +11,9 @@ import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
+import { useInterval } from "../hooks/useInterval";
 import { useJudge } from "../hooks/useJudge";
+import { useMatchEventSender } from "../hooks/useMatchEventSender";
 import { useMatchInfo } from "../hooks/useMatchInfo";
 import { useMatchTimer } from "../hooks/useMatchTimer";
 import { getMatchStatus } from "../utils/matchStatus";
@@ -39,13 +41,42 @@ export const Match = () => {
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
+  const sendMatchEvent = useMatchEventSender(matchType, id);
+
   const onClickReset = useCallback(
     (side: Side) => {
-      (side == "left" ? leftDisplayedTeam : rightDisplayedTeam).judge.reset();
+      const team = side == "left" ? leftDisplayedTeam : rightDisplayedTeam;
+      team.judge.reset();
+      if (team.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: team.info.id,
+          pointState: team.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: team.info.id,
+          goalTimeSeconds: team.judge.goalTimeSeconds,
+        });
+      }
       forceReload();
     },
-    [matchJudge, forceReload]
+    [forceReload, leftDisplayedTeam, rightDisplayedTeam, sendMatchEvent]
   );
+
+  // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
+  useInterval(
+    () =>
+      sendMatchEvent({
+        type: "TIMER_UPDATED",
+        totalSeconds,
+        isRunning,
+        state: timerState,
+      }),
+    500,
+    { active: matchStatus != "end" }
+  );
+
   return (
     <Flex
       h="100%"
@@ -147,12 +178,28 @@ export const Match = () => {
             <PointControls
               color="blue"
               team={leftDisplayedTeam.judge}
-              onChange={forceReload}
-              onGoal={(done) =>
+              onChange={() => {
+                if (leftDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
+                    teamId: leftDisplayedTeam.info.id,
+                    pointState: leftDisplayedTeam.judge.point.state,
+                  });
+                }
+                forceReload();
+              }}
+              onGoal={(done) => {
                 leftDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
-                )
-              }
+                );
+                if (leftDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    teamId: leftDisplayedTeam.info.id,
+                    goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }
+              }}
               disabled={!isExhibition && !leftDisplayedTeam.info}
             />
 
@@ -161,12 +208,28 @@ export const Match = () => {
             <PointControls
               color="red"
               team={rightDisplayedTeam.judge}
-              onChange={forceReload}
-              onGoal={(done) =>
+              onChange={() => {
+                if (rightDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
+                    teamId: rightDisplayedTeam.info.id,
+                    pointState: rightDisplayedTeam.judge.point.state,
+                  });
+                }
+                forceReload();
+              }}
+              onGoal={(done) => {
                 rightDisplayedTeam.goal(
                   done ? matchTimeSec - totalSeconds : undefined
-                )
-              }
+                );
+                if (rightDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    teamId: rightDisplayedTeam.info.id,
+                    goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }
+              }}
               disabled={!isExhibition && !rightDisplayedTeam.info}
             />
           </Flex>
@@ -198,6 +261,7 @@ export const Match = () => {
               onSubmit={(isSucceeded) => {
                 if (!isSucceeded) return;
 
+                sendMatchEvent({ type: "MATCH_ENDED" });
                 navigate(0);
               }}
             />
