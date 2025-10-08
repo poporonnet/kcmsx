@@ -13,8 +13,8 @@ describe('EntryCodeService', () => {
   const teamRepository = new DummyRepository();
   const preMatchRepository = new DummyPreMatchRepository();
   const mainMatchRepository = new DummyMainMatchRepository();
-  const getMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
-  const entryService = new EntryService(teamRepository, getMatchService);
+  const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
+  const entryService = new EntryService(teamRepository, fetchMatchService);
   const entryCodeService = new EntryCodeService(teamRepository);
 
   beforeEach(() => {

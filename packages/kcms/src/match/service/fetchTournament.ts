@@ -10,10 +10,10 @@ export type Tournament = {
 };
 
 export class FetchTournamentService {
-  constructor(private readonly getMatch: FetchMatchService) {}
+  constructor(private readonly fetchMatch: FetchMatchService) {}
 
   async handle(departmentType: DepartmentType): Promise<Result.Result<Error, Tournament>> {
-    const mainRes = await this.getMatch.fetchAllMainMatch();
+    const mainRes = await this.fetchMatch.fetchAllMainMatch();
     if (Result.isErr(mainRes)) {
       return mainRes;
     }
