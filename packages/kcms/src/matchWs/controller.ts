@@ -3,7 +3,7 @@
 import { Result } from '@mikuroxina/mini-fn';
 import { MainMatchID } from '../match/model/main';
 import { PreMatchID } from '../match/model/pre';
-import { GetMatchService } from '../match/service/get';
+import { FetchMatchService } from '../match/service/fetch';
 
 type LivingMatch = {
   id: string;
@@ -13,7 +13,7 @@ type LivingMatch = {
 export class MatchWebSocketController {
   private readonly livingMatches: Map<PreMatchID | MainMatchID, LivingMatch>;
 
-  constructor(private readonly getMatch: GetMatchService) {
+  constructor(private readonly fetchMatch: FetchMatchService) {
     this.livingMatches = new Map();
   }
 
@@ -21,7 +21,7 @@ export class MatchWebSocketController {
     matchId: PreMatchID | MainMatchID,
     wsSend: (data: string) => void
   ): Promise<Result.Result<Error, LivingMatch>> {
-    const matchRes = await this.getMatch.findByID(matchId);
+    const matchRes = await this.fetchMatch.fetchByID(matchId);
     if (Result.isErr(matchRes)) return matchRes;
 
     const livingMatch: LivingMatch = this.livingMatches.get(matchId) ?? {
@@ -43,7 +43,7 @@ export class MatchWebSocketController {
     matchId: PreMatchID | MainMatchID,
     data: string
   ): Promise<Result.Result<Error, LivingMatch>> {
-    const matchRes = await this.getMatch.findByID(matchId);
+    const matchRes = await this.fetchMatch.fetchByID(matchId);
     if (Result.isErr(matchRes)) return matchRes;
 
     const livingMatch: LivingMatch = this.livingMatches.get(matchId) ?? {

@@ -7,15 +7,15 @@ import { PrismaMainMatchRepository } from '../match/adaptor/prisma/mainMatchRepo
 import { PrismaPreMatchRepository } from '../match/adaptor/prisma/preMatchRepository';
 import { MainMatchID } from '../match/model/main';
 import { PreMatchID } from '../match/model/pre';
-import { GetMatchService } from '../match/service/get';
+import { FetchMatchService } from '../match/service/fetch';
 import { MatchWebSocketController } from './controller';
 
 const preMatchRepository = new PrismaPreMatchRepository(prismaClient);
 const mainMatchRepository = new PrismaMainMatchRepository(prismaClient);
 
-const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
 
-const matchWsController = new MatchWebSocketController(getMatchService);
+const matchWsController = new MatchWebSocketController(fetchMatchService);
 
 export const matchWsHandler = new Hono();
 
