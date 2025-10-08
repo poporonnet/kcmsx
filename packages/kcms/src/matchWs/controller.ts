@@ -11,7 +11,7 @@ type LivingMatch = {
 };
 
 export class MatchWebSocketController {
-  private readonly livingMatches: Map<string, LivingMatch>;
+  private readonly livingMatches: Map<PreMatchID | MainMatchID, LivingMatch>;
 
   constructor(private readonly getMatch: GetMatchService) {
     this.livingMatches = new Map();
