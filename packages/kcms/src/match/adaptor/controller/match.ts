@@ -30,7 +30,7 @@ import {
 
 export class MatchController {
   constructor(
-    private readonly getMatchService: FetchMatchService,
+    private readonly fetchMatchService: FetchMatchService,
     private readonly getTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
     private readonly generateRankingService: GenerateRankingService,
@@ -41,7 +41,7 @@ export class MatchController {
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
-    const matchesRes = await this.getMatchService.fetchAll();
+    const matchesRes = await this.fetchMatchService.fetchAll();
     if (Result.isErr(matchesRes)) return matchesRes;
     const match = Result.unwrap(matchesRes);
 
@@ -164,7 +164,7 @@ export class MatchController {
     matchType: T,
     id: T extends 'pre' ? PreMatchID : MainMatchID
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchIDResponseSchema>>> {
-    const res = await this.getMatchService.fetchByID(id);
+    const res = await this.fetchMatchService.fetchByID(id);
     if (Result.isErr(res)) return res;
     const match = Result.unwrap(res);
 
@@ -229,7 +229,7 @@ export class MatchController {
     matchType: MatchType
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
     if (matchType === 'pre') {
-      const matchRes = await this.getMatchService.fetchAllPreMatch();
+      const matchRes = await this.fetchMatchService.fetchAllPreMatch();
       if (Result.isErr(matchRes)) return matchRes;
 
       const matches = Result.unwrap(matchRes);
@@ -277,7 +277,7 @@ export class MatchController {
         })
       );
     } else {
-      const matchRes = await this.getMatchService.fetchAllMainMatch();
+      const matchRes = await this.fetchMatchService.fetchAllMainMatch();
       if (Result.isErr(matchRes)) return matchRes;
 
       const matches = Result.unwrap(matchRes);
