@@ -8,7 +8,8 @@ export const useMatchEventListener = (
   matchId: string | undefined,
   onMatchEvent: (event: MatchEvent) => void
 ) => {
-  if (matchType == null || matchId == null) throw new Error("Not implemented");
+  // FIXME: ちゃんとハンドリングする
+  if (matchType == null || matchId == null) throw new Error("Unreachable");
 
   const onMatchEventRef = useRef(onMatchEvent);
 
