@@ -28,12 +28,12 @@ import {
   PostMatchWinnerIDRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
+import { FetchMatchService } from './service/fetch';
 import { FetchRunResultService } from './service/fetchRunResult';
 import { FetchTournamentService } from './service/fetchTournament';
 import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
-import { GetMatchService } from './service/get';
 import { SetMainMatchWinnerService } from './service/setMainWinner';
 import { upcase } from './utility/upcase';
 
@@ -51,7 +51,7 @@ const createRunResultService = new CreateRunResultService(
   mainMatchRepository,
   setMainWinnerService
 );
-const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
 
 export const controller = new Controller(createRunResultService);
@@ -68,9 +68,9 @@ const generateMainMatchService = new GenerateMainMatchService(
   idGenerator,
   config.match.main.requiredTeams
 );
-const fetchTournamentService = new FetchTournamentService(getMatchService);
+const fetchTournamentService = new FetchTournamentService(fetchMatchService);
 const matchController = new MatchController(
-  getMatchService,
+  fetchMatchService,
   fetchTeamService,
   generatePreMatchService,
   generateRankingService,
