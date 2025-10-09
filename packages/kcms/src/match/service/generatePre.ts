@@ -61,15 +61,7 @@ export class GeneratePreMatchService {
   private async makeMatches(
     data: (Team | undefined)[][][],
     departmentType: DepartmentType,
-    matchIndexOffset: Map<number, number> = new Map(
-      Array.from(
-        new Set(
-          config.departmentTypes.flatMap(
-            (departmentType) => config.match.pre.course[departmentType]
-          )
-        )
-      ).map((key) => [key, 0])
-    )
+    matchIndexOffset: Map<number, number> = new Map()
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
 
@@ -81,7 +73,7 @@ export class GeneratePreMatchService {
     // コースごとに生成
     const generated = data.map((course, courseIndex) => {
       const courseNumber = config.match.pre.course[departmentType][courseIndex];
-      if (matchIndexOffset.get(courseNumber) === undefined) {
+      if (!matchIndexOffset.has(courseNumber)) {
         matchIndexOffset.set(courseNumber, 0);
       }
 
@@ -92,7 +84,7 @@ export class GeneratePreMatchService {
           return id;
         }
 
-        const matchIndex = matchIndexOffset.get(courseNumber)! + 1;
+        const matchIndex = (matchIndexOffset.get(courseNumber) ?? 0) + 1;
         const match = PreMatch.new({
           id: Result.unwrap(id),
           // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
