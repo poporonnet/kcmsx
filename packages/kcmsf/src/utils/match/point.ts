@@ -1,4 +1,4 @@
-import { config, PointState, PremiseState } from "config";
+import { config, initialPointState, PointState, PremiseState } from "config";
 
 export class Point {
   private readonly _state: PointState;
@@ -27,9 +27,9 @@ export class Point {
       .reduce((sum, point) => (sum += point), 0);
   }
 
-  public reset(): void {
+  public reset(state: PointState = initialPointState): void {
     config.rules.forEach((rule) => {
-      this._state[rule.name] = rule.initial as never;
+      this._state[rule.name] = state[rule.name] as never;
     });
   }
 }

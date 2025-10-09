@@ -6,6 +6,7 @@ MIT License.
 import { Context, Hono } from 'hono';
 import { env } from 'hono/adapter';
 import { basicAuth } from 'hono/basic-auth';
+import { websocket } from 'hono/bun';
 import { except } from 'hono/combine';
 import { deleteCookie, setSignedCookie } from 'hono/cookie';
 import { cors } from 'hono/cors';
@@ -15,6 +16,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import { trimTrailingSlash } from 'hono/trailing-slash';
 import { z } from 'zod';
 import { matchHandler } from './match/main';
+import { matchWsHandler } from './matchWs/main';
 import { sponsorHandler } from './sponser/main';
 import { teamHandler } from './team/main.js';
 
@@ -135,9 +137,11 @@ app.get('/', (c) => c.json({ message: 'kcms is up' }));
 app.route('/', teamHandler);
 app.route('/', matchHandler);
 app.route('/', sponsorHandler);
+app.route('/', matchWsHandler);
 
 // ToDo: config packageのTS読み込み問題により、一時的にBunで直接TSを実行する形に変更した
 export default {
   port: 3000,
   fetch: app.fetch,
+  websocket,
 };

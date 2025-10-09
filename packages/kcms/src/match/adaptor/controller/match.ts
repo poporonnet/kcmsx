@@ -5,12 +5,12 @@ import { Team, TeamID } from '../../../team/models/team';
 import { FetchTeamService } from '../../../team/service/fetchTeam';
 import { MainMatch, MainMatchID } from '../../model/main';
 import { PreMatch, PreMatchID } from '../../model/pre';
+import { FetchMatchService } from '../../service/fetch';
 import { FetchRunResultService } from '../../service/fetchRunResult';
 import { FetchTournamentService, Tournament } from '../../service/fetchTournament';
 import { GenerateMainMatchService } from '../../service/generateMain';
 import { GeneratePreMatchService } from '../../service/generatePre';
 import { GenerateRankingService } from '../../service/generateRanking';
-import { GetMatchService } from '../../service/get';
 import { SetMainMatchWinnerService } from '../../service/setMainWinner';
 import {
   GetMatchIDResponseSchema,
@@ -31,7 +31,7 @@ import {
 
 export class MatchController {
   constructor(
-    private readonly getMatchService: GetMatchService,
+    private readonly fetchMatchService: FetchMatchService,
     private readonly fetchTeamService: FetchTeamService,
     private readonly generatePreMatchService: GeneratePreMatchService,
     private readonly generateRankingService: GenerateRankingService,
@@ -42,11 +42,11 @@ export class MatchController {
   ) {}
 
   async getAll(): Promise<Result.Result<Error, z.infer<typeof GetMatchResponseSchema>>> {
-    const matchesRes = await this.getMatchService.findAll();
+    const matchesRes = await this.fetchMatchService.fetchAll();
     if (Result.isErr(matchesRes)) return matchesRes;
     const match = Result.unwrap(matchesRes);
 
-    const teamsRes = await this.fetchTeamService.findAll();
+    const teamsRes = await this.fetchTeamService.fetchAll();
     if (Result.isErr(teamsRes)) return teamsRes;
     const teams = Result.unwrap(teamsRes);
 
@@ -191,7 +191,7 @@ export class MatchController {
     matchType: T,
     id: T extends 'pre' ? PreMatchID : MainMatchID
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchIDResponseSchema>>> {
-    const res = await this.getMatchService.findByID(id);
+    const res = await this.fetchMatchService.fetchByID(id);
     if (Result.isErr(res)) return res;
     const match = Result.unwrap(res);
 
@@ -199,7 +199,7 @@ export class MatchController {
       teamID: TeamID | undefined
     ): Promise<{ id: string; teamName: string } | undefined> => {
       if (!teamID) return undefined;
-      const teamRes = await this.fetchTeamService.findByID(teamID);
+      const teamRes = await this.fetchTeamService.fetchByID(teamID);
       if (Result.isErr(teamRes)) return undefined;
       const team = Result.unwrap(teamRes);
       return {
@@ -256,7 +256,7 @@ export class MatchController {
     matchType: MatchType
   ): Promise<Result.Result<Error, z.infer<typeof GetMatchTypeResponseSchema>>> {
     if (matchType === 'pre') {
-      const matchRes = await this.getMatchService.findAllPreMatch();
+      const matchRes = await this.fetchMatchService.fetchAllPreMatch();
       if (Result.isErr(matchRes)) return matchRes;
 
       const matches = Result.unwrap(matchRes);
@@ -265,7 +265,7 @@ export class MatchController {
       for (const teamID of teamIDs) {
         if (!teamID) continue;
 
-        const teamRes = await this.fetchTeamService.findByID(teamID);
+        const teamRes = await this.fetchTeamService.fetchByID(teamID);
         if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
         teamsMap.set(team.getID(), team);
@@ -304,7 +304,7 @@ export class MatchController {
         })
       );
     } else {
-      const matchRes = await this.getMatchService.findAllMainMatch();
+      const matchRes = await this.fetchMatchService.fetchAllMainMatch();
       if (Result.isErr(matchRes)) return matchRes;
 
       const matches = Result.unwrap(matchRes);
@@ -313,7 +313,7 @@ export class MatchController {
       for (const teamID of teamIDs) {
         if (!teamID) continue;
 
-        const teamRes = await this.fetchTeamService.findByID(teamID);
+        const teamRes = await this.fetchTeamService.fetchByID(teamID);
         if (Result.isErr(teamRes)) return teamRes;
         const team = Result.unwrap(teamRes);
         teamsMap.set(team.getID(), team);
@@ -368,7 +368,7 @@ export class MatchController {
     const ranking = Result.unwrap(rankingRes);
 
     // NOTE: 一つずつ取得しても良いが、エラーの扱いが煩雑になるので簡単化のために*一時的に*全て取得するようにした
-    const teamsRes = await this.fetchTeamService.findAll();
+    const teamsRes = await this.fetchTeamService.fetchAll();
     if (Result.isErr(teamsRes)) return teamsRes;
     const teamsMap = new Map<TeamID, Team>(Result.unwrap(teamsRes).map((v) => [v.getID(), v]));
 
@@ -405,7 +405,7 @@ export class MatchController {
   async getTournament(
     departmentType: DepartmentType
   ): Promise<Result.Result<Error, z.infer<typeof GetTournamentResponseSchema>>> {
-    const teamsRes = await this.fetchTeamService.findAll();
+    const teamsRes = await this.fetchTeamService.fetchAll();
     if (Result.isErr(teamsRes)) return teamsRes;
 
     const teamMap = new Map(Result.unwrap(teamsRes).map((v) => [v.getID(), v]));
