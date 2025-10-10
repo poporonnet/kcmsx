@@ -1,5 +1,10 @@
 import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
-import { IconDeviceTv, IconSwitchHorizontal } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import {
+  IconDeviceTv,
+  IconDeviceTvOff,
+  IconSwitchHorizontal,
+} from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo, useState } from "react";
@@ -79,7 +84,30 @@ export const MatchView = () => {
     [matchJudge, forceReload, id, matchType, navigate]
   );
 
-  useMatchEventListener(matchType, id, onMatchEvent);
+  const [isViewError, setIsViewError] = useState(false);
+  useMatchEventListener(
+    matchType,
+    id,
+    onMatchEvent,
+    () => {
+      setIsViewError(true);
+      notifications.show({
+        title: "観戦に失敗しました",
+        message: "WebSocketの接続中にエラーが発生しました",
+        color: "red",
+        autoClose: false,
+      });
+    },
+    (event) => {
+      setIsViewError(true);
+      notifications.show({
+        title: "観戦から切断されました",
+        message: `WebSocketが切断されました ( code: ${event.code} )`,
+        color: "red",
+        autoClose: false,
+      });
+    }
+  );
 
   if (matchStatus === "end")
     return <Navigate to={`/match/${matchType}/${id}`} replace />;
@@ -105,10 +133,16 @@ export const MatchView = () => {
                 `${match.runResults.length == 0 ? 1 : 2}試合目`}
               <Badge
                 size="lg"
-                color="green"
-                leftSection={<IconDeviceTv size={18} />}
+                color={!isViewError ? "green" : "red"}
+                leftSection={
+                  !isViewError ? (
+                    <IconDeviceTv size={18} />
+                  ) : (
+                    <IconDeviceTvOff size={18} />
+                  )
+                }
               >
-                観戦中
+                {!isViewError ? "観戦中" : "エラー"}
               </Badge>
               <Button
                 onClick={flip}
