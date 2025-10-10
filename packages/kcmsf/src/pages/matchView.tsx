@@ -1,5 +1,5 @@
 import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
-import { IconDeviceTv, IconSwitchHorizontal } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo, useState } from "react";
@@ -79,7 +79,14 @@ export const MatchView = () => {
     [matchJudge, forceReload, id, matchType, navigate]
   );
 
-  useMatchEventListener(matchType, id, onMatchEvent);
+  useMatchEventListener(matchType, id, onMatchEvent, () => {
+    notifications.show({
+      title: "観戦に失敗しました",
+      message: `WebSocketの接続中にエラーが発生しました`,
+      color: "red",
+      autoClose: false,
+    });
+  });
 
   if (matchStatus === "end")
     return <Navigate to={`/match/${matchType}/${id}`} replace />;
