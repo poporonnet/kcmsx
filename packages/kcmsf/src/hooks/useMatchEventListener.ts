@@ -7,7 +7,8 @@ export const useMatchEventListener = (
   matchType: MatchType | undefined,
   matchId: string | undefined,
   onMatchEvent: (event: MatchEvent) => void,
-  onError?: (event: Event) => void
+  onError?: (event: Event) => void,
+  onClose?: (event: CloseEvent) => void
 ) => {
   // FIXME: ちゃんとハンドリングする
   if (matchType == null || matchId == null) throw new Error("Unreachable");
@@ -27,6 +28,7 @@ export const useMatchEventListener = (
         onMatchEventRef.current(matchEvent);
       },
       onError,
+      onClose,
     }
   );
 };
