@@ -117,7 +117,7 @@ export const MatchList = () => {
           setDepartmentType={setDepartmentType}
         />
       </LabeledSegmentedControls>
-      {!loading && matches && matches[matchType].length > 0 && (
+      {matches && matches[matchType].length > 0 && (
         <>
           <Flex w="100%" justify="space-between" align="flex-end">
             <Flex justify="right" gap="lg">
@@ -156,7 +156,7 @@ export const MatchList = () => {
           </Table>
         </>
       )}
-      {loading && (
+      {loading && !matches && (
         <>
           <Text>ロード中</Text>
           <Loader size={40} />
