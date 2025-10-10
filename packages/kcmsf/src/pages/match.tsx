@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Text } from "@mantine/core";
+import { Box, Button, Divider, Flex, Text } from "@mantine/core";
 import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
@@ -145,30 +145,32 @@ export const Match = () => {
                 : 0
             }
             leftSection={
-              <Button
-                flex={1}
-                variant="transparent"
-                c="blue"
-                leftSection={<IconRotate />}
-                size="xl"
-                fw="normal"
-                onClick={() => onClickReset("left")}
-              >
-                リセット
-              </Button>
+              <Box flex={1}>
+                <Button
+                  variant="transparent"
+                  color="blue"
+                  leftSection={<IconRotate />}
+                  size="xl"
+                  fw="normal"
+                  onClick={() => onClickReset("left")}
+                >
+                  リセット
+                </Button>
+              </Box>
             }
             rightSection={
-              <Button
-                flex={1}
-                variant="transparent"
-                c="red"
-                leftSection={<IconRotate />}
-                size="xl"
-                fw="normal"
-                onClick={() => onClickReset("right")}
-              >
-                リセット
-              </Button>
+              <Box flex={1}>
+                <Button
+                  variant="transparent"
+                  color="red"
+                  leftSection={<IconRotate />}
+                  size="xl"
+                  fw="normal"
+                  onClick={() => onClickReset("right")}
+                >
+                  リセット
+                </Button>
+              </Box>
             }
           />
 
