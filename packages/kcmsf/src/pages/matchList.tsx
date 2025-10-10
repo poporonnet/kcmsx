@@ -119,7 +119,19 @@ export const MatchList = () => {
       </LabeledSegmentedControls>
       {!loading && matches && matches[matchType].length > 0 && (
         <>
-          <Flex w="100%" justify="right">
+          <Flex w="100%" justify="space-between" align="flex-end">
+            <Flex justify="right" gap="lg">
+              <Text size="sm">
+                最終更新
+                {` ${latestFetchTime?.getHours().toString().padStart(2, "0")}:${latestFetchTime?.getMinutes().toString().padStart(2, "0")}`}
+              </Text>
+              <Divider orientation="vertical" />
+              <Checkbox
+                label="自動更新"
+                checked={isAutoRefetch}
+                onChange={(e) => setIsAutoRefetch(e.currentTarget.checked)}
+              />
+            </Flex>
             <CourtSelector
               courts={courts}
               court={selectedCourt}
