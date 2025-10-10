@@ -3,7 +3,7 @@ import { createConfig } from "./utility/createConfig";
 
 export const config = createConfig(
   {
-    contestName: "第2回 Matz葉がにロボコン",
+    contestName: "第3回 Matz葉がにロボコン",
     robots: [
       {
         type: "leg",
@@ -32,7 +32,7 @@ export const config = createConfig(
         limitSeconds: 180,
         course: {
           elementary: [1, 2],
-          open: [1, 2],
+          open: [3],
         },
       },
       main: {
@@ -54,7 +54,7 @@ export const config = createConfig(
         label: "歩行型",
         type: "single",
         initial: true, // conditionsの"scorable"で制御する
-        point: (done: boolean) => (done ? 2 : 0),
+        point: (done: boolean) => (done ? 5 : 0),
       },
       {
         name: "leaveBase",
@@ -131,8 +131,9 @@ export const config = createConfig(
         !state.matchInfo && // エキシビションモードでのみマニュアル変更可能
         !state.matchState[state.side]?.getPointState().finish,
       scorable: (state) =>
-        !state.matchInfo || // エキシビションモードでは通常通り加算可能
-        state.matchInfo.teams[state.side]?.robotType === "leg", // 通常の試合では歩行型のときのみ加算可能
+        (!state.matchInfo || // エキシビションモードでは通常通り加算可能
+          state.matchInfo.teams[state.side]?.robotType === "leg") && // 通常の試合では歩行型のときのみ加算可能
+        !!state.matchState[state.side]?.getPointState().goal, // ゴールしたときのみ可算可能
     },
     leaveBase: {
       changeable: (state) =>
