@@ -85,15 +85,29 @@ export const MatchView = () => {
   );
 
   const [isViewError, setIsViewError] = useState(false);
-  useMatchEventListener(matchType, id, onMatchEvent, () => {
-    setIsViewError(true);
-    notifications.show({
-      title: "観戦に失敗しました",
-      message: `WebSocketの接続中にエラーが発生しました`,
-      color: "red",
-      autoClose: false,
-    });
-  });
+  useMatchEventListener(
+    matchType,
+    id,
+    onMatchEvent,
+    () => {
+      setIsViewError(true);
+      notifications.show({
+        title: "観戦に失敗しました",
+        message: "WebSocketの接続中にエラーが発生しました",
+        color: "red",
+        autoClose: false,
+      });
+    },
+    (event) => {
+      setIsViewError(true);
+      notifications.show({
+        title: "観戦から切断されました",
+        message: `WebSocketが切断されました ( code: ${event.code} )`,
+        color: "red",
+        autoClose: false,
+      });
+    }
+  );
 
   if (matchStatus === "end")
     return <Navigate to={`/match/${matchType}/${id}`} replace />;
