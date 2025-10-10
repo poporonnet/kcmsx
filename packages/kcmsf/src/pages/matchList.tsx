@@ -1,6 +1,8 @@
 import {
   Button,
   Center,
+  Checkbox,
+  Divider,
   Flex,
   List,
   Loader,
@@ -26,6 +28,7 @@ import {
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
+import { useInterval } from "../hooks/useInterval";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
@@ -95,6 +98,11 @@ export const MatchList = () => {
     },
     []
   );
+
+  const [isAutoRefetch, setIsAutoRefetch] = useState(true);
+  const latestFetchTime = useMemo(() => new Date(), [matches]);
+
+  useInterval(refetch, 10000, { active: isAutoRefetch });
 
   return (
     <Stack w="fit-content" align="center" gap="md">
