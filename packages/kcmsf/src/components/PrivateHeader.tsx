@@ -1,7 +1,7 @@
 import { AppShell, Group, Title } from "@mantine/core";
 import { RouterLink } from "./RouterLink";
 
-export function Header() {
+export function PrivateHeader() {
   return (
     <AppShell.Header>
       <Group h="100%" px="md">

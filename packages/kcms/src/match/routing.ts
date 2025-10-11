@@ -3,6 +3,7 @@ import {
   CommonErrorSchema,
   GetMatchIDParamsSchema,
   GetMatchIDResponseSchema,
+  GetMatchPublicResponseSchema,
   GetMatchResponseSchema,
   GetMatchRunResultParamsSchema,
   GetMatchRunResultResponseSchema,
@@ -263,6 +264,29 @@ export const GetTournamentRoute = createRoute({
         },
       },
       description: 'Get main tournament',
+    },
+    400: {
+      content: {
+        'application/json': {
+          schema: CommonErrorSchema,
+        },
+      },
+      description: 'Common error',
+    },
+  },
+});
+
+export const GetMatchPublicRoute = createRoute({
+  method: 'get',
+  path: '/match/public',
+  responses: {
+    200: {
+      content: {
+        'application/json': {
+          schema: GetMatchPublicResponseSchema,
+        },
+      },
+      description: 'Retrieve all matches for public',
     },
     400: {
       content: {

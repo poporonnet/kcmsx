@@ -17,6 +17,7 @@ import { PreMatchID } from './model/pre';
 import { CreateRunResultArgs } from './model/runResult';
 import {
   GetMatchIDRoute,
+  GetMatchPublicRoute,
   GetMatchRoute,
   GetMatchRunResultRoute,
   GetMatchTypeRoute,
@@ -80,6 +81,15 @@ const matchController = new MatchController(
   setMainWinnerService
 );
 export const matchHandler = new OpenAPIHono();
+
+// FIXME: /match/{matchType} と衝突するためとりあえず先にハンドラを登録
+matchHandler.openapi(GetMatchPublicRoute, async (c) => {
+  const res = await matchController.getAll();
+  if (Result.isErr(res)) {
+    return c.json({ description: Result.unwrapErr(res).message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
 
 matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();

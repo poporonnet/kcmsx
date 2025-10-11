@@ -1,25 +1,21 @@
+// FIXME: 雑実装
+
 import {
   Button,
   Center,
-  Checkbox,
-  Divider,
   Flex,
-  List,
   Loader,
   Stack,
   Table,
   Text,
   Title,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
-import { config, DepartmentType, MatchType } from "config";
-import { useCallback, useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { config, MatchType } from "config";
+import { useMemo, useState } from "react";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
-import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
   MatchStatusButton,
@@ -28,19 +24,21 @@ import {
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
-import { useInterval } from "../hooks/useInterval";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
-import { GetMatchesResponse } from "../types/api/match";
+import { GetMatchesPublicResponse } from "../types/api/match";
 import { Match } from "../types/match";
 import { getMatchStatus } from "../utils/matchStatus";
 
-export const MatchList = () => {
+export const PublicMatchList = () => {
   const {
     data: matches,
     loading,
     error,
     refetch,
-  } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
+  } = useFetch<GetMatchesPublicResponse>(
+    `${import.meta.env.VITE_API_URL}/match/public`,
+    { credentials: "omit" }
+  );
   const courts = useMemo(
     () =>
       [
@@ -78,32 +76,6 @@ export const MatchList = () => {
     [matches, matchType, departmentType, selectedCourt]
   );
 
-  const generateMatch = useCallback(
-    async (matchType: MatchType, departmentType: DepartmentType) => {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/match/${matchType}/${departmentType}/generate`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      ).catch(() => undefined);
-
-      const isSucceeded = !!res?.ok;
-
-      notifications.show({
-        title: `試合表生成${isSucceeded ? "成功" : "失敗"}`,
-        message: `${config.department[departmentType].name}・${config.match[matchType].name}の試合表を生成${isSucceeded ? "しました" : "できませんでした"}`,
-        color: isSucceeded ? "green" : "red",
-      });
-    },
-    []
-  );
-
-  const [isAutoRefetch, setIsAutoRefetch] = useState(true);
-  const latestFetchTime = useMemo(() => new Date(), [matches]);
-
-  useInterval(refetch, 10000, { active: isAutoRefetch });
-
   return (
     <Stack w="fit-content" align="center" gap="md">
       <Title m="md">試合表</Title>
@@ -119,19 +91,7 @@ export const MatchList = () => {
       </LabeledSegmentedControls>
       {matches && matches[matchType].length > 0 && (
         <>
-          <Flex w="100%" justify="space-between" align="flex-end">
-            <Flex justify="right" gap="lg">
-              <Text size="sm">
-                最終更新
-                {` ${latestFetchTime?.getHours().toString().padStart(2, "0")}:${latestFetchTime?.getMinutes().toString().padStart(2, "0")}`}
-              </Text>
-              <Divider orientation="vertical" />
-              <Checkbox
-                label="自動更新"
-                checked={isAutoRefetch}
-                onChange={(e) => setIsAutoRefetch(e.currentTarget.checked)}
-              />
-            </Flex>
+          <Flex w="100%" justify="right">
             <CourtSelector
               courts={courts}
               court={selectedCourt}
@@ -177,34 +137,7 @@ export const MatchList = () => {
         </>
       )}
       {matches?.[matchType].length === 0 && !loading && !error && (
-        <>
-          <Text>現在{config.match[matchType].name}試合はありません。</Text>
-          <GenerateMatchButton
-            generate={async () => {
-              await Promise.all(
-                config.departmentTypes.map((departmentType) =>
-                  generateMatch(matchType, departmentType)
-                )
-              );
-              refetch();
-            }}
-            modalTitle={`${config.match[matchType].name}試合表生成確認`}
-            modalDetail={
-              <>
-                以下の試合表を生成します:
-                <List withPadding>
-                  {config.departmentTypes.map((departmentType) => (
-                    <List.Item key={departmentType}>
-                      {config.match[matchType].name}&emsp;
-                      {config.department[departmentType].name}
-                    </List.Item>
-                  ))}
-                </List>
-              </>
-            }
-            disabled={matchType != "pre"} // TODO: 本戦試合も生成できるように
-          />
-        </>
+        <Text>現在{config.match[matchType].name}試合はありません。</Text>
       )}
     </Stack>
   );
@@ -218,7 +151,6 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
       <Table.Th>{matchType == "pre" ? "左コース" : "チーム1"}</Table.Th>
       <Table.Th>{matchType == "pre" ? "右コース" : "チーム2"}</Table.Th>
       <Table.Th ta="center">状態</Table.Th>
-      <Table.Th ta="center">観戦</Table.Th>
     </Table.Tr>
   </Table.Thead>
 );
@@ -228,14 +160,8 @@ const MatchColumn = ({ match }: { match: Match }) => {
     return getMatchStatus(match);
   }, [match]);
 
-  const navigate = useNavigate();
-
   return (
-    <Table.Tr
-      onClick={() => {
-        navigate(`/match/${match.matchType}/${match.id}`);
-      }}
-    >
+    <Table.Tr>
       <Table.Td>
         <Text fw="bold" ta="center">
           {match.matchCode}
@@ -264,20 +190,6 @@ const MatchColumn = ({ match }: { match: Match }) => {
         <Center>
           <MatchStatusButton status={matchStatus} />
         </Center>
-      </Table.Td>
-      <Table.Td>
-        <Button
-          component={Link}
-          to={`/match/${match.matchType}/${match.id}/view`}
-          variant="outline"
-          color="green"
-          radius="lg"
-          size="xs"
-          disabled={matchStatus === "end"}
-          onClick={(event) => event.stopPropagation()}
-        >
-          <Text fw={700}>観戦する</Text>
-        </Button>
       </Table.Td>
     </Table.Tr>
   );
