@@ -36,8 +36,8 @@ export class GeneratePreMatchService {
         }
         const match = PreMatch.new({
           id: Result.unwrap(id),
-          // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
-          courseIndex: courseIndex + 1,
+          courseIndex:
+            config.match.pre.course[(pair[0] || pair[1]!).getDepartmentType()][courseIndex],
           matchIndex: matchIndex + 1,
           departmentType: (pair[0] || pair[1]!).getDepartmentType(),
           teamID1: pair[0]?.getID(),

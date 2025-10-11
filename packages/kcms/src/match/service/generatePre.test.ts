@@ -50,4 +50,12 @@ describe('GeneratePreMatchService', () => {
       expect(pair).toStrictEqual(expectedTeamPair[i]);
     }
   });
+
+  it("hotfix: configで指定したコース番号を正しく使う", async () => {
+    const generatedRes = await generateService.handle("open");
+
+    expect(Result.isOk(generatedRes)).toBe(true);
+    expect( Result.unwrap(generatedRes).map(v => v.getCourseIndex())).includes(config.match.pre.course["open"])
+  })
+
 });
