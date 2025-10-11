@@ -14,7 +14,6 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
@@ -152,7 +151,6 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
       <Table.Th>{matchType == "pre" ? "左コース" : "チーム1"}</Table.Th>
       <Table.Th>{matchType == "pre" ? "右コース" : "チーム2"}</Table.Th>
       <Table.Th ta="center">状態</Table.Th>
-      <Table.Th ta="center">観戦</Table.Th>
     </Table.Tr>
   </Table.Thead>
 );
@@ -162,14 +160,8 @@ const MatchColumn = ({ match }: { match: Match }) => {
     return getMatchStatus(match);
   }, [match]);
 
-  const navigate = useNavigate();
-
   return (
-    <Table.Tr
-      onClick={() => {
-        navigate(`/match/${match.matchType}/${match.id}`);
-      }}
-    >
+    <Table.Tr>
       <Table.Td>
         <Text fw="bold" ta="center">
           {match.matchCode}
@@ -198,20 +190,6 @@ const MatchColumn = ({ match }: { match: Match }) => {
         <Center>
           <MatchStatusButton status={matchStatus} />
         </Center>
-      </Table.Td>
-      <Table.Td>
-        <Button
-          component={Link}
-          to={`/match/${match.matchType}/${match.id}/view`}
-          variant="outline"
-          color="green"
-          radius="lg"
-          size="xs"
-          disabled={matchStatus === "end"}
-          onClick={(event) => event.stopPropagation()}
-        >
-          <Text fw={700}>観戦する</Text>
-        </Button>
       </Table.Td>
     </Table.Tr>
   );
