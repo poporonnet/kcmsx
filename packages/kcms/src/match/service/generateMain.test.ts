@@ -141,7 +141,9 @@ describe('GenerateMainMatchService', () => {
     }, new Map());
 
     for (const indexes of matchIndexes.values()) {
-      expect(indexes.sort()).toStrictEqual(Array.from({ length: indexes.length }, (_, i) => i + 1));
+      expect(indexes.sort((a, b) => a - b)).toStrictEqual(
+        Array.from({ length: indexes.length }, (_, i) => i + 1)
+      );
     }
   });
 });
