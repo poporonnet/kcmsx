@@ -31,8 +31,8 @@ export const config = createConfig(
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: [1, 2],
-          open: [3],
+          elementary: [1, 2, 3],
+          open: [1,2],
         },
       },
       main: {
