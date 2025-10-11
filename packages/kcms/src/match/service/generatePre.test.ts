@@ -55,8 +55,8 @@ describe('GeneratePreMatchService', () => {
     const generatedRes = await generateService.handle('open');
 
     expect(Result.isOk(generatedRes)).toBe(true);
-    expect(Result.unwrap(generatedRes).map((v) => v.getCourseIndex())).includes(
-      config.match.pre.course['open']
-    );
+    for (const v of Result.unwrap(generatedRes)) {
+      expect(config.match.pre.course['open']).toContain(v.getCourseIndex());
+    }
   });
 });
