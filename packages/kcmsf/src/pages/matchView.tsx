@@ -34,6 +34,7 @@ export const MatchView = () => {
   const {
     teams: [leftDisplayedTeam, rightDisplayedTeam],
     displayedCourseName: [leftDisplayedCourseName, rightDisplayedCourseName],
+    displayedColor: [leftDisplayedColor, rightDisplayedColor],
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
@@ -127,6 +128,8 @@ export const MatchView = () => {
           matchCode={match.matchCode}
           rightTeamName={rightDisplayedTeam.info?.teamName}
           leftTeamName={leftDisplayedTeam.info?.teamName}
+          rightTeamColor={rightDisplayedColor}
+          leftTeamColor={leftDisplayedColor}
           centerSection={
             <>
               {match.matchType === "main" &&
@@ -179,13 +182,15 @@ export const MatchView = () => {
             ? leftDisplayedTeam.judge.point.point()
             : 0
         }
+        leftTeamColor={leftDisplayedColor}
+        rightTeamColor={rightDisplayedColor}
       />
 
       <Divider w="100%" />
 
       <Flex direction="row" gap="2rem" align="center" justify="center">
         <PointControls
-          color="blue"
+          color={leftDisplayedColor}
           team={leftDisplayedTeam.judge}
           onChange={() => {}}
           onGoal={() => {}}
@@ -196,7 +201,7 @@ export const MatchView = () => {
         <Divider orientation="vertical" />
 
         <PointControls
-          color="red"
+          color={rightDisplayedColor}
           team={rightDisplayedTeam.judge}
           onChange={() => {}}
           onGoal={() => {}}
