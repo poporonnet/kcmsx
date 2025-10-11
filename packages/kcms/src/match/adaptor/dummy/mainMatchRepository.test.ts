@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it } from 'vitest';
 import { TeamID } from '../../../team/models/team.js';
 import { testRankingMainMatchData } from '../../../testData/match.js';
 import { MainMatch, MainMatchID } from '../../model/main.js';
+import { MatchIndexAndCourseIndex } from '../../model/repository.js';
 import { RunResult, RunResultID } from '../../model/runResult.js';
 import { DummyMainMatchRepository } from './mainMatchRepository.js';
 
@@ -87,5 +88,12 @@ describe('DummyMainMatchRepository', () => {
   it('全ての試合を取得できる', async () => {
     const res = await repository.findAll();
     expect(Result.isErr(res)).toBe(false);
+  });
+
+  it('各コースごとに最大の試合番号を取得できる', async () => {
+    const res = await repository.findMaxMatchIndexAll();
+    const expected: MatchIndexAndCourseIndex[] = [{ courseIndex: 1, matchIndex: 1 }];
+    expect(res).satisfy(Result.isOk);
+    expect(Result.unwrap(res)).toStrictEqual(expected);
   });
 });
