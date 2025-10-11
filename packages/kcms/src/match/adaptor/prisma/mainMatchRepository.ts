@@ -3,7 +3,7 @@ import type { Prisma, PrismaClient } from '@prisma/client';
 import { DepartmentType } from 'config';
 import { TeamID } from '../../../team/models/team';
 import { ChildMatches, MainMatch, MainMatchID } from '../../model/main';
-import { MainMatchRepository } from '../../model/repository';
+import { MainMatchRepository, MatchIndexAndCourseIndex } from '../../model/repository';
 import { RunResult, RunResultID } from '../../model/runResult';
 
 export class PrismaMainMatchRepository implements MainMatchRepository {
@@ -262,6 +262,25 @@ export class PrismaMainMatchRepository implements MainMatchRepository {
       });
 
       return Result.ok(undefined);
+    } catch (e) {
+      return Result.err(e as Error);
+    }
+  }
+
+  async findMaxMatchIndexAll(): Promise<Result.Result<Error, MatchIndexAndCourseIndex[]>> {
+    try {
+      const res = await this.client.mainMatch.groupBy({
+        by: 'courseIndex',
+        _max: {
+          matchIndex: true,
+        },
+      });
+
+      return Result.ok(
+        res
+          .map(({ courseIndex, _max: { matchIndex } }) => ({ courseIndex, matchIndex }))
+          .filter((r): r is MatchIndexAndCourseIndex => r.matchIndex != null)
+      );
     } catch (e) {
       return Result.err(e as Error);
     }
