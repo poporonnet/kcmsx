@@ -85,5 +85,10 @@ export const testTeamData: Map<TeamID, Team> = new Map<TeamID, Team>(
     testDataGenerator({ clubName: 'C', teamName: '2', department: 'elementary', isEntered: true }),
     testDataGenerator({ teamName: '1', department: 'elementary', isEntered: true }), // N1
     testDataGenerator({ teamName: '2', department: 'elementary', isEntered: true }), // N2
+    // hotfix: 試合を生成するときにconfigで指定したコース番号を正しく使うようにした
+    testDataGenerator({ teamName: 'open1', department: 'open', isEntered: true }),
+    testDataGenerator({ teamName: 'open2', department: 'open', isEntered: true }),
+    testDataGenerator({ teamName: 'open3', department: 'open', isEntered: true }),
+    testDataGenerator({ teamName: 'open4', department: 'open', isEntered: true }),
   ].map((v) => [v.getID(), v])
 );

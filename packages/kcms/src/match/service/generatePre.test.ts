@@ -53,4 +53,13 @@ describe('GeneratePreMatchService', () => {
       expect(pair).toStrictEqual(expectedTeamPair[i]);
     }
   });
+
+  it('hotfix: configで指定したコース番号を正しく使う', async () => {
+    const generatedRes = await generateService.handle('open');
+
+    expect(Result.isOk(generatedRes)).toBe(true);
+    for (const v of Result.unwrap(generatedRes)) {
+      expect(config.match.pre.course['open']).toContain(v.getCourseIndex());
+    }
+  });
 });
