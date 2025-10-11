@@ -17,15 +17,18 @@ export const useQueryParamsState = <T extends string>(
   const setQueryParamsState = useCallback(
     (value: T) => {
       setState(value);
-      setSearchParams((prev) => {
-        if (prev.has(key)) {
-          prev.set(key, value);
-        } else {
-          prev.append(key, value);
-        }
+      setSearchParams(
+        (prev) => {
+          if (prev.has(key)) {
+            prev.set(key, value);
+          } else {
+            prev.append(key, value);
+          }
 
-        return [...prev.entries()];
-      });
+          return [...prev.entries()];
+        },
+        { replace: true }
+      );
     },
     [key, setSearchParams]
   );
