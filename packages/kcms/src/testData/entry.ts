@@ -90,5 +90,7 @@ export const testTeamData: Map<TeamID, Team> = new Map<TeamID, Team>(
     testDataGenerator({ teamName: 'open2', department: 'open', isEntered: true }),
     testDataGenerator({ teamName: 'open3', department: 'open', isEntered: true }),
     testDataGenerator({ teamName: 'open4', department: 'open', isEntered: true }),
+    testDataGenerator({ teamName: 'open5', department: 'open', isEntered: true }),
+    testDataGenerator({ teamName: 'open6', department: 'open', isEntered: true }),
   ].map((v) => [v.getID(), v])
 );
