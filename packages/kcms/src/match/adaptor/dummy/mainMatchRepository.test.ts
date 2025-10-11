@@ -12,7 +12,7 @@ describe('DummyMainMatchRepository', () => {
   const repository = new DummyMainMatchRepository();
 
   beforeEach(() => {
-    repository.clear(testRankingMainMatchData);
+    repository.clear([...testRankingMainMatchData]);
   });
 
   it('作成できる', async () => {
