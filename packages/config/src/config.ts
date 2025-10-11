@@ -32,7 +32,7 @@ export const config = createConfig(
         limitSeconds: 180,
         course: {
           elementary: [1, 2, 3],
-          open: [1,2],
+          open: [1, 2],
         },
       },
       main: {
