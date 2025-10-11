@@ -1,6 +1,6 @@
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
-import { Header } from "../components/header.tsx";
+import { PublicHeader } from "../components/PublicHeader.tsx";
 
 export const PublicLayout = () => (
   <AppShell
@@ -8,7 +8,7 @@ export const PublicLayout = () => (
     footer={{ height: 30, offset: true }}
     padding="md"
   >
-    <Header />
+    <PublicHeader />
     <AppShell.Main display="flex" style={{ flexDirection: "column" }}>
       <Outlet />
     </AppShell.Main>
