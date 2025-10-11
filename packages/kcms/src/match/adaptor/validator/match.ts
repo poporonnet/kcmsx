@@ -182,3 +182,8 @@ export const GetTournamentResponseSchema = TournamentSchema;
 export const PostMatchWinnerIDRequestSchema = z.object({
   winnerID: z.string().openapi({ example: '31415926535' }),
 });
+
+export const GetMatchPublicResponseSchema = z.object({
+  pre: z.array(PreSchema),
+  main: z.array(MainSchema),
+});
