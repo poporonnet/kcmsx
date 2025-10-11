@@ -165,7 +165,7 @@ export const MatchList = () => {
       {error && (
         <>
           <Text c="red" fw={700}>
-            サーバーからのフェッチに失敗しました。
+            データの取得に失敗しました。
           </Text>
           <Button
             mt="2rem"
