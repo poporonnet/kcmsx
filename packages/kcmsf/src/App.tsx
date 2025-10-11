@@ -5,7 +5,6 @@ import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import "./App.css";
-import { AuthProvider } from "./components/AuthProvider.tsx";
 import { router } from "./routes/router.tsx";
 
 const theme = createTheme({
@@ -16,10 +15,8 @@ const theme = createTheme({
 const App = () => {
   return (
     <MantineProvider theme={theme}>
-      <AuthProvider>
-        <Notifications />
-        <RouterProvider router={router} />
-      </AuthProvider>
+      <Notifications />
+      <RouterProvider router={router} />
     </MantineProvider>
   );
 };

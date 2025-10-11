@@ -63,3 +63,11 @@ export type GetTournament = Tournament;
 export type PostMatchWinnerRequest = {
   winnerID: string;
 };
+
+/**
+ * `GET /match/public`のレスポンス
+ */
+export type GetMatchesPublicResponse = {
+  pre: PreMatch[];
+  main: MainMatch[];
+};
