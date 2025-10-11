@@ -1,7 +1,7 @@
 import { AppShell } from "@mantine/core";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "../components/AuthProvider.tsx";
-import { Header } from "../components/header.tsx";
+import { PrivateHeader } from "../components/PrivateHeader.tsx";
 
 export const PrivateLayout = () => (
   <AppShell
@@ -9,7 +9,7 @@ export const PrivateLayout = () => (
     footer={{ height: 30, offset: true }}
     padding="md"
   >
-    <Header />
+    <PrivateHeader />
     <AppShell.Main display="flex" style={{ flexDirection: "column" }}>
       <AuthProvider>
         <Outlet />
