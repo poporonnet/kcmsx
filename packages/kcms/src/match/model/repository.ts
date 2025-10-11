@@ -2,6 +2,8 @@ import { Option, Result } from '@mikuroxina/mini-fn';
 import { MainMatch, MainMatchID } from './main.js';
 import { PreMatch, PreMatchID } from './pre.js';
 
+export type MatchIndexAndCourseIndex = { courseIndex: number; matchIndex: number };
+
 export interface PreMatchRepository {
   /**
    * @description 試合を作成
@@ -53,6 +55,12 @@ export interface PreMatchRepository {
    * @returns 成功時: Result.ok({@link PreMatch}) 失敗時: Error
    */
   findAll(): Promise<Result.Result<Error, PreMatch[]>>;
+
+  /**
+   * @description 試合が存在する全てのコースごとに最大の試合番号を取得
+   * @returns 成功時: Result.ok({@link MatchIndexAndCourseIndex}) 失敗時: Error
+   */
+  findMaxMatchIndexAll(): Promise<Result.Result<Error, MatchIndexAndCourseIndex[]>>;
 }
 
 export interface MainMatchRepository {
@@ -106,4 +114,10 @@ export interface MainMatchRepository {
    * @returns 成功時: Result.ok({@link MainMatch}) 失敗時: Error
    */
   findAll(): Promise<Result.Result<Error, MainMatch[]>>;
+
+  /**
+   * @description 試合が存在する全てのコースごとに最大の試合番号を取得
+   * @returns 成功時: Result.ok({@link MatchIndexAndCourseIndex}) 失敗時: Error
+   */
+  findMaxMatchIndexAll(): Promise<Result.Result<Error, MatchIndexAndCourseIndex[]>>;
 }

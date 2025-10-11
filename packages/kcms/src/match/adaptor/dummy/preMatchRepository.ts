@@ -1,6 +1,6 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { PreMatch, PreMatchID } from '../../model/pre.js';
-import { PreMatchRepository } from '../../model/repository.js';
+import { MatchIndexAndCourseIndex, PreMatchRepository } from '../../model/repository.js';
 import { clonePreMatch } from '../../utility/clonePreMatch.js';
 
 export class DummyPreMatchRepository implements PreMatchRepository {
@@ -36,6 +36,28 @@ export class DummyPreMatchRepository implements PreMatchRepository {
 
   public async findAll(): Promise<Result.Result<Error, PreMatch[]>> {
     return Result.ok(this.data.map(clonePreMatch));
+  }
+
+  public async findMaxMatchIndexAll(): Promise<Result.Result<Error, MatchIndexAndCourseIndex[]>> {
+    return Result.ok(
+      [
+        ...this.data
+          .reduce<Map<number, number>>((prev, m) => {
+            const courseIndex = m.getCourseIndex();
+            const matchIndex = m.getMatchIndex();
+            const prevMaxMatchIndex = prev.get(courseIndex);
+            if (prevMaxMatchIndex == null || matchIndex > prevMaxMatchIndex) {
+              prev.set(courseIndex, matchIndex);
+            }
+
+            return prev;
+          }, new Map())
+          .entries(),
+      ].map(([courseIndex, matchIndex]) => ({
+        courseIndex,
+        matchIndex,
+      }))
+    );
   }
 
   /**

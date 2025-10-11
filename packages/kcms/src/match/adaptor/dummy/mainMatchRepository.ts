@@ -1,6 +1,6 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
 import { MainMatch, MainMatchID } from '../../model/main.js';
-import { MainMatchRepository } from '../../model/repository.js';
+import { MainMatchRepository, MatchIndexAndCourseIndex } from '../../model/repository.js';
 
 export class DummyMainMatchRepository implements MainMatchRepository {
   private data: MainMatch[];
@@ -35,6 +35,28 @@ export class DummyMainMatchRepository implements MainMatchRepository {
 
   public async findAll(): Promise<Result.Result<Error, MainMatch[]>> {
     return Result.ok(this.data);
+  }
+
+  public async findMaxMatchIndexAll(): Promise<Result.Result<Error, MatchIndexAndCourseIndex[]>> {
+    return Result.ok(
+      [
+        ...this.data
+          .reduce<Map<number, number>>((prev, m) => {
+            const courseIndex = m.getCourseIndex();
+            const matchIndex = m.getMatchIndex();
+            const prevMaxMatchIndex = prev.get(courseIndex);
+            if (prevMaxMatchIndex == null || matchIndex > prevMaxMatchIndex) {
+              prev.set(courseIndex, matchIndex);
+            }
+
+            return prev;
+          }, new Map())
+          .entries(),
+      ].map(([courseIndex, matchIndex]) => ({
+        courseIndex,
+        matchIndex,
+      }))
+    );
   }
 
   public clear(data: MainMatch[] = []) {

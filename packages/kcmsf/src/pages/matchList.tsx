@@ -181,11 +181,9 @@ export const MatchList = () => {
           <Text>現在{config.match[matchType].name}試合はありません。</Text>
           <GenerateMatchButton
             generate={async () => {
-              await Promise.all(
-                config.departmentTypes.map((departmentType) =>
-                  generateMatch(matchType, departmentType)
-                )
-              );
+              for (const departmentType of config.departmentTypes) {
+                await generateMatch(matchType, departmentType);
+              }
               refetch();
             }}
             modalTitle={`${config.match[matchType].name}試合表生成確認`}

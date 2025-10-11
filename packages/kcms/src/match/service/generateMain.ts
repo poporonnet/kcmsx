@@ -30,7 +30,14 @@ export class GenerateMainMatchService {
 
     const pairs = this.generateMatchPair(teamIDs);
 
-    const matchesRes = this.generateTournament(departmentType, pairs);
+    const maxMatchIndexRes = await this.mainMatchRepository.findMaxMatchIndexAll();
+    if (Result.isErr(maxMatchIndexRes)) return maxMatchIndexRes;
+    const maxMatchIndex = Result.unwrap(maxMatchIndexRes);
+    const matchIndexOffset = new Map(
+      maxMatchIndex.map(({ courseIndex, matchIndex }) => [courseIndex, matchIndex])
+    );
+
+    const matchesRes = this.generateTournament(departmentType, pairs, matchIndexOffset);
     if (Result.isErr(matchesRes)) {
       return matchesRes;
     }
@@ -76,7 +83,8 @@ export class GenerateMainMatchService {
    */
   private generateTournament(
     departmentType: DepartmentType,
-    firstRoundMatches: [TeamID, TeamID][]
+    firstRoundMatches: [TeamID, TeamID][],
+    matchIndexOffsets: Map<number, number>
   ): Result.Result<Error, MainMatch[]> {
     // K: トーナメントのラウンド(0が初戦) / V: そのラウンドの試合
     const matches: Map<number, MainMatch[]> = new Map();
@@ -89,7 +97,10 @@ export class GenerateMainMatchService {
 
     // K: コース番号 / V: そのコースの試合番号
     const matchIndexes: Map<number, number> = new Map(
-      config.match.main.course[departmentType].map((v) => [v, 1])
+      config.match.main.course[departmentType].map((courseIndex) => [
+        courseIndex,
+        (matchIndexOffsets?.get(courseIndex) ?? 0) + 1,
+      ])
     );
     let courseIndex = 0;
 

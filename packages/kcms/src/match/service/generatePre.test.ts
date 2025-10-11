@@ -62,4 +62,28 @@ describe('GeneratePreMatchService', () => {
       expect(config.match.pre.course['open']).toContain(v.getCourseIndex());
     }
   });
+
+  it('hotfix: 部門をまたいでもコースごとの試合番号が連番になる', async () => {
+    expect(await generateService.handle('elementary')).satisfy(Result.isOk);
+    expect(await generateService.handle('open')).satisfy(Result.isOk);
+
+    const matchesRes = await preMatchRepository.findAll();
+    expect(matchesRes).satisfy(Result.isOk);
+    const matches = Result.unwrap(matchesRes);
+
+    const matchIndexes = matches.reduce<Map<number, number[]>>((prev, match) => {
+      const matchIndexes = prev.get(match.getCourseIndex()) ?? [];
+      matchIndexes.push(match.getMatchIndex());
+      if (!prev.has(match.getCourseIndex())) {
+        prev.set(match.getCourseIndex(), matchIndexes);
+      }
+      return prev;
+    }, new Map());
+
+    for (const indexes of matchIndexes.values()) {
+      expect(indexes.sort((a, b) => a - b)).toStrictEqual(
+        Array.from({ length: indexes.length }, (_, i) => i + 1)
+      );
+    }
+  });
 });

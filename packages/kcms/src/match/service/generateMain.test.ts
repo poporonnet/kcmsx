@@ -10,7 +10,10 @@ describe('GenerateMainMatchService', () => {
     BigInt(new Date('2024/01/01 00:00:00 UTC').getTime())
   );
   const mainMatchRepository = new DummyMainMatchRepository([]);
-  const service = new GenerateMainMatchService(mainMatchRepository, idGenerator, { elementary: 4 });
+  const service = new GenerateMainMatchService(mainMatchRepository, idGenerator, {
+    elementary: 4,
+    open: 4,
+  });
 
   afterEach(() => {
     mainMatchRepository.clear();
@@ -115,6 +118,32 @@ describe('GenerateMainMatchService', () => {
     for (const match of hasChild) {
       expect(matchIDs).toContain(match.getChildMatches()?.match1.getID());
       expect(matchIDs).toContain(match.getChildMatches()?.match2.getID());
+    }
+  });
+
+  it('hotfix: 部門をまたいでもコースごとの試合番号が連番になる', async () => {
+    expect(await service.handle('elementary', ['1', '2', '3', '4'] as TeamID[])).satisfy(
+      Result.isOk
+    );
+    expect(await service.handle('open', ['4', '5', '6', '7'] as TeamID[])).satisfy(Result.isOk);
+
+    const matchesRes = await mainMatchRepository.findAll();
+    expect(matchesRes).satisfies(Result.isOk);
+    const matches = Result.unwrap(matchesRes);
+
+    const matchIndexes = matches.reduce<Map<number, number[]>>((prev, match) => {
+      const matchIndexes = prev.get(match.getCourseIndex()) ?? [];
+      matchIndexes.push(match.getMatchIndex());
+      if (!prev.has(match.getCourseIndex())) {
+        prev.set(match.getCourseIndex(), matchIndexes);
+      }
+      return prev;
+    }, new Map());
+
+    for (const indexes of matchIndexes.values()) {
+      expect(indexes.sort((a, b) => a - b)).toStrictEqual(
+        Array.from({ length: indexes.length }, (_, i) => i + 1)
+      );
     }
   });
 });
