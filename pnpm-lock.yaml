@@ -48,13 +48,13 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^1.3.3
-        version: 1.19.5(hono@4.9.10)
+        version: 1.19.5(hono@4.9.11)
       '@hono/zod-openapi':
         specifier: ^1.0.0
-        version: 1.1.3(hono@4.9.10)(zod@4.1.12)
+        version: 1.1.3(hono@4.9.11)(zod@4.1.12)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.4(hono@4.9.10)(zod@4.1.12)
+        version: 0.7.4(hono@4.9.11)(zod@4.1.12)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.0.0
@@ -63,7 +63,7 @@ importers:
         version: 6.17.1(prisma@6.17.1(magicast@0.3.5)(typescript@5.9.3))(typescript@5.9.3)
       '@scalar/hono-api-reference':
         specifier: ^0.9.0
-        version: 0.9.21(hono@4.9.10)
+        version: 0.9.21(hono@4.9.11)
       config:
         specifier: workspace:^
         version: link:../config
@@ -72,7 +72,7 @@ importers:
         version: 0.25.10
       hono:
         specifier: ^4.0.0
-        version: 4.9.10
+        version: 4.9.11
       typescript:
         specifier: ^5.3.2
         version: 5.9.3
@@ -269,13 +269,13 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.4(hono@4.9.10)(zod@4.1.12)
+        version: 0.7.4(hono@4.9.11)(zod@4.1.12)
       config:
         specifier: workspace:^
         version: link:../config
       hono:
         specifier: ^4.5.4
-        version: 4.9.10
+        version: 4.9.11
       zod:
         specifier: ^4.0.0
         version: 4.1.12
@@ -2401,8 +2401,8 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
-  hono@4.9.10:
-    resolution: {integrity: sha512-AlI15ijFyKTXR7eHo7QK7OR4RoKIedZvBuRjO8iy4zrxvlY5oFCdiRG/V/lFJHCNXJ0k72ATgnyzx8Yqa5arug==}
+  hono@4.9.11:
+    resolution: {integrity: sha512-MyJ4xop3boTyXl8bJBh4i20AAZTLM3AXUJphyrUb0CpgTKYb1N703z53XiKUKchGUpcPqiiYkiLOXA3kqK3icA==}
     engines: {node: '>=16.9.0'}
 
   html-encoding-sniffer@4.0.0:
@@ -4100,21 +4100,21 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@hono/node-server@1.19.5(hono@4.9.10)':
+  '@hono/node-server@1.19.5(hono@4.9.11)':
     dependencies:
-      hono: 4.9.10
+      hono: 4.9.11
 
-  '@hono/zod-openapi@1.1.3(hono@4.9.10)(zod@4.1.12)':
+  '@hono/zod-openapi@1.1.3(hono@4.9.11)(zod@4.1.12)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 8.1.0(zod@4.1.12)
-      '@hono/zod-validator': 0.7.4(hono@4.9.10)(zod@4.1.12)
-      hono: 4.9.10
+      '@hono/zod-validator': 0.7.4(hono@4.9.11)(zod@4.1.12)
+      hono: 4.9.11
       openapi3-ts: 4.5.0
       zod: 4.1.12
 
-  '@hono/zod-validator@0.7.4(hono@4.9.10)(zod@4.1.12)':
+  '@hono/zod-validator@0.7.4(hono@4.9.11)(zod@4.1.12)':
     dependencies:
-      hono: 4.9.10
+      hono: 4.9.11
       zod: 4.1.12
 
   '@humanfs/core@0.19.1': {}
@@ -4498,10 +4498,10 @@ snapshots:
     dependencies:
       '@scalar/types': 0.3.1
 
-  '@scalar/hono-api-reference@0.9.21(hono@4.9.10)':
+  '@scalar/hono-api-reference@0.9.21(hono@4.9.11)':
     dependencies:
       '@scalar/core': 0.3.19
-      hono: 4.9.10
+      hono: 4.9.11
 
   '@scalar/openapi-types@0.4.1':
     dependencies:
@@ -5581,7 +5581,7 @@ snapshots:
 
   has-flag@4.0.0: {}
 
-  hono@4.9.10: {}
+  hono@4.9.11: {}
 
   html-encoding-sniffer@4.0.0:
     dependencies:
