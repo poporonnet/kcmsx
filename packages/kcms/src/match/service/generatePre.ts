@@ -20,7 +20,14 @@ export class GeneratePreMatchService {
       return Result.err(new Error('DepartmentType is not defined'));
     }
     const pairs = await this.makePairs(departmentType);
-    const matchRes = await this.makeMatches(pairs, departmentType);
+    const maxMatchIndexRes = await this.preMatchRepository.findMaxMatchIndexAll();
+    if (Result.isErr(maxMatchIndexRes)) return maxMatchIndexRes;
+
+    const maxMatchIndex = Result.unwrap(maxMatchIndexRes);
+    const matchIndexOffsets = new Map(
+      maxMatchIndex.map(({ courseIndex, matchIndex }) => [courseIndex, matchIndex])
+    );
+    const matchRes = await this.makeMatches(pairs, matchIndexOffsets);
     if (Result.isErr(matchRes)) {
       return matchRes;
     }
@@ -36,11 +43,17 @@ export class GeneratePreMatchService {
 
   async generateAll(): Promise<Result.Result<Error, Map<DepartmentType, PreMatch[]>>> {
     const matches = new Map<DepartmentType, PreMatch[]>();
-    const matchIndexOffsets = new Map<number, number>();
+    const maxMatchIndexRes = await this.preMatchRepository.findMaxMatchIndexAll();
+    if (Result.isErr(maxMatchIndexRes)) return maxMatchIndexRes;
+
+    const maxMatchIndex = Result.unwrap(maxMatchIndexRes);
+    const matchIndexOffsets = new Map(
+      maxMatchIndex.map(({ courseIndex, matchIndex }) => [courseIndex, matchIndex])
+    );
 
     for (const departmentType of config.departmentTypes) {
       const pairs = await this.makePairs(departmentType);
-      const matchRes = await this.makeMatches(pairs, departmentType, matchIndexOffsets);
+      const matchRes = await this.makeMatches(pairs, matchIndexOffsets);
       if (Result.isErr(matchRes)) {
         return matchRes;
       }
@@ -60,7 +73,6 @@ export class GeneratePreMatchService {
 
   private async makeMatches(
     data: (Team | undefined)[][][],
-    departmentType: DepartmentType,
     matchIndexOffsets: Map<number, number> = new Map()
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
