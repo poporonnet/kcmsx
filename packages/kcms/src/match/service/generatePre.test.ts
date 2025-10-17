@@ -32,8 +32,8 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
-    let leftTeams: (string | undefined)[] = [];
-    let rightTeams: (string | undefined)[] = [];
+    const leftTeams: (string | undefined)[] = [];
+    const rightTeams: (string | undefined)[] = [];
 
     for (const courseIndex of config.match.pre.course.elementary) {
       const filteredByCourse = res.filter((v) => v.getCourseIndex() === courseIndex);
@@ -78,8 +78,8 @@ describe('GeneratePreMatchService', () => {
     const res = Result.unwrap(generated);
 
     for (const [departmentType, createdMatches] of res) {
-      let leftTeams: (string | undefined)[] = [];
-      let rightTeams: (string | undefined)[] = [];
+      const leftTeams: (string | undefined)[] = [];
+      const rightTeams: (string | undefined)[] = [];
 
       for (const courseIndex of config.match.pre.course[departmentType]) {
         const filteredByCourse = createdMatches.filter((v) => v.getCourseIndex() === courseIndex);
