@@ -1,4 +1,4 @@
-import { Flex, Paper, Text } from "@mantine/core";
+import { Flex, MantineColor, Paper, Text } from "@mantine/core";
 import { config, MatchInfo } from "config";
 import { ReactNode } from "react";
 
@@ -10,6 +10,8 @@ export const MatchNameCard = ({
   centerSection,
   leftTeamCourseName,
   rightTeamCourseName,
+  leftTeamColor,
+  rightTeamColor,
 }: {
   matchType: MatchInfo["matchType"];
   matchCode: string;
@@ -18,12 +20,14 @@ export const MatchNameCard = ({
   centerSection?: ReactNode;
   leftTeamCourseName?: string;
   rightTeamCourseName?: string;
+  leftTeamColor?: MantineColor;
+  rightTeamColor?: MantineColor;
 }) => (
   <Paper w="100%" p="xs" withBorder>
     <Flex direction="row" align="center" justify="center">
       <Flex direction="column" flex={1} gap="xs">
-        <Text c="blue">{leftTeamCourseName}</Text>
-        <Text size="2rem" c="blue">
+        <Text c={leftTeamColor ?? "blue"}>{leftTeamCourseName}</Text>
+        <Text size="2rem" c={leftTeamColor ?? "blue"}>
           {leftTeamName}
         </Text>
       </Flex>
@@ -33,8 +37,8 @@ export const MatchNameCard = ({
         {centerSection}
       </Flex>
       <Flex direction="column" flex={1} gap="xs">
-        <Text c="red">{rightTeamCourseName}</Text>
-        <Text size="2rem" c="red">
+        <Text c={rightTeamColor ?? "red"}>{rightTeamCourseName}</Text>
+        <Text size="2rem" c={rightTeamColor ?? "red"}>
           {rightTeamName}
         </Text>
       </Flex>

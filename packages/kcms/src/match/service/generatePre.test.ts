@@ -26,18 +26,21 @@ describe('GeneratePreMatchService', () => {
   const expectedTeamPair = [
     [
       ['A1', 'B3'],
-      ['A3', 'C2'],
-      ['B1', 'N2'],
+      ['A4', 'N1'],
       ['B3', 'A1'],
-      ['C2', 'A3'],
+      ['N1', 'A4'],
+    ],
+    [
+      ['A2', 'C1'],
+      ['B1', 'N2'],
+      ['C1', 'A2'],
       ['N2', 'B1'],
     ],
     [
-      ['A2', 'B2'],
-      ['A4', 'C1'],
-      ['B2', 'N1'],
-      ['C1', 'A2'],
-      ['N1', 'A4'],
+      ['A3', 'C2'],
+      ['B2', undefined],
+      [undefined, 'A3'],
+      ['C2', 'B2'],
     ],
   ];
 
@@ -131,5 +134,43 @@ describe('GeneratePreMatchService', () => {
 
     const res = await preMatchRepository.findAll();
     expect(Result.unwrap(res)).toStrictEqual([]);
+  });
+
+  it('hotfix: configで指定したコース番号を正しく使う', async () => {
+    const { generateService } = createGenerateService([...testTeamData.values()]);
+    const generatedRes = await generateService.generateByDepartment('open');
+
+    expect(Result.isOk(generatedRes)).toBe(true);
+    for (const v of Result.unwrap(generatedRes)) {
+      expect(config.match.pre.course['open']).toContain(v.getCourseIndex());
+    }
+  });
+
+  it('hotfix: 部門をまたいでもコースごとの試合番号が連番になる', async () => {
+    const { generateService, preMatchRepository } = createGenerateService([
+      ...testTeamData.values(),
+    ]);
+
+    expect(await generateService.generateByDepartment('elementary')).satisfy(Result.isOk);
+    expect(await generateService.generateByDepartment('open')).satisfy(Result.isOk);
+
+    const matchesRes = await preMatchRepository.findAll();
+    expect(matchesRes).satisfy(Result.isOk);
+    const matches = Result.unwrap(matchesRes);
+
+    const matchIndexes = matches.reduce<Map<number, number[]>>((prev, match) => {
+      const matchIndexes = prev.get(match.getCourseIndex()) ?? [];
+      matchIndexes.push(match.getMatchIndex());
+      if (!prev.has(match.getCourseIndex())) {
+        prev.set(match.getCourseIndex(), matchIndexes);
+      }
+      return prev;
+    }, new Map());
+
+    for (const indexes of matchIndexes.values()) {
+      expect(indexes.sort((a, b) => a - b)).toStrictEqual(
+        Array.from({ length: indexes.length }, (_, i) => i + 1)
+      );
+    }
   });
 });

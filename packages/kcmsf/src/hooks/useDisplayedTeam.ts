@@ -1,3 +1,4 @@
+import { MantineColor } from "@mantine/core";
 import { MatchInfo } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo, useState } from "react";
@@ -14,6 +15,7 @@ type UseDisplayedTeamReturnValue = {
   teams: [DisplayedTeam, DisplayedTeam];
   isFlipped: boolean;
   displayedCourseName: [string, string];
+  displayedColor: [MantineColor, MantineColor];
   flip: () => void;
 };
 
@@ -50,5 +52,10 @@ export const useDisplayedTeam = (
       isFlipped ? ["右コース", "左コース"] : ["左コース", "右コース"],
     [isFlipped]
   );
-  return { teams, isFlipped, displayedCourseName, flip };
+  const displayedColor = useMemo(
+    (): [MantineColor, MantineColor] =>
+      isFlipped ? ["red", "blue"] : ["blue", "red"],
+    [isFlipped]
+  );
+  return { teams, isFlipped, displayedCourseName, displayedColor, flip };
 };

@@ -38,6 +38,7 @@ export const Match = () => {
   const {
     teams: [leftDisplayedTeam, rightDisplayedTeam],
     displayedCourseName: [leftDisplayedCourseName, rightDisplayedCourseName],
+    displayedColor: [leftDisplayedColor, rightDisplayedColor],
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
@@ -102,6 +103,8 @@ export const Match = () => {
               matchCode={match.matchCode}
               rightTeamName={rightDisplayedTeam.info?.teamName}
               leftTeamName={leftDisplayedTeam.info?.teamName}
+              rightTeamColor={rightDisplayedColor}
+              leftTeamColor={leftDisplayedColor}
               centerSection={
                 <>
                   {match.matchType === "main" &&
@@ -144,11 +147,13 @@ export const Match = () => {
                 ? leftDisplayedTeam.judge.point.point()
                 : 0
             }
+            leftTeamColor={leftDisplayedColor}
+            rightTeamColor={rightDisplayedColor}
             leftSection={
               <Box flex={1}>
                 <Button
                   variant="transparent"
-                  color="blue"
+                  color={leftDisplayedColor}
                   leftSection={<IconRotate />}
                   size="xl"
                   fw="normal"
@@ -162,7 +167,7 @@ export const Match = () => {
               <Box flex={1}>
                 <Button
                   variant="transparent"
-                  color="red"
+                  color={rightDisplayedColor}
                   leftSection={<IconRotate />}
                   size="xl"
                   fw="normal"
@@ -178,7 +183,7 @@ export const Match = () => {
 
           <Flex direction="row" gap="2rem" align="center" justify="center">
             <PointControls
-              color="blue"
+              color={leftDisplayedColor}
               team={leftDisplayedTeam.judge}
               onChange={() => {
                 if (leftDisplayedTeam.info) {
@@ -208,7 +213,7 @@ export const Match = () => {
             <Divider orientation="vertical" />
 
             <PointControls
-              color="red"
+              color={rightDisplayedColor}
               team={rightDisplayedTeam.judge}
               onChange={() => {
                 if (rightDisplayedTeam.info) {
