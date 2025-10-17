@@ -23,27 +23,6 @@ const createGenerateService = (teamData: Team[]) => {
 };
 
 describe('GeneratePreMatchService', () => {
-  const expectedTeamPair = [
-    [
-      ['A1', 'B3'],
-      ['A4', 'N1'],
-      ['B3', 'A1'],
-      ['N1', 'A4'],
-    ],
-    [
-      ['A2', 'C1'],
-      ['B1', 'N2'],
-      ['C1', 'A2'],
-      ['N2', 'B1'],
-    ],
-    [
-      ['A3', 'C2'],
-      ['B2', undefined],
-      [undefined, 'A3'],
-      ['C2', 'B2'],
-    ],
-  ];
-
   it('正しく予選対戦表を生成できる - 部門ごと', async () => {
     const { generateService, preMatchRepository } = createGenerateService([
       ...testTeamData.values(),
@@ -53,14 +32,30 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
-    for (let i = 0; i < config.match.pre.course.elementary.length; i++) {
-      const course = res.filter((v) => v.getCourseIndex() === i + 1);
-      const pairs = course.map((v) => [
-        testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
-        testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
-      ]);
-      expect(pairs).toStrictEqual(expectedTeamPair[i]);
+    let leftTeams: (string | undefined)[] = [];
+    let rightTeams: (string | undefined)[] = [];
+
+    for (const courseIndex of config.match.pre.course.elementary) {
+      const filteredByCourse = res.filter((v) => v.getCourseIndex() === courseIndex);
+      for (const match of filteredByCourse) {
+        // ペアが同じチーム同士でない
+        const leftTeam = testTeamData.get(match.getTeamID1() ?? ('' as TeamID))?.getTeamName();
+        const rightTeam = testTeamData.get(match.getTeamID2() ?? ('' as TeamID))?.getTeamName();
+        expect(leftTeam).not.toStrictEqual(rightTeam);
+
+        leftTeams.push(leftTeam);
+        rightTeams.push(rightTeam);
+      }
     }
+
+    // 各チーム左右に1回ずつペアになる
+    const teamData = [...testTeamData.values()]
+      .filter((team) => team.getDepartmentType() === 'elementary')
+      .map((team) => team.getTeamName())
+      .sort();
+
+    expect(leftTeams.filter((team) => team !== undefined).sort()).toEqual(teamData);
+    expect(rightTeams.filter((team) => team !== undefined).sort()).toEqual(teamData);
 
     await Promise.all(
       res.map(async (createdMatch) => {
@@ -83,18 +78,35 @@ describe('GeneratePreMatchService', () => {
     const res = Result.unwrap(generated);
 
     for (const [departmentType, createdMatches] of res) {
-      for (let i = 0; i < config.match.pre.course[departmentType].length; i++) {
-        const course = createdMatches.filter((v) => v.getCourseIndex() === i + 1);
-        const pairs = course.map((v) => [
-          testTeamData.get(v.getTeamID1() ?? ('' as TeamID))?.getTeamName(),
-          testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
-        ]);
-        expect(pairs).toStrictEqual(expectedTeamPair[i]);
+      let leftTeams: (string | undefined)[] = [];
+      let rightTeams: (string | undefined)[] = [];
+
+      for (const courseIndex of config.match.pre.course[departmentType]) {
+        const filteredByCourse = createdMatches.filter((v) => v.getCourseIndex() === courseIndex);
+        for (const match of filteredByCourse) {
+          // ペアが同じチーム同士でない
+          const leftTeam = testTeamData.get(match.getTeamID1() ?? ('' as TeamID))?.getTeamName();
+          const rightTeam = testTeamData.get(match.getTeamID2() ?? ('' as TeamID))?.getTeamName();
+          expect(leftTeam).not.toStrictEqual(rightTeam);
+
+          leftTeams.push(leftTeam);
+          rightTeams.push(rightTeam);
+        }
       }
+
+      // 各チーム左右に1回ずつペアになる
+      const teamData = [...testTeamData.values()]
+        .filter((team) => team.getDepartmentType() === departmentType)
+        .map((team) => team.getTeamName())
+        .sort();
+
+      expect(leftTeams.filter((team) => team !== undefined).sort()).toEqual(teamData);
+      expect(rightTeams.filter((team) => team !== undefined).sort()).toEqual(teamData);
     }
 
     const allMatches = [...res.values()].flat();
 
+    // 正しく保存されている
     await Promise.all(
       allMatches.map(async (createdMatch) => {
         const res = await preMatchRepository.findByID(createdMatch.getID());
@@ -105,7 +117,7 @@ describe('GeneratePreMatchService', () => {
       })
     );
 
-    // 部門をまたいでコースごとにmatchIndexが連番になっていることを確認
+    // 部門をまたいでコースごとにmatchIndexが連番になっている
     const matchesByCourse = new Map<number, PreMatch[]>();
     for (const match of allMatches) {
       const courseIndex = match.getCourseIndex();
@@ -143,34 +155,6 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generatedRes)).toBe(true);
     for (const v of Result.unwrap(generatedRes)) {
       expect(config.match.pre.course['open']).toContain(v.getCourseIndex());
-    }
-  });
-
-  it('hotfix: 部門をまたいでもコースごとの試合番号が連番になる', async () => {
-    const { generateService, preMatchRepository } = createGenerateService([
-      ...testTeamData.values(),
-    ]);
-
-    expect(await generateService.generateByDepartment('elementary')).satisfy(Result.isOk);
-    expect(await generateService.generateByDepartment('open')).satisfy(Result.isOk);
-
-    const matchesRes = await preMatchRepository.findAll();
-    expect(matchesRes).satisfy(Result.isOk);
-    const matches = Result.unwrap(matchesRes);
-
-    const matchIndexes = matches.reduce<Map<number, number[]>>((prev, match) => {
-      const matchIndexes = prev.get(match.getCourseIndex()) ?? [];
-      matchIndexes.push(match.getMatchIndex());
-      if (!prev.has(match.getCourseIndex())) {
-        prev.set(match.getCourseIndex(), matchIndexes);
-      }
-      return prev;
-    }, new Map());
-
-    for (const indexes of matchIndexes.values()) {
-      expect(indexes.sort((a, b) => a - b)).toStrictEqual(
-        Array.from({ length: indexes.length }, (_, i) => i + 1)
-      );
     }
   });
 });

@@ -36,16 +36,10 @@ export class GeneratePreMatchService {
 
   async generateAll(): Promise<Result.Result<Error, Map<DepartmentType, PreMatch[]>>> {
     const matches = new Map<DepartmentType, PreMatch[]>();
+    const matchIndexOffsets = new Map<number, number>();
 
     for (const departmentType of config.departmentTypes) {
       const pairs = await this.makePairs(departmentType);
-      const maxMatchIndexRes = await this.preMatchRepository.findMaxMatchIndexAll();
-      if (Result.isErr(maxMatchIndexRes)) return maxMatchIndexRes;
-
-      const maxMatchIndex = Result.unwrap(maxMatchIndexRes);
-      const matchIndexOffsets = new Map(
-        maxMatchIndex.map(({ courseIndex, matchIndex }) => [courseIndex, matchIndex])
-      );
       const matchRes = await this.makeMatches(pairs, departmentType, matchIndexOffsets);
       if (Result.isErr(matchRes)) {
         return matchRes;
@@ -79,7 +73,7 @@ export class GeneratePreMatchService {
     // コースごとに生成
     const generated = data.map((course, eachCourseIndex) => {
       // ペアをもとに試合を生成
-      return course.map((pair, eachMatchIndex): Result.Result<Error, PreMatch> => {
+      return course.map((pair): Result.Result<Error, PreMatch> => {
         const id = this.idGenerator.generate<PreMatch>();
         if (Result.isErr(id)) {
           return id;
@@ -87,16 +81,18 @@ export class GeneratePreMatchService {
 
         const departmentType = (pair[0] || pair[1]!).getDepartmentType();
         const courseIndex = config.match.pre.course[departmentType][eachCourseIndex];
-        const matchIndexOffset = matchIndexOffsets.get(courseIndex) ?? 0;
+        const matchIndex = (matchIndexOffsets.get(courseIndex) ?? 0) + 1;
         const match = PreMatch.new({
           id: Result.unwrap(id),
           courseIndex,
-          matchIndex: matchIndexOffset + eachMatchIndex + 1,
+          matchIndex: matchIndex,
           departmentType,
           teamID1: pair[0]?.getID(),
           teamID2: pair[1]?.getID(),
           runResults: [],
         });
+
+        matchIndexOffsets.set(courseIndex, matchIndex);
 
         return Result.ok(match);
       });
