@@ -1,9 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Login } from "./Login";
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [auth, setAuth] = useState<boolean>();
+  const [initialChecked, setInitialChecked] = useState(false);
+
   const check = useCallback(async (): Promise<boolean> => {
     const checkRes = await fetch(`${import.meta.env.VITE_API_URL}/`, {
       credentials: "include",
@@ -16,6 +18,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       );
     }
     setAuth(res);
+    setInitialChecked(true);
+
     return res;
   }, []);
   const login = useCallback(
@@ -33,9 +37,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [check]
   );
 
-  useEffect(() => {
+  if (!initialChecked) {
     check();
-  }, [check]);
+  }
 
   return (
     <AuthContext.Provider value={auth}>
