@@ -1,4 +1,3 @@
-import { fixupPluginRules } from "@eslint/compat";
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import typeScriptESLint from "@typescript-eslint/eslint-plugin";
@@ -34,7 +33,7 @@ export default [
     plugins: {
       "@typescript-eslint": typeScriptESLint,
       "react-refresh": reactRefresh,
-      "react-hooks": fixupPluginRules(reactHooks),
+      "react-hooks": reactHooks,
       vitest,
     },
   },
