@@ -12,7 +12,7 @@ import { useListState } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { IconGripVertical } from "@tabler/icons-react";
 import { config } from "config";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { GenerateMainMatchCard } from "../components/GenerateMainMatchCard";
@@ -33,7 +33,17 @@ export const Ranking = () => {
     config.departmentTypes[0]
   );
   const { data: ranking, refetch } = useFetch<GetRankingResponse>(
-    `${import.meta.env.VITE_API_URL}/contest/${matchType}/${departmentType}/ranking`
+    `${import.meta.env.VITE_API_URL}/contest/${matchType}/${departmentType}/ranking`,
+    undefined,
+    {
+      auto: true,
+      onFetch: (ranking) => {
+        const now = new Date();
+        setLatestFetchTime(now);
+        setRankingOrder([...new Array(ranking?.length ?? 0)].map((_, i) => i));
+        setSelectedTeams(new Map());
+      },
+    }
   );
   const [selectedTeams, setSelectedTeams] = useState<
     Map<RankingRecord["teamID"], RankingRecord>
@@ -92,13 +102,6 @@ export const Ranking = () => {
     },
     [departmentType, navigate]
   );
-
-  useEffect(() => {
-    const now = new Date();
-    setLatestFetchTime(now);
-    setRankingOrder([...new Array(ranking?.length ?? 0)].map((_, i) => i));
-    setSelectedTeams(new Map());
-  }, [ranking, setRankingOrder]);
 
   useInterval(refetch, 10000, { active: isAutoReload });
 
