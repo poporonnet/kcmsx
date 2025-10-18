@@ -104,6 +104,7 @@ export class GeneratePreMatchService {
           runResults: [],
         });
 
+        // TODO: 外部のオブジェクトなのでどうにかする
         matchIndexOffsets.set(courseIndex, matchIndex);
 
         return Result.ok(match);
