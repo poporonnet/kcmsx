@@ -27,6 +27,7 @@ import {
   PostMatchGenerateRoute,
   PostMatchRunResultRoute,
   PostMatchWinnerIDRoute,
+  PostPreMatchGenerateRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
 import { FetchMatchService } from './service/fetch';
@@ -62,6 +63,7 @@ const generatePreMatchService = new GeneratePreMatchService(
   idGenerator,
   preMatchRepository
 );
+
 const generateRankingService = new GenerateRankingService(preMatchRepository, mainMatchRepository);
 const fetchRunResultService = new FetchRunResultService(mainMatchRepository, preMatchRepository);
 const generateMainMatchService = new GenerateMainMatchService(
@@ -94,9 +96,10 @@ matchHandler.openapi(GetMatchPublicRoute, async (c) => {
 matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();
   if (Result.isErr(res)) {
-    return c.json({ description: res[1].message }, 400);
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
   }
-  return c.json(res[1], 200);
+  return c.json(Result.unwrap(res), 200);
 });
 
 // Post match run result route
@@ -116,7 +119,8 @@ matchHandler.openapi(PostMatchRunResultRoute, async (c) => {
     request
   );
   if (Result.isErr(res)) {
-    return c.json({ description: errorToCode(res[1]) }, 400);
+    const error = Result.unwrapErr(res);
+    return c.json({ description: errorToCode(error) }, 400);
   }
   return c.json(200);
 });
@@ -126,10 +130,21 @@ matchHandler.openapi(PostMatchGenerateRoute, async (c) => {
 
   const res = await matchController.generateMatch(matchType, departmentType);
   if (Result.isErr(res)) {
-    return c.json({ description: res[1].message }, 400);
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
   }
 
-  return c.json(res[1], 200);
+  return c.json(Result.unwrap(res), 200);
+});
+
+matchHandler.openapi(PostPreMatchGenerateRoute, async (c) => {
+  const res = await matchController.generateAllPreMatch();
+  if (Result.isErr(res)) {
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
+  }
+
+  return c.json(Result.unwrap(res), 200);
 });
 
 /**
@@ -141,10 +156,11 @@ matchHandler.openapi(PostMatchGenerateManualRoute, async (c) => {
 
   const res = await matchController.generateMatchManual(departmentType, req.teamIDs);
   if (Result.isErr(res)) {
-    return c.json({ description: res[1].message }, 400);
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
   }
 
-  return c.json(res[1], 200);
+  return c.json(Result.unwrap(res), 200);
 });
 
 matchHandler.openapi(PostMatchWinnerIDRoute, async (c) => {
@@ -153,7 +169,8 @@ matchHandler.openapi(PostMatchWinnerIDRoute, async (c) => {
 
   const res = await matchController.setWinner(matchID, req.winnerID);
   if (Result.isErr(res)) {
-    return c.json({ description: res[1].message }, 400);
+    const error = Result.unwrapErr(res);
+    return c.json({ description: error.message }, 400);
   }
 
   return c.json(200);
