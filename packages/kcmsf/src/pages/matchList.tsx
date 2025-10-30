@@ -238,6 +238,56 @@ const MatchHead = ({ matchType }: { matchType: MatchType }) => (
   </Table.Thead>
 );
 
+const MatchHeader = ({
+  keyName,
+  label,
+  sortable,
+  filterable,
+  sortState,
+  setSortState,
+  filterData,
+  filterState,
+  setFilterState,
+}: {
+  keyName: keyof FilterState;
+  label: string;
+  sortable?: boolean;
+  filterable?: boolean;
+  sortState?: SortState;
+  setSortState?: (sortState: SortState) => void;
+  filterData?: FilterData;
+  filterState?: FilterState;
+  setFilterState?: (filterState: FilterState) => void;
+}) => (
+  <Table.Th ta="center">
+    <Flex direction="row" align="center" justify="center">
+      {label}
+      {(sortable || filterable) && <Space w={10} />}
+      {sortable && sortState && setSortState && (
+        <Sort
+          active={sortState.key == keyName}
+          defaultOrder={sortState.key == keyName ? sortState.order : undefined}
+          onSort={(order) => setSortState({ key: keyName, order })}
+          size={22}
+          style={{ minWidth: 22 }}
+        />
+      )}
+      {filterable && filterData && filterState && setFilterState && (
+        <Filter
+          active={filterState[keyName] != null}
+          data={filterData[keyName] ?? []}
+          value={`${filterState[keyName]}`}
+          onFilter={(value) =>
+            setFilterState({ ...filterState, [keyName]: value })
+          }
+          size={20}
+          style={{ minWidth: 20 }}
+        />
+      )}
+    </Flex>
+  </Table.Th>
+);
+
 const MatchColumn = ({ match }: { match: Match }) => {
   const matchStatus: StatusButtonProps["status"] = useMemo(() => {
     return getMatchStatus(match);
