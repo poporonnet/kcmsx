@@ -2,13 +2,14 @@ import { Box, Button, Divider, Flex, Text } from "@mantine/core";
 import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
+import { NetworkStatusBadge } from "../components/NetworkStatusBadge";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
@@ -41,7 +42,12 @@ export const Match = () => {
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
-  const sendMatchEvent = useMatchEventSender(matchType, id);
+  const [isMatchOnline, setIsMatchOnline] = useState(false);
+  const sendMatchEvent = useMatchEventSender(matchType, id, {
+    onOpen: () => setIsMatchOnline(true),
+    onClose: () => setIsMatchOnline(false),
+    onReconnect: () => setIsMatchOnline(true),
+  });
 
   const onClickReset = useCallback(
     (side: Side) => {
@@ -106,6 +112,7 @@ export const Match = () => {
                 <>
                   {match.matchType === "main" &&
                     `${match.runResults.length == 0 ? 1 : 2}試合目`}
+                  <NetworkStatusBadge online={isMatchOnline} />
                   <Button
                     onClick={flip}
                     variant="subtle"
