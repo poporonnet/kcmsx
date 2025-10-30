@@ -1,40 +1,43 @@
 import { useEffect, useRef } from "react";
+import { EnhancedWebSocket } from "../libs/enhancedWebSocket";
 
 export const useWebSocket = (
   url: string,
-  listener: {
+  listener?: {
     onOpen?: (event: Event) => void;
     onMessage?: (event: MessageEvent) => void;
     onError?: (event: Event) => void;
     onClose?: (event: CloseEvent) => void;
+    onReconnect?: (event: Event) => void;
   },
   protocols?: string
 ) => {
-  const wsRef = useRef<WebSocket>(undefined);
+  const wsRef = useRef<EnhancedWebSocket>(undefined);
   const listenerRef = useRef(listener);
 
   useEffect(() => {
-    const onOpen = (event: Event) => listenerRef.current.onOpen?.(event);
-    const onMessage = (event: MessageEvent) =>
-      listenerRef.current.onMessage?.(event);
-    const onError = (event: Event) => listenerRef.current.onError?.(event);
-    const onClose = (event: CloseEvent) => listenerRef.current.onClose?.(event);
+    const ws = new EnhancedWebSocket(url, protocols);
+    wsRef.current = ws;
 
-    wsRef.current = new WebSocket(url, protocols);
+    ws.addEventListener("open", (event: Event) =>
+      listenerRef.current?.onOpen?.(event)
+    );
+    ws.addEventListener("message", (event: MessageEvent) =>
+      listenerRef.current?.onMessage?.(event)
+    );
+    ws.addEventListener("error", (event: Event) =>
+      listenerRef.current?.onError?.(event)
+    );
+    ws.addEventListener("close", (event: CloseEvent) =>
+      listenerRef.current?.onClose?.(event)
+    );
+    ws.addEventListener("reconnect", (event: Event) =>
+      listenerRef.current?.onReconnect?.(event)
+    );
 
-    wsRef.current.addEventListener("open", onOpen);
-    wsRef.current.addEventListener("message", onMessage);
-    wsRef.current.addEventListener("error", onError);
-    wsRef.current.addEventListener("close", onClose);
+    ws.connect();
 
-    return () => {
-      wsRef.current?.removeEventListener("open", onOpen);
-      wsRef.current?.removeEventListener("message", onMessage);
-      wsRef.current?.removeEventListener("error", onError);
-      wsRef.current?.removeEventListener("close", onClose);
-
-      wsRef.current?.close();
-    };
+    return () => ws.disconnect();
   }, [url, protocols]);
 
   useEffect(() => {
