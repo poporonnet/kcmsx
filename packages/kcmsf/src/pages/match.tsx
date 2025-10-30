@@ -65,6 +65,37 @@ export const Match = () => {
         message: "WebSocketが再接続されました",
         color: "green",
       });
+
+      if (leftDisplayedTeam.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: leftDisplayedTeam.info.id,
+          pointState: leftDisplayedTeam.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: leftDisplayedTeam.info.id,
+          goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+        });
+      }
+      if (rightDisplayedTeam.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: rightDisplayedTeam.info.id,
+          pointState: rightDisplayedTeam.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: rightDisplayedTeam.info.id,
+          goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+        });
+      }
+      sendMatchEvent({
+        type: "TIMER_UPDATED",
+        totalSeconds,
+        isRunning,
+        state: timerState,
+      });
     },
   });
 
