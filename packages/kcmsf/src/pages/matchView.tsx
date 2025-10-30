@@ -1,10 +1,6 @@
-import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
+import { Button, Divider, Flex, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import {
-  IconDeviceTv,
-  IconDeviceTvOff,
-  IconSwitchHorizontal,
-} from "@tabler/icons-react";
+import { IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo, useState } from "react";
@@ -12,6 +8,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
 import { PointControls } from "../components/match/PointControls";
+import { NetworkStatusBadge } from "../components/NetworkStatusBadge";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
@@ -147,19 +144,7 @@ export const MatchView = () => {
             <>
               {match.matchType === "main" &&
                 `${match.runResults.length == 0 ? 1 : 2}試合目`}
-              <Badge
-                size="lg"
-                color={isViewOnline ? "green" : "red"}
-                leftSection={
-                  isViewOnline ? (
-                    <IconDeviceTv size={18} />
-                  ) : (
-                    <IconDeviceTvOff size={18} />
-                  )
-                }
-              >
-                {isViewOnline ? "オンライン" : "オフライン"}
-              </Badge>
+              <NetworkStatusBadge online={isMatchOnline} />
               <Button
                 onClick={flip}
                 variant="subtle"
