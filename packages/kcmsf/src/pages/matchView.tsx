@@ -91,9 +91,9 @@ export const MatchView = () => {
     ]
   );
 
-  const [isViewOnline, setIsViewOnline] = useState(false);
+  const [isMatchOnline, setIsMatchOnline] = useState(false);
   useMatchEventListener(matchType, id, onMatchEvent, {
-    onOpen: () => setIsViewOnline(true),
+    onOpen: () => setIsMatchOnline(true),
     onError: () => {
       notifications.show({
         title: "観戦中にエラーが発生しました",
@@ -102,7 +102,7 @@ export const MatchView = () => {
       });
     },
     onClose: (event) => {
-      setIsViewOnline(false);
+      setIsMatchOnline(false);
       notifications.show({
         title: "観戦から切断されました",
         message: `WebSocketが切断されました ( code: ${event.code} )`,
@@ -114,7 +114,7 @@ export const MatchView = () => {
       });
     },
     onReconnect: () => {
-      setIsViewOnline(true);
+      setIsMatchOnline(true);
       notifications.show({
         title: "観戦に復帰しました",
         message: "WebSocketが再接続されました",
