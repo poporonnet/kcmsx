@@ -82,7 +82,13 @@ export const MatchView = () => {
           throw new Error("Unknown match event:", { cause: event });
       }
     },
-    [matchJudge, forceReload, id, matchType, navigate]
+    [
+      matchJudge,
+      forceReload,
+      navigate,
+      matchInfo?.teams.left?.id,
+      matchInfo?.teams.right?.id,
+    ]
   );
 
   const [isViewOnline, setIsViewOnline] = useState(false);
