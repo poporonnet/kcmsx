@@ -1,4 +1,5 @@
 import { Box, Button, Divider, Flex, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
@@ -45,8 +46,26 @@ export const Match = () => {
   const [isMatchOnline, setIsMatchOnline] = useState(false);
   const sendMatchEvent = useMatchEventSender(matchType, id, {
     onOpen: () => setIsMatchOnline(true),
-    onClose: () => setIsMatchOnline(false),
-    onReconnect: () => setIsMatchOnline(true),
+    onClose: (event) => {
+      setIsMatchOnline(false);
+      notifications.show({
+        title: "観戦から切断されました",
+        message: `WebSocketが切断されました ( code: ${event.code} )`,
+        color: "red",
+      });
+      notifications.show({
+        title: "再接続中",
+        message: "観戦へ再接続を試みています",
+      });
+    },
+    onReconnect: () => {
+      setIsMatchOnline(true);
+      notifications.show({
+        title: "観戦に復帰しました",
+        message: "WebSocketが再接続されました",
+        color: "green",
+      });
+    },
   });
 
   const onClickReset = useCallback(
