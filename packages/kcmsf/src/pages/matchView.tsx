@@ -85,30 +85,37 @@ export const MatchView = () => {
     [matchJudge, forceReload, id, matchType, navigate]
   );
 
-  const [isViewError, setIsViewError] = useState(false);
-  useMatchEventListener(
-    matchType,
-    id,
-    onMatchEvent,
-    () => {
-      setIsViewError(true);
+  const [isViewOnline, setIsViewOnline] = useState(false);
+  useMatchEventListener(matchType, id, onMatchEvent, {
+    onOpen: () => setIsViewOnline(true),
+    onError: () => {
       notifications.show({
         title: "観戦に失敗しました",
         message: "WebSocketの接続中にエラーが発生しました",
         color: "red",
-        autoClose: false,
       });
     },
-    (event) => {
-      setIsViewError(true);
+    onClose: (event) => {
+      setIsViewOnline(false);
       notifications.show({
         title: "観戦から切断されました",
         message: `WebSocketが切断されました ( code: ${event.code} )`,
         color: "red",
-        autoClose: false,
       });
-    }
-  );
+      notifications.show({
+        title: "再接続中",
+        message: "観戦へ再接続を試みています",
+      });
+    },
+    onReconnect: () => {
+      setIsViewOnline(true);
+      notifications.show({
+        title: "観戦に復帰しました",
+        message: "WebSocketが再接続されました",
+        color: "green",
+      });
+    },
+  });
 
   if (matchStatus === "end")
     return <Navigate to={`/match/${matchType}/${id}`} replace />;
@@ -136,16 +143,16 @@ export const MatchView = () => {
                 `${match.runResults.length == 0 ? 1 : 2}試合目`}
               <Badge
                 size="lg"
-                color={!isViewError ? "green" : "red"}
+                color={isViewOnline ? "green" : "red"}
                 leftSection={
-                  !isViewError ? (
+                  isViewOnline ? (
                     <IconDeviceTv size={18} />
                   ) : (
                     <IconDeviceTvOff size={18} />
                   )
                 }
               >
-                {!isViewError ? "観戦中" : "エラー"}
+                {isViewOnline ? "オンライン" : "オフライン"}
               </Badge>
               <Button
                 onClick={flip}
