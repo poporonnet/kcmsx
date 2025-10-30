@@ -34,6 +34,23 @@ import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
 import { getMatchStatus } from "../utils/matchStatus";
 
+type Comparer = {
+  [K in keyof FilterState]?: (a: Match, b: Match) => number;
+};
+
+type FilterData = Partial<Record<keyof FilterState, ComboboxItem[]>>;
+
+type FilterState = Partial<{
+  code: string;
+  course: string;
+  status: StatusButtonProps["status"];
+}>;
+
+type SortState = {
+  key?: keyof FilterState;
+  order?: Order;
+};
+
 export const MatchList = () => {
   const {
     data: matches,
