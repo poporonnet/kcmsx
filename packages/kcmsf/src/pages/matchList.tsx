@@ -2,6 +2,7 @@ import {
   Button,
   Center,
   Checkbox,
+  ComboboxItem,
   Divider,
   Flex,
   List,
@@ -19,6 +20,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
+import { Filter } from "../components/Filter";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
@@ -26,6 +28,7 @@ import {
   StatusButtonProps,
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
+import { Order, Sort } from "../components/Sort";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
 import { useInterval } from "../hooks/useInterval";
@@ -58,21 +61,101 @@ export const MatchList = () => {
     error,
     refetch,
   } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
-  const courts = useMemo(
-    () =>
-      [
-        ...new Set(
-          Object.values(matches ?? {})
-            .flat()
-            .map((match: Match) => Number(match.matchCode.split("-")[0]))
-        ),
-      ].sort(),
-    [matches]
-  );
-  const [selectedCourt, setSelectedCourt] = useState<CourtFilter>("all");
   const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
   const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departmentTypes[0]
+  );
+
+  const [sortState, setSortState] = useState<SortState>({
+    key: "course",
+    order: "asc",
+  });
+  const [filterState, setFilterState] = useState<FilterState>({});
+
+  const comparer: Comparer = useMemo(
+    () => ({
+      code: (a, b) => {
+        const [courseA, indexA] = a.matchCode.split("-");
+        const [courseB, indexB] = b.matchCode.split("-");
+
+        const indexOrder = indexA.localeCompare(indexB, undefined, {
+          numeric: true,
+        });
+        if (indexOrder != 0) return indexOrder;
+
+        return courseA.localeCompare(courseB, undefined, { numeric: true });
+      },
+      course: (a, b) =>
+        a.matchCode
+          .split("-")[0]
+          .localeCompare(b.matchCode.split("-")[0], undefined, {
+            numeric: true,
+          }),
+      status: (a, b) => {
+        const statuses: StatusButtonProps["status"][] = [
+          "future",
+          "now",
+          "end",
+        ];
+        return (
+          statuses.indexOf(getMatchStatus(a)) -
+          statuses.indexOf(getMatchStatus(b))
+        );
+      },
+    }),
+    []
+  );
+
+  const filterData = useMemo<FilterData>((): FilterData => {
+    if (!matches) return {};
+
+    const courses = [
+      ...new Set<number>(
+        matches[matchType].map((match) => Number(match.matchCode.split("-")[0]))
+      ),
+    ];
+    const course: { value: string; label: string }[] = courses.map(
+      (course) => ({
+        value: `${course}`,
+        label: `${course}`,
+      })
+    );
+    const status: { value: StatusButtonProps["status"]; label: string }[] = [
+      { value: "future", label: "未来" },
+      { value: "now", label: "進行中" },
+      { value: "end", label: "完了" },
+    ];
+
+    return {
+      course,
+      status,
+    };
+  }, [matches, matchType]);
+
+  const sort = useCallback(
+    (matches: Match[]) => {
+      const { key, order } = sortState;
+      if (!key) return matches;
+
+      const compare = comparer[key];
+      if (!compare) return matches;
+
+      const orderNumber = order == "asc" ? 1 : -1;
+      return matches.sort((a, b) => orderNumber * compare(a, b));
+    },
+    [sortState, comparer]
+  );
+
+  const filter = useCallback(
+    (matches: Match[]) =>
+      matches.filter(
+        (match) =>
+          (filterState.status == null ||
+            getMatchStatus(match) === filterState.status) &&
+          (filterState.course == null ||
+            match.matchCode.split("-")[0] === filterState.course)
+      ),
+    [filterState]
   );
 
   const processedMatches = useMemo<Match[]>(
@@ -83,16 +166,10 @@ export const MatchList = () => {
             .feed((matches) =>
               matches.filter((match) => match.departmentType == departmentType)
             )
-            .feed((matches) =>
-              selectedCourt == "all"
-                ? matches
-                : matches.filter(
-                    (match) =>
-                      Number(match.matchCode.split("-")[0]) == selectedCourt
-                  )
-            ).value
+            .feed(sort)
+            .feed(filter).value
         : [],
-    [matches, matchType, departmentType, selectedCourt]
+    [matches, matchType, departmentType, sort, filter]
   );
 
   const generateMatch = useCallback(
