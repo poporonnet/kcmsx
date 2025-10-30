@@ -96,7 +96,7 @@ export const MatchView = () => {
     onOpen: () => setIsViewOnline(true),
     onError: () => {
       notifications.show({
-        title: "観戦に失敗しました",
+        title: "観戦中にエラーが発生しました",
         message: "WebSocketの接続中にエラーが発生しました",
         color: "red",
       });
