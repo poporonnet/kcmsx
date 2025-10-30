@@ -7,6 +7,7 @@ import {
   Flex,
   List,
   Loader,
+  Space,
   Stack,
   Table,
   Text,
@@ -18,7 +19,6 @@ import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CourtFilter, CourtSelector } from "../components/CourtSelector";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
 import { Filter } from "../components/Filter";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
@@ -226,11 +226,9 @@ export const MatchList = () => {
                 onChange={(e) => setIsAutoRefetch(e.currentTarget.checked)}
               />
             </Flex>
-            <CourtSelector
-              courts={courts}
-              court={selectedCourt}
-              setCourt={setSelectedCourt}
-            />
+            <Button onClick={() => setFilterState({})} variant="outline">
+              フィルターをリセット
+            </Button>
           </Flex>
           <Table
             highlightOnHover
@@ -241,7 +239,14 @@ export const MatchList = () => {
             horizontalSpacing="md"
             miw="40rem"
           >
-            <MatchHead matchType={matchType} />
+            <MatchHead
+              matchType={matchType}
+              sortState={sortState}
+              setSortState={setSortState}
+              filterData={filterData}
+              filterState={filterState}
+              setFilterState={setFilterState}
+            />
             <Table.Tbody>
               {processedMatches.map((match) => (
                 <MatchColumn match={match} key={match.id} />
@@ -302,14 +307,54 @@ export const MatchList = () => {
   );
 };
 
-const MatchHead = ({ matchType }: { matchType: MatchType }) => (
+const MatchHead = ({
+  matchType,
+  sortState,
+  setSortState,
+  filterData,
+  filterState,
+  setFilterState,
+}: {
+  matchType: MatchType;
+  sortState: SortState;
+  setSortState: (sortState: SortState) => void;
+  filterData: FilterData;
+  filterState: FilterState;
+  setFilterState: (filterState: FilterState) => void;
+}) => (
   <Table.Thead>
     <Table.Tr>
-      <Table.Th ta="center">試合番号</Table.Th>
-      <Table.Th ta="center">コース番号</Table.Th>
+      <MatchHeader
+        keyName="code"
+        label="試合番号"
+        sortable
+        sortState={sortState}
+        setSortState={setSortState}
+      />
+      <MatchHeader
+        keyName="course"
+        label="コース番号"
+        sortable
+        sortState={sortState}
+        setSortState={setSortState}
+        filterable
+        filterData={filterData}
+        filterState={filterState}
+        setFilterState={setFilterState}
+      />
       <Table.Th>{matchType == "pre" ? "左コース" : "チーム1"}</Table.Th>
       <Table.Th>{matchType == "pre" ? "右コース" : "チーム2"}</Table.Th>
-      <Table.Th ta="center">状態</Table.Th>
+      <MatchHeader
+        keyName="status"
+        label="状態"
+        sortable
+        sortState={sortState}
+        setSortState={setSortState}
+        filterable
+        filterData={filterData}
+        filterState={filterState}
+        setFilterState={setFilterState}
+      />
       <Table.Th ta="center">観戦</Table.Th>
     </Table.Tr>
   </Table.Thead>
