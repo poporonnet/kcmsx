@@ -8,7 +8,7 @@ type EventMap = {
 
 type EventKey = keyof EventMap;
 
-const reconnectDelayMs = 1000;
+const reconnectDelayMs = 3000;
 
 export class EnhancedWebSocket {
   private ws?: WebSocket;
