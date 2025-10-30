@@ -2,7 +2,7 @@ import { Box, Button, Divider, Flex, Text } from "@mantine/core";
 import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
@@ -11,7 +11,6 @@ import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
-import { useInterval } from "../hooks/useInterval";
 import { useJudge } from "../hooks/useJudge";
 import { useMatchEventSender } from "../hooks/useMatchEventSender";
 import { useMatchInfo } from "../hooks/useMatchInfo";
@@ -65,8 +64,7 @@ export const Match = () => {
     [forceReload, leftDisplayedTeam, rightDisplayedTeam, sendMatchEvent]
   );
 
-  // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
-  useInterval(
+  useEffect(
     () =>
       sendMatchEvent({
         type: "TIMER_UPDATED",
@@ -74,8 +72,7 @@ export const Match = () => {
         isRunning,
         state: timerState,
       }),
-    500,
-    { active: matchStatus != "end" }
+    [sendMatchEvent, totalSeconds, isRunning, timerState]
   );
 
   return (
