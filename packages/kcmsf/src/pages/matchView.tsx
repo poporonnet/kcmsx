@@ -91,13 +91,6 @@ export const MatchView = () => {
   const [isMatchOnline, setIsMatchOnline] = useState(false);
   useMatchEventListener(matchType, id, onMatchEvent, {
     onOpen: () => setIsMatchOnline(true),
-    onError: () => {
-      notifications.show({
-        title: "観戦中にエラーが発生しました",
-        message: "WebSocketの接続中にエラーが発生しました",
-        color: "red",
-      });
-    },
     onClose: (event) => {
       setIsMatchOnline(false);
       notifications.show({
