@@ -1,11 +1,10 @@
-import { Anchor, AppShell, rem, useMantineTheme } from "@mantine/core";
+import { Anchor, AppShell, rem } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "../components/AuthProvider.tsx";
 import { PrivateHeader } from "../components/PrivateHeader.tsx";
 
 export const PrivateLayout = () => {
-  const theme = useMantineTheme();
   const pinned = useHeadroom({ fixedAt: 60 });
 
   return (
