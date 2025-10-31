@@ -125,7 +125,7 @@ app.use(
       secret: authPublicJwk,
       cookie: {
         key: cookieKey,
-        secret: KCMS_COOKIE_SECRET,
+        secret: cookieSecret,
         prefixOptions: nodeEnv === 'production' ? 'host' : undefined,
       },
       alg: 'ES256',
