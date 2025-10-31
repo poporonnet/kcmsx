@@ -130,8 +130,8 @@ export const MatchList = () => {
             .feed((matches) =>
               matches.filter((match) => match.departmentType == departmentType)
             )
-            .feed(sort)
-            .feed(filter).value
+            .feed(filter)
+            .feed(sort).value
         : [],
     [matches, matchType, departmentType, sort, filter]
   );

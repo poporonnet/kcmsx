@@ -115,8 +115,8 @@ export const Teams = () => {
     () =>
       teams
         ? Cat.cat([...teams.values()])
-            .feed(sort)
-            .feed(filter).value
+            .feed(filter)
+            .feed(sort).value
         : undefined,
     [teams, sort, filter]
   );
