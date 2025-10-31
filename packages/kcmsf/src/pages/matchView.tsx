@@ -1,10 +1,6 @@
-import { Badge, Button, Divider, Flex, Text } from "@mantine/core";
+import { Button, Divider, Flex, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
-import {
-  IconDeviceTv,
-  IconDeviceTvOff,
-  IconSwitchHorizontal,
-} from "@tabler/icons-react";
+import { IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
 import { useCallback, useMemo, useState } from "react";
@@ -12,6 +8,7 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
 import { PointControls } from "../components/match/PointControls";
+import { NetworkStatusBadge } from "../components/NetworkStatusBadge";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
@@ -82,33 +79,39 @@ export const MatchView = () => {
           throw new Error("Unknown match event:", { cause: event });
       }
     },
-    [matchJudge, forceReload, id, matchType, navigate]
+    [
+      matchJudge,
+      forceReload,
+      navigate,
+      matchInfo?.teams.left?.id,
+      matchInfo?.teams.right?.id,
+    ]
   );
 
-  const [isViewError, setIsViewError] = useState(false);
-  useMatchEventListener(
-    matchType,
-    id,
-    onMatchEvent,
-    () => {
-      setIsViewError(true);
-      notifications.show({
-        title: "観戦に失敗しました",
-        message: "WebSocketの接続中にエラーが発生しました",
-        color: "red",
-        autoClose: false,
-      });
-    },
-    (event) => {
-      setIsViewError(true);
+  const [isMatchOnline, setIsMatchOnline] = useState(false);
+  useMatchEventListener(matchType, id, onMatchEvent, {
+    onOpen: () => setIsMatchOnline(true),
+    onClose: (event) => {
+      setIsMatchOnline(false);
       notifications.show({
         title: "観戦から切断されました",
         message: `WebSocketが切断されました ( code: ${event.code} )`,
         color: "red",
-        autoClose: false,
       });
-    }
-  );
+      notifications.show({
+        title: "再接続中",
+        message: "観戦へ再接続を試みています",
+      });
+    },
+    onReconnect: () => {
+      setIsMatchOnline(true);
+      notifications.show({
+        title: "観戦に復帰しました",
+        message: "WebSocketが再接続されました",
+        color: "green",
+      });
+    },
+  });
 
   if (matchStatus === "end")
     return <Navigate to={`/match/${matchType}/${id}`} replace />;
@@ -134,19 +137,7 @@ export const MatchView = () => {
             <>
               {match.matchType === "main" &&
                 `${match.runResults.length == 0 ? 1 : 2}試合目`}
-              <Badge
-                size="lg"
-                color={!isViewError ? "green" : "red"}
-                leftSection={
-                  !isViewError ? (
-                    <IconDeviceTv size={18} />
-                  ) : (
-                    <IconDeviceTvOff size={18} />
-                  )
-                }
-              >
-                {!isViewError ? "観戦中" : "エラー"}
-              </Badge>
+              <NetworkStatusBadge online={isMatchOnline} />
               <Button
                 onClick={flip}
                 variant="subtle"
