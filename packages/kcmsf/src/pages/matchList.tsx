@@ -2,12 +2,10 @@ import {
   Button,
   Center,
   Checkbox,
-  ComboboxItem,
   Divider,
   Flex,
   List,
   Loader,
-  Space,
   Stack,
   Table,
   Text,
@@ -20,7 +18,10 @@ import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
-import { Filter } from "../components/Filter";
+import {
+  FilterAndSort,
+  FilterAndSortTableHeader,
+} from "../components/FilterAndSortTableHeader";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
@@ -28,31 +29,51 @@ import {
   StatusButtonProps,
 } from "../components/matchStatus";
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
-import { Order, Sort } from "../components/Sort";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
+import { FilterData, useFilterAndSort } from "../hooks/useFilterAndSort";
 import { useInterval } from "../hooks/useInterval";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
+import { createComparer } from "../utils/comparer";
+import { createFilterer } from "../utils/filterer";
 import { getMatchStatus } from "../utils/matchStatus";
 
-type Comparer = {
-  [K in keyof FilterState]?: (a: Match, b: Match) => number;
-};
+const filterAndSortKeys = ["code", "course", "status"] as const;
 
-type FilterData = Partial<Record<keyof FilterState, ComboboxItem[]>>;
+type FilterAndSortKey = (typeof filterAndSortKeys)[number];
 
-type FilterState = Partial<{
-  code: string;
-  course: string;
-  status: StatusButtonProps["status"];
-}>;
+const filterer = createFilterer<Match, FilterAndSortKey>({
+  course: (match, state) => match.matchCode.split("-")[0] === state,
+  status: (match, state) => getMatchStatus(match) === state,
+});
 
-type SortState = {
-  key?: keyof FilterState;
-  order?: Order;
-};
+const comparer = createComparer<Match, FilterAndSortKey>({
+  code: (a, b) => {
+    const [courseA, indexA] = a.matchCode.split("-");
+    const [courseB, indexB] = b.matchCode.split("-");
+    const indexOrder = indexA.localeCompare(indexB, undefined, {
+      numeric: true,
+    });
+
+    return indexOrder != 0
+      ? indexOrder
+      : courseA.localeCompare(courseB, undefined, { numeric: true });
+  },
+  course: (a, b) =>
+    a.matchCode
+      .split("-")[0]
+      .localeCompare(b.matchCode.split("-")[0], undefined, {
+        numeric: true,
+      }),
+  status: (a, b) => {
+    const statuses: StatusButtonProps["status"][] = ["future", "now", "end"];
+    return (
+      statuses.indexOf(getMatchStatus(a)) - statuses.indexOf(getMatchStatus(b))
+    );
+  },
+});
 
 export const MatchList = () => {
   const {
@@ -66,47 +87,16 @@ export const MatchList = () => {
     config.departmentTypes[0]
   );
 
-  const [sortState, setSortState] = useState<SortState>({
-    key: "course",
-    order: "asc",
-  });
-  const [filterState, setFilterState] = useState<FilterState>({});
+  const { filterState, setFilterState, sortState, setSortState, filter, sort } =
+    useFilterAndSort<Match, FilterAndSortKey>(
+      filterAndSortKeys,
+      filterer,
+      comparer,
+      {},
+      { key: "course", order: "asc" }
+    );
 
-  const comparer: Comparer = useMemo(
-    () => ({
-      code: (a, b) => {
-        const [courseA, indexA] = a.matchCode.split("-");
-        const [courseB, indexB] = b.matchCode.split("-");
-
-        const indexOrder = indexA.localeCompare(indexB, undefined, {
-          numeric: true,
-        });
-        if (indexOrder != 0) return indexOrder;
-
-        return courseA.localeCompare(courseB, undefined, { numeric: true });
-      },
-      course: (a, b) =>
-        a.matchCode
-          .split("-")[0]
-          .localeCompare(b.matchCode.split("-")[0], undefined, {
-            numeric: true,
-          }),
-      status: (a, b) => {
-        const statuses: StatusButtonProps["status"][] = [
-          "future",
-          "now",
-          "end",
-        ];
-        return (
-          statuses.indexOf(getMatchStatus(a)) -
-          statuses.indexOf(getMatchStatus(b))
-        );
-      },
-    }),
-    []
-  );
-
-  const filterData = useMemo<FilterData>((): FilterData => {
+  const filterData = useMemo<FilterData<FilterAndSortKey>>(() => {
     if (!matches) return {};
 
     const courses = [
@@ -131,32 +121,6 @@ export const MatchList = () => {
       status,
     };
   }, [matches, matchType]);
-
-  const sort = useCallback(
-    (matches: Match[]) => {
-      const { key, order } = sortState;
-      if (!key) return matches;
-
-      const compare = comparer[key];
-      if (!compare) return matches;
-
-      const orderNumber = order == "asc" ? 1 : -1;
-      return matches.sort((a, b) => orderNumber * compare(a, b));
-    },
-    [sortState, comparer]
-  );
-
-  const filter = useCallback(
-    (matches: Match[]) =>
-      matches.filter(
-        (match) =>
-          (filterState.status == null ||
-            getMatchStatus(match) === filterState.status) &&
-          (filterState.course == null ||
-            match.matchCode.split("-")[0] === filterState.course)
-      ),
-    [filterState]
-  );
 
   const processedMatches = useMemo<Match[]>(
     () =>
@@ -241,15 +205,17 @@ export const MatchList = () => {
           >
             <MatchHead
               matchType={matchType}
-              sortState={sortState}
-              setSortState={setSortState}
-              filterData={filterData}
-              filterState={filterState}
-              setFilterState={setFilterState}
+              filterAndSort={{
+                filterData,
+                filterState,
+                setFilterState,
+                sortState,
+                setSortState,
+              }}
             />
             <Table.Tbody>
               {processedMatches.map((match) => (
-                <MatchColumn match={match} key={match.id} />
+                <MatchRow match={match} key={match.id} />
               ))}
             </Table.Tbody>
           </Table>
@@ -309,108 +275,41 @@ export const MatchList = () => {
 
 const MatchHead = ({
   matchType,
-  sortState,
-  setSortState,
-  filterData,
-  filterState,
-  setFilterState,
+  filterAndSort,
 }: {
   matchType: MatchType;
-  sortState: SortState;
-  setSortState: (sortState: SortState) => void;
-  filterData: FilterData;
-  filterState: FilterState;
-  setFilterState: (filterState: FilterState) => void;
+  filterAndSort: FilterAndSort<FilterAndSortKey>;
 }) => (
   <Table.Thead>
     <Table.Tr>
-      <MatchHeader
+      <FilterAndSortTableHeader
         keyName="code"
         label="試合番号"
         sortable
-        sortState={sortState}
-        setSortState={setSortState}
+        {...filterAndSort}
       />
-      <MatchHeader
+      <FilterAndSortTableHeader
         keyName="course"
         label="コース番号"
         sortable
-        sortState={sortState}
-        setSortState={setSortState}
         filterable
-        filterData={filterData}
-        filterState={filterState}
-        setFilterState={setFilterState}
+        {...filterAndSort}
       />
       <Table.Th>{matchType == "pre" ? "左コース" : "チーム1"}</Table.Th>
       <Table.Th>{matchType == "pre" ? "右コース" : "チーム2"}</Table.Th>
-      <MatchHeader
+      <FilterAndSortTableHeader
         keyName="status"
         label="状態"
         sortable
-        sortState={sortState}
-        setSortState={setSortState}
         filterable
-        filterData={filterData}
-        filterState={filterState}
-        setFilterState={setFilterState}
+        {...filterAndSort}
       />
       <Table.Th ta="center">観戦</Table.Th>
     </Table.Tr>
   </Table.Thead>
 );
 
-const MatchHeader = ({
-  keyName,
-  label,
-  sortable,
-  filterable,
-  sortState,
-  setSortState,
-  filterData,
-  filterState,
-  setFilterState,
-}: {
-  keyName: keyof FilterState;
-  label: string;
-  sortable?: boolean;
-  filterable?: boolean;
-  sortState?: SortState;
-  setSortState?: (sortState: SortState) => void;
-  filterData?: FilterData;
-  filterState?: FilterState;
-  setFilterState?: (filterState: FilterState) => void;
-}) => (
-  <Table.Th ta="center">
-    <Flex direction="row" align="center" justify="center">
-      {label}
-      {(sortable || filterable) && <Space w={10} />}
-      {sortable && sortState && setSortState && (
-        <Sort
-          active={sortState.key == keyName}
-          defaultOrder={sortState.key == keyName ? sortState.order : undefined}
-          onSort={(order) => setSortState({ key: keyName, order })}
-          size={22}
-          style={{ minWidth: 22 }}
-        />
-      )}
-      {filterable && filterData && filterState && setFilterState && (
-        <Filter
-          active={filterState[keyName] != null}
-          data={filterData[keyName] ?? []}
-          value={`${filterState[keyName]}`}
-          onFilter={(value) =>
-            setFilterState({ ...filterState, [keyName]: value })
-          }
-          size={20}
-          style={{ minWidth: 20 }}
-        />
-      )}
-    </Flex>
-  </Table.Th>
-);
-
-const MatchColumn = ({ match }: { match: Match }) => {
+const MatchRow = ({ match }: { match: Match }) => {
   const matchStatus: StatusButtonProps["status"] = useMemo(() => {
     return getMatchStatus(match);
   }, [match]);
