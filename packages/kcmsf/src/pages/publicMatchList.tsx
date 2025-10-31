@@ -3,6 +3,8 @@
 import {
   Button,
   Center,
+  Checkbox,
+  Divider,
   Flex,
   Loader,
   Stack,
@@ -24,6 +26,7 @@ import {
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
+import { useInterval } from "../hooks/useInterval";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesPublicResponse } from "../types/api/match";
 import { Match } from "../types/match";
@@ -76,6 +79,11 @@ export const PublicMatchList = () => {
     [matches, matchType, departmentType, selectedCourt]
   );
 
+  const [isAutoRefetch, setIsAutoRefetch] = useState(false); // 過度な負荷を避けるためデフォルトではオフ
+  const latestFetchTime = useMemo(() => new Date(), [matches]);
+
+  useInterval(refetch, 10000, { active: isAutoRefetch });
+
   return (
     <Stack w="fit-content" align="center" gap="md">
       <Title m="md">試合表</Title>
@@ -91,7 +99,19 @@ export const PublicMatchList = () => {
       </LabeledSegmentedControls>
       {matches && matches[matchType].length > 0 && (
         <>
-          <Flex w="100%" justify="right">
+          <Flex w="100%" justify="space-between" align="flex-end">
+            <Flex justify="right" gap="lg">
+              <Text size="sm">
+                最終更新
+                {` ${latestFetchTime?.getHours().toString().padStart(2, "0")}:${latestFetchTime?.getMinutes().toString().padStart(2, "0")}`}
+              </Text>
+              <Divider orientation="vertical" />
+              <Checkbox
+                label="自動更新"
+                checked={isAutoRefetch}
+                onChange={(e) => setIsAutoRefetch(e.currentTarget.checked)}
+              />
+            </Flex>
             <CourtSelector
               courts={courts}
               court={selectedCourt}
