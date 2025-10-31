@@ -14,3 +14,5 @@ const cookieSecret = Buffer.from(crypto.getRandomValues(new Uint32Array(8))).toS
 console.info(
   `KCMS_COOKIE_SECRET="${cookieSecret}"\nKCMS_AUTH_PRIVATE_JWK='${JSON.stringify(privateJwk)}'\nKCMS_AUTH_PUBLIC_JWK='${JSON.stringify(publicJwk)}'`
 );
+
+export {};

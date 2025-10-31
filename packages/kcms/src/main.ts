@@ -16,7 +16,6 @@ import { secureHeaders } from 'hono/secure-headers';
 import { trimTrailingSlash } from 'hono/trailing-slash';
 import * as process from 'node:process';
 import { z } from 'zod';
-import { base64ToUint8Array } from 'zod/v4/core/util';
 import { matchHandler } from './match/main';
 import { matchWsHandler } from './matchWs/main';
 import { sponsorHandler } from './sponser/main';
@@ -63,7 +62,7 @@ const authPublicJwk = await crypto.subtle.importKey(
   true,
   ['verify']
 );
-const cookieSecret = base64ToUint8Array(KCMS_COOKIE_SECRET);
+const cookieSecret = atob(KCMS_COOKIE_SECRET);
 
 const app = new Hono();
 
