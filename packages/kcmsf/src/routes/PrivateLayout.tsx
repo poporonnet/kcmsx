@@ -1,4 +1,4 @@
-import { AppShell, rem } from "@mantine/core";
+import { Anchor, AppShell, rem } from "@mantine/core";
 import { useHeadroom } from "@mantine/hooks";
 import { Outlet } from "react-router-dom";
 import { AuthProvider } from "../components/AuthProvider.tsx";
@@ -22,7 +22,17 @@ export const PrivateLayout = () => {
         >
           <Outlet />
         </AppShell.Main>
-        <AppShell.Footer>kcms &copy; 2023-2024 Poporon Network</AppShell.Footer>
+        <AppShell.Footer>
+          kcms &copy; 2023-2025{" "}
+          <Anchor
+            href="https://poporon.org"
+            target="_blank"
+            c="black"
+            underline="not-hover"
+          >
+            Poporon Network
+          </Anchor>
+        </AppShell.Footer>
       </AppShell>
     </AuthProvider>
   );
