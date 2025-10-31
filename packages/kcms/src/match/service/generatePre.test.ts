@@ -49,14 +49,13 @@ describe('GeneratePreMatchService', () => {
     }
   });
 
-  // it('hotfix: configで指定したコース番号を正しく使う', async () => {
-  //   const generatedRes = await generateService.handle(`open`);
-
-  //   expect(Result.isOk(generatedRes)).toBe(true);
-  //   for (const v of Result.unwrap(generatedRes)) {
-  //     expect(config.match.pre.course[`open`]).toContain(v.getCourseIndex());
-  //   }
-  // });
+  it.skip('hotfix: configで指定したコース番号を正しく使う', async () => {
+    // const generatedRes = await generateService.handle(`open`);
+    // expect(Result.isOk(generatedRes)).toBe(true);
+    // for (const v of Result.unwrap(generatedRes)) {
+    //   expect(config.match.pre.course[`open`]).toContain(v.getCourseIndex());
+    // }
+  });
 
   it('hotfix: 部門をまたいでもコースごとの試合番号が連番になる', async () => {
     expect(await generateService.handle('elementary')).satisfy(Result.isOk);
