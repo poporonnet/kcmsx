@@ -109,15 +109,6 @@ export const Match = () => {
                 <>
                   {match.matchType === "main" &&
                     `${match.runResults.length == 0 ? 1 : 2}試合目`}
-                  <Button
-                    onClick={flip}
-                    variant="subtle"
-                    size="compact-sm"
-                    color="violet"
-                    leftSection={<IconSwitchHorizontal size={14} />}
-                  >
-                    左右を反転
-                  </Button>
                 </>
               }
               leftTeamCourseName={leftDisplayedCourseName}
@@ -179,7 +170,19 @@ export const Match = () => {
             }
           />
 
-          <Divider w="100%" />
+          <Flex w="100%" align="center" gap="md">
+            <Divider flex={1} />
+            <Button
+              onClick={flip}
+              variant="subtle"
+              size="compact-sm"
+              color="violet"
+              leftSection={<IconSwitchHorizontal size={14} />}
+            >
+              左右を反転
+            </Button>
+            <Divider flex={1} />
+          </Flex>
 
           <Flex direction="row" gap="2rem" align="center" justify="center">
             <PointControls
