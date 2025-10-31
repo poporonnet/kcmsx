@@ -162,7 +162,7 @@ export const Match = () => {
                 <>
                   {match.matchType === "main" &&
                     `${match.runResults.length == 0 ? 1 : 2}試合目`}
-                  <NetworkStatusBadge online={isMatchOnline} />
+                  {!isMatchOnline && <NetworkStatusBadge online={false} />}
                   <Button
                     onClick={flip}
                     variant="subtle"
