@@ -1,17 +1,18 @@
 import { Box, Button, Divider, Flex, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
+import { NetworkStatusBadge } from "../components/NetworkStatusBadge";
 import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
-import { useInterval } from "../hooks/useInterval";
 import { useJudge } from "../hooks/useJudge";
 import { useMatchEventSender } from "../hooks/useMatchEventSender";
 import { useMatchInfo } from "../hooks/useMatchInfo";
@@ -42,7 +43,61 @@ export const Match = () => {
     flip,
   } = useDisplayedTeam(matchInfo, matchJudge);
 
-  const sendMatchEvent = useMatchEventSender(matchType, id);
+  const [isMatchOnline, setIsMatchOnline] = useState(false);
+  const sendMatchEvent = useMatchEventSender(matchType, id, {
+    onOpen: () => setIsMatchOnline(true),
+    onClose: (event) => {
+      setIsMatchOnline(false);
+      notifications.show({
+        title: "観戦から切断されました",
+        message: `WebSocketが切断されました ( code: ${event.code} )`,
+        color: "red",
+      });
+      notifications.show({
+        title: "再接続中",
+        message: "観戦へ再接続を試みています",
+      });
+    },
+    onReconnect: () => {
+      setIsMatchOnline(true);
+      notifications.show({
+        title: "観戦に復帰しました",
+        message: "WebSocketが再接続されました",
+        color: "green",
+      });
+
+      if (leftDisplayedTeam.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: leftDisplayedTeam.info.id,
+          pointState: leftDisplayedTeam.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: leftDisplayedTeam.info.id,
+          goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+        });
+      }
+      if (rightDisplayedTeam.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: rightDisplayedTeam.info.id,
+          pointState: rightDisplayedTeam.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: rightDisplayedTeam.info.id,
+          goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+        });
+      }
+      sendMatchEvent({
+        type: "TIMER_UPDATED",
+        totalSeconds,
+        isRunning,
+        state: timerState,
+      });
+    },
+  });
 
   const onClickReset = useCallback(
     (side: Side) => {
@@ -65,8 +120,7 @@ export const Match = () => {
     [forceReload, leftDisplayedTeam, rightDisplayedTeam, sendMatchEvent]
   );
 
-  // FIXME: useTimer に tick 時のコールバックがないためとりあえず 500ms おきに送信
-  useInterval(
+  useEffect(
     () =>
       sendMatchEvent({
         type: "TIMER_UPDATED",
@@ -74,8 +128,7 @@ export const Match = () => {
         isRunning,
         state: timerState,
       }),
-    500,
-    { active: matchStatus != "end" }
+    [sendMatchEvent, totalSeconds, isRunning, timerState]
   );
 
   return (
@@ -109,6 +162,7 @@ export const Match = () => {
                 <>
                   {match.matchType === "main" &&
                     `${match.runResults.length == 0 ? 1 : 2}試合目`}
+                  {!isMatchOnline && <NetworkStatusBadge online={false} />}
                 </>
               }
               leftTeamCourseName={leftDisplayedCourseName}
