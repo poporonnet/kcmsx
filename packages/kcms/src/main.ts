@@ -62,6 +62,7 @@ const authPublicJwk = await crypto.subtle.importKey(
   true,
   ['verify']
 );
+const cookieSecret = KCMS_COOKIE_SECRET;
 
 const app = new Hono();
 

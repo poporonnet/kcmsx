@@ -15,7 +15,7 @@
     "check": "prettier --check 'src/**/**.ts' && tsc -p . --noEmit",
     "prepare": "prisma generate",
     "studio": "prisma studio",
-    "generate:secrets": "bun ./scripts/generateKey.js"
+    "generate:secrets": "bun scripts/generateKey.ts"
   },
   "keywords": [],
   "author": "Poporon Network (Tatsuto C. YAMAMOTO) & Other Contributors",
