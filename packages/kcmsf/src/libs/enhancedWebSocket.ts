@@ -17,6 +17,7 @@ export class EnhancedWebSocket {
   private isInitialized: boolean;
   private isConnecting: boolean;
   private isDisconnecting: boolean;
+  private isDisconnected: boolean;
   private unregister?: () => void;
 
   constructor(
@@ -27,6 +28,7 @@ export class EnhancedWebSocket {
     this.isInitialized = false;
     this.isConnecting = false;
     this.isDisconnecting = false;
+    this.isDisconnected = false;
   }
 
   async connect(): Promise<void> {
@@ -67,10 +69,11 @@ export class EnhancedWebSocket {
     this.ws = undefined;
 
     this.isDisconnecting = false;
+    this.isDisconnected = true;
   }
 
   async reconnect(): Promise<void> {
-    this.disconnect();
+    this.unregister?.();
     return this.connect();
   }
 
@@ -126,7 +129,7 @@ export class EnhancedWebSocket {
         );
       };
       const onClose = (event: CloseEvent) => {
-        if (this.isDisconnecting) {
+        if (this.isDisconnecting || this.isDisconnected) {
           resolve();
         } else {
           reject(event);
