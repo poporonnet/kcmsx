@@ -60,6 +60,7 @@ export const RegisterBulk = () => {
   // CSVのテキストをパースして、CSVRowの配列に変換
   const parseCSV = (text: string): CSVRow[] => {
     const rows = text
+      .trim()
       .replace(/\r\n/g, "\n")
       .split("\n")
       .map((row) => row.split(","));
