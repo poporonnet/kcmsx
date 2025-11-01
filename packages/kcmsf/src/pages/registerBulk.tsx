@@ -25,16 +25,15 @@ import type { PostTeamsRequest } from "../types/api/team";
 import type { CreateTeamArgs } from "../types/team";
 import { notifyError } from "../utils/notifyError";
 
-const csvKeys = [
-  "teamName",
-  "member1",
-  "member2",
-  "robotType",
-  "departmentType",
-  "clubName",
-] as const;
 // CSVの1行を表す型
-export type CSVRow = Record<(typeof csvKeys)[number], string>;
+export type CSVRow = {
+  teamName: string;
+  member1: string;
+  member2: string;
+  robotType: string;
+  departmentType: string;
+  clubName: string;
+};
 export const RegisterBulk = () => {
   const [csvData, setCsvData] = useState<CSVRow[]>();
   const [errors, isError] = useCheckData(csvData ?? []);
