@@ -69,12 +69,12 @@ export const RegisterBulk = () => {
 
     // CSVRow型に変換
     const parsedData: CSVRow[] = dataRows.map((row) => ({
-      teamName: row[0],
-      member1: row[1],
-      member2: row[2],
-      robotType: row[3],
-      departmentType: row[4],
-      clubName: row[5],
+      teamName: row.at(0) ?? "",
+      member1: row.at(1) ?? "",
+      member2: row.at(2) ?? "",
+      robotType: row.at(3) ?? "",
+      departmentType: row.at(4) ?? "",
+      clubName: row.at(5) ?? "",
     }));
 
     return parsedData;
