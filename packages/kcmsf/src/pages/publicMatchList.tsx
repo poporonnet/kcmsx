@@ -259,7 +259,6 @@ const MatchHead = ({
         filterable
         {...filterAndSort}
       />
-      <Table.Th ta="center">観戦</Table.Th>
     </Table.Tr>
   </Table.Thead>
 );
