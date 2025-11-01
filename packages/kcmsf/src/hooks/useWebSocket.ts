@@ -10,12 +10,18 @@ export const useWebSocket = (
     onClose?: (event: CloseEvent) => void;
     onReconnect?: (event: Event) => void;
   },
-  protocols?: string
+  protocols?: string,
+  option?: { disable?: boolean }
 ) => {
   const wsRef = useRef<EnhancedWebSocket>(undefined);
   const listenerRef = useRef(listener);
 
   useEffect(() => {
+    if (option?.disable) {
+      wsRef.current = undefined;
+      return;
+    }
+
     const ws = new EnhancedWebSocket(url, protocols);
     wsRef.current = ws;
 
@@ -38,7 +44,7 @@ export const useWebSocket = (
     ws.connect();
 
     return () => ws.disconnect();
-  }, [url, protocols]);
+  }, [url, protocols, option?.disable]);
 
   useEffect(() => {
     listenerRef.current = listener;

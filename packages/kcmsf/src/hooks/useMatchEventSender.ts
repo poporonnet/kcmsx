@@ -16,7 +16,9 @@ export const useMatchEventSender = (
 ) => {
   const wsRef = useWebSocket(
     `${import.meta.env.VITE_API_URL}/match/${matchType}/${matchId}/ws/update`,
-    optionListener
+    optionListener,
+    undefined,
+    { disable: matchType == null || matchId == null }
   );
 
   const send = useCallback(
