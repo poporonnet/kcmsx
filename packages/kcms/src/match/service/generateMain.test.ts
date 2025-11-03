@@ -54,7 +54,7 @@ describe('GenerateMainMatchService', () => {
     expect(actual.length).toStrictEqual(4 - 1);
 
     const matchNumbers = actual.map((m) => `${m.getCourseIndex()}-${m.getMatchIndex()}`);
-    expect(matchNumbers).toStrictEqual(['1-1', '2-1', '1-2']);
+    expect(matchNumbers).toStrictEqual(['1-1', '1-2', '1-3']);
   });
 
   it('n=8のとき、試合が生成できる', async () => {
@@ -66,7 +66,7 @@ describe('GenerateMainMatchService', () => {
     const actual = Result.unwrap(res);
     expect(actual.length).toStrictEqual(8 - 1);
     const matchNumbers = actual.map((m) => `${m.getCourseIndex()}-${m.getMatchIndex()}`);
-    expect(matchNumbers).toStrictEqual(['1-1', '2-1', '1-2', '2-2', '1-3', '2-3', '1-4']);
+    expect(matchNumbers).toStrictEqual(['1-1', '1-2', '1-3', '1-4', '1-5', '1-6', '1-7']);
   });
 
   it('親が存在しない試合は1つだけ生成される', async () => {
@@ -125,7 +125,9 @@ describe('GenerateMainMatchService', () => {
     expect(await service.handle('elementary', ['1', '2', '3', '4'] as TeamID[])).satisfy(
       Result.isOk
     );
-    expect(await service.handle('open', ['4', '5', '6', '7'] as TeamID[])).satisfy(Result.isOk);
+    expect(await service.handle(`elementary`, ['4', '5', '6', '7'] as TeamID[])).satisfy(
+      Result.isOk
+    );
 
     const matchesRes = await mainMatchRepository.findAll();
     expect(matchesRes).satisfies(Result.isOk);

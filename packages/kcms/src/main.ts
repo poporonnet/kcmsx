@@ -14,6 +14,7 @@ import { HTTPException } from 'hono/http-exception';
 import { jwt, sign } from 'hono/jwt';
 import { secureHeaders } from 'hono/secure-headers';
 import { trimTrailingSlash } from 'hono/trailing-slash';
+import * as process from 'node:process';
 import { z } from 'zod';
 import { matchHandler } from './match/main';
 import { matchWsHandler } from './matchWs/main';
@@ -42,15 +43,26 @@ const getEnv = <C extends Context = Parameters<typeof env>['0']>(c: C) => {
   return envRes.data;
 };
 
-const jwtSecret = await crypto.subtle.generateKey(
-  {
-    name: 'ECDSA',
-    namedCurve: 'P-256',
-  },
+const { KCMS_COOKIE_SECRET, KCMS_AUTH_PRIVATE_JWK, KCMS_AUTH_PUBLIC_JWK } = process.env;
+if (!KCMS_AUTH_PRIVATE_JWK || !KCMS_AUTH_PUBLIC_JWK || !KCMS_COOKIE_SECRET) {
+  throw new Error('KCMS_AUTH_(PRIVATE/PUBLIC)_JWK/KCMS_COOKIE_SECRET is required.');
+}
+
+const authPrivateJwk = await crypto.subtle.importKey(
+  'jwk',
+  JSON.parse(KCMS_AUTH_PRIVATE_JWK),
+  { name: 'ECDSA', namedCurve: 'P-256' },
   true,
-  ['sign', 'verify']
+  ['sign']
 );
-const cookieSecret = crypto.getRandomValues(new Uint32Array(8));
+const authPublicJwk = await crypto.subtle.importKey(
+  'jwk',
+  JSON.parse(KCMS_AUTH_PUBLIC_JWK),
+  { name: 'ECDSA', namedCurve: 'P-256' },
+  true,
+  ['verify']
+);
+const cookieSecret = new Uint32Array(Buffer.from(KCMS_COOKIE_SECRET, 'base64'));
 
 const app = new Hono();
 
@@ -85,7 +97,7 @@ app.get(
         iat: nowSeconds,
         exp: nowSeconds + cookieMaxAge,
       },
-      jwtSecret.privateKey,
+      authPrivateJwk,
       'ES256'
     );
     await setSignedCookie(c, cookieKey, token, cookieSecret, {
@@ -110,7 +122,7 @@ app.use(
   except(['/login', '/logout', '/match/public'], (c, next) => {
     const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = getEnv(c);
     return jwt({
-      secret: jwtSecret.publicKey,
+      secret: authPublicJwk,
       cookie: {
         key: cookieKey,
         secret: cookieSecret,
