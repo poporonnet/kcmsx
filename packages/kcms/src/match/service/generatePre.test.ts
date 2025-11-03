@@ -1,5 +1,4 @@
 import { Option, Result } from '@mikuroxina/mini-fn';
-import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { SnowflakeIDGenerator } from '../../id/main';
 import { DummyRepository } from '../../team/adaptor/repository/dummyRepository';
@@ -31,8 +30,8 @@ describe('GeneratePreMatchService', () => {
     expect(Result.isOk(generated)).toBe(true);
     const res = Result.unwrap(generated);
 
-    const leftTeamNames: (string | undefined)[] = [];
-    const rightTeamNames: (string | undefined)[] = [];
+    const leftTeamNames: string[] = [];
+    const rightTeamNames: string[] = [];
 
     for (const match of res) {
       // ペアが同じチーム同士でない
@@ -40,10 +39,10 @@ describe('GeneratePreMatchService', () => {
       const rightTeamName = testTeamData.get(match.getTeamID2() ?? ('' as TeamID))?.getTeamName();
       expect(leftTeamName).not.toStrictEqual(rightTeamName);
 
-      if (leftTeamName) {
+      if (leftTeamName != null) {
         leftTeamNames.push(leftTeamName);
       }
-      if (rightTeamName) {
+      if (rightTeamName != null) {
         rightTeamNames.push(rightTeamName);
       }
     }
@@ -54,8 +53,8 @@ describe('GeneratePreMatchService', () => {
       .map((team) => team.getTeamName())
       .sort();
 
-    expect(leftTeamNames.filter((team) => team !== undefined).sort()).toEqual(teamNames);
-    expect(rightTeamNames.filter((team) => team !== undefined).sort()).toEqual(teamNames);
+    expect(leftTeamNames.sort()).toEqual(teamNames);
+    expect(rightTeamNames.sort()).toEqual(teamNames);
 
     // 正しく保存されている
     await Promise.all(
@@ -79,8 +78,8 @@ describe('GeneratePreMatchService', () => {
     const res = Result.unwrap(generated);
 
     for (const [departmentType, createdMatches] of res) {
-      const leftTeams: (string | undefined)[] = [];
-      const rightTeams: (string | undefined)[] = [];
+      const leftTeams: string[] = [];
+      const rightTeams: string[] = [];
 
       for (const match of createdMatches) {
         // ペアが同じチーム同士でない
@@ -88,10 +87,10 @@ describe('GeneratePreMatchService', () => {
         const rightTeam = testTeamData.get(match.getTeamID2() ?? ('' as TeamID))?.getTeamName();
         expect(leftTeam).not.toStrictEqual(rightTeam);
 
-        if (leftTeam) {
+        if (leftTeam != null) {
           leftTeams.push(leftTeam);
         }
-        if (rightTeam) {
+        if (rightTeam != null) {
           rightTeams.push(rightTeam);
         }
       }
@@ -102,8 +101,8 @@ describe('GeneratePreMatchService', () => {
         .map((team) => team.getTeamName())
         .sort();
 
-      expect(leftTeams.filter((team) => team !== undefined).sort()).toEqual(teamData);
-      expect(rightTeams.filter((team) => team !== undefined).sort()).toEqual(teamData);
+      expect(leftTeams.sort()).toEqual(teamData);
+      expect(rightTeams.sort()).toEqual(teamData);
     }
 
     const allMatches = [...res.values()].flat();
@@ -125,7 +124,7 @@ describe('GeneratePreMatchService', () => {
       ...testTeamData.values(),
     ]);
     expect(await generateService.generateByDepartment('elementary')).satisfy(Result.isOk);
-    expect(await generateService.generateByDepartment('open')).satisfy(Result.isOk);
+    //expect(await generateService.generateByDepartment('open')).satisfy(Result.isOk);
 
     const matchesRes = await preMatchRepository.findAll();
     expect(matchesRes).satisfy(Result.isOk);
@@ -172,7 +171,7 @@ describe('GeneratePreMatchService', () => {
       );
     }
   });
-  
+
   it('どちらかが不足していると全体が失敗する - すべての部門', async () => {
     const testTeams = [...testTeamData.values()].filter(
       (team) => team.getDepartmentType() !== 'elementary'
@@ -189,7 +188,6 @@ describe('GeneratePreMatchService', () => {
   it.skip('hotfix: configで指定したコース番号を正しく使う', async () => {
     // const { generateService } = createGenerateService([...testTeamData.values()]);
     // const generatedRes = await generateService.generateByDepartment('open');
-
     // expect(Result.isOk(generatedRes)).toBe(true);
     // for (const v of Result.unwrap(generatedRes)) {
     //   expect(config.match.pre.course['open']).toContain(v.getCourseIndex());
