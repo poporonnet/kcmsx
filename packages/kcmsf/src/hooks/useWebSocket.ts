@@ -1,41 +1,50 @@
 import { useEffect, useRef } from "react";
+import { EnhancedWebSocket } from "../libs/enhancedWebSocket";
 
 export const useWebSocket = (
   url: string,
-  listener: {
+  listener?: {
     onOpen?: (event: Event) => void;
     onMessage?: (event: MessageEvent) => void;
     onError?: (event: Event) => void;
     onClose?: (event: CloseEvent) => void;
+    onReconnect?: (event: Event) => void;
   },
-  protocols?: string
+  protocols?: string,
+  option?: { disable?: boolean }
 ) => {
-  const wsRef = useRef<WebSocket>(undefined);
+  const wsRef = useRef<EnhancedWebSocket>(undefined);
   const listenerRef = useRef(listener);
 
   useEffect(() => {
-    const onOpen = (event: Event) => listenerRef.current.onOpen?.(event);
-    const onMessage = (event: MessageEvent) =>
-      listenerRef.current.onMessage?.(event);
-    const onError = (event: Event) => listenerRef.current.onError?.(event);
-    const onClose = (event: CloseEvent) => listenerRef.current.onClose?.(event);
+    if (option?.disable) {
+      wsRef.current = undefined;
+      return;
+    }
 
-    wsRef.current = new WebSocket(url, protocols);
+    const ws = new EnhancedWebSocket(url, protocols);
+    wsRef.current = ws;
 
-    wsRef.current.addEventListener("open", onOpen);
-    wsRef.current.addEventListener("message", onMessage);
-    wsRef.current.addEventListener("error", onError);
-    wsRef.current.addEventListener("close", onClose);
+    ws.addEventListener("open", (event: Event) =>
+      listenerRef.current?.onOpen?.(event)
+    );
+    ws.addEventListener("message", (event: MessageEvent) =>
+      listenerRef.current?.onMessage?.(event)
+    );
+    ws.addEventListener("error", (event: Event) =>
+      listenerRef.current?.onError?.(event)
+    );
+    ws.addEventListener("close", (event: CloseEvent) =>
+      listenerRef.current?.onClose?.(event)
+    );
+    ws.addEventListener("reconnect", (event: Event) =>
+      listenerRef.current?.onReconnect?.(event)
+    );
 
-    return () => {
-      wsRef.current?.removeEventListener("open", onOpen);
-      wsRef.current?.removeEventListener("message", onMessage);
-      wsRef.current?.removeEventListener("error", onError);
-      wsRef.current?.removeEventListener("close", onClose);
+    ws.connect();
 
-      wsRef.current?.close();
-    };
-  }, [url, protocols]);
+    return () => ws.disconnect();
+  }, [url, protocols, option?.disable]);
 
   useEffect(() => {
     listenerRef.current = listener;
