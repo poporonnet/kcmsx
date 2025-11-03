@@ -40,8 +40,12 @@ describe('GeneratePreMatchService', () => {
       const rightTeamName = testTeamData.get(match.getTeamID2() ?? ('' as TeamID))?.getTeamName();
       expect(leftTeamName).not.toStrictEqual(rightTeamName);
 
-      leftTeamNames.push(leftTeamName);
-      rightTeamNames.push(rightTeamName);
+      if (leftTeamName) {
+        leftTeamNames.push(leftTeamName);
+      }
+      if (rightTeamName) {
+        rightTeamNames.push(rightTeamName);
+      }
     }
 
     // 各チーム左右に1回ずつペアになる
@@ -84,8 +88,12 @@ describe('GeneratePreMatchService', () => {
         const rightTeam = testTeamData.get(match.getTeamID2() ?? ('' as TeamID))?.getTeamName();
         expect(leftTeam).not.toStrictEqual(rightTeam);
 
-        leftTeams.push(leftTeam);
-        rightTeams.push(rightTeam);
+        if (leftTeam) {
+          leftTeams.push(leftTeam);
+        }
+        if (rightTeam) {
+          rightTeams.push(rightTeam);
+        }
       }
 
       // 各チーム左右に1回ずつペアになる
