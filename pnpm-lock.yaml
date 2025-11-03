@@ -15,7 +15,7 @@ importers:
         version: 3.3.1
       '@eslint/js':
         specifier: ^9.0.0
-        version: 9.38.0
+        version: 9.39.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.0.0
         version: 8.46.2(@typescript-eslint/parser@8.46.2(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.38.0(jiti@2.6.1))(typescript@5.9.3)
@@ -85,7 +85,7 @@ importers:
         version: 3.3.1
       '@eslint/js':
         specifier: ^9.0.0
-        version: 9.38.0
+        version: 9.39.0
       '@types/node':
         specifier: ^24.0.0
         version: 24.10.0
@@ -182,7 +182,7 @@ importers:
         version: 3.3.1
       '@eslint/js':
         specifier: ^9.37.0
-        version: 9.38.0
+        version: 9.39.0
       '@testing-library/jest-dom':
         specifier: ^6.4.2
         version: 6.9.1
@@ -870,6 +870,10 @@ packages:
 
   '@eslint/js@9.38.0':
     resolution: {integrity: sha512-UZ1VpFvXf9J06YG9xQBdnzU+kthors6KjhMAl6f4gH4usHyh31rUf2DLGInT8RFYIReYXNSydgPY0V2LuWgl7A==}
+    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+
+  '@eslint/js@9.39.0':
+    resolution: {integrity: sha512-BIhe0sW91JGPiaF1mOuPy5v8NflqfjIcDNpC+LbW9f609WVRX1rArrhi6Z2ymvrAry9jw+5POTj4t2t62o8Bmw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
   '@eslint/object-schema@2.1.7':
@@ -4079,6 +4083,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@9.38.0': {}
+
+  '@eslint/js@9.39.0': {}
 
   '@eslint/object-schema@2.1.7': {}
 
