@@ -2,8 +2,8 @@ import { AppShell } from "@mantine/core";
 import "@testing-library/jest-dom";
 import { screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
-import { render } from "../../test";
-import { Header } from "./header.tsx";
+import { render } from "../../test/index.ts";
+import { PrivateHeader } from "./PrivateHeader.tsx";
 
 describe("header component", () => {
   test("has /entrylist link", () => {
@@ -13,12 +13,12 @@ describe("header component", () => {
         footer={{ height: 30, offset: true }}
         padding="md"
       >
-        <Header />
+        <PrivateHeader />
       </AppShell>
     );
 
-    expect(screen.getByText("参加者一覧")).toHaveAttribute("href", "/team");
-    expect(screen.getByText("参加者登録")).toHaveAttribute("href", "/register");
+    expect(screen.getByText("チーム一覧")).toHaveAttribute("href", "/team");
+    expect(screen.getByText("チーム登録")).toHaveAttribute("href", "/register");
     expect(screen.getByText("一括登録")).toHaveAttribute(
       "href",
       "/register/bulk"

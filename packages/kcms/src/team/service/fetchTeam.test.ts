@@ -19,30 +19,30 @@ describe('FetchTeamService', () => {
   });
 
   it('すべて取得できる', async () => {
-    const actual = await service.findAll();
+    const actual = await service.fetchAll();
 
     expect(Result.isOk(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(testEntryData);
   });
 
   it('チーム名で取得できる', async () => {
-    const actual = await service.findByTeamName(testEntryData[0].getTeamName());
+    const actual = await service.fetchByTeamName(testEntryData[0].getTeamName());
     expect(Result.isOk(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(testEntryData[0]);
   });
 
   it('チームIDで取得できる', async () => {
-    const actual = await service.findByID(testEntryData[0].getID());
+    const actual = await service.fetchByID(testEntryData[0].getID());
     expect(Result.isOk(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(testEntryData[0]);
   });
 
   it('存在しないときはエラーを返す', async () => {
-    const actual = await service.findByID('0' as TeamID);
+    const actual = await service.fetchByID('0' as TeamID);
     expect(Result.isErr(actual)).toBe(true);
     expect(actual[1]).toStrictEqual(new Error('Not found'));
 
-    const actual2 = await service.findByTeamName('team0');
+    const actual2 = await service.fetchByTeamName('team0');
     expect(Result.isErr(actual2)).toBe(true);
     expect(actual2[1]).toStrictEqual(new Error('Not found'));
   });

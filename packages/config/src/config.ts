@@ -3,7 +3,7 @@ import { createConfig } from "./utility/createConfig";
 
 export const config = createConfig(
   {
-    contestName: "第2回 Matz葉がにロボコン",
+    contestName: "第2回 どじょうすくいロボコン",
     robots: [
       {
         type: "leg",
@@ -20,31 +20,31 @@ export const config = createConfig(
         name: "小学生部門",
         robotTypes: ["leg", "wheel"],
       },
-      {
-        type: "open",
-        name: "オープン部門",
-        robotTypes: ["leg", "wheel"],
-      },
+      // {
+      //   type: "open",
+      //   name: "オープン部門",
+      //   robotTypes: ["leg", "wheel"],
+      // },
     ],
     match: {
       pre: {
         name: "予選",
         limitSeconds: 180,
         course: {
-          elementary: [1, 2],
-          open: [1, 2],
+          elementary: [1],
+          //open: [1, 2],
         },
       },
       main: {
         name: "本戦",
         limitSeconds: 180,
         course: {
-          elementary: [1, 2],
-          open: [1, 2],
+          elementary: [1],
+          //open: [1, 2],
         },
         requiredTeams: {
-          elementary: 4,
-          open: 4,
+          elementary: 2,
+          //open: 4,
         },
       },
     },
@@ -54,11 +54,11 @@ export const config = createConfig(
         label: "歩行型",
         type: "single",
         initial: true, // conditionsの"scorable"で制御する
-        point: (done: boolean) => (done ? 2 : 0),
+        point: (done: boolean) => (done ? 5 : 0),
       },
       {
         name: "leaveBase",
-        label: "松江エリアを出た",
+        label: "水草エリアを出た",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 1 : 0),
@@ -72,21 +72,21 @@ export const config = createConfig(
       },
       {
         name: "enterDestination",
-        label: "金星エリアに入った",
+        label: "温暖化エリアに入った",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 1 : 0),
       },
       {
         name: "placeBall",
-        label: "金星エリアにプローブを投入した",
+        label: "温暖化エリアに氷を置いた",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 1 : 0),
       },
       {
         name: "returnBase",
-        label: "松江エリアに戻った",
+        label: "水草エリアに戻った",
         type: "single",
         initial: false,
         point: (done: boolean) => (done ? 2 : 0),
@@ -100,7 +100,7 @@ export const config = createConfig(
       },
       {
         name: "bringBall",
-        label: "雲粒子の数",
+        label: "どじょうの数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,
@@ -108,7 +108,7 @@ export const config = createConfig(
       },
       {
         name: "bringRareBall",
-        label: "激レア雲粒子の数",
+        label: "激レアどじょうの数",
         type: "countable",
         initial: 0,
         point: (count: number) => count,
@@ -131,8 +131,9 @@ export const config = createConfig(
         !state.matchInfo && // エキシビションモードでのみマニュアル変更可能
         !state.matchState[state.side]?.getPointState().finish,
       scorable: (state) =>
-        !state.matchInfo || // エキシビションモードでは通常通り加算可能
-        state.matchInfo.teams[state.side]?.robotType === "leg", // 通常の試合では歩行型のときのみ加算可能
+        (!state.matchInfo || // エキシビションモードでは通常通り加算可能
+          state.matchInfo.teams[state.side]?.robotType === "leg") && // 通常の試合では歩行型のときのみ加算可能
+        !!state.matchState[state.side]?.getPointState().goal, // ゴールしたときのみ可算可能
     },
     leaveBase: {
       changeable: (state) =>

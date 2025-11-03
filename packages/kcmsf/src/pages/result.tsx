@@ -1,6 +1,8 @@
-import { Flex, Select, Table, Title } from "@mantine/core";
-import { DepartmentType, config } from "config";
+import { Stack, Table, Title } from "@mantine/core";
+import { config } from "config";
 import { useMemo } from "react";
+import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
+import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
 import { GetMatchesResponse } from "../types/api/match";
@@ -11,7 +13,7 @@ export const Result = () => {
   const { data: matches } = useFetch<GetMatchesResponse>(
     `${import.meta.env.VITE_API_URL}/match`
   );
-  const [department, setDepartment] = useDepartmentTypeQuery(
+  const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departments[0].type
   );
 
@@ -26,35 +28,32 @@ export const Result = () => {
 
   const preMatches = useMemo(
     () =>
-      matches?.pre.filter((match) => match.departmentType === department) ?? [],
-    [matches, department]
+      matches?.pre.filter((match) => match.departmentType === departmentType) ??
+      [],
+    [matches, departmentType]
   );
 
   const mainMatches = useMemo(
     () =>
-      matches?.main.filter((match) => match.departmentType === department) ??
-      [],
-    [matches, department]
+      matches?.main.filter(
+        (match) => match.departmentType === departmentType
+      ) ?? [],
+    [matches, departmentType]
   );
 
   return (
-    <>
-      <Select
-        label="部門"
-        data={config.departments.map((element) => ({
-          value: element.type,
-          label: element.name,
-        }))}
-        value={department}
-        defaultValue={config.departments[0].type}
-        onChange={(value) => value && setDepartment(value as DepartmentType)}
-      />
-      <Flex direction="column" gap={20}>
-        <Title order={3}>{config.department[department].name}</Title>
-        <MainResultTable matches={mainMatches} teamNames={teamNames} />
-        <PreResultTable matches={preMatches} />
-      </Flex>
-    </>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">試合結果</Title>
+      <LabeledSegmentedControls>
+        <DepartmentSegmentedControl
+          departmentType={departmentType}
+          setDepartmentType={setDepartmentType}
+        />
+      </LabeledSegmentedControls>
+      <Title order={3}>{config.department[departmentType].name}</Title>
+      <MainResultTable matches={mainMatches} teamNames={teamNames} />
+      <PreResultTable matches={preMatches} />
+    </Stack>
   );
 };
 
@@ -138,10 +137,10 @@ const PreResultTable = (props: { matches: PreMatch[] }) => {
       <Table striped withTableBorder miw="40rem">
         <Table.Thead>
           <Table.Tr>
-            <Table.Th style={{ textAlign: "center" }}>左チーム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>左コース</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
-            <Table.Th style={{ textAlign: "center" }}>右チーム</Table.Th>
+            <Table.Th style={{ textAlign: "center" }}>右コース</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>得点</Table.Th>
             <Table.Th style={{ textAlign: "center" }}>ゴールタイム</Table.Th>
           </Table.Tr>

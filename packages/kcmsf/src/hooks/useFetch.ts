@@ -13,6 +13,9 @@ type UseFetch<Response extends object> = {
 
 export const useFetch = <Response extends object>(
   query: string,
+  init: RequestInit = {
+    credentials: "include",
+  },
   option: Option = {
     auto: true,
   }
@@ -26,9 +29,7 @@ export const useFetch = <Response extends object>(
       setLoading(true);
       setError(undefined);
 
-      const res = await fetch(query, {
-        credentials: "include",
-      });
+      const res = await fetch(query, init);
       if (!res.ok) throw res;
 
       const data = (await res.json()) as Response;

@@ -1,4 +1,13 @@
-import { Box, Button, Group, Paper, rem, Text, Title } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Group,
+  Paper,
+  rem,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { notifications } from "@mantine/notifications";
 import {
@@ -50,6 +59,7 @@ export const RegisterBulk = () => {
   // CSVのテキストをパースして、CSVRowの配列に変換
   const parseCSV = (text: string): CSVRow[] => {
     const rows = text
+      .trim()
       .replace(/\r\n/g, "\n")
       .split("\n")
       .map((row) => row.split(","));
@@ -58,12 +68,12 @@ export const RegisterBulk = () => {
 
     // CSVRow型に変換
     const parsedData: CSVRow[] = dataRows.map((row) => ({
-      teamName: row[0],
-      member1: row[1],
-      member2: row[2],
-      robotType: row[3],
-      departmentType: row[4],
-      clubName: row[5],
+      teamName: row.at(0) ?? "",
+      member1: row.at(1) ?? "",
+      member2: row.at(2) ?? "",
+      robotType: row.at(3) ?? "",
+      departmentType: row.at(4) ?? "",
+      clubName: row.at(5) ?? "",
     }));
 
     return parsedData;
@@ -106,8 +116,8 @@ export const RegisterBulk = () => {
   };
 
   return (
-    <>
-      <Title>一括エントリー</Title>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">一括登録</Title>
       {csvData ? (
         <>
           <p>この内容で登録します</p>
@@ -193,6 +203,6 @@ export const RegisterBulk = () => {
         </Paper>
       )}
       <CsvExample />
-    </>
+    </Stack>
   );
 };

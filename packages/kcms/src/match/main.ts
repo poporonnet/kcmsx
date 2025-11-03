@@ -17,6 +17,7 @@ import { PreMatchID } from './model/pre';
 import { CreateRunResultArgs } from './model/runResult';
 import {
   GetMatchIDRoute,
+  GetMatchPublicRoute,
   GetMatchRoute,
   GetMatchRunResultRoute,
   GetMatchTypeRoute,
@@ -28,12 +29,12 @@ import {
   PostMatchWinnerIDRoute,
 } from './routing';
 import { CreateRunResultService } from './service/createRunResult';
+import { FetchMatchService } from './service/fetch';
 import { FetchRunResultService } from './service/fetchRunResult';
 import { FetchTournamentService } from './service/fetchTournament';
 import { GenerateMainMatchService } from './service/generateMain';
 import { GeneratePreMatchService } from './service/generatePre';
 import { GenerateRankingService } from './service/generateRanking';
-import { GetMatchService } from './service/get';
 import { SetMainMatchWinnerService } from './service/setMainWinner';
 import { upcase } from './utility/upcase';
 
@@ -51,7 +52,7 @@ const createRunResultService = new CreateRunResultService(
   mainMatchRepository,
   setMainWinnerService
 );
-const getMatchService = new GetMatchService(preMatchRepository, mainMatchRepository);
+const fetchMatchService = new FetchMatchService(preMatchRepository, mainMatchRepository);
 const fetchTeamService = new FetchTeamService(teamRepository);
 
 export const controller = new Controller(createRunResultService);
@@ -68,9 +69,9 @@ const generateMainMatchService = new GenerateMainMatchService(
   idGenerator,
   config.match.main.requiredTeams
 );
-const fetchTournamentService = new FetchTournamentService(getMatchService);
+const fetchTournamentService = new FetchTournamentService(fetchMatchService);
 const matchController = new MatchController(
-  getMatchService,
+  fetchMatchService,
   fetchTeamService,
   generatePreMatchService,
   generateRankingService,
@@ -80,6 +81,15 @@ const matchController = new MatchController(
   setMainWinnerService
 );
 export const matchHandler = new OpenAPIHono();
+
+// FIXME: /match/{matchType} と衝突するためとりあえず先にハンドラを登録
+matchHandler.openapi(GetMatchPublicRoute, async (c) => {
+  const res = await matchController.getAll();
+  if (Result.isErr(res)) {
+    return c.json({ description: Result.unwrapErr(res).message }, 400);
+  }
+  return c.json(Result.unwrap(res), 200);
+});
 
 matchHandler.openapi(GetMatchRoute, async (c) => {
   const res = await matchController.getAll();

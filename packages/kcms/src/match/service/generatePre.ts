@@ -18,28 +18,39 @@ export class GeneratePreMatchService {
       return Result.err(new Error('DepartmentType is not defined'));
     }
     const pair = await this.makePairs(departmentType);
-    return await this.makeMatches(pair);
+    const maxMatchIndexRes = await this.preMatchRepository.findMaxMatchIndexAll();
+    if (Result.isErr(maxMatchIndexRes)) return maxMatchIndexRes;
+
+    const maxMatchIndex = Result.unwrap(maxMatchIndexRes);
+    const matchIndexOffset = new Map(
+      maxMatchIndex.map(({ courseIndex, matchIndex }) => [courseIndex, matchIndex])
+    );
+    return await this.makeMatches(pair, matchIndexOffset);
   }
 
   private async makeMatches(
-    data: (Team | undefined)[][][]
+    data: (Team | undefined)[][][],
+    matchIndexOffsets: Map<number, number>
   ): Promise<Result.Result<Error, PreMatch[]>> {
     // 与えられたペアをもとに試合を生成する
 
     // コースごとに生成
-    const generated = data.map((course, courseIndex) => {
+    const generated = data.map((course, eachCourseIndex) => {
       // ペアをもとに試合を生成
-      return course.map((pair, matchIndex): Result.Result<Error, PreMatch> => {
+      return course.map((pair, eachMatchIndex): Result.Result<Error, PreMatch> => {
         const id = this.idGenerator.generate<PreMatch>();
         if (Result.isErr(id)) {
           return id;
         }
+
+        const departmentType = (pair[0] || pair[1]!).getDepartmentType();
+        const courseIndex = config.match.pre.course[departmentType][eachCourseIndex];
+        const matchIndexOffset = matchIndexOffsets.get(courseIndex) ?? 0;
         const match = PreMatch.new({
           id: Result.unwrap(id),
-          // ToDo: 他部門のコースがすでに使用されているときにコース番号をどうするかを考える
-          courseIndex: courseIndex + 1,
-          matchIndex: matchIndex + 1,
-          departmentType: (pair[0] || pair[1]!).getDepartmentType(),
+          courseIndex,
+          matchIndex: matchIndexOffset + eachMatchIndex + 1,
+          departmentType,
           teamID1: pair[0]?.getID(),
           teamID2: pair[1]?.getID(),
           runResults: [],
@@ -67,7 +78,7 @@ export class GeneratePreMatchService {
     const courseCount = config.match.pre.course[departmentType].length;
 
     // エントリー済みのチームを取得
-    const teamRes = await this.fetchTeam.findAll();
+    const teamRes = await this.fetchTeam.fetchAll();
     if (Result.isErr(teamRes)) {
       return [];
     }

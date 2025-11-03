@@ -6,6 +6,7 @@ MIT License.
 import { Context, Hono } from 'hono';
 import { env } from 'hono/adapter';
 import { basicAuth } from 'hono/basic-auth';
+import { websocket } from 'hono/bun';
 import { except } from 'hono/combine';
 import { deleteCookie, setSignedCookie } from 'hono/cookie';
 import { cors } from 'hono/cors';
@@ -13,8 +14,10 @@ import { HTTPException } from 'hono/http-exception';
 import { jwt, sign } from 'hono/jwt';
 import { secureHeaders } from 'hono/secure-headers';
 import { trimTrailingSlash } from 'hono/trailing-slash';
+import * as process from 'node:process';
 import { z } from 'zod';
 import { matchHandler } from './match/main';
+import { matchWsHandler } from './matchWs/main';
 import { sponsorHandler } from './sponser/main';
 import { teamHandler } from './team/main.js';
 
@@ -40,15 +43,26 @@ const getEnv = <C extends Context = Parameters<typeof env>['0']>(c: C) => {
   return envRes.data;
 };
 
-const jwtSecret = await crypto.subtle.generateKey(
-  {
-    name: 'ECDSA',
-    namedCurve: 'P-256',
-  },
+const { KCMS_COOKIE_SECRET, KCMS_AUTH_PRIVATE_JWK, KCMS_AUTH_PUBLIC_JWK } = process.env;
+if (!KCMS_AUTH_PRIVATE_JWK || !KCMS_AUTH_PUBLIC_JWK || !KCMS_COOKIE_SECRET) {
+  throw new Error('KCMS_AUTH_(PRIVATE/PUBLIC)_JWK/KCMS_COOKIE_SECRET is required.');
+}
+
+const authPrivateJwk = await crypto.subtle.importKey(
+  'jwk',
+  JSON.parse(KCMS_AUTH_PRIVATE_JWK),
+  { name: 'ECDSA', namedCurve: 'P-256' },
   true,
-  ['sign', 'verify']
+  ['sign']
 );
-const cookieSecret = crypto.getRandomValues(new Uint32Array(8));
+const authPublicJwk = await crypto.subtle.importKey(
+  'jwk',
+  JSON.parse(KCMS_AUTH_PUBLIC_JWK),
+  { name: 'ECDSA', namedCurve: 'P-256' },
+  true,
+  ['verify']
+);
+const cookieSecret = new Uint32Array(Buffer.from(KCMS_COOKIE_SECRET, 'base64'));
 
 const app = new Hono();
 
@@ -83,7 +97,7 @@ app.get(
         iat: nowSeconds,
         exp: nowSeconds + cookieMaxAge,
       },
-      jwtSecret.privateKey,
+      authPrivateJwk,
       'ES256'
     );
     await setSignedCookie(c, cookieKey, token, cookieSecret, {
@@ -105,10 +119,10 @@ app.get('/logout', async (c) => {
 });
 app.use(
   '*',
-  except(['/login', '/logout'], (c, next) => {
+  except(['/login', '/logout', '/match/public'], (c, next) => {
     const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = getEnv(c);
     return jwt({
-      secret: jwtSecret.publicKey,
+      secret: authPublicJwk,
       cookie: {
         key: cookieKey,
         secret: cookieSecret,
@@ -135,9 +149,11 @@ app.get('/', (c) => c.json({ message: 'kcms is up' }));
 app.route('/', teamHandler);
 app.route('/', matchHandler);
 app.route('/', sponsorHandler);
+app.route('/', matchWsHandler);
 
 // ToDo: config packageのTS読み込み問題により、一時的にBunで直接TSを実行する形に変更した
 export default {
   port: 3000,
   fetch: app.fetch,
+  websocket,
 };

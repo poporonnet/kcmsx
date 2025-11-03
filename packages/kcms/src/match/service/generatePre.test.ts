@@ -20,19 +20,17 @@ describe('GeneratePreMatchService', () => {
 
   const expectedTeamPair = [
     [
-      ['A1', 'B3'],
-      ['A3', 'C2'],
-      ['B1', 'N2'],
+      ['A1', 'B2'],
+      ['A2', 'B3'],
+      ['A3', 'C1'],
+      ['A4', 'C2'],
+      ['B1', 'N1'],
+      ['B2', 'N2'],
       ['B3', 'A1'],
-      ['C2', 'A3'],
-      ['N2', 'B1'],
-    ],
-    [
-      ['A2', 'B2'],
-      ['A4', 'C1'],
-      ['B2', 'N1'],
       ['C1', 'A2'],
+      ['C2', 'A3'],
       ['N1', 'A4'],
+      ['N2', 'B1'],
     ],
   ];
 
@@ -48,6 +46,38 @@ describe('GeneratePreMatchService', () => {
         testTeamData.get(v.getTeamID2() ?? ('' as TeamID))?.getTeamName(),
       ]);
       expect(pair).toStrictEqual(expectedTeamPair[i]);
+    }
+  });
+
+  it.skip('hotfix: configで指定したコース番号を正しく使う', async () => {
+    // const generatedRes = await generateService.handle(`open`);
+    // expect(Result.isOk(generatedRes)).toBe(true);
+    // for (const v of Result.unwrap(generatedRes)) {
+    //   expect(config.match.pre.course[`open`]).toContain(v.getCourseIndex());
+    // }
+  });
+
+  it('hotfix: 部門をまたいでもコースごとの試合番号が連番になる', async () => {
+    expect(await generateService.handle('elementary')).satisfy(Result.isOk);
+    //expect(await generateService.handle('open')).satisfy(Result.isOk);
+
+    const matchesRes = await preMatchRepository.findAll();
+    expect(matchesRes).satisfy(Result.isOk);
+    const matches = Result.unwrap(matchesRes);
+
+    const matchIndexes = matches.reduce<Map<number, number[]>>((prev, match) => {
+      const matchIndexes = prev.get(match.getCourseIndex()) ?? [];
+      matchIndexes.push(match.getMatchIndex());
+      if (!prev.has(match.getCourseIndex())) {
+        prev.set(match.getCourseIndex(), matchIndexes);
+      }
+      return prev;
+    }, new Map());
+
+    for (const indexes of matchIndexes.values()) {
+      expect(indexes.sort((a, b) => a - b)).toStrictEqual(
+        Array.from({ length: indexes.length }, (_, i) => i + 1)
+      );
     }
   });
 });

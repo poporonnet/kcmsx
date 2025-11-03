@@ -1,6 +1,8 @@
 import {
   Button,
   Center,
+  Checkbox,
+  Divider,
   Flex,
   List,
   Loader,
@@ -14,9 +16,12 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config, DepartmentType, MatchType } from "config";
 import { useCallback, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { CourtFilter, CourtSelector } from "../components/CourtSelector";
+import { Link, useNavigate } from "react-router-dom";
 import { DepartmentSegmentedControl } from "../components/DepartmentSegmentedControl";
+import {
+  FilterAndSort,
+  FilterAndSortTableHeader,
+} from "../components/FilterAndSortTableHeader";
 import { GenerateMatchButton } from "../components/GenerateMatchButton";
 import { LabeledSegmentedControls } from "../components/LabeledSegmentedControls";
 import {
@@ -26,10 +31,49 @@ import {
 import { MatchSegmentedControl } from "../components/MatchTypeSegmentedControl";
 import { useDepartmentTypeQuery } from "../hooks/useDepartmentTypeQuery";
 import { useFetch } from "../hooks/useFetch";
+import { FilterData, useFilterAndSort } from "../hooks/useFilterAndSort";
+import { useInterval } from "../hooks/useInterval";
 import { useMatchTypeQuery } from "../hooks/useMatchTypeQuery";
 import { GetMatchesResponse } from "../types/api/match";
 import { Match } from "../types/match";
+import { createComparer } from "../utils/comparer";
+import { createFilterer } from "../utils/filterer";
 import { getMatchStatus } from "../utils/matchStatus";
+
+const filterAndSortKeys = ["code", "course", "status"] as const;
+
+type FilterAndSortKey = (typeof filterAndSortKeys)[number];
+
+const filterer = createFilterer<Match, FilterAndSortKey>({
+  course: (match, state) => match.matchCode.split("-")[0] === state,
+  status: (match, state) => getMatchStatus(match) === state,
+});
+
+const comparer = createComparer<Match, FilterAndSortKey>({
+  code: (a, b) => {
+    const [courseA, indexA] = a.matchCode.split("-");
+    const [courseB, indexB] = b.matchCode.split("-");
+    const indexOrder = indexA.localeCompare(indexB, undefined, {
+      numeric: true,
+    });
+
+    return indexOrder != 0
+      ? indexOrder
+      : courseA.localeCompare(courseB, undefined, { numeric: true });
+  },
+  course: (a, b) =>
+    a.matchCode
+      .split("-")[0]
+      .localeCompare(b.matchCode.split("-")[0], undefined, {
+        numeric: true,
+      }),
+  status: (a, b) => {
+    const statuses: StatusButtonProps["status"][] = ["future", "now", "end"];
+    return (
+      statuses.indexOf(getMatchStatus(a)) - statuses.indexOf(getMatchStatus(b))
+    );
+  },
+});
 
 export const MatchList = () => {
   const {
@@ -38,22 +82,45 @@ export const MatchList = () => {
     error,
     refetch,
   } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
-  const courts = useMemo(
-    () =>
-      [
-        ...new Set(
-          Object.values(matches ?? {})
-            .flat()
-            .map((match: Match) => Number(match.matchCode.split("-")[0]))
-        ),
-      ].sort(),
-    [matches]
-  );
-  const [selectedCourt, setSelectedCourt] = useState<CourtFilter>("all");
   const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
   const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departmentTypes[0]
   );
+
+  const { filterState, setFilterState, sortState, setSortState, filter, sort } =
+    useFilterAndSort<Match, FilterAndSortKey>(
+      filterAndSortKeys,
+      filterer,
+      comparer,
+      {},
+      { key: "course", order: "asc" }
+    );
+
+  const filterData = useMemo<FilterData<FilterAndSortKey>>(() => {
+    if (!matches) return {};
+
+    const courses = [
+      ...new Set<number>(
+        matches[matchType].map((match) => Number(match.matchCode.split("-")[0]))
+      ),
+    ];
+    const course: { value: string; label: string }[] = courses.map(
+      (course) => ({
+        value: `${course}`,
+        label: `${course}`,
+      })
+    );
+    const status: { value: StatusButtonProps["status"]; label: string }[] = [
+      { value: "future", label: "未来" },
+      { value: "now", label: "進行中" },
+      { value: "end", label: "完了" },
+    ];
+
+    return {
+      course,
+      status,
+    };
+  }, [matches, matchType]);
 
   const processedMatches = useMemo<Match[]>(
     () =>
@@ -63,16 +130,10 @@ export const MatchList = () => {
             .feed((matches) =>
               matches.filter((match) => match.departmentType == departmentType)
             )
-            .feed((matches) =>
-              selectedCourt == "all"
-                ? matches
-                : matches.filter(
-                    (match) =>
-                      Number(match.matchCode.split("-")[0]) == selectedCourt
-                  )
-            ).value
+            .feed(filter)
+            .feed(sort).value
         : [],
-    [matches, matchType, departmentType, selectedCourt]
+    [matches, matchType, departmentType, sort, filter]
   );
 
   const generateMatch = useCallback(
@@ -96,9 +157,14 @@ export const MatchList = () => {
     []
   );
 
+  const [isAutoRefetch, setIsAutoRefetch] = useState(true);
+  const latestFetchTime = useMemo(() => new Date(), [matches]);
+
+  useInterval(refetch, 10000, { active: isAutoRefetch });
+
   return (
-    <Stack justify="center" align="center" gap="md" w="fit-content">
-      <Title m="1rem">試合表</Title>
+    <Stack w="fit-content" align="center" gap="md">
+      <Title m="md">試合表</Title>
       <LabeledSegmentedControls>
         <MatchSegmentedControl
           matchType={matchType}
@@ -109,14 +175,24 @@ export const MatchList = () => {
           setDepartmentType={setDepartmentType}
         />
       </LabeledSegmentedControls>
-      {!loading && matches && matches[matchType].length > 0 && (
+      {matches && matches[matchType].length > 0 && (
         <>
-          <Flex w="100%" justify="right">
-            <CourtSelector
-              courts={courts}
-              court={selectedCourt}
-              setCourt={setSelectedCourt}
-            />
+          <Flex w="100%" justify="space-between" align="flex-end">
+            <Flex justify="right" gap="lg">
+              <Text size="sm">
+                最終更新
+                {` ${latestFetchTime?.getHours().toString().padStart(2, "0")}:${latestFetchTime?.getMinutes().toString().padStart(2, "0")}`}
+              </Text>
+              <Divider orientation="vertical" />
+              <Checkbox
+                label="自動更新"
+                checked={isAutoRefetch}
+                onChange={(e) => setIsAutoRefetch(e.currentTarget.checked)}
+              />
+            </Flex>
+            <Button onClick={() => setFilterState({})} variant="outline">
+              フィルターをリセット
+            </Button>
           </Flex>
           <Table
             highlightOnHover
@@ -127,16 +203,25 @@ export const MatchList = () => {
             horizontalSpacing="md"
             miw="40rem"
           >
-            <MatchHead matchType={matchType} />
+            <MatchHead
+              matchType={matchType}
+              filterAndSort={{
+                filterData,
+                filterState,
+                setFilterState,
+                sortState,
+                setSortState,
+              }}
+            />
             <Table.Tbody>
               {processedMatches.map((match) => (
-                <MatchColumn match={match} key={match.id} />
+                <MatchRow match={match} key={match.id} />
               ))}
             </Table.Tbody>
           </Table>
         </>
       )}
-      {loading && (
+      {loading && !matches && (
         <>
           <Text>ロード中</Text>
           <Loader size={40} />
@@ -144,11 +229,14 @@ export const MatchList = () => {
       )}
       {error && (
         <>
-          <Text c={"red"} fw={700}>
-            サーバーからのフェッチに失敗しました。
+          <Text c="red" fw={700}>
+            データの取得に失敗しました。
           </Text>
-          <Button mt={"2rem"} onClick={refetch}>
-            <IconRefresh stroke={2} />
+          <Button
+            mt="2rem"
+            onClick={refetch}
+            leftSection={<IconRefresh stroke={2} />}
+          >
             再読み込み
           </Button>
         </>
@@ -158,11 +246,9 @@ export const MatchList = () => {
           <Text>現在{config.match[matchType].name}試合はありません。</Text>
           <GenerateMatchButton
             generate={async () => {
-              await Promise.all(
-                config.departmentTypes.map((departmentType) =>
-                  generateMatch(matchType, departmentType)
-                )
-              );
+              for (const departmentType of config.departmentTypes) {
+                await generateMatch(matchType, departmentType);
+              }
               refetch();
             }}
             modalTitle={`${config.match[matchType].name}試合表生成確認`}
@@ -187,19 +273,43 @@ export const MatchList = () => {
   );
 };
 
-const MatchHead = ({ matchType }: { matchType: MatchType }) => (
+const MatchHead = ({
+  matchType,
+  filterAndSort,
+}: {
+  matchType: MatchType;
+  filterAndSort: FilterAndSort<FilterAndSortKey>;
+}) => (
   <Table.Thead>
     <Table.Tr>
-      <Table.Th ta="center">試合番号</Table.Th>
-      <Table.Th ta="center">コート番号</Table.Th>
-      <Table.Th>{matchType == "pre" ? "左チーム" : "チーム1"}</Table.Th>
-      <Table.Th>{matchType == "pre" ? "右チーム" : "チーム2"}</Table.Th>
-      <Table.Th ta="center">状態</Table.Th>
+      <FilterAndSortTableHeader
+        keyName="code"
+        label="試合番号"
+        sortable
+        {...filterAndSort}
+      />
+      <FilterAndSortTableHeader
+        keyName="course"
+        label="コース番号"
+        sortable
+        filterable
+        {...filterAndSort}
+      />
+      <Table.Th>{matchType == "pre" ? "左コース" : "チーム1"}</Table.Th>
+      <Table.Th>{matchType == "pre" ? "右コース" : "チーム2"}</Table.Th>
+      <FilterAndSortTableHeader
+        keyName="status"
+        label="状態"
+        sortable
+        filterable
+        {...filterAndSort}
+      />
+      <Table.Th ta="center">観戦</Table.Th>
     </Table.Tr>
   </Table.Thead>
 );
 
-const MatchColumn = ({ match }: { match: Match }) => {
+const MatchRow = ({ match }: { match: Match }) => {
   const matchStatus: StatusButtonProps["status"] = useMemo(() => {
     return getMatchStatus(match);
   }, [match]);
@@ -240,6 +350,20 @@ const MatchColumn = ({ match }: { match: Match }) => {
         <Center>
           <MatchStatusButton status={matchStatus} />
         </Center>
+      </Table.Td>
+      <Table.Td>
+        <Button
+          component={Link}
+          to={`/match/${match.matchType}/${match.id}/view`}
+          variant="outline"
+          color="green"
+          radius="lg"
+          size="xs"
+          disabled={matchStatus === "end"}
+          onClick={(event) => event.stopPropagation()}
+        >
+          <Text fw={700}>観戦する</Text>
+        </Button>
       </Table.Td>
     </Table.Tr>
   );

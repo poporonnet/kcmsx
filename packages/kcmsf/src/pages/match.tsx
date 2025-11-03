@@ -1,16 +1,20 @@
-import { Button, Divider, Flex, Text } from "@mantine/core";
-import { IconRotate } from "@tabler/icons-react";
+import { Box, Button, Divider, Flex, Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { IconRotate, IconSwitchHorizontal } from "@tabler/icons-react";
 import { config, MatchType } from "config";
 import { Side } from "config/src/types/matchInfo";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MatchNameCard } from "../components/match/MatchNameCard";
 import { MatchPointCard } from "../components/match/MatchPointCard";
 import { MatchSubmit } from "../components/match/matchSubmit";
 import { PointControls } from "../components/match/PointControls";
 import { MatchResult } from "../components/MatchResult";
+import { NetworkStatusBadge } from "../components/NetworkStatusBadge";
+import { useDisplayedTeam } from "../hooks/useDisplayedTeam";
 import { useForceReload } from "../hooks/useForceReload";
 import { useJudge } from "../hooks/useJudge";
+import { useMatchEventSender } from "../hooks/useMatchEventSender";
 import { useMatchInfo } from "../hooks/useMatchInfo";
 import { useMatchTimer } from "../hooks/useMatchTimer";
 import { getMatchStatus } from "../utils/matchStatus";
@@ -30,14 +34,103 @@ export const Match = () => {
   } = useMatchTimer(matchInfo?.matchType || "pre");
   const forceReload = useForceReload();
   const navigate = useNavigate();
+  const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
+
+  const {
+    teams: [leftDisplayedTeam, rightDisplayedTeam],
+    displayedCourseName: [leftDisplayedCourseName, rightDisplayedCourseName],
+    displayedColor: [leftDisplayedColor, rightDisplayedColor],
+    flip,
+  } = useDisplayedTeam(matchInfo, matchJudge);
+
+  const [isMatchOnline, setIsMatchOnline] = useState(false);
+  const sendMatchEvent = useMatchEventSender(matchType, id, {
+    onOpen: () => setIsMatchOnline(true),
+    onClose: (event) => {
+      setIsMatchOnline(false);
+      notifications.show({
+        title: "観戦から切断されました",
+        message: `WebSocketが切断されました ( code: ${event.code} )`,
+        color: "red",
+      });
+      notifications.show({
+        title: "再接続中",
+        message: "観戦へ再接続を試みています",
+      });
+    },
+    onReconnect: () => {
+      setIsMatchOnline(true);
+      notifications.show({
+        title: "観戦に復帰しました",
+        message: "WebSocketが再接続されました",
+        color: "green",
+      });
+
+      if (leftDisplayedTeam.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: leftDisplayedTeam.info.id,
+          pointState: leftDisplayedTeam.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: leftDisplayedTeam.info.id,
+          goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+        });
+      }
+      if (rightDisplayedTeam.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: rightDisplayedTeam.info.id,
+          pointState: rightDisplayedTeam.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: rightDisplayedTeam.info.id,
+          goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+        });
+      }
+      sendMatchEvent({
+        type: "TIMER_UPDATED",
+        totalSeconds,
+        isRunning,
+        state: timerState,
+      });
+    },
+  });
+
   const onClickReset = useCallback(
     (side: Side) => {
-      matchJudge.team(side).reset();
+      const team = side == "left" ? leftDisplayedTeam : rightDisplayedTeam;
+      team.judge.reset();
+      if (team.info) {
+        sendMatchEvent({
+          type: "TEAM_POINT_STATE_UPDATED",
+          teamId: team.info.id,
+          pointState: team.judge.point.state,
+        });
+        sendMatchEvent({
+          type: "TEAM_GOAL_TIME_UPDATED",
+          teamId: team.info.id,
+          goalTimeSeconds: team.judge.goalTimeSeconds,
+        });
+      }
       forceReload();
     },
-    [matchJudge, forceReload]
+    [forceReload, leftDisplayedTeam, rightDisplayedTeam, sendMatchEvent]
   );
-  const matchStatus = useMemo(() => match && getMatchStatus(match), [match]);
+
+  useEffect(
+    () =>
+      sendMatchEvent({
+        type: "TIMER_UPDATED",
+        totalSeconds,
+        isRunning,
+        state: timerState,
+      }),
+    [sendMatchEvent, totalSeconds, isRunning, timerState]
+  );
+
   return (
     <Flex
       h="100%"
@@ -61,13 +154,19 @@ export const Match = () => {
             <MatchNameCard
               matchType={matchInfo.matchType}
               matchCode={match.matchCode}
-              description={
-                match.matchType === "main"
-                  ? `${match.runResults.length == 0 ? 1 : 2}試合目`
-                  : ""
+              rightTeamName={rightDisplayedTeam.info?.teamName}
+              leftTeamName={leftDisplayedTeam.info?.teamName}
+              rightTeamColor={rightDisplayedColor}
+              leftTeamColor={leftDisplayedColor}
+              centerSection={
+                <>
+                  {match.matchType === "main" &&
+                    `${match.runResults.length == 0 ? 1 : 2}試合目`}
+                  {!isMatchOnline && <NetworkStatusBadge online={false} />}
+                </>
               }
-              rightTeamName={matchInfo.teams.right?.teamName}
-              leftTeamName={matchInfo.teams.left?.teamName}
+              leftTeamCourseName={leftDisplayedCourseName}
+              rightTeamCourseName={rightDisplayedCourseName}
             />
           )}
           <Button
@@ -84,71 +183,121 @@ export const Match = () => {
           </Button>
           <MatchPointCard
             rightTeamPoint={
-              isExhibition || matchInfo?.teams.right
-                ? matchJudge.rightTeam.point.point()
+              isExhibition || rightDisplayedTeam.info
+                ? rightDisplayedTeam.judge.point.point()
                 : 0
             }
             leftTeamPoint={
-              isExhibition || matchInfo?.teams.left
-                ? matchJudge.leftTeam.point.point()
+              isExhibition || leftDisplayedTeam.info
+                ? leftDisplayedTeam.judge.point.point()
                 : 0
             }
+            leftTeamColor={leftDisplayedColor}
+            rightTeamColor={rightDisplayedColor}
             leftSection={
-              <Button
-                flex={1}
-                variant="transparent"
-                c="blue"
-                leftSection={<IconRotate />}
-                size="xl"
-                fw="normal"
-                onClick={() => onClickReset("left")}
-              >
-                リセット
-              </Button>
+              <Box flex={1}>
+                <Button
+                  variant="transparent"
+                  color={leftDisplayedColor}
+                  leftSection={<IconRotate />}
+                  size="xl"
+                  fw="normal"
+                  onClick={() => onClickReset("left")}
+                >
+                  リセット
+                </Button>
+              </Box>
             }
             rightSection={
-              <Button
-                flex={1}
-                variant="transparent"
-                c="red"
-                leftSection={<IconRotate />}
-                size="xl"
-                fw="normal"
-                onClick={() => onClickReset("right")}
-              >
-                リセット
-              </Button>
+              <Box flex={1}>
+                <Button
+                  variant="transparent"
+                  color={rightDisplayedColor}
+                  leftSection={<IconRotate />}
+                  size="xl"
+                  fw="normal"
+                  onClick={() => onClickReset("right")}
+                >
+                  リセット
+                </Button>
+              </Box>
             }
           />
 
-          <Divider w="100%" />
-          {matchJudge && (
-            <Flex direction="row" gap="2rem" align="center" justify="center">
-              <PointControls
-                color="blue"
-                team={matchJudge.leftTeam}
-                onChange={forceReload}
-                onGoal={(done) =>
-                  matchJudge.goalLeftTeam(
-                    done ? matchTimeSec - totalSeconds : undefined
-                  )
+          <Flex w="100%" align="center" gap="md">
+            <Divider flex={1} />
+            <Button
+              onClick={flip}
+              variant="subtle"
+              size="compact-sm"
+              color="violet"
+              leftSection={<IconSwitchHorizontal size={14} />}
+            >
+              左右を反転
+            </Button>
+            <Divider flex={1} />
+          </Flex>
+
+          <Flex direction="row" gap="2rem" align="center" justify="center">
+            <PointControls
+              color={leftDisplayedColor}
+              team={leftDisplayedTeam.judge}
+              onChange={() => {
+                if (leftDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
+                    teamId: leftDisplayedTeam.info.id,
+                    pointState: leftDisplayedTeam.judge.point.state,
+                  });
                 }
-                disabled={!isExhibition && !matchInfo?.teams.left}
-              />
-              <Divider orientation="vertical" />
-              <PointControls
-                color="red"
-                team={matchJudge.rightTeam}
-                onChange={forceReload}
-                onGoal={(done) =>
-                  matchJudge.goalRightTeam(
-                    done ? matchTimeSec - totalSeconds : undefined
-                  )
+                forceReload();
+              }}
+              onGoal={(done) => {
+                leftDisplayedTeam.goal(
+                  done ? matchTimeSec - totalSeconds : undefined
+                );
+                if (leftDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    teamId: leftDisplayedTeam.info.id,
+                    goalTimeSeconds: leftDisplayedTeam.judge.goalTimeSeconds,
+                  });
                 }
-                disabled={!isExhibition && !matchInfo?.teams.right}
-              />
-            </Flex>
-          )}
+              }}
+              disabled={!isExhibition && !leftDisplayedTeam.info}
+            />
+
+            <Divider orientation="vertical" />
+
+            <PointControls
+              color={rightDisplayedColor}
+              team={rightDisplayedTeam.judge}
+              onChange={() => {
+                if (rightDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_POINT_STATE_UPDATED",
+                    teamId: rightDisplayedTeam.info.id,
+                    pointState: rightDisplayedTeam.judge.point.state,
+                  });
+                }
+                forceReload();
+              }}
+              onGoal={(done) => {
+                rightDisplayedTeam.goal(
+                  done ? matchTimeSec - totalSeconds : undefined
+                );
+                if (rightDisplayedTeam.info) {
+                  sendMatchEvent({
+                    type: "TEAM_GOAL_TIME_UPDATED",
+                    teamId: rightDisplayedTeam.info.id,
+                    goalTimeSeconds: rightDisplayedTeam.judge.goalTimeSeconds,
+                  });
+                }
+              }}
+              disabled={!isExhibition && !rightDisplayedTeam.info}
+            />
+          </Flex>
+
           {!isExhibition && matchInfo && matchJudge && (
             <MatchSubmit
               matchInfo={matchInfo}
@@ -176,6 +325,7 @@ export const Match = () => {
               onSubmit={(isSucceeded) => {
                 if (!isSucceeded) return;
 
+                sendMatchEvent({ type: "MATCH_ENDED" });
                 navigate(0);
               }}
             />
