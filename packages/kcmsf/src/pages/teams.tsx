@@ -69,7 +69,6 @@ export const Teams = () => {
     }
   );
 
-
   const { filterState, setFilterState, sortState, setSortState, filter, sort } =
     useFilterAndSort<Team, FilterAndSortKey>(
       filterAndSortKeys,
