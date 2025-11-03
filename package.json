@@ -8,6 +8,7 @@
     "backend": "pnpm -F \"kcms\"",
     "frontend": "pnpm -F \"kcmsf\"",
     "mock": "pnpm -F \"mock\"",
+    "site": "pnpm -F \"site\"",
     "start:backend": "pnpm backend start",
     "start:frontend": "pnpm frontend start",
     "dev:backend": "pnpm backend dev",
