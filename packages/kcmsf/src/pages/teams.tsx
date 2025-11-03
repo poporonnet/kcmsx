@@ -1,9 +1,7 @@
 import {
   Button,
-  ComboboxItem,
   Flex,
   Loader,
-  Space,
   Stack,
   Table,
   Text,
@@ -14,25 +12,47 @@ import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config } from "config";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Filter } from "../components/Filter";
+import {
+  FilterAndSort,
+  FilterAndSortTableHeader,
+} from "../components/FilterAndSortTableHeader";
 import { LoaderButton } from "../components/LoaderButton";
-import { Order, Sort } from "../components/Sort";
 import { useFetch } from "../hooks/useFetch";
+import { FilterData, useFilterAndSort } from "../hooks/useFilterAndSort";
 import { GetTeamsResponse } from "../types/api/team";
 import { Team } from "../types/team";
+import { createComparer } from "../utils/comparer";
+import { createFilterer } from "../utils/filterer";
 
-type Comparer = {
-  [K in keyof Team]?: (a: Team[K], b: Team[K]) => number;
-};
+const filterAndSortKeys = [
+  "entryCode",
+  "name",
+  "clubName",
+  "robotType",
+  "departmentType",
+  "isEntered",
+] as const;
 
-type FilterData = Partial<Record<keyof Team, ComboboxItem[]>>;
+type FilterAndSortKey = (typeof filterAndSortKeys)[number];
 
-type SortState = {
-  key?: keyof Team;
-  order?: Order;
-};
+const filterer = createFilterer<Team, FilterAndSortKey>({
+  clubName: (team, state) => team.clubName === state,
+  robotType: (team, state) => team.robotType === state,
+  departmentType: (team, state) => team.departmentType == state,
+  isEntered: (team, state) => `${team.isEntered}` === state,
+});
 
-type FilterState = Partial<Team>;
+const comparer = createComparer<Team, FilterAndSortKey>({
+  entryCode: (a, b) =>
+    a.entryCode.localeCompare(b.entryCode, undefined, {
+      numeric: true,
+    }),
+  name: (a, b) => a.name.localeCompare(b.name),
+  clubName: (a, b) => a.clubName.localeCompare(b.clubName),
+  robotType: (a, b) => a.robotType.localeCompare(b.robotType),
+  departmentType: (a, b) => a.departmentType.localeCompare(b.departmentType),
+  isEntered: (a, b) => (a.isEntered ? 1 : 0) - (b.isEntered ? 1 : 0),
+});
 
 export const Teams = () => {
   const {
@@ -42,28 +62,19 @@ export const Teams = () => {
     refetch,
   } = useFetch<GetTeamsResponse>(`${import.meta.env.VITE_API_URL}/team`);
   const [teams, setTeams] = useState<Map<string, Team>>();
-  const [sortState, setSortState] = useState<SortState>({
-    key: "entryCode",
-    order: "asc",
-  });
-  const [filterState, setFilterState] = useState<FilterState>({});
 
-  const comparer: Comparer = useMemo(
-    () => ({
-      entryCode: (a, b) =>
-        a.localeCompare(b, undefined, {
-          numeric: true,
-        }),
-      name: (a, b) => a.localeCompare(b),
-      clubName: (a, b) => a.localeCompare(b),
-      robotType: (a, b) => a.localeCompare(b),
-      departmentType: (a, b) => a.localeCompare(b),
-      isEntered: (a, b) => (a ? 1 : 0) - (b ? 1 : 0),
-    }),
-    []
-  );
+  const { filterState, setFilterState, sortState, setSortState, filter, sort } =
+    useFilterAndSort<Team, FilterAndSortKey>(
+      filterAndSortKeys,
+      filterer,
+      comparer,
+      {},
+      { key: "entryCode", order: "asc" }
+    );
 
-  const filterData = useMemo<FilterData>((): FilterData => {
+  const filterData = useMemo<
+    FilterData<FilterAndSortKey>
+  >((): FilterData<FilterAndSortKey> => {
     if (!teams) return {};
 
     const clubNames = [
@@ -100,40 +111,12 @@ export const Teams = () => {
     };
   }, [teams]);
 
-  const sort = useCallback(
-    (teams: Team[]) => {
-      const { key, order } = sortState;
-      if (!key) return teams;
-
-      const compare = comparer[key];
-      if (!compare) return teams;
-
-      const orderNumber = order == "asc" ? 1 : -1;
-      return teams.sort(
-        (a, b) => orderNumber * compare(a[key] as never, b[key] as never)
-      );
-    },
-    [sortState, comparer]
-  );
-
-  const filter = useCallback(
-    (teams: Team[]) => {
-      return teams.filter((team) =>
-        (Object.keys(team) as (keyof Team)[]).every(
-          (key) =>
-            filterState[key] == null || `${filterState[key]}` === `${team[key]}`
-        )
-      );
-    },
-    [filterState]
-  );
-
   const processedTeams = useMemo(
     () =>
       teams
         ? Cat.cat([...teams.values()])
-            .feed(sort)
-            .feed(filter).value
+            .feed(filter)
+            .feed(sort).value
         : undefined,
     [teams, sort, filter]
   );
@@ -182,11 +165,13 @@ export const Teams = () => {
           </Flex>
           <TeamTable
             teams={processedTeams}
-            sortState={sortState}
-            setSortState={setSortState}
-            filterData={filterData}
-            filterState={filterState}
-            setFilterState={setFilterState}
+            filterAndSort={{
+              filterData,
+              filterState,
+              setFilterState,
+              sortState,
+              setSortState,
+            }}
             enterable={true} // TODO: バックエンドにエントリー期間か判定する機能を作る？
             entry={entry}
           />
@@ -218,20 +203,12 @@ export const Teams = () => {
 
 const TeamTable = ({
   teams,
-  sortState,
-  setSortState,
-  filterData,
-  filterState,
-  setFilterState,
+  filterAndSort,
   enterable,
   entry,
 }: {
   teams: Team[];
-  sortState: SortState;
-  setSortState: (sortState: SortState) => void;
-  filterData: FilterData;
-  filterState: FilterState;
-  setFilterState: (filterState: FilterState) => void;
+  filterAndSort: FilterAndSort<FilterAndSortKey>;
   enterable: boolean;
   entry: (teamID: string, isEnter: boolean) => Promise<void>;
 }) => (
@@ -244,64 +221,46 @@ const TeamTable = ({
   >
     <Table.Thead>
       <Table.Tr>
-        <TeamHeader
+        <FilterAndSortTableHeader
           keyName="entryCode"
           label="ゼッケン"
           sortable
-          sortState={sortState}
-          setSortState={setSortState}
+          {...filterAndSort}
         />
-        <TeamHeader
+        <FilterAndSortTableHeader
           keyName="name"
           label="チーム名"
           sortable
-          sortState={sortState}
-          setSortState={setSortState}
+          {...filterAndSort}
         />
-        <TeamHeader keyName="members" label="メンバー" />
-        <TeamHeader
+        <FilterAndSortTableHeader keyName="members" label="メンバー" />
+        <FilterAndSortTableHeader
           keyName="clubName"
           label="クラブ"
           sortable
-          sortState={sortState}
-          setSortState={setSortState}
           filterable
-          filterData={filterData}
-          filterState={filterState}
-          setFilterState={setFilterState}
+          {...filterAndSort}
         />
-        <TeamHeader
+        <FilterAndSortTableHeader
           keyName="robotType"
           label="ロボット種別"
           sortable
-          sortState={sortState}
-          setSortState={setSortState}
           filterable
-          filterData={filterData}
-          filterState={filterState}
-          setFilterState={setFilterState}
+          {...filterAndSort}
         />
-        <TeamHeader
+        <FilterAndSortTableHeader
           keyName="departmentType"
           label="部門"
           sortable
-          sortState={sortState}
-          setSortState={setSortState}
           filterable
-          filterData={filterData}
-          filterState={filterState}
-          setFilterState={setFilterState}
+          {...filterAndSort}
         />
-        <TeamHeader
+        <FilterAndSortTableHeader
           keyName="isEntered"
           label="エントリー"
           sortable
-          sortState={sortState}
-          setSortState={setSortState}
           filterable
-          filterData={filterData}
-          filterState={filterState}
-          setFilterState={setFilterState}
+          {...filterAndSort}
         />
       </Table.Tr>
     </Table.Thead>
@@ -316,56 +275,6 @@ const TeamTable = ({
       ))}
     </Table.Tbody>
   </Table>
-);
-
-const TeamHeader = ({
-  keyName,
-  label,
-  sortable,
-  filterable,
-  sortState,
-  setSortState,
-  filterData,
-  filterState,
-  setFilterState,
-}: {
-  keyName: keyof Team;
-  label: string;
-  sortable?: boolean;
-  filterable?: boolean;
-  sortState?: SortState;
-  setSortState?: (sortState: SortState) => void;
-  filterData?: FilterData;
-  filterState?: FilterState;
-  setFilterState?: (filterState: FilterState) => void;
-}) => (
-  <Table.Th style={{ textAlign: "center" }}>
-    <Flex direction="row" align="center" justify="center">
-      {label}
-      {(sortable || filterable) && <Space w={10} />}
-      {sortable && sortState && setSortState && (
-        <Sort
-          active={sortState.key == keyName}
-          defaultOrder={sortState.key == keyName ? sortState.order : undefined}
-          onSort={(order) => setSortState({ key: keyName, order })}
-          size={22}
-          style={{ minWidth: 22 }}
-        />
-      )}
-      {filterable && filterData && filterState && setFilterState && (
-        <Filter
-          active={filterState[keyName] != null}
-          data={filterData[keyName] ?? []}
-          value={`${filterState[keyName]}`}
-          onFilter={(value) =>
-            setFilterState({ ...filterState, [keyName]: value })
-          }
-          size={20}
-          style={{ minWidth: 20 }}
-        />
-      )}
-    </Flex>
-  </Table.Th>
 );
 
 const TeamRow = ({
