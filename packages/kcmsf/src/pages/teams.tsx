@@ -127,7 +127,6 @@ export const Teams = () => {
         `${import.meta.env.VITE_API_URL}/team/${teamID}/entry`,
         {
           method: isEnter ? "POST" : "DELETE",
-          credentials: "include",
         }
       );
       if (!response.ok) return;
