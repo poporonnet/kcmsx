@@ -7,6 +7,12 @@ export default defineConfig({
   integrations: [
     starlight({
       title: "kcmsx",
+      locales: {
+        root: {
+          label: "日本語",
+          lang: "ja-JP",
+        },
+      },
       social: [
         {
           icon: "github",
@@ -22,7 +28,11 @@ export default defineConfig({
       sidebar: [
         {
           label: "ガイド",
-          autogenerate: { directory: "guides" },
+          items: ["guides/what-is-kcmsx", "guides/getting-started"],
+        },
+        {
+          label: "ステップバイステップ",
+          items: ["step-by-step", "step-by-step/register-teams"],
         },
         {
           label: "リファレンス",
