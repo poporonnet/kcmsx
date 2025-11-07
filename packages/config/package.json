@@ -20,7 +20,7 @@
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
     "@vitest/coverage-v8": "^4.0.0",
-    "eslint": "9.39.0",
+    "eslint": "9.39.1",
     "eslint-config-prettier": "^10.0.0",
     "prettier": "^3.3.3",
     "prettier-plugin-organize-imports": "^4.0.0",
