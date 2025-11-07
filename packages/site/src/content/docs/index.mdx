@@ -1,0 +1,42 @@
+---
+title: kcmsx
+description: kcmsx | ご当地こどもロボコン大会運営システム
+template: splash
+hero:
+  tagline: ご当地こどもロボコン 大会運営システム
+  image:
+    file: /public/dolphin.png
+  actions:
+    - text: はじめる
+      link: /guides/what-is-kcmsx/
+      icon: right-arrow
+    - text: poporonnet/kcmsx
+      link: https://github.com/poporonnet/kcmsx
+      icon: github
+      variant: secondary
+    - text: Poporon Network
+      link: https://poporon.org
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid, LinkCard } from "@astrojs/starlight/components";
+
+## 次のステップ
+
+<LinkCard title="kcmsx について知る" href="guides/what-is-kcmsx"></LinkCard>
+
+<CardGrid stagger>
+  <Card title="All in One" icon="star">
+    チーム登録から試合生成、採点、ランキング計算まで、大会運営を一貫してサポートします。
+  </Card>
+  <Card title="Simple" icon="heart">
+    シンプルで整理された UI/UX は、同時に使いやすさを重視して設計されています。
+  </Card>
+  <Card title="Modern & Standard" icon="rocket">
+    kcmsx はモダンかつ Web 標準の技術スタックで構築されています。
+  </Card>
+  <Card title="Customizable" icon="setting">
+    大会ごとに異なるテキストや採点ルールも、柔軟にカスタマイズ可能です。
+  </Card>
+</CardGrid>
