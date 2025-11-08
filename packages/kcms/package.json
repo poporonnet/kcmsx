@@ -25,7 +25,7 @@
     "@hono/zod-openapi": "^1.0.0",
     "@hono/zod-validator": "^0.7.0",
     "@mikuroxina/mini-fn": "^7.0.0",
-    "@prisma/client": "6.18.0",
+    "@prisma/client": "6.19.0",
     "@scalar/hono-api-reference": "^0.9.0",
     "config": "workspace:^",
     "esbuild": "^0.25.0",
@@ -39,15 +39,15 @@
     "@types/node": "^24.0.0",
     "@typescript-eslint/eslint-plugin": "^8.0.0",
     "@typescript-eslint/parser": "^8.0.0",
-    "@vitest/coverage-v8": "^3.0.0",
+    "@vitest/coverage-v8": "^4.0.0",
+    "@vitest/eslint-plugin": "^1.4.0",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^10.0.0",
-    "eslint-plugin-vitest": "^0.5.0",
     "prettier": "^3.1.0",
     "prettier-plugin-organize-imports": "^4.0.0",
     "prisma": "^6.0.0",
     "tsx": "^4.6.2",
-    "vitest": "^3.0.0"
+    "vitest": "^4.0.0"
   },
   "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
 }

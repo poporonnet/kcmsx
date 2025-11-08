@@ -9,7 +9,6 @@ import { basicAuth } from 'hono/basic-auth';
 import { websocket } from 'hono/bun';
 import { except } from 'hono/combine';
 import { deleteCookie, setSignedCookie } from 'hono/cookie';
-import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { jwt, sign } from 'hono/jwt';
 import { secureHeaders } from 'hono/secure-headers';
@@ -64,15 +63,8 @@ const authPublicJwk = await crypto.subtle.importKey(
 );
 const cookieSecret = new Uint32Array(Buffer.from(KCMS_COOKIE_SECRET, 'base64'));
 
-const app = new Hono();
+const app = new Hono().basePath('/api');
 
-app.use('*', (c, next) => {
-  const { KCMS_CLIENT_URL: clientUrl } = getEnv(c);
-  return cors({
-    origin: ['http://localhost:5173', clientUrl],
-    credentials: true,
-  })(c, next);
-});
 app.use(trimTrailingSlash());
 app.use(secureHeaders());
 app.get(
