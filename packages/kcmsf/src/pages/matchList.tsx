@@ -142,7 +142,6 @@ export const MatchList = () => {
         `${import.meta.env.VITE_API_URL}/match/${matchType}/${departmentType}/generate`,
         {
           method: "POST",
-          credentials: "include",
         }
       ).catch(() => undefined);
 
