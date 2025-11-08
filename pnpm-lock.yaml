@@ -6,11 +6,7 @@ settings:
 
 importers:
 
-  .:
-    devDependencies:
-      '@vitest/eslint-plugin':
-        specifier: ^1.4.0
-        version: 1.4.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.3)
+  .: {}
 
   packages/config:
     devDependencies:
@@ -29,6 +25,9 @@ importers:
       '@vitest/coverage-v8':
         specifier: ^4.0.0
         version: 4.0.3(vitest@4.0.3)
+      '@vitest/eslint-plugin':
+        specifier: ^1.4.0
+        version: 1.4.0(eslint@9.39.1(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.3)
       eslint:
         specifier: 9.39.1
         version: 9.39.1(jiti@2.6.1)
@@ -4040,9 +4039,6 @@ snapshots:
   '@rolldown/pluginutils@1.0.0-beta.43': {}
 
   '@rolldown/pluginutils@1.0.0-beta.46': {}
-
-  '@rollup/rollup-android-arm-eabi@4.44.1':
-    optional: true
 
   '@rollup/rollup-android-arm-eabi@4.52.5':
     optional: true
