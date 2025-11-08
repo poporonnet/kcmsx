@@ -9,7 +9,6 @@ export default defineConfig({
         "src/config.ts",
         "index.ts",
       ],
-      all: true,
     },
   },
 });
