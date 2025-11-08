@@ -5,7 +5,7 @@ import {
   outro,
   password,
   select,
-  spinner,
+  tasks,
   text,
 } from "@clack/prompts";
 import fs from "node:fs";
@@ -103,21 +103,25 @@ const main = async () => {
     })
   );
 
-  const spinnerGenerateEnv = spinner();
-  spinnerGenerateEnv.start("Generating environment files...");
-
-  const secrets = await generateSecrets();
-  generateKcmsEnv(
+  await tasks([
     {
-      adminUsername,
-      adminPassword,
-      cookieTokenKey,
-      cookieMaxAge,
-    },
-    secrets
-  );
+      title: "Generating environment files...",
+      task: async () => {
+        const secrets = await generateSecrets();
 
-  spinnerGenerateEnv.stop("Environment files generated!");
+        generateKcmsEnv(
+          {
+            adminUsername,
+            adminPassword,
+            cookieTokenKey,
+            cookieMaxAge,
+          },
+          secrets
+        );
+        return "Environment files generated!";
+      },
+    },
+  ]);
 
   outro("Done!");
 };
