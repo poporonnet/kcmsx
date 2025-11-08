@@ -2,10 +2,10 @@ import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import typeScriptESLint from "@typescript-eslint/eslint-plugin";
 import typeScriptESLintParser from "@typescript-eslint/parser";
+import vitest from "@vitest/eslint-plugin";
 import eslintConfigPrettier from "eslint-config-prettier";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
-import vitest from "eslint-plugin-vitest";
 import globals from "globals";
 
 const compat = new FlatCompat();
@@ -24,6 +24,9 @@ export default [
   {
     languageOptions: {
       parser: typeScriptESLintParser,
+      parserOptions: {
+        projectService: true,
+      },
       globals: {
         ...globals.browser,
       },
