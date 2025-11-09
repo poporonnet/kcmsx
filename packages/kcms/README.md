@@ -19,12 +19,10 @@ KCMS_ADMIN_USERNAME=<管理者ユーザ名>
 KCMS_ADMIN_PASSWORD=<管理者パスワード>
 KCMS_COOKIE_TOKEN_KEY=<Cookieのキー>
 KCMS_COOKIE_MAX_AGE=<Cookieの有効期間>
-KCMS_CLIENT_URL=<クライアントのproduction環境URL>
 ```
 
 - `<Cookieのキー>`は、特に理由がなければ`kcms-token`を推奨します。
 - `<Cookieの有効期間>`には、有効期間を数値(秒)で指定します。この期間が、ログイン状態が持続する時間になります。
-- `<クライアントのproduction環境URL>`は、ない場合は空欄で構いません。
 
 認証用シークレットの生成
 ```bash
