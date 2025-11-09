@@ -121,6 +121,16 @@ const main = async () => {
         return "Environment files generated!";
       },
     },
+    {
+      title: "Initializing Database...",
+      task: async () => {
+        await execAsync(
+          "pnpm --silent --workspace-root backend exec prisma db push"
+        );
+
+        return "Database initialized!";
+      },
+    },
   ]);
 
   outro("Done!");
