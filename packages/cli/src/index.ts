@@ -81,7 +81,7 @@ const main = async () => {
   const cookieTokenKey = await getOrQuit(
     text({
       message: "What do you want the cookie token key to be?",
-      initialValue: "kcmsx-token",
+      initialValue: "kcms-token",
       validate(value) {
         if (value.length == 0) return "The cookie token key cannot be empty.";
       },
