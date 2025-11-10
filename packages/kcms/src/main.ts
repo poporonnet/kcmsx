@@ -26,7 +26,6 @@ const EnvScheme = z.object({
   KCMS_ADMIN_PASSWORD: z.string().min(1),
   KCMS_COOKIE_TOKEN_KEY: z.string().min(1),
   KCMS_COOKIE_MAX_AGE: z.coerce.number(),
-  KCMS_CLIENT_URL: z.string(),
 });
 
 export type Env = z.infer<typeof EnvScheme>;
