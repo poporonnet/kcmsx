@@ -21,7 +21,7 @@ const execAsync = promisify(child_process.exec);
 const getOrQuit = async <T>(prompt: Promise<T | symbol>): Promise<T> => {
   const value = await prompt;
   if (isCancel(value)) {
-    cancel("Setup terminated.");
+    cancel("Setup cancelled.");
     process.exit(0);
   }
 
