@@ -1,5 +1,5 @@
 import { MatchInfo, MatchType, TeamInfo } from "config";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { GetMatchResponse } from "../types/api/match";
 import { GetTeamResponse } from "../types/api/team";
 import { Match } from "../types/match";
@@ -10,6 +10,8 @@ export const useMatchInfo = (
 ): { match?: Match; matchInfo?: MatchInfo; refetch: () => Promise<void> } => {
   const [match, setMatch] = useState<Match>();
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
+
+  const [initialFetched, setInitialFetched] = useState(false);
 
   const fetchTeam = useCallback(
     async (teamID: string): Promise<GetTeamResponse> => {
@@ -81,11 +83,12 @@ export const useMatchInfo = (
 
     setMatch(matchRes);
     setMatchInfo(matchInfo);
+    setInitialFetched(true);
   }, [id, matchType, fetchTeam]);
 
-  useEffect(() => {
+  if (!initialFetched) {
     fetchMatchInfo();
-  }, [fetchMatchInfo]);
+  }
 
   return { match, matchInfo, refetch: fetchMatchInfo };
 };

@@ -11,7 +11,7 @@ import {
 import { Cat } from "@mikuroxina/mini-fn";
 import { IconRefresh } from "@tabler/icons-react";
 import { config } from "config";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import {
   FilterAndSort,
   FilterAndSortTableHeader,
@@ -55,13 +55,19 @@ const comparer = createComparer<Team, FilterAndSortKey>({
 });
 
 export const Teams = () => {
-  const {
-    data: teamsRes,
-    loading,
-    error,
-    refetch,
-  } = useFetch<GetTeamsResponse>(`${import.meta.env.VITE_API_URL}/team`);
   const [teams, setTeams] = useState<Map<string, Team>>();
+
+  const { loading, error, refetch } = useFetch<GetTeamsResponse>(
+    `${import.meta.env.VITE_API_URL}/team`,
+    undefined,
+    {
+      auto: true,
+      onFetch: (teamsRes) =>
+        setTeams(
+          teamsRes && new Map(teamsRes.teams.map((team) => [team.id, team]))
+        ),
+    }
+  );
 
   const { filterState, setFilterState, sortState, setSortState, filter, sort } =
     useFilterAndSort<Team, FilterAndSortKey>(
@@ -145,12 +151,6 @@ export const Teams = () => {
     },
     [setTeams]
   );
-
-  useEffect(() => {
-    setTeams(
-      teamsRes && new Map(teamsRes.teams.map((team) => [team.id, team]))
-    );
-  }, [setTeams, teamsRes]);
 
   return (
     <Stack w="fit-content" align="center" gap="md">
