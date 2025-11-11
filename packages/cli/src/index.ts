@@ -122,7 +122,7 @@ const main = async () => {
       },
     },
     {
-      title: "Initializing Database...",
+      title: "Initializing database...",
       task: async () => {
         await execAsync(
           "pnpm --silent --workspace-root backend exec prisma db push"
