@@ -7,9 +7,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialChecked, setInitialChecked] = useState(false);
 
   const check = useCallback(async (): Promise<boolean> => {
-    const checkRes = await fetch(`${import.meta.env.VITE_API_URL}/`, {
-      credentials: "include",
-    }).catch(() => undefined);
+    const checkRes = await fetch(`${import.meta.env.VITE_API_URL}`).catch(
+      () => undefined
+    );
     const res = checkRes?.ok ?? false;
 
     if (!res) {
@@ -25,7 +25,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useCallback(
     async (username: string, password: string): Promise<boolean> => {
       const loginRes = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-        credentials: "include",
         headers: {
           Authorization: `Basic ${btoa(`${username}:${password}`)}`,
         },

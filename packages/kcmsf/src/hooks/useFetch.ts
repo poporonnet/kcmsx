@@ -15,9 +15,7 @@ type UseFetch<Response extends object> = {
 
 export const useFetch = <Response extends object>(
   query: string,
-  init: RequestInit = {
-    credentials: "include",
-  },
+  init: RequestInit = {},
   option: Option<Response> = {
     auto: true,
     onFetch: undefined,

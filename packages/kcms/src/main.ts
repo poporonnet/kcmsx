@@ -9,7 +9,6 @@ import { basicAuth } from 'hono/basic-auth';
 import { websocket } from 'hono/bun';
 import { except } from 'hono/combine';
 import { deleteCookie, setSignedCookie } from 'hono/cookie';
-import { cors } from 'hono/cors';
 import { HTTPException } from 'hono/http-exception';
 import { jwt, sign } from 'hono/jwt';
 import { secureHeaders } from 'hono/secure-headers';
@@ -27,7 +26,6 @@ const EnvScheme = z.object({
   KCMS_ADMIN_PASSWORD: z.string().min(1),
   KCMS_COOKIE_TOKEN_KEY: z.string().min(1),
   KCMS_COOKIE_MAX_AGE: z.coerce.number(),
-  KCMS_CLIENT_URL: z.string(),
 });
 
 export type Env = z.infer<typeof EnvScheme>;
@@ -64,15 +62,8 @@ const authPublicJwk = await crypto.subtle.importKey(
 );
 const cookieSecret = new Uint32Array(Buffer.from(KCMS_COOKIE_SECRET, 'base64'));
 
-const app = new Hono();
+const app = new Hono().basePath('/api');
 
-app.use('*', (c, next) => {
-  const { KCMS_CLIENT_URL: clientUrl } = getEnv(c);
-  return cors({
-    origin: ['http://localhost:5173', clientUrl],
-    credentials: true,
-  })(c, next);
-});
 app.use(trimTrailingSlash());
 app.use(secureHeaders());
 app.get(

@@ -17,7 +17,7 @@ export const useMatchInfo = (
     async (teamID: string): Promise<GetTeamResponse> => {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/team/${teamID}`,
-        { method: "GET", credentials: "include" }
+        { method: "GET" }
       );
       return (await res.json()) as GetTeamResponse;
     },
@@ -29,7 +29,7 @@ export const useMatchInfo = (
 
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
-      { method: "GET", credentials: "include" }
+      { method: "GET" }
     );
     if (!res.ok) return;
 
