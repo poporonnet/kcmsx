@@ -38,8 +38,9 @@ export type TournamentChildren<Type extends DataType> = Type extends "match"
 /**
  * 表示用のトーナメントデータの型
  */
-export interface TournamentData<Type extends DataType = DataType>
-  extends RawNodeDatum {
+export interface TournamentData<
+  Type extends DataType = DataType,
+> extends RawNodeDatum {
   name: string;
   attributes: TournamentAttributes<Type>;
   children?: TournamentChildren<Type>;
