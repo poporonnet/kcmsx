@@ -8,6 +8,7 @@
     "backend": "pnpm -F \"kcms\"",
     "frontend": "pnpm -F \"kcmsf\"",
     "mock": "pnpm -F \"mock\"",
+    "cli": "pnpm -F \"cli\"",
     "start:backend": "pnpm backend start",
     "start:frontend": "pnpm frontend start",
     "dev:backend": "pnpm backend dev",
@@ -16,7 +17,8 @@
     "format": "pnpm frontend format && pnpm backend format && pnpm mock format",
     "lint": "pnpm frontend lint && pnpm backend lint",
     "test:backend": "pnpm backend t",
-    "test:frontend": "pnpm frontend t"
+    "test:frontend": "pnpm frontend t",
+    "setup": "pnpm -s cli run setup"
   },
   "version": "0.0.1",
   "workspaces": [

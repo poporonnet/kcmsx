@@ -1,20 +1,35 @@
 # 開発者向けガイド
 ## Getting Started
 ### 事前に準備するもの
-- [Node.js](https://nodejs.org/en/) LTSバージョンを使用してください
-- [pnpm](https://pnpm.io/ja/)
 - [Git](https://git-scm.com/downloads)
-- [bun](https://bun.sh/)
+- mise を使用する場合
+  - [mise](https://mise.jdx.dev/)
+- mise を使用せず、手動で Node.js と bun を準備する場合
+  - [Node.js](https://nodejs.org/en/)
+  - [bun](https://bun.sh/)
 
 ## インストール
-```
+初めにリポジトリをクローンします。
+
+```bash
 git clone https://github.com/poporonnet/kcmsx
 cd kcmsx
-pnpm i
+```
+
+mise を使用する場合のみ、以下の手順を追加で実行してください。自動で Node.js と bun がインストールされます。
+```bash
+mise trust
+mise install
+```
+
+最後にパッケージのインストールと初期設定を行います。CLIが起動するので、表示に従ってください。
+```bash
+pnpm install
+pnpm run setup
 ```
 
 ## 実行について
-それぞれ別のターミナルを開いて実行してください
+それぞれ別のターミナルを開いて実行してください。
 
 ### フロントエンド
 ```
@@ -23,24 +38,20 @@ pnpm dev:frontend
 http://localhost:5173 をブラウザで開いて使用できます。
 
 ### バックエンド
-バックエンドの起動には事前にセットアップを行なっておく必要があります。
-
-[バックエンドの環境構築](../packages/kcms/README.md)
-
-```
+```bash
 pnpm dev:backend
 ```
 
 ### その他のコマンド
 #### フォーマット
 kcmsxのルートで実行でき、バックエンド、フロントエンド、モックのコードがフォーマットされます。
-```
+```bash
 pnpm format
 ```
 
 ### 構文チェック
 kcmsxのルートで実行でき、バックエンド・フロントエンドのコードをESLintを用いて構文チェックを行います。
-```
+```bash
 pnpm lint
 ```
 
