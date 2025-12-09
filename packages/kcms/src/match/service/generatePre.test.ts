@@ -185,7 +185,7 @@ describe('GeneratePreMatchService', () => {
     expect(Result.unwrap(res)).toStrictEqual([]);
   });
 
-  it.skip('hotfix: configで指定したコース番号を正しく使う', async () => {
+  it.todo('hotfix: configで指定したコース番号を正しく使う', async () => {
     // const { generateService } = createGenerateService([...testTeamData.values()]);
     // const generatedRes = await generateService.generateByDepartment('open');
     // expect(Result.isOk(generatedRes)).toBe(true);
