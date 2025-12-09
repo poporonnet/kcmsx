@@ -24,7 +24,7 @@ export const PointControl = (props: Props) => (
           if (props.unclickable) return;
           if (props.rule.type !== "single") return; // type narrowing
 
-          props.team.point.state[props.rule.name] = active;
+          props.team.point.set(props.rule.name, active);
           props.onChange(active);
         }}
         disabled={
@@ -44,7 +44,7 @@ export const PointControl = (props: Props) => (
           if (props.unclickable) return;
           if (props.rule.type !== "countable") return; // type narrowing
 
-          props.team.point.state[props.rule.name] = count;
+          props.team.point.set(props.rule.name, count);
           props.onChange(count);
         }}
         disabled={

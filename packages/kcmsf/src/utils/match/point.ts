@@ -1,4 +1,10 @@
-import { config, initialPointState, PointState, PremiseState } from "config";
+import {
+  config,
+  initialPointState,
+  PointState,
+  PremiseState,
+  RuleName,
+} from "config";
 
 export class Point {
   private readonly _state: PointState;
@@ -9,11 +15,11 @@ export class Point {
     this._premiseState = _premiseState;
   }
 
-  get state() {
+  get state(): Readonly<PointState> {
     return this._state;
   }
 
-  get premiseState() {
+  get premiseState(): Readonly<PremiseState> {
     return this._premiseState;
   }
 
@@ -25,6 +31,10 @@ export class Point {
         return rule.point(this.state[rule.name] as never);
       })
       .reduce((sum, point) => (sum += point), 0);
+  }
+
+  public set<Name extends RuleName>(name: Name, value: PointState[Name]): void {
+    this._state[name] = value;
   }
 
   public reset(state: PointState = initialPointState): void {
