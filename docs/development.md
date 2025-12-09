@@ -1,7 +1,6 @@
 # 開発者向けガイド
 ## Getting Started
 ### 事前に準備するもの
-
 - [Git](https://git-scm.com/downloads)
 - mise を使用する場合
   - [mise](https://mise.jdx.dev/)
@@ -10,7 +9,6 @@
   - [bun](https://bun.sh/)
 
 ## インストール
-
 初めにリポジトリをクローンします。
 
 ```bash
@@ -29,10 +27,6 @@ mise install
 pnpm install
 pnpm run setup
 ```
-
-</details>
-
-
 
 ## 実行について
 それぞれ別のターミナルを開いて実行してください。
