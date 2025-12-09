@@ -1,3 +1,4 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { TeamID } from '../../team/models/team.js';
@@ -59,24 +60,7 @@ describe('PreMatch', () => {
         teamID2: '3' as TeamID,
         runResults: [],
       });
-      // 1,2以外は足せない
-      if (i == 1 || i == 2) {
-        expect(() => {
-          preMatch.appendRunResults(
-            [...Array(i)].map((_, i) => {
-              return RunResult.new({
-                id: String(i) as RunResultID,
-                goalTimeSeconds: i * 10,
-                points: 10 + i,
-                teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
-                finishState: 'FINISHED',
-              });
-            })
-          );
-        }).not.toThrow(new Error('RunResult length must be 1 or 2'));
-        continue;
-      }
-      expect(() => {
+      const appendRes = Result.wrapThrowable((error) => error)(() =>
         preMatch.appendRunResults(
           [...Array(i)].map((_, i) => {
             return RunResult.new({
@@ -87,8 +71,11 @@ describe('PreMatch', () => {
               finishState: 'FINISHED',
             });
           })
-        );
-      }).toThrow(new Error('RunResult length must be 1 or 2'));
+        )
+      )();
+      // 1,2以外は足せない
+      const isExpectedOk = i == 1 || i == 2;
+      expect(Result.isOk(appendRes)).toBe(isExpectedOk);
     }
   });
 

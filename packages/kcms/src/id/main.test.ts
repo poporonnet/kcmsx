@@ -19,13 +19,13 @@ describe('SnowflakeIDGenerator', () => {
     );
     let oldID = '';
     for (let i = 0; i < 4096; i++) {
-      const newID = generator.generate();
+      const newIDRes = generator.generate();
+      expect(Result.isOk(newIDRes)).toBe(true);
 
-      if (Result.isOk(newID)) {
-        expect(newID[1]).not.toBe(oldID);
-        oldID = newID[1];
-      }
-      expect(Result.isErr(newID)).toBe(false);
+      const newID = Result.unwrap(newIDRes);
+      expect(newID).not.toBe(oldID);
+      
+      oldID = newID;
     }
 
     const res = generator.generate();
