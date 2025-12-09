@@ -41,15 +41,17 @@ export const MatchView = () => {
     config.match[matchType ?? "pre"].limitSeconds
   );
 
+  const getSide = useCallback(
+    (teamId: string): Side => {
+      if (matchInfo?.teams.left?.id === teamId) return "left";
+      if (matchInfo?.teams.right?.id === teamId) return "right";
+
+      throw new Error("TeamId not matched");
+    },
+    [matchInfo?.teams.left?.id, matchInfo?.teams.right?.id]
+  );
   const onMatchEvent = useCallback(
     (event: MatchEvent) => {
-      const getSide = (teamId: string): Side => {
-        if (matchInfo?.teams.left?.id === teamId) return "left";
-        if (matchInfo?.teams.right?.id === teamId) return "right";
-
-        throw new Error("TeamId not matched");
-      };
-
       switch (event.type) {
         case "TIMER_UPDATED": {
           const { isRunning, state, totalSeconds } = event;
@@ -79,13 +81,7 @@ export const MatchView = () => {
           throw new Error("Unknown match event:", { cause: event });
       }
     },
-    [
-      matchJudge,
-      forceReload,
-      navigate,
-      matchInfo?.teams.left?.id,
-      matchInfo?.teams.right?.id,
-    ]
+    [matchJudge, forceReload, navigate, getSide]
   );
 
   const [isMatchOnline, setIsMatchOnline] = useState(false);

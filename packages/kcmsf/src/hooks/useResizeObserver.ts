@@ -1,27 +1,27 @@
-import { useCallback, useSyncExternalStore } from "react";
+import { RefObject, useCallback, useSyncExternalStore } from "react";
 
-export const useResizeObserver = (target: Element | null) => {
+export const useResizeObserver = (targetRef: RefObject<Element | null>) => {
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
       const observer = new ResizeObserver((entries) =>
         entries.forEach(onStoreChange)
       );
-      if (target) {
-        observer.observe(target);
+      if (targetRef.current) {
+        observer.observe(targetRef.current);
       }
 
       return () => observer.disconnect();
     },
-    [target]
+    [targetRef]
   );
 
   const width = useSyncExternalStore(
     subscribe,
-    () => target?.getBoundingClientRect().width ?? 0
+    () => targetRef.current?.getBoundingClientRect().width ?? 0
   );
   const height = useSyncExternalStore(
     subscribe,
-    () => target?.getBoundingClientRect().height ?? 0
+    () => targetRef.current?.getBoundingClientRect().height ?? 0
   );
 
   return { width, height };

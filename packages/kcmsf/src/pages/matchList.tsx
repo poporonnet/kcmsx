@@ -81,7 +81,17 @@ export const MatchList = () => {
     loading,
     error,
     refetch,
-  } = useFetch<GetMatchesResponse>(`${import.meta.env.VITE_API_URL}/match`);
+  } = useFetch<GetMatchesResponse>(
+    `${import.meta.env.VITE_API_URL}/match`,
+    undefined,
+    {
+      auto: true,
+      onFetch: () => setLatestFetchTime(new Date()),
+    }
+  );
+
+  const [latestFetchTime, setLatestFetchTime] = useState<Date>();
+
   const [matchType, setMatchType] = useMatchTypeQuery(config.matchTypes[0]);
   const [departmentType, setDepartmentType] = useDepartmentTypeQuery(
     config.departmentTypes[0]
@@ -157,7 +167,6 @@ export const MatchList = () => {
   );
 
   const [isAutoRefetch, setIsAutoRefetch] = useState(true);
-  const latestFetchTime = useMemo(() => new Date(), [matches]);
 
   useInterval(refetch, 10000, { active: isAutoRefetch });
 
