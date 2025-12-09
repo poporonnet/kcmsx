@@ -24,7 +24,7 @@ describe('SnowflakeIDGenerator', () => {
 
       const newID = Result.unwrap(newIDRes);
       expect(newID).not.toBe(oldID);
-      
+
       oldID = newID;
     }
 
