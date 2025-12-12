@@ -142,19 +142,19 @@ importers:
         version: 18.0.1(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@mantine/carousel':
         specifier: ^8.0.0
-        version: 8.3.9(@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.9(react@19.2.1))(embla-carousel-react@8.6.0(react@19.2.1))(embla-carousel@8.6.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: 8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.10(react@19.2.1))(embla-carousel-react@8.6.0(react@19.2.1))(embla-carousel@8.6.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@mantine/core':
         specifier: ^8.0.0
-        version: 8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: 8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@mantine/dropzone':
         specifier: ^8.0.0
-        version: 8.3.9(@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.9(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        version: 8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.10(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@mantine/hooks':
         specifier: ^8.0.0
-        version: 8.3.9(react@19.2.1)
+        version: 8.3.10(react@19.2.1)
       '@mantine/notifications':
-        specifier: 8.3.9
-        version: 8.3.9(@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.9(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+        specifier: 8.3.10
+        version: 8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.10(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.0.0
@@ -1211,46 +1211,46 @@ packages:
   '@jridgewell/trace-mapping@0.3.9':
     resolution: {integrity: sha512-3Belt6tdc8bPgAtbcmdtNJlirVoTmEb5e2gC94PnkwEW9jI6CAHUeoG85tjWP5WquqfavoMtMwiG4P926ZKKuQ==}
 
-  '@mantine/carousel@8.3.9':
-    resolution: {integrity: sha512-P7basq/iWydo8v0N8NYOnTCAu7mH7NdxGS5nksjEyc3AxB4HaVun/Mro3fGFiViOsvifM8SFhzOxERrJW4onGw==}
+  '@mantine/carousel@8.3.10':
+    resolution: {integrity: sha512-EyUgsIORa3ZozJNDr3Z4k2Wate5+2Ylmi7G+aF48nwrkl2JxPfqM98SVSlvshY3swQqHRSC+pxQUXz+7mlhybw==}
     peerDependencies:
-      '@mantine/core': 8.3.9
-      '@mantine/hooks': 8.3.9
+      '@mantine/core': 8.3.10
+      '@mantine/hooks': 8.3.10
       embla-carousel: '>=8.0.0'
       embla-carousel-react: '>=8.0.0'
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/core@8.3.9':
-    resolution: {integrity: sha512-ivj0Crn5N521cI2eWZBsBGckg0ZYRqfOJz5vbbvYmfj65bp0EdsyqZuOxXzIcn2aUScQhskfvzyhV5XIUv81PQ==}
+  '@mantine/core@8.3.10':
+    resolution: {integrity: sha512-aKQFETN14v6GtM07b/G5yJneMM1yrgf9mNrTah6GVy5DvQM0AeutITT7toHqh5gxxwzdg/DoY+HQsv5zhqnc5g==}
     peerDependencies:
-      '@mantine/hooks': 8.3.9
+      '@mantine/hooks': 8.3.10
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/dropzone@8.3.9':
-    resolution: {integrity: sha512-RXFpmHQnANMxa3qBssQyI/YS+Xzpr6N/vPWTXrAzjNrJApbwShlIKRDHNw4mmydYT3Wq9y86uzXFPsrPoaJWLA==}
+  '@mantine/dropzone@8.3.10':
+    resolution: {integrity: sha512-PqY9gZ7tpz34iKek+UImbK1LBmSmkMlspqkUecAsMwbBqD2WNLNINTl7pkOh20BdYOaX1GvfkXwTA4/6ya/1kg==}
     peerDependencies:
-      '@mantine/core': 8.3.9
-      '@mantine/hooks': 8.3.9
+      '@mantine/core': 8.3.10
+      '@mantine/hooks': 8.3.10
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/hooks@8.3.9':
-    resolution: {integrity: sha512-Dfz7W0+K1cq4Gb1WFQCZn8tsMXkLH6MV409wZR/ToqsxdNDUMJ/xxbfnwEXWEZjXNJd1wDETHgc+cZG2lTe3Xw==}
+  '@mantine/hooks@8.3.10':
+    resolution: {integrity: sha512-bv+yYHl+keTIvakiDzVJMIjW+o8/Px0G3EdpCMFG+U2ux6SwQqluqoq+/kqrTtT6RaLvQ0fMxjpIULF2cu/xAg==}
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mantine/notifications@8.3.9':
-    resolution: {integrity: sha512-emUdoCyaccf/NuNmJ4fQgloJ7hEod0Pde7XIoD9xUUztVchL143oWRU2gYm6cwqzSyjpjTaqPXfz5UvEBRYjZw==}
+  '@mantine/notifications@8.3.10':
+    resolution: {integrity: sha512-0aVpRCyn9u0wuryBnFu1jOwBYw6xGeaNNtTcTUnSvkL6NAypfPon6JG7Wsekf3IuWSTLBjhYaFEIEd4nh7VDpg==}
     peerDependencies:
-      '@mantine/core': 8.3.9
-      '@mantine/hooks': 8.3.9
+      '@mantine/core': 8.3.10
+      '@mantine/hooks': 8.3.10
       react: ^18.x || ^19.x
       react-dom: ^18.x || ^19.x
 
-  '@mantine/store@8.3.9':
-    resolution: {integrity: sha512-Z4tYW597mD3NxHLlJ3OJ1aKucmwrD9nhqobz+142JNw01aHqzKjxVXlu3L5GGa7F3u3OjXJk/qb1QmUs4sU+Jw==}
+  '@mantine/store@8.3.10':
+    resolution: {integrity: sha512-38t1UivcucZo9hQq27F/eqR5GvovNs4NHEz6DchOuZzV5IJWqO8+T07ivb8wct47ovYe42rPfLcaOdnIEvMsJA==}
     peerDependencies:
       react: ^18.x || ^19.x
 
@@ -2877,8 +2877,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-remove-scroll@2.7.1:
-    resolution: {integrity: sha512-HpMh8+oahmIdOuS5aFKKY6Pyog+FNaZV/XyJOq7b4YFwsFHe5yYfdbIalI4k3vU2nSDql7YskmUseHsRrJqIPA==}
+  react-remove-scroll@2.7.2:
+    resolution: {integrity: sha512-Iqb9NjCCTt6Hf+vOdNIZGdTiH1QSqr27H/Ek9sv/a97gfueI/5h1s3yRi1nngzMUaOOToin5dI1dXKdXiF+u0Q==}
     engines: {node: '>=10'}
     peerDependencies:
       '@types/react': '*'
@@ -4177,51 +4177,51 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.5
 
-  '@mantine/carousel@8.3.9(@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.9(react@19.2.1))(embla-carousel-react@8.6.0(react@19.2.1))(embla-carousel@8.6.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@mantine/carousel@8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.10(react@19.2.1))(embla-carousel-react@8.6.0(react@19.2.1))(embla-carousel@8.6.0)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
-      '@mantine/core': 8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-      '@mantine/hooks': 8.3.9(react@19.2.1)
+      '@mantine/core': 8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@mantine/hooks': 8.3.10(react@19.2.1)
       embla-carousel: 8.6.0
       embla-carousel-react: 8.6.0(react@19.2.1)
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
 
-  '@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
       '@floating-ui/react': 0.27.16(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-      '@mantine/hooks': 8.3.9(react@19.2.1)
+      '@mantine/hooks': 8.3.10(react@19.2.1)
       clsx: 2.1.1
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
       react-number-format: 5.4.4(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-      react-remove-scroll: 2.7.1(@types/react@19.2.7)(react@19.2.1)
+      react-remove-scroll: 2.7.2(@types/react@19.2.7)(react@19.2.1)
       react-textarea-autosize: 8.5.9(@types/react@19.2.7)(react@19.2.1)
       type-fest: 4.41.0
     transitivePeerDependencies:
       - '@types/react'
 
-  '@mantine/dropzone@8.3.9(@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.9(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@mantine/dropzone@8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.10(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
-      '@mantine/core': 8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-      '@mantine/hooks': 8.3.9(react@19.2.1)
+      '@mantine/core': 8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@mantine/hooks': 8.3.10(react@19.2.1)
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
       react-dropzone: 14.3.8(react@19.2.1)
 
-  '@mantine/hooks@8.3.9(react@19.2.1)':
+  '@mantine/hooks@8.3.10(react@19.2.1)':
     dependencies:
       react: 19.2.1
 
-  '@mantine/notifications@8.3.9(@mantine/core@8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.9(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
+  '@mantine/notifications@8.3.10(@mantine/core@8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1))(@mantine/hooks@8.3.10(react@19.2.1))(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
-      '@mantine/core': 8.3.9(@mantine/hooks@8.3.9(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
-      '@mantine/hooks': 8.3.9(react@19.2.1)
-      '@mantine/store': 8.3.9(react@19.2.1)
+      '@mantine/core': 8.3.10(@mantine/hooks@8.3.10(react@19.2.1))(@types/react@19.2.7)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@mantine/hooks': 8.3.10(react@19.2.1)
+      '@mantine/store': 8.3.10(react@19.2.1)
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
       react-transition-group: 4.4.5(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
 
-  '@mantine/store@8.3.9(react@19.2.1)':
+  '@mantine/store@8.3.10(react@19.2.1)':
     dependencies:
       react: 19.2.1
 
@@ -5871,7 +5871,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
-  react-remove-scroll@2.7.1(@types/react@19.2.7)(react@19.2.1):
+  react-remove-scroll@2.7.2(@types/react@19.2.7)(react@19.2.1):
     dependencies:
       react: 19.2.1
       react-remove-scroll-bar: 2.3.8(@types/react@19.2.7)(react@19.2.1)
