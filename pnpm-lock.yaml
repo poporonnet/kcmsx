@@ -63,10 +63,10 @@ importers:
         version: 1.19.7(hono@4.11.1)
       '@hono/zod-openapi':
         specifier: ^1.0.0
-        version: 1.1.5(hono@4.11.1)(zod@4.1.13)
+        version: 1.1.5(hono@4.11.1)(zod@4.2.1)
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.5(hono@4.11.1)(zod@4.1.13)
+        version: 0.7.5(hono@4.11.1)(zod@4.2.1)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.0.0
@@ -90,7 +90,7 @@ importers:
         version: 5.9.3
       zod:
         specifier: ^4.0.0
-        version: 4.1.13
+        version: 4.2.1
     devDependencies:
       '@eslint/eslintrc':
         specifier: ^3.0.0
@@ -278,7 +278,7 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.7.0
-        version: 0.7.5(hono@4.11.1)(zod@4.1.13)
+        version: 0.7.5(hono@4.11.1)(zod@4.2.1)
       config:
         specifier: workspace:^
         version: link:../config
@@ -287,7 +287,7 @@ importers:
         version: 4.11.1
       zod:
         specifier: ^4.0.0
-        version: 4.1.13
+        version: 4.2.1
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20240529.0
@@ -3485,8 +3485,8 @@ packages:
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
 
-  zod@4.1.13:
-    resolution: {integrity: sha512-AvvthqfqrAhNH9dnfmrfKzX5upOdjUVJYFqNSlkmGf64gRaTzlPwz99IHYnVs28qYAybvAlBV+H7pn0saFY4Ig==}
+  zod@4.2.1:
+    resolution: {integrity: sha512-0wZ1IRqGGhMP76gLqz8EyfBXKk0J2qo2+H3fi4mcUP/KtTocoX08nmIAHl1Z2kJIZbZee8KOpBCSNPRgauucjw==}
 
 snapshots:
 
@@ -3512,10 +3512,10 @@ snapshots:
 
   '@asamuzakjp/nwsapi@2.3.9': {}
 
-  '@asteasolutions/zod-to-openapi@8.1.0(zod@4.1.13)':
+  '@asteasolutions/zod-to-openapi@8.1.0(zod@4.2.1)':
     dependencies:
       openapi3-ts: 4.5.0
-      zod: 4.1.13
+      zod: 4.2.1
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -4040,18 +4040,18 @@ snapshots:
     dependencies:
       hono: 4.11.1
 
-  '@hono/zod-openapi@1.1.5(hono@4.11.1)(zod@4.1.13)':
+  '@hono/zod-openapi@1.1.5(hono@4.11.1)(zod@4.2.1)':
     dependencies:
-      '@asteasolutions/zod-to-openapi': 8.1.0(zod@4.1.13)
-      '@hono/zod-validator': 0.7.5(hono@4.11.1)(zod@4.1.13)
+      '@asteasolutions/zod-to-openapi': 8.1.0(zod@4.2.1)
+      '@hono/zod-validator': 0.7.5(hono@4.11.1)(zod@4.2.1)
       hono: 4.11.1
       openapi3-ts: 4.5.0
-      zod: 4.1.13
+      zod: 4.2.1
 
-  '@hono/zod-validator@0.7.5(hono@4.11.1)(zod@4.1.13)':
+  '@hono/zod-validator@0.7.5(hono@4.11.1)(zod@4.2.1)':
     dependencies:
       hono: 4.11.1
-      zod: 4.1.13
+      zod: 4.2.1
 
   '@humanfs/core@0.19.1': {}
 
@@ -4345,7 +4345,7 @@ snapshots:
     dependencies:
       nanoid: 5.1.5
       type-fest: 5.0.0
-      zod: 4.1.13
+      zod: 4.2.1
 
   '@sindresorhus/is@7.1.1': {}
 
@@ -5205,8 +5205,8 @@ snapshots:
       '@babel/parser': 7.28.5
       eslint: 9.39.2(jiti@2.6.1)
       hermes-parser: 0.25.1
-      zod: 4.1.13
-      zod-validation-error: 4.0.2(zod@4.1.13)
+      zod: 4.2.1
+      zod-validation-error: 4.0.2(zod@4.2.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -6397,10 +6397,10 @@ snapshots:
       cookie: 1.1.1
       youch-core: 0.3.3
 
-  zod-validation-error@4.0.2(zod@4.1.13):
+  zod-validation-error@4.0.2(zod@4.2.1):
     dependencies:
-      zod: 4.1.13
+      zod: 4.2.1
 
   zod@3.22.3: {}
 
-  zod@4.1.13: {}
+  zod@4.2.1: {}
