@@ -22,7 +22,7 @@
     "@mantine/hooks": "^8.0.0",
     "@mantine/notifications": "8.3.10",
     "@mikuroxina/mini-fn": "^7.0.0",
-    "@tabler/icons-react": "3.36.0",
+    "@tabler/icons-react": "3.36.1",
     "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
