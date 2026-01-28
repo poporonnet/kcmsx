@@ -69,7 +69,7 @@ importers:
         version: 0.7.6(hono@4.11.7)(zod@4.3.6)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.1.0
       '@prisma/client':
         specifier: 6.19.2
         version: 6.19.2(prisma@6.19.2(magicast@0.3.5)(typescript@5.9.3))(typescript@5.9.3)
@@ -157,7 +157,7 @@ importers:
         version: 8.3.13(@mantine/core@8.3.13(@mantine/hooks@8.3.13(react@19.2.3))(@types/react@19.2.9)(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(@mantine/hooks@8.3.13(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.1.0
       '@tabler/icons-react':
         specifier: 3.36.1
         version: 3.36.1(react@19.2.3)
@@ -1308,8 +1308,8 @@ packages:
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mikuroxina/mini-fn@7.0.0':
-    resolution: {integrity: sha512-31RvUgwmaiLqw5BXAJ7aB5NU2t99A+/OAVY3G49eymoeXywUEtnl06UQjCQUBxGxDVq9P6+jqQbPeSJzAU513Q==}
+  '@mikuroxina/mini-fn@7.1.0':
+    resolution: {integrity: sha512-PZLLB/jZRmBAof3Wqg3R4/FdtRlRe9JggVcAWyJSiB7b1o+eGpSIO+STmAYzJiEGYZrdBjTV4Crd3K9mqkB9Uw==}
 
   '@polka/url@1.0.0-next.29':
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
@@ -4234,7 +4234,7 @@ snapshots:
     dependencies:
       react: 19.2.3
 
-  '@mikuroxina/mini-fn@7.0.0': {}
+  '@mikuroxina/mini-fn@7.1.0': {}
 
   '@polka/url@1.0.0-next.29': {}
 
