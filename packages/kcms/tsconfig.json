@@ -2,7 +2,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "incremental": true,
-    "target": "es2022",
+    "target": "es2023",
     "module": "ESNext",
     "outDir": "./build",
     "rootDir": ".",
