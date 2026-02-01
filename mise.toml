@@ -1,3 +1,3 @@
 [tools]
 node = { version = "24.13.0", postinstall = "corepack enable; corepack install" }
-bun = { version = "1.3.7" }
+bun = { version = "1.3.8" }
