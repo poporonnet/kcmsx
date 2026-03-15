@@ -39,7 +39,7 @@ importers:
         version: 4.0.18(vitest@4.0.18)
       '@vitest/eslint-plugin':
         specifier: ^1.4.0
-        version: 1.6.10(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)
+        version: 1.6.11(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)
       eslint:
         specifier: 9.39.4
         version: 9.39.4(jiti@2.6.1)
@@ -112,7 +112,7 @@ importers:
         version: 4.0.18(vitest@4.0.18)
       '@vitest/eslint-plugin':
         specifier: ^1.4.0
-        version: 1.6.10(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)
+        version: 1.6.11(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)
       eslint:
         specifier: ^9.0.0
         version: 9.39.4(jiti@2.6.1)
@@ -224,7 +224,7 @@ importers:
         version: 4.0.18(vitest@4.0.18)
       '@vitest/eslint-plugin':
         specifier: ^1.4.0
-        version: 1.6.10(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)
+        version: 1.6.11(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)
       '@vitest/ui':
         specifier: ^4.0.0
         version: 4.0.18(vitest@4.0.18)
@@ -1825,8 +1825,8 @@ packages:
       '@vitest/browser':
         optional: true
 
-  '@vitest/eslint-plugin@1.6.10':
-    resolution: {integrity: sha512-/cOf+mTu4HBJIYHTETo8/OFCSZv3T2p+KfGnouzKfjK063cWLZp0TzvK7EU5B3eFG7ypUNtw6l+jK+SA+p1g8g==}
+  '@vitest/eslint-plugin@1.6.11':
+    resolution: {integrity: sha512-/m7cyD2x/TMJt6SmW6X9ZQWThCROa3AgBXJKVzTDG6MIRQkxBGLlwi4Vi+F5bcKnRKI17b3aeUzOhqBwnsjiHg==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: '>=8.57.0'
@@ -4788,7 +4788,7 @@ snapshots:
       tinyrainbow: 3.0.3
       vitest: 4.0.18(@types/node@24.12.0)(@vitest/ui@4.0.18)(jiti@2.6.1)(jsdom@28.1.0)(sugarss@5.0.0(postcss@8.5.8))(tsx@4.21.0)(yaml@2.8.2)
 
-  '@vitest/eslint-plugin@1.6.10(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)':
+  '@vitest/eslint-plugin@1.6.11(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)(vitest@4.0.18)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.57.0
       '@typescript-eslint/utils': 8.57.0(eslint@9.39.4(jiti@2.6.1))(typescript@5.9.3)
