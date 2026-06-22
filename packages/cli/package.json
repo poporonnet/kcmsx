@@ -8,7 +8,7 @@
   "packageManager": "pnpm@10.34.4",
   "devDependencies": {
     "@clack/prompts": "^1.0.0",
-    "@types/node": "^24.10.0",
+    "@types/node": "^26.0.0",
     "tsx": "^4.20.6"
   }
 }
