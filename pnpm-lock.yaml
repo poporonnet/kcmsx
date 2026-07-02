@@ -47,11 +47,11 @@ importers:
         specifier: ^10.0.0
         version: 10.1.8(eslint@9.39.4(jiti@2.6.1))
       prettier:
-        specifier: 3.8.5
-        version: 3.8.5
+        specifier: 3.9.1
+        version: 3.9.1
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.3.0(prettier@3.8.5)(typescript@6.0.3)
+        version: 4.3.0(prettier@3.9.1)(typescript@6.0.3)
       vitest:
         specifier: ^4.0.0
         version: 4.1.9(@types/node@24.13.2)(@vitest/coverage-v8@4.1.9)(@vitest/ui@4.1.9)(jsdom@29.1.1)(vite@8.1.0(@types/node@24.13.2)(esbuild@0.28.1)(jiti@2.6.1)(sugarss@5.0.0(postcss@8.5.16))(tsx@4.22.4)(yaml@2.9.0))
@@ -120,11 +120,11 @@ importers:
         specifier: ^10.0.0
         version: 10.1.8(eslint@9.39.4(jiti@2.6.1))
       prettier:
-        specifier: 3.8.5
-        version: 3.8.5
+        specifier: 3.9.1
+        version: 3.9.1
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.3.0(prettier@3.8.5)(typescript@6.0.3)
+        version: 4.3.0(prettier@3.9.1)(typescript@6.0.3)
       prisma:
         specifier: ^6.0.0
         version: 6.19.3(magicast@0.3.5)(typescript@6.0.3)
@@ -256,11 +256,11 @@ importers:
         specifier: ^7.0.1
         version: 7.0.1(postcss@8.5.16)
       prettier:
-        specifier: 3.8.5
-        version: 3.8.5
+        specifier: 3.9.1
+        version: 3.9.1
       prettier-plugin-organize-imports:
         specifier: ^4.0.0
-        version: 4.3.0(prettier@3.8.5)(typescript@6.0.3)
+        version: 4.3.0(prettier@3.9.1)(typescript@6.0.3)
       serve:
         specifier: ^14.2.4
         version: 14.2.6
@@ -293,8 +293,8 @@ importers:
         specifier: ^4.20240529.0
         version: 4.20260629.1
       prettier:
-        specifier: 3.8.5
-        version: 3.8.5
+        specifier: 3.9.1
+        version: 3.9.1
       wrangler:
         specifier: ^4.0.0
         version: 4.105.0(@cloudflare/workers-types@4.20260629.1)
@@ -2846,8 +2846,8 @@ packages:
       vue-tsc:
         optional: true
 
-  prettier@3.8.5:
-    resolution: {integrity: sha512-zxcTTCedNGJM4R8sj/Cq/F0W/c4iE0afWBcBwMTRtw4WHYP9TWkYjdiH3npPRUYsXQCPR0hTU9yjovOu+E6EQA==}
+  prettier@3.9.1:
+    resolution: {integrity: sha512-ppiDo2CSwexck1eyZUwJHg/N3nf1+6IRCv7W/VJ5vaLnVCmB7+3CdRfMwoCHBBX6xTrREDTksZ4OZl5SSf4zXA==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -5847,12 +5847,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-organize-imports@4.3.0(prettier@3.8.5)(typescript@6.0.3):
+  prettier-plugin-organize-imports@4.3.0(prettier@3.9.1)(typescript@6.0.3):
     dependencies:
-      prettier: 3.8.5
+      prettier: 3.9.1
       typescript: 6.0.3
 
-  prettier@3.8.5: {}
+  prettier@3.9.1: {}
 
   pretty-format@27.5.1:
     dependencies:
