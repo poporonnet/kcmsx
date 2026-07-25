@@ -65,8 +65,8 @@ importers:
         specifier: ^1.0.0
         version: 1.5.1(hono@4.12.31)(zod@4.4.3)
       '@hono/zod-validator':
-        specifier: ^0.8.0
-        version: 0.8.0(hono@4.12.31)(zod@4.4.3)
+        specifier: ^0.9.0
+        version: 0.9.0(hono@4.12.31)(zod@4.4.3)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.4.0
@@ -277,8 +277,8 @@ importers:
   packages/mock:
     dependencies:
       '@hono/zod-validator':
-        specifier: ^0.8.0
-        version: 0.8.0(hono@4.12.31)(zod@4.4.3)
+        specifier: ^0.9.0
+        version: 0.9.0(hono@4.12.31)(zod@4.4.3)
       config:
         specifier: workspace:^
         version: link:../config
@@ -799,12 +799,6 @@ packages:
     peerDependencies:
       hono: '>=4.10.0'
       zod: ^4.0.0
-
-  '@hono/zod-validator@0.8.0':
-    resolution: {integrity: sha512-5uS4S1/LKtZQYvD4BtpPUFkOv8d1wNxHHrChm26buMiEYc1FrHWvDUaKVBwkiVtvSExHSpLGDvcnpI2Copyj9w==}
-    peerDependencies:
-      hono: '>=4.10.0'
-      zod: ^3.25.0 || ^4.0.0
 
   '@hono/zod-validator@0.9.0':
     resolution: {integrity: sha512-n0ZSXmCiHVIp4Y5wlOOyZCeTd/rsawA/qW1cipB8QOYKZ9N8Tk0nZUZCXho9cu374AN4JpDNKioNKBJ/W+LBug==}
@@ -3721,11 +3715,6 @@ snapshots:
       '@hono/zod-validator': 0.9.0(hono@4.12.31)(zod@4.4.3)
       hono: 4.12.31
       openapi3-ts: 4.6.0
-      zod: 4.4.3
-
-  '@hono/zod-validator@0.8.0(hono@4.12.31)(zod@4.4.3)':
-    dependencies:
-      hono: 4.12.31
       zod: 4.4.3
 
   '@hono/zod-validator@0.9.0(hono@4.12.31)(zod@4.4.3)':
