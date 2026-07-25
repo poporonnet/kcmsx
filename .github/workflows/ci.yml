@@ -14,7 +14,7 @@ jobs:
       - run: npm i -g --force corepack
       - run: corepack enable
       - name: Setup Nodejs
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: "pnpm"
