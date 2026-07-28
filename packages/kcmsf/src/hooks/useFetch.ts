@@ -54,6 +54,7 @@ export const useFetch = <Response extends object>(
   useEffect(() => {
     if (!option.auto) return;
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- このuseEffectはrefetchが変更する状態に依存していない
     refetch();
   }, [option.auto, refetch]);
 
