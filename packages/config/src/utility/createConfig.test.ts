@@ -123,13 +123,11 @@ describe("正しい設定を生成できる", () => {
       type: `robot${i}`,
       name: `ロボット${i}`,
     })) as Robots;
-    const departments = range.map(
-      (i): Department => ({
-        type: `department${i}`,
-        name: `部門${i}`,
-        robotTypes: robots.slice(0, i + 1).map((r) => r.type) as RobotTypes,
-      })
-    ) as Departments;
+    const departments = range.map((i): Department => ({
+      type: `department${i}`,
+      name: `部門${i}`,
+      robotTypes: robots.slice(0, i + 1).map((r) => r.type) as RobotTypes,
+    })) as Departments;
     const match: Match = {
       pre: {
         name: "予選",
@@ -142,25 +140,21 @@ describe("正しい設定を生成できる", () => {
         course: { elementary: [1], __department0: [0] },
       },
     };
-    const singleRules = range.map(
-      (i): Rule => ({
-        name: `rule${i}-1`,
-        label: `ルール${i}-1`,
-        type: "single" as const,
-        initial: i % 2 == 0,
-        point: (done: boolean) => (done ? 1 : 0),
-      })
-    );
-    const countableRules = range.map(
-      (i): Rule => ({
-        name: `rule${i}-2`,
-        label: `ルール${i}-2`,
-        type: "countable" as const,
-        initial: i,
-        point: (value: number) => value,
-        validate: (value: number) => 0 <= value && value <= i * 100,
-      })
-    );
+    const singleRules = range.map((i): Rule => ({
+      name: `rule${i}-1`,
+      label: `ルール${i}-1`,
+      type: "single" as const,
+      initial: i % 2 == 0,
+      point: (done: boolean) => (done ? 1 : 0),
+    }));
+    const countableRules = range.map((i): Rule => ({
+      name: `rule${i}-2`,
+      label: `ルール${i}-2`,
+      type: "countable" as const,
+      initial: i,
+      point: (value: number) => value,
+      validate: (value: number) => 0 <= value && value <= i * 100,
+    }));
     const rules = [...singleRules, ...countableRules] as Rules;
     const sponsors = range.map((i) => ({
       name: `スポンサー${i}`,
