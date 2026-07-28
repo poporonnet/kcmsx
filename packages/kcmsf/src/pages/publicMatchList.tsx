@@ -138,6 +138,7 @@ export const PublicMatchList = () => {
   );
 
   const [isAutoRefetch, setIsAutoRefetch] = useState(false); // 過度な負荷を避けるためデフォルトではオフ
+  // eslint-disable-next-line react-hooks/exhaustive-deps -- 更新時間をmatchesが変化したタイミングとするため
   const latestFetchTime = useMemo(() => new Date(), [matches]);
 
   useInterval(refetch, 10000, { active: isAutoRefetch });
