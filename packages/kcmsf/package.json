@@ -22,7 +22,7 @@
     "@mantine/hooks": "^8.0.0",
     "@mantine/notifications": "8.3.18",
     "@mikuroxina/mini-fn": "^7.0.0",
-    "@tabler/icons-react": "3.44.0",
+    "@tabler/icons-react": "3.45.0",
     "config": "workspace:^",
     "embla-carousel-autoplay": "^8.0.0",
     "embla-carousel-react": "^8.0.0",
@@ -35,7 +35,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.37.0",
-    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/jest-dom": "^7.0.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/react": "^19.0.0",
