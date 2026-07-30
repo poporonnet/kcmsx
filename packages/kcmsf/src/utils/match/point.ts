@@ -30,7 +30,7 @@ export class Point {
 
         return rule.point(this.state[rule.name] as never);
       })
-      .reduce((sum, point) => (sum += point), 0);
+      .reduce((sum, point) => (sum + point), 0);
   }
 
   public set<Name extends RuleName>(name: Name, value: PointState[Name]): void {
