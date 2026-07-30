@@ -16,6 +16,5 @@
     "prettier": "3.9.6",
     "prettier-plugin-organize-imports": "^4.0.0",
     "wrangler": "^4.0.0"
-  },
-  "packageManager": "pnpm@11.17.0"
+  }
 }

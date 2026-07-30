@@ -5,7 +5,6 @@
   "scripts": {
     "setup": "tsx src/index.ts"
   },
-  "packageManager": "pnpm@11.17.0",
   "devDependencies": {
     "@clack/prompts": "^1.0.0",
     "@types/node": "^24.10.0",
