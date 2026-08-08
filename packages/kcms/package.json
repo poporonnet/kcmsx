@@ -30,7 +30,7 @@
     "config": "workspace:^",
     "esbuild": "^0.28.0",
     "hono": "^4.0.0",
-    "typescript": "^6.0.0",
+    "typescript": "^7.0.0",
     "zod": "^4.0.0"
   },
   "devDependencies": {
