@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.0.0",
-    "prettier": "3.9.6",
+    "prettier": "3.9.9",
     "prettier-plugin-organize-imports": "^4.0.0",
     "wrangler": "^4.0.0"
   }
