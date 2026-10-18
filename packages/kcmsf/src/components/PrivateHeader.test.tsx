@@ -1,5 +1,5 @@
 import { AppShell } from "@mantine/core";
-import "@testing-library/jest-dom";
+import "@testing-library/jest-dom/vitest";
 import { screen } from "@testing-library/react";
 import { describe, expect, test } from "vitest";
 import { render } from "../../test/index.ts";
