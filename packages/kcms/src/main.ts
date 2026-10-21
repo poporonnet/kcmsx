@@ -110,7 +110,7 @@ app.get('/logout', async (c) => {
 });
 app.use(
   '*',
-  except(['/login', '/logout', '/match/public'], (c, next) => {
+  except(['/api/login', '/api/logout', '/api/match/public'], (c, next) => {
     const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = getEnv(c);
     return jwt({
       secret: authPublicJwk,
