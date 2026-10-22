@@ -62,7 +62,7 @@ const authPublicJwk = await crypto.subtle.importKey(
 );
 const cookieSecret = new Uint32Array(Buffer.from(KCMS_COOKIE_SECRET, 'base64'));
 
-const BASE_PATH = '/api'
+const BASE_PATH = '/api';
 const app = new Hono().basePath(BASE_PATH);
 
 app.use(trimTrailingSlash());
@@ -111,18 +111,21 @@ app.get('/logout', async (c) => {
 });
 app.use(
   '*',
-  except(['/login', '/logout', '/match/public'].map(path => BASE_PATH + path), (c, next) => {
-    const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = getEnv(c);
-    return jwt({
-      secret: authPublicJwk,
-      cookie: {
-        key: cookieKey,
-        secret: cookieSecret,
-        prefixOptions: nodeEnv === 'production' ? 'host' : undefined,
-      },
-      alg: 'ES256',
-    })(c, next);
-  })
+  except(
+    ['/login', '/logout', '/match/public'].map((path) => BASE_PATH + path),
+    (c, next) => {
+      const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = getEnv(c);
+      return jwt({
+        secret: authPublicJwk,
+        cookie: {
+          key: cookieKey,
+          secret: cookieSecret,
+          prefixOptions: nodeEnv === 'production' ? 'host' : undefined,
+        },
+        alg: 'ES256',
+      })(c, next);
+    }
+  )
 );
 app.onError((err) => {
   if (!(err instanceof HTTPException)) {
