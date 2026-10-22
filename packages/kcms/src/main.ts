@@ -62,7 +62,8 @@ const authPublicJwk = await crypto.subtle.importKey(
 );
 const cookieSecret = new Uint32Array(Buffer.from(KCMS_COOKIE_SECRET, 'base64'));
 
-const app = new Hono().basePath('/api');
+const BASE_PATH = '/api'
+const app = new Hono().basePath(BASE_PATH);
 
 app.use(trimTrailingSlash());
 app.use(secureHeaders());
@@ -110,7 +111,7 @@ app.get('/logout', async (c) => {
 });
 app.use(
   '*',
-  except(['/api/login', '/api/logout', '/api/match/public'], (c, next) => {
+  except(['/login', '/logout', '/match/public'].map(path => BASE_PATH + path), (c, next) => {
     const { NODE_ENV: nodeEnv, KCMS_COOKIE_TOKEN_KEY: cookieKey } = getEnv(c);
     return jwt({
       secret: authPublicJwk,
