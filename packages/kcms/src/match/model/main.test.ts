@@ -1,3 +1,4 @@
+import { Result } from '@mikuroxina/mini-fn';
 import { config } from 'config';
 import { describe, expect, it } from 'vitest';
 import { TeamID } from '../../team/models/team.js';
@@ -43,25 +44,7 @@ describe('MainMatch', () => {
         parentMatchID: '10' as MainMatchID,
         childMatches: undefined,
       });
-      // 2か4以外は足せない
-      if (j == 1 || j == 2 || j == 4) {
-        expect(() => {
-          mainMatch.appendRunResults(
-            [...Array(j)].map((_, i) => {
-              return RunResult.new({
-                id: String(i) as RunResultID,
-                goalTimeSeconds: i * 10,
-                points: 10 + i,
-                teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
-                finishState: 'FINISHED',
-              });
-            })
-          );
-        }).not.toThrow(new Error('RunResult length must be 2 or 4'));
-        expect(mainMatch.getRunResults().length).toBe(j);
-        continue;
-      }
-      expect(() => {
+      const appendRes = Result.wrapThrowable((error) => error)(() => {
         mainMatch.appendRunResults(
           [...Array(j)].map((_, i) => {
             return RunResult.new({
@@ -73,8 +56,11 @@ describe('MainMatch', () => {
             });
           })
         );
-      }).toThrow(new Error('RunResult length must be 2 or 4'));
-      expect(mainMatch.getRunResults().length).toBe(0);
+      })();
+      // 2か4以外は足せない
+      const isExpectedOk = j == 1 || j == 2 || j == 4;
+      expect(Result.isOk(appendRes)).toBe(isExpectedOk);
+      expect(mainMatch.getRunResults().length).toBe(isExpectedOk ? j : 0);
     }
   });
 
@@ -93,35 +79,21 @@ describe('MainMatch', () => {
         childMatches: undefined,
       });
       for (let j = 1; j < 8; j++) {
-        if (j === 1 || j == 2) {
-          expect(() => {
-            mainMatch.appendRunResults(
-              [...Array(i)].map((_, i) => {
-                return RunResult.new({
-                  id: String(i) as RunResultID,
-                  goalTimeSeconds: i * 10,
-                  points: 10 + i,
-                  teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
-                  finishState: 'FINISHED',
-                });
-              })
-            );
-          }).not.toThrow(new Error('RunResult length must be 2 or 4'));
-        } else {
-          expect(() => {
-            mainMatch.appendRunResults(
-              [...Array(i)].map((_, i) => {
-                return RunResult.new({
-                  id: String(i) as RunResultID,
-                  goalTimeSeconds: i * 10,
-                  points: 10 + i,
-                  teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
-                  finishState: 'FINISHED',
-                });
-              })
-            );
-          }).toThrow(new Error('RunResult length must be 2 or 4'));
-        }
+        const appendRes = Result.wrapThrowable((error) => error)(() => {
+          mainMatch.appendRunResults(
+            [...Array(i)].map((_, i) => {
+              return RunResult.new({
+                id: String(i) as RunResultID,
+                goalTimeSeconds: i * 10,
+                points: 10 + i,
+                teamID: i % 2 == 0 ? ('2' as TeamID) : ('3' as TeamID),
+                finishState: 'FINISHED',
+              });
+            })
+          );
+        })();
+        const isExpectedOk = j === 1 || j === 2;
+        expect(Result.isOk(appendRes)).toBe(isExpectedOk);
       }
     }
   });

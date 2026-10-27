@@ -81,20 +81,15 @@ export const RegisterBulk = () => {
 
   const sendData = async () => {
     if (!csvData) return;
-    const data: PostTeamsRequest = csvData.map(
-      (row): CreateTeamArgs => ({
-        name: row.teamName,
-        members: [row.member1, row.member2].filter(
-          (member) => member.length > 0
-        ),
-        robotType: row.robotType as RobotType,
-        departmentType: row.departmentType as DepartmentType,
-        clubName: row.clubName,
-      })
-    );
+    const data: PostTeamsRequest = csvData.map((row): CreateTeamArgs => ({
+      name: row.teamName,
+      members: [row.member1, row.member2].filter((member) => member.length > 0),
+      robotType: row.robotType as RobotType,
+      departmentType: row.departmentType as DepartmentType,
+      clubName: row.clubName,
+    }));
     const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

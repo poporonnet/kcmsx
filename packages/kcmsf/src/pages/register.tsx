@@ -36,7 +36,6 @@ export const Register = () => {
     };
     const res = await fetch(`${import.meta.env.VITE_API_URL}/team`, {
       method: "POST",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },

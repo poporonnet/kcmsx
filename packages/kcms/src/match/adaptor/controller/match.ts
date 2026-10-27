@@ -63,41 +63,37 @@ export class MatchController {
     };
 
     return Result.ok({
-      pre: match.pre.map(
-        (v): z.infer<typeof PreSchema> => ({
+      pre: match.pre.map((v): z.infer<typeof PreSchema> => ({
+        id: v.getID(),
+        matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+        matchType: 'pre',
+        departmentType: v.getDepartmentType(),
+        leftTeam: getTeam(v.getTeamID1()),
+        rightTeam: getTeam(v.getTeamID2()),
+        runResults: v.getRunResults().map((v) => ({
           id: v.getID(),
-          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-          matchType: 'pre',
-          departmentType: v.getDepartmentType(),
-          leftTeam: getTeam(v.getTeamID1()),
-          rightTeam: getTeam(v.getTeamID2()),
-          runResults: v.getRunResults().map((v) => ({
-            id: v.getID(),
-            teamID: v.getTeamID(),
-            points: v.getPoints(),
-            goalTimeSeconds: v.getGoalTimeSeconds(),
-            finishState: v.isGoal() ? 'goal' : 'finished',
-          })),
-        })
-      ),
-      main: match.main.map(
-        (v): z.infer<typeof MainSchema> => ({
+          teamID: v.getTeamID(),
+          points: v.getPoints(),
+          goalTimeSeconds: v.getGoalTimeSeconds(),
+          finishState: v.isGoal() ? 'goal' : 'finished',
+        })),
+      })),
+      main: match.main.map((v): z.infer<typeof MainSchema> => ({
+        id: v.getID(),
+        matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+        matchType: 'main',
+        departmentType: v.getDepartmentType(),
+        team1: getTeam(v.getTeamID1()),
+        team2: getTeam(v.getTeamID2()),
+        winnerID: v.getWinnerID() ?? '',
+        runResults: v.getRunResults().map((v) => ({
           id: v.getID(),
-          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-          matchType: 'main',
-          departmentType: v.getDepartmentType(),
-          team1: getTeam(v.getTeamID1()),
-          team2: getTeam(v.getTeamID2()),
-          winnerID: v.getWinnerID() ?? '',
-          runResults: v.getRunResults().map((v) => ({
-            id: v.getID(),
-            teamID: v.getTeamID(),
-            points: v.getPoints(),
-            goalTimeSeconds: v.getGoalTimeSeconds(),
-            finishState: v.isGoal() ? 'goal' : 'finished',
-          })),
-        })
-      ),
+          teamID: v.getTeamID(),
+          points: v.getPoints(),
+          goalTimeSeconds: v.getGoalTimeSeconds(),
+          finishState: v.isGoal() ? 'goal' : 'finished',
+        })),
+      })),
     });
   }
 
@@ -140,17 +136,15 @@ export class MatchController {
     return Result.ok(
       [...allMatches.entries()].map(([departmentType, matches]) => ({
         departmentType,
-        matches: matches.map(
-          (v): z.infer<typeof ShortPreSchema> => ({
-            id: v.getID(),
-            matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
-            matchType: 'pre',
-            departmentType: v.getDepartmentType(),
-            leftTeamID: v.getTeamID1(),
-            rightTeamID: v.getTeamID2(),
-            runResults: [],
-          })
-        ),
+        matches: matches.map((v): z.infer<typeof ShortPreSchema> => ({
+          id: v.getID(),
+          matchCode: `${v.getCourseIndex()}-${v.getMatchIndex()}`,
+          matchType: 'pre',
+          departmentType: v.getDepartmentType(),
+          leftTeamID: v.getTeamID1(),
+          rightTeamID: v.getTeamID2(),
+          runResults: [],
+        })),
       }))
     );
   }
@@ -218,15 +212,13 @@ export class MatchController {
         departmentType: pre.getDepartmentType(),
         leftTeam: await getTeam(pre.getTeamID1()),
         rightTeam: await getTeam(pre.getTeamID2()),
-        runResults: pre.getRunResults().map(
-          (v): z.infer<typeof RunResultSchema> => ({
-            id: v.getID(),
-            teamID: v.getTeamID(),
-            points: v.getPoints(),
-            goalTimeSeconds: v.getGoalTimeSeconds(),
-            finishState: v.isGoal() ? 'goal' : 'finished',
-          })
-        ),
+        runResults: pre.getRunResults().map((v): z.infer<typeof RunResultSchema> => ({
+          id: v.getID(),
+          teamID: v.getTeamID(),
+          points: v.getPoints(),
+          goalTimeSeconds: v.getGoalTimeSeconds(),
+          finishState: v.isGoal() ? 'goal' : 'finished',
+        })),
       });
     } else {
       const main = match as MainMatch;
@@ -239,15 +231,13 @@ export class MatchController {
         team1: await getTeam(main.getTeamID1()),
         team2: await getTeam(main.getTeamID2()),
         winnerID: main.getWinnerID() ?? '',
-        runResults: main.getRunResults().map(
-          (v): z.infer<typeof RunResultSchema> => ({
-            id: v.getID(),
-            teamID: v.getTeamID(),
-            points: v.getPoints(),
-            goalTimeSeconds: v.getGoalTimeSeconds(),
-            finishState: v.isGoal() ? 'goal' : 'finished',
-          })
-        ),
+        runResults: main.getRunResults().map((v): z.infer<typeof RunResultSchema> => ({
+          id: v.getID(),
+          teamID: v.getTeamID(),
+          points: v.getPoints(),
+          goalTimeSeconds: v.getGoalTimeSeconds(),
+          finishState: v.isGoal() ? 'goal' : 'finished',
+        })),
       });
     }
   }
@@ -291,15 +281,13 @@ export class MatchController {
               teamName: team2.getTeamName(),
             },
             runResults:
-              v.getRunResults()?.map(
-                (v): z.infer<typeof RunResultSchema> => ({
-                  id: v.getID(),
-                  teamID: v.getTeamID(),
-                  points: v.getPoints(),
-                  goalTimeSeconds: v.getGoalTimeSeconds(),
-                  finishState: v.isGoal() ? 'goal' : 'finished',
-                })
-              ) ?? [],
+              v.getRunResults()?.map((v): z.infer<typeof RunResultSchema> => ({
+                id: v.getID(),
+                teamID: v.getTeamID(),
+                points: v.getPoints(),
+                goalTimeSeconds: v.getGoalTimeSeconds(),
+                finishState: v.isGoal() ? 'goal' : 'finished',
+              })) ?? [],
           };
         })
       );
@@ -340,15 +328,13 @@ export class MatchController {
             },
             winnerID: v.getWinnerID() ?? '',
             runResults:
-              v.getRunResults()?.map(
-                (v): z.infer<typeof RunResultSchema> => ({
-                  id: v.getID(),
-                  teamID: v.getTeamID(),
-                  points: v.getPoints(),
-                  goalTimeSeconds: v.getGoalTimeSeconds(),
-                  finishState: v.isGoal() ? 'goal' : 'finished',
-                })
-              ) ?? [],
+              v.getRunResults()?.map((v): z.infer<typeof RunResultSchema> => ({
+                id: v.getID(),
+                teamID: v.getTeamID(),
+                points: v.getPoints(),
+                goalTimeSeconds: v.getGoalTimeSeconds(),
+                finishState: v.isGoal() ? 'goal' : 'finished',
+              })) ?? [],
           };
         })
       );
@@ -390,15 +376,13 @@ export class MatchController {
     const res = await this.fetchRunResultService.handle(matchType, matchID as PreMatchID);
     if (Result.isErr(res)) return res;
     return Result.ok(
-      Result.unwrap(res).map(
-        (v): z.infer<typeof RunResultSchema> => ({
-          id: v.getID(),
-          teamID: v.getTeamID(),
-          points: v.getPoints(),
-          goalTimeSeconds: v.getGoalTimeSeconds(),
-          finishState: v.isGoal() ? 'goal' : 'finished',
-        })
-      )
+      Result.unwrap(res).map((v): z.infer<typeof RunResultSchema> => ({
+        id: v.getID(),
+        teamID: v.getTeamID(),
+        points: v.getPoints(),
+        goalTimeSeconds: v.getGoalTimeSeconds(),
+        finishState: v.isGoal() ? 'goal' : 'finished',
+      }))
     );
   }
 

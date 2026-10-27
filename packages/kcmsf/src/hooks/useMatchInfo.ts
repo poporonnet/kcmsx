@@ -1,5 +1,5 @@
 import { MatchInfo, MatchType, TeamInfo } from "config";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { GetMatchResponse } from "../types/api/match";
 import { GetTeamResponse } from "../types/api/team";
 import { Match } from "../types/match";
@@ -11,11 +11,13 @@ export const useMatchInfo = (
   const [match, setMatch] = useState<Match>();
   const [matchInfo, setMatchInfo] = useState<MatchInfo>();
 
+  const [initialFetched, setInitialFetched] = useState(false);
+
   const fetchTeam = useCallback(
     async (teamID: string): Promise<GetTeamResponse> => {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/team/${teamID}`,
-        { method: "GET", credentials: "include" }
+        { method: "GET" }
       );
       return (await res.json()) as GetTeamResponse;
     },
@@ -27,7 +29,7 @@ export const useMatchInfo = (
 
     const res = await fetch(
       `${import.meta.env.VITE_API_URL}/match/${matchType}/${id}`,
-      { method: "GET", credentials: "include" }
+      { method: "GET" }
     );
     if (!res.ok) return;
 
@@ -81,11 +83,12 @@ export const useMatchInfo = (
 
     setMatch(matchRes);
     setMatchInfo(matchInfo);
+    setInitialFetched(true);
   }, [id, matchType, fetchTeam]);
 
-  useEffect(() => {
+  if (!initialFetched) {
     fetchMatchInfo();
-  }, [fetchMatchInfo]);
+  }
 
   return { match, matchInfo, refetch: fetchMatchInfo };
 };

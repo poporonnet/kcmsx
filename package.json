@@ -9,6 +9,7 @@
     "frontend": "pnpm -F \"kcmsf\"",
     "mock": "pnpm -F \"mock\"",
     "site": "pnpm -F \"site\"",
+    "cli": "pnpm -F \"cli\"",
     "start:backend": "pnpm backend start",
     "start:frontend": "pnpm frontend start",
     "dev:backend": "pnpm backend dev",
@@ -17,11 +18,12 @@
     "format": "pnpm frontend format && pnpm backend format && pnpm mock format",
     "lint": "pnpm frontend lint && pnpm backend lint",
     "test:backend": "pnpm backend t",
-    "test:frontend": "pnpm frontend t"
+    "test:frontend": "pnpm frontend t",
+    "setup": "pnpm -s cli run setup"
   },
   "version": "0.0.1",
   "workspaces": [
     "packages/*"
   ],
-  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
+  "packageManager": "pnpm@12.15.0+sha512.b3951d6d6ff4a9f13dc7cf56cd28d2b8eb37dbcc9c68e52e1e1191873ea9f82a017287ab50baadc5ccc494f036c67c0e47eb13608c2fa36f47711b61ea128e61"
 }

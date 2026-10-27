@@ -44,5 +44,4 @@ export type RunResult = RunResultGoal | RunResultFinished;
  * 走行結果作成に必要な情報
  */
 export type CreateRunResultArgs =
-  | Omit<RunResultGoal, "id">
-  | Omit<RunResultFinished, "id">;
+  Omit<RunResultGoal, "id"> | Omit<RunResultFinished, "id">;

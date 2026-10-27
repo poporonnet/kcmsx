@@ -33,7 +33,6 @@ export const MatchResult = ({
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: "include",
           body: JSON.stringify({
             winnerID: winnerID,
           } as PostMatchWinnerRequest),

@@ -64,7 +64,6 @@ export const MatchSubmit = ({
       {
         method: "post",
         body: JSON.stringify(runResults),
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
