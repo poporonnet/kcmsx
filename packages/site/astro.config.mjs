@@ -1,6 +1,6 @@
 // @ts-check
-import { defineConfig } from "astro/config";
 import starlight from "@astrojs/starlight";
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
@@ -36,7 +36,7 @@ export default defineConfig({
         },
         {
           label: "リファレンス",
-          autogenerate: { directory: "references" },
+          items: [{ autogenerate: { directory: "references" } }],
         },
       ],
       editLink: {
