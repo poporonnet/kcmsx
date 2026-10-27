@@ -1,6 +1,6 @@
 ---
 title: はじめる
-description: 初めて kcmsx をセットアップするためのガイド。
+description: 初めてkcmsxをセットアップするためのガイド。
 ---
 
 ## リポジトリをクローンする

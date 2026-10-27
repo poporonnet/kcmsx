@@ -1,9 +1,9 @@
 ---
 title: What is kcmsx?
-description: kcmsx の紹介。
+description: kcmsxの紹介。
 ---
 
-kcmsx は、ご当地こどもロボコンのために構築された Web ベースの大会運営システムです。
+kcmsxは、ご当地こどもロボコンのために構築されたWebベースの大会運営システムです。
 
 ## ご当地こどもロボコンとは
 
