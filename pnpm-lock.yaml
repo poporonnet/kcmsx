@@ -218,13 +218,13 @@ importers:
     dependencies:
       '@hono/node-server':
         specifier: ^2.0.0
-        version: 2.1.5(hono@4.13.13)
+        version: 2.1.5(hono@4.13.14)
       '@hono/zod-openapi':
         specifier: ^1.0.0
-        version: 1.6.3(hono@4.13.13)(zod@4.6.7)
+        version: 1.6.3(hono@4.13.14)(zod@4.6.7)
       '@hono/zod-validator':
         specifier: ^0.9.0
-        version: 0.9.1(hono@4.13.13)(zod@4.6.7)
+        version: 0.9.1(hono@4.13.14)(zod@4.6.7)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
         version: 7.4.0
@@ -233,7 +233,7 @@ importers:
         version: 6.19.3(prisma@6.19.3(magicast@0.3.5)(typescript@6.0.3))(typescript@6.0.3)
       '@scalar/hono-api-reference':
         specifier: ^0.12.0
-        version: 0.12.14(hono@4.13.13)
+        version: 0.12.14(hono@4.13.14)
       config:
         specifier: workspace:^
         version: link:../config
@@ -242,7 +242,7 @@ importers:
         version: 0.28.2
       hono:
         specifier: ^4.0.0
-        version: 4.13.13
+        version: 4.13.14
       typescript:
         specifier: ^6.0.0
         version: 6.0.3
@@ -436,13 +436,13 @@ importers:
     dependencies:
       '@hono/zod-validator':
         specifier: ^0.9.0
-        version: 0.9.1(hono@4.13.13)(zod@4.6.7)
+        version: 0.9.1(hono@4.13.14)(zod@4.6.7)
       config:
         specifier: workspace:^
         version: link:../config
       hono:
         specifier: ^4.5.4
-        version: 4.13.13
+        version: 4.13.14
       zod:
         specifier: ^4.0.0
         version: 4.6.7
@@ -2249,8 +2249,8 @@ packages:
   hermes-parser@0.25.1:
     resolution: {integrity: sha512-6pEjquH3rqaI6cYAXYPcz9MS4rY6R4ngRgrgfDshRptUZIc3lw0MCIJIGDj9++mfySOuPTHB4nrSW99BCvOPIA==}
 
-  hono@4.13.13:
-    resolution: {integrity: sha512-CQ46U0ZkAGmbT/4UxdzzGJpacP2IeKgY4a5/tOI9AABbpOMfK739wfDXmv1usCk+3RkKj1hQy4/fjhiwa2xlrA==}
+  hono@4.13.14:
+    resolution: {integrity: sha512-yhRLQ21U6qa9Hsu2N7Qcbh8tE+WKEcoErjIo56LeSGiGXGp9sA7UpE86Ui9uexb61KakiGwuHMn2QdV7w6i6kQ==}
     engines: {node: '>=16.9.0'}
 
   html-encoding-sniffer@7.0.0:
@@ -3755,21 +3755,21 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
-  '@hono/node-server@2.1.5(hono@4.13.13)':
+  '@hono/node-server@2.1.5(hono@4.13.14)':
     dependencies:
-      hono: 4.13.13
+      hono: 4.13.14
 
-  '@hono/zod-openapi@1.6.3(hono@4.13.13)(zod@4.6.7)':
+  '@hono/zod-openapi@1.6.3(hono@4.13.14)(zod@4.6.7)':
     dependencies:
       '@asteasolutions/zod-to-openapi': 9.1.0(zod@4.6.7)
-      '@hono/zod-validator': 0.9.1(hono@4.13.13)(zod@4.6.7)
-      hono: 4.13.13
+      '@hono/zod-validator': 0.9.1(hono@4.13.14)(zod@4.6.7)
+      hono: 4.13.14
       openapi3-ts: 4.6.1
       zod: 4.6.7
 
-  '@hono/zod-validator@0.9.1(hono@4.13.13)(zod@4.6.7)':
+  '@hono/zod-validator@0.9.1(hono@4.13.14)(zod@4.6.7)':
     dependencies:
-      hono: 4.13.13
+      hono: 4.13.14
       zod: 4.6.7
 
   '@humanfs/core@0.19.2':
@@ -4077,10 +4077,10 @@ snapshots:
 
   '@scalar/helpers@0.16.4': {}
 
-  '@scalar/hono-api-reference@0.12.14(hono@4.13.13)':
+  '@scalar/hono-api-reference@0.12.14(hono@4.13.14)':
     dependencies:
       '@scalar/client-side-rendering': 0.4.13
-      hono: 4.13.13
+      hono: 4.13.14
 
   '@scalar/schemas@0.15.0':
     dependencies:
@@ -4995,7 +4995,7 @@ snapshots:
     dependencies:
       hermes-estree: 0.25.1
 
-  hono@4.13.13: {}
+  hono@4.13.14: {}
 
   html-encoding-sniffer@7.0.0:
     dependencies:
