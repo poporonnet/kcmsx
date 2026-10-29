@@ -6,4 +6,5 @@ allowBuilds:
   '@swc/core': false
   esbuild: false
   prisma: false
+  sharp: false
   workerd: false
