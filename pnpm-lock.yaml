@@ -230,7 +230,7 @@ importers:
         version: 0.9.1(hono@4.13.18)(zod@4.6.7)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
-        version: 7.4.0
+        version: 7.4.1
       '@prisma/client':
         specifier: 6.19.3
         version: 6.19.3(prisma@6.19.3(magicast@0.3.5)(typescript@6.0.3))(typescript@6.0.3)
@@ -318,7 +318,7 @@ importers:
         version: 8.3.18(@mantine/core@8.3.18(@mantine/hooks@8.3.18(react@19.3.1))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(@mantine/hooks@8.3.18(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@mikuroxina/mini-fn':
         specifier: ^7.0.0
-        version: 7.4.0
+        version: 7.4.1
       '@tabler/icons-react':
         specifier: 3.52.0
         version: 3.52.0(react@19.3.1)
@@ -1181,8 +1181,8 @@ packages:
     peerDependencies:
       react: ^18.x || ^19.x
 
-  '@mikuroxina/mini-fn@7.4.0':
-    resolution: {integrity: sha512-eLlhw7evaSoXZT5wi0nk8lSkezjvpyh9eniMTkuLMJBf7NGPT17Ec0sJPNyy2yy/cggxaWSaYCG3l29yEK7XgA==}
+  '@mikuroxina/mini-fn@7.4.1':
+    resolution: {integrity: sha512-t938Ol7CaM8JJQtf0Vu9jH80QvI9uNvZyHUHRb9bosMkrrBIqnvqTuEWGmQrEZ/EwB+fpc0JKKETPTbyq1vguw==}
 
   '@napi-rs/wasm-runtime@1.2.6':
     resolution: {integrity: sha512-mRyDmEw9/fCDXCGfL1sbgIw/GUK0PVxRW4YwgPN61F3LQ+fSyoBFarJVzgGyhF6kRzEQZ0FejDqm4WLXSeqQmw==}
@@ -4009,7 +4009,7 @@ snapshots:
     dependencies:
       react: 19.3.1
 
-  '@mikuroxina/mini-fn@7.4.0': {}
+  '@mikuroxina/mini-fn@7.4.1': {}
 
   '@napi-rs/wasm-runtime@1.2.6(@emnapi/core@2.0.0-beta.2)(@emnapi/runtime@2.0.0-beta.2)':
     dependencies:
