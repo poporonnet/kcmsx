@@ -16,7 +16,7 @@ jobs:
       - name: Setup Nodejs
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 26
           cache: "pnpm"
 
       - name: Install packages
